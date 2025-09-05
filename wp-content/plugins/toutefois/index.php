@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Toutefois - Custom Post Type
- * Description: Adds a custom post type for "Projets" with custom fields and changes the default post type to "Quoi de neuf?".
+ * Description: Adds a custom post type for "Projets" with custom fields and changes the default post type to "Nouvelles".
  * Version: 1.0
  * Author: Ariane Guay
  */
@@ -225,24 +225,23 @@ function projets_add_inline_media_script() {
 }
 add_action( 'admin_footer', 'projets_add_inline_media_script' );
 
-// 7. Rename Posts to "Quoi de neuf?"
-function rename_posts_to_quoi_de_neuf() {
+// 7. Rename Posts to "Nouvelles"
+function rename_posts_to_nouvelles() {
     global $wp_post_types;
 
     $labels = &$wp_post_types['post']->labels;
-    $labels->name = 'Quoi de neuf?';
-    $labels->singular_name = 'Quoi de neuf?';
+    $labels->name = 'Nouvelles';
+    $labels->singular_name = 'Nouvelle';
     $labels->add_new = 'Ajouter';
-    $labels->add_new_item = 'Ajouter un Quoi de neuf?';
-    $labels->edit_item = 'Modifier le Quoi de neuf?';
-    $labels->new_item = 'Nouveau Quoi de neuf?';
-    $labels->view_item = 'Voir le Quoi de neuf?';
-    $labels->search_items = 'Rechercher un Quoi de neuf?';
-    $labels->not_found = 'Aucun Quoi de neuf? trouvé';
-    $labels->not_found_in_trash = 'Aucun Quoi de neuf? trouvé dans la corbeille';
-    $labels->all_items = 'Tous les Quoi de neuf?';
-    $labels->menu_name = 'Quoi de neuf?';
-    $labels->name_admin_bar = 'Quoi de neuf?';
+    $labels->add_new_item = 'Ajouter une Nouvelle';
+    $labels->edit_item = 'Modifier la Nouvelle';
+    $labels->new_item = 'Nouvelle';
+    $labels->view_item = 'Voir la Nouvelle';
+    $labels->search_items = 'Rechercher une Nouvelle';
+    $labels->not_found = 'Aucune nouvelle trouvée';
+    $labels->not_found_in_trash = 'Aucune nouvelle trouvée dans la corbeille';
+    $labels->all_items = 'Toutes les Nouvelles';
+    $labels->menu_name = 'Nouvelles';
+    $labels->name_admin_bar = 'Nouvelle';
 }
-add_action( 'init', 'rename_posts_to_quoi_de_neuf' );
-
+add_action( 'init', 'rename_posts_to_nouvelles' );
