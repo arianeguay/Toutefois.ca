@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import api from './api';
-import { type WordpressPage } from './types';
-import { Route, Routes } from 'react-router-dom';
 import PageLayout from './layout/Page';
-import Home from './pages/Home';
-import About from './pages/About';
+import { type WordpressPage } from './types';
 
 function App() {
   const [pages, setPages] = useState<WordpressPage[]>([]);
@@ -33,10 +31,13 @@ function App() {
   return (
     <div className="app">
       <Routes>
-        {pages
-          .map((page) => (
-            <Route key={page.id} path={page.slug === 'home' ? '/' : `/${page.slug}`} element={<PageLayout page={page} />} />
-          ))}
+        {pages.map((page) => (
+          <Route
+            key={page.id}
+            path={page.slug === 'home' ? '/' : `/${page.slug}`}
+            element={<PageLayout page={page} />}
+          />
+        ))}
       </Routes>
     </div>
   );
