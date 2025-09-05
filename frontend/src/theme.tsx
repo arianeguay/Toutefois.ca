@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, css } from 'styled-components';
 import { createFontStyleCSS } from './components/common/typography/styles';
 
 export const theme = {
@@ -82,6 +82,24 @@ export const theme = {
   },
 };
 
+const WordpressStyling = css`
+  .wp-block-group {
+    max-width: 1200px;
+    width: 100%;
+    margin-inline: auto;
+    padding-block: ${({ theme }) => theme.spacing.xxl}px;
+  }
+
+  .wp-block-image {
+    max-width: 1200px;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .wp-block-button {
+  }
+`;
+
 export const DefaultStyling = createGlobalStyle`
 body {
     background-color: ${({ theme }) => theme.colors.mainBackground};
@@ -97,8 +115,10 @@ body {
     h2 {${createFontStyleCSS('h2')}}
     h3 {${createFontStyleCSS('h3')}}
     h4 {${createFontStyleCSS('h4')}}
-
     p {${createFontStyleCSS('body')}}
+    
+    
+    ${WordpressStyling}
  
 }`;
 
