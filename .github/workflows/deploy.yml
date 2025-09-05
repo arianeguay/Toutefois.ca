@@ -1,0 +1,40 @@
+# .github/workflows/deploy.yml
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main # Or your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Droplet
+        uses: easingthemes/ssh-deploy@v5.0.0
+        with:
+          # The private SSH key for authentication.
+          # To generate a new key pair: ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+          # Add the public key (~/.ssh/id_rsa.pub) to your server's ~/.ssh/authorized_keys file.
+          # Add the private key (~/.ssh/id_rsa) to your GitHub repository secrets with the name SSH_PRIVATE_KEY.
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          # The IP address of your DigitalOcean droplet.
+          # Add this to your GitHub repository secrets with the name REMOTE_HOST.
+          REMOTE_HOST: '137.184.170.66'
+
+          # The user to log in as on the remote server.
+          # Add this to your GitHub repository secrets with the name REMOTE_USER.
+          REMOTE_USER: ${{ secrets.REMOTE_USER }} # e.g., root
+
+          # The source directory from your repository to deploy.
+          # This is set to deploy the entire wp-content directory.
+          SOURCE: "wp-content/"
+
+          # The target directory on your remote server.
+          # This is a common path for WordPress installations.
+          # You might need to adjust this depending on your server setup.
+          TARGET: "/var/www/html/wp-content"
