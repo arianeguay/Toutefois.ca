@@ -13,36 +13,41 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create target directory
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use a current LTS version
+
+      - name: Install and Build Frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      - name: Create remote directories
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: mkdir -p /var/www/html
+          script: |
+            mkdir -p /var/www/frontend
+            mkdir -p /var/www/html/wp-content
 
-      - name: Deploy to Droplet
+      - name: Deploy Frontend to Droplet
         uses: easingthemes/ssh-deploy@v5.0.0
         with:
-          # The private SSH key for authentication.
-          # To generate a new key pair: ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-          # Add the public key (~/.ssh/id_rsa.pub) to your server's ~/.ssh/authorized_keys file.
-          # Add the private key (~/.ssh/id_rsa) to your GitHub repository secrets with the name SSH_PRIVATE_KEY.
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
-          # The IP address of your DigitalOcean droplet.
-          # Add this to your GitHub repository secrets with the name REMOTE_HOST.
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-
-          # The user to log in as on the remote server.
-          # Add this to your GitHub repository secrets with the name REMOTE_USER.
-          REMOTE_USER: ${{ secrets.REMOTE_USER }} # e.g., root
-
-          # The source directory from your repository to deploy.
-          # This is set to deploy the entire wp-content directory.
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          SOURCE: "frontend/dist/"
+          TARGET: "/var/www/frontend"
+          
+      - name: Deploy WordPress Content to Droplet
+        uses: easingthemes/ssh-deploy@v5.0.0
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SOURCE: "wp-content/"
-
-          # The target directory on your remote server.
-          # This is a common path for WordPress installations.
-          # You might need to adjust this depending on your server setup.
           TARGET: "/var/www/html/wp-content"
