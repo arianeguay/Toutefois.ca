@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use a current LTS version
+          node-version: "20" # Use a current LTS version
 
       - name: Install and Build Frontend
         run: |
@@ -42,7 +42,7 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SOURCE: "frontend/dist/"
           TARGET: "/var/www/frontend"
-          
+
       - name: Deploy WordPress Content to Droplet
         uses: easingthemes/ssh-deploy@v5.0.0
         with:
@@ -58,7 +58,16 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SOURCE: "toutefois.ca.conf"
+          SOURCE: "nginx/sites-available/toutefois.ca.conf"
+          TARGET: "/etc/nginx/sites-available/toutefois.ca.conf"
+
+      - name: Deploy Frontend Nginx Configuration - Develop
+        uses: easingthemes/ssh-deploy@v5.0.0
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          SOURCE: "nginx/sites-available/toutefois.arianeguay.ca.conf"
           TARGET: "/etc/nginx/sites-available/toutefois.arianeguay.ca.conf"
 
       - name: Deploy Admin Nginx Configuration
@@ -67,9 +76,18 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SOURCE: "toutefois.ca-headless.conf"
+          SOURCE: "nginx/sites-available/admin.toutefois.ca.conf"
+          TARGET: "/etc/nginx/sites-available/admin.toutefois.ca.conf"
+
+      - name: Deploy Admin Nginx Configuration - Develop
+        uses: easingthemes/ssh-deploy@v5.0.0
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          SOURCE: "nginx/sites-available/admin.toutefois.arianeguay.ca.conf"
           TARGET: "/etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf"
-          
+
       - name: Enable Site and Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
         with:
