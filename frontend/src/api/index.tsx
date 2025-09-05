@@ -1,61 +1,61 @@
-import type { WordpressMenu, WordpressMenuItem, WordpressPage, WordpressPost } from "../types";
+import type { WordpressMenuItem, WordpressPage, WordpressPost } from '../types';
 
 class Api {
-    private baseUrl: string;
+  private baseUrl: string;
 
-    constructor() {
-        this.baseUrl = 'http://localhost/wp-json';
+  constructor() {
+    this.baseUrl = 'http://localhost/wp-json';
+  }
+
+  async fetchFromApi(url: string) {
+    const apiUrl = `${this.baseUrl}/${url}`;
+
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    async fetchFromApi(url: string) {
-        const apiUrl = `${this.baseUrl}/${url}`;
+    const data = await response.json();
 
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            mode: 'cors',
-            credentials: 'include',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        });
+    return data;
+  }
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+  async fetchPosts(): Promise<WordpressPost[]> {
+    return this.fetchFromApi('wp/v2/posts');
+  }
 
-        const data = await response.json();
+  async fetchPostById(id: number): Promise<WordpressPost> {
+    return this.fetchFromApi(`wp/v2/posts/${id}`);
+  }
 
-        return data;
-    }
+  async fetchPages(): Promise<WordpressPage[]> {
+    return this.fetchFromApi('wp/v2/pages');
+  }
 
-    async fetchPosts(): Promise<WordpressPost[]> {
-        return this.fetchFromApi('wp/v2/posts');
-    }
+  async fetchPageBySlug(slug: string): Promise<WordpressPage> {
+    return this.fetchFromApi(`wp/v2/pages?slug=${slug}`);
+  }
 
-    async fetchPostById(id: number): Promise<WordpressPost> {
-        return this.fetchFromApi(`wp/v2/posts/${id}`);
-    }
+  async fetchProjects() {
+    return this.fetchFromApi('wp/v2/projects');
+  }
 
-    async fetchPages(): Promise<WordpressPage[]> {
-        return this.fetchFromApi('wp/v2/pages');
-    }
+  async fetchProjectById(id: number) {
+    return this.fetchFromApi(`wp/v2/projects/${id}`);
+  }
 
-    async fetchPageBySlug(slug: string): Promise<WordpressPage> {
-        return this.fetchFromApi(`wp/v2/pages?slug=${slug}`);
-    }
-
-    async fetchProjects() {
-        return this.fetchFromApi('wp/v2/projects');
-    }
-
-    async fetchProjectById(id: number) {
-        return this.fetchFromApi(`wp/v2/projects/${id}`);
-    }
-
-    async fetchMenu(): Promise<WordpressMenuItem[]> {
-        return this.fetchFromApi('toutefois/v1/menu');
-    }
+  async fetchMenu(): Promise<WordpressMenuItem[]> {
+    return this.fetchFromApi('toutefois/v1/menu');
+  }
 }
 
 export default new Api();
