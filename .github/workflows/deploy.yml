@@ -21,8 +21,8 @@ jobs:
       - name: Install and Build Frontend
         run: |
           cd frontend
-          npm install
-          npm run build
+          yarn install --frozen-lockfile
+          yarn build
 
       - name: Create remote directories
         uses: appleboy/ssh-action@v1.0.3
