@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # Use a current LTS version
+          node-version: "20"
 
       - name: Install and Build Frontend
         run: |
@@ -24,77 +24,62 @@ jobs:
           yarn install
           yarn build
 
-      - name: Create remote directories
+      - name: Deploy files via rsync
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --delete
+          path: "./"
+          remote_path: "/var/www/toutefois_app"
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Run Post-Deployment Scripts
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            mkdir -p /var/www/frontend
-            mkdir -p /var/www/html/wp-content
+            set -e # Exit immediately if a command exits with a non-zero status.
+            echo "Moving Nginx configs..."
+            sudo mv /var/www/toutefois_app/nginx/sites-available/*.conf /etc/nginx/sites-available/
 
-      - name: Deploy Frontend to Droplet
-        uses: easingthemes/ssh-deploy@v5.0.0
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SOURCE: "frontend/dist/"
-          TARGET: "/var/www/frontend"
-
-      - name: Deploy WordPress Content to Droplet
-        uses: easingthemes/ssh-deploy@v5.0.0
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SOURCE: "wp-content/"
-          TARGET: "/var/www/html/wp-content"
-
-      - name: Deploy Frontend Nginx Configuration
-        uses: easingthemes/ssh-deploy@v5.0.0
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SOURCE: "nginx/sites-available/toutefois.ca.conf"
-          TARGET: "/etc/nginx/sites-available/toutefois.ca.conf"
-
-      - name: Deploy Frontend Nginx Configuration - Develop
-        uses: easingthemes/ssh-deploy@v5.0.0
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SOURCE: "nginx/sites-available/toutefois.arianeguay.ca.conf"
-          TARGET: "/etc/nginx/sites-available/toutefois.arianeguay.ca.conf"
-
-      - name: Deploy Admin Nginx Configuration
-        uses: easingthemes/ssh-deploy@v5.0.0
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SOURCE: "nginx/sites-available/admin.toutefois.ca.conf"
-          TARGET: "/etc/nginx/sites-available/admin.toutefois.ca.conf"
-
-      - name: Deploy Admin Nginx Configuration - Develop
-        uses: easingthemes/ssh-deploy@v5.0.0
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SOURCE: "nginx/sites-available/admin.toutefois.arianeguay.ca.conf"
-          TARGET: "/etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf"
-
-      - name: Enable Site and Reload Nginx
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+            echo "Creating symlinks..."
+            sudo ln -sf /etc/nginx/sites-available/toutefois.ca.conf /etc/nginx/sites-enabled/toutefois.ca.conf
             sudo ln -sf /etc/nginx/sites-available/toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/toutefois.arianeguay.ca.conf
+            sudo ln -sf /etc/nginx/sites-available/admin.toutefois.ca.conf /etc/nginx/sites-enabled/admin.toutefois.ca.conf
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/admin.toutefois.arianeguay.ca.conf
-            sudo nginx -t && sudo systemctl reload nginx
+
+            echo "Testing Nginx configuration..."
+            sudo nginx -t
+
+            echo "Reloading Nginx..."
+            sudo systemctl reload nginx
+
+  manage-ssl:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Install Certbot and Generate Certificate
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            if ! command -v certbot &> /dev/null; then
+              echo "Certbot not found, installing..."
+              sudo snap install --classic certbot
+              sudo ln -s /snap/bin/certbot /usr/bin/certbot
+            fi
+
+            # Request certificate
+            sudo certbot certonly --dns-digitalocean --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
+              -d toutefois.ca -d *.toutefois.ca \
+              -d toutefois.arianeguay.ca -d *.toutefois.arianeguay.ca \
+              --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }}
+
+            echo "Reloading Nginx after cert generation..."
+            sudo systemctl reload nginx
