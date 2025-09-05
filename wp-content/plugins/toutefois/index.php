@@ -245,3 +245,25 @@ function rename_posts_to_nouvelles() {
     $labels->name_admin_bar = 'Nouvelle';
 }
 add_action( 'init', 'rename_posts_to_nouvelles' );
+
+// 8. Expose menu to REST API
+function get_menu() {
+    // Replace 'primary' with your menu location if different
+    $menu_name = 'primary';
+    $locations = get_nav_menu_locations();
+    if (isset($locations[$menu_name])) {
+        $menu = wp_get_nav_menu_object($locations[$menu_name]);
+        $menu_items = wp_get_nav_menu_items($menu->term_id);
+        return $menu_items;
+    }
+    return [];
+}
+
+add_action('rest_api_init', function () {
+    register_rest_route('toutefois/v1', '/menu', array(
+        'methods' => 'GET',
+        'callback' => 'get_menu',
+        'permission_callback' => '__return_true' // Make public
+    ));
+});
+

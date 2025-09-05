@@ -4,7 +4,7 @@ class Api {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = 'http://localhost/wp-json/wp/v2';
+        this.baseUrl = 'http://localhost/wp-json';
     }
 
     async fetchFromApi(url: string) {
@@ -30,31 +30,31 @@ class Api {
     }
 
     async fetchPosts(): Promise<WordpressPost[]> {
-        return this.fetchFromApi('posts');
+        return this.fetchFromApi('wp/v2/posts');
     }
 
     async fetchPostById(id: number): Promise<WordpressPost> {
-        return this.fetchFromApi(`posts/${id}`);
+        return this.fetchFromApi(`wp/v2/posts/${id}`);
     }
 
     async fetchPages(): Promise<WordpressPage[]> {
-        return this.fetchFromApi('pages');
+        return this.fetchFromApi('wp/v2/pages');
     }
 
     async fetchPageBySlug(slug: string): Promise<WordpressPage> {
-        return this.fetchFromApi(`pages?slug=${slug}`);
+        return this.fetchFromApi(`wp/v2/pages?slug=${slug}`);
     }
 
     async fetchProjects() {
-        return this.fetchFromApi('projects');
+        return this.fetchFromApi('wp/v2/projects');
     }
 
     async fetchProjectById(id: number) {
-        return this.fetchFromApi(`projects/${id}`);
+        return this.fetchFromApi(`wp/v2/projects/${id}`);
     }
 
     async fetchMenu(): Promise<WordpressMenuItem[]> {
-        return this.fetchFromApi('menu-items');
+        return this.fetchFromApi('toutefois/v1/menu');
     }
 }
 
