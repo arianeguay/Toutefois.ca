@@ -12,8 +12,8 @@ export default defineConfig({
       '/wp-json': {
         target: 'http://localhost',
         changeOrigin: true,
-        secure: false
-      }
-    }
+        secure: false,
+      },
+    },
   },
-})
+});

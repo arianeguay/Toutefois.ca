@@ -1,0 +1,11 @@
+# Ignore artifacts:
+build
+dist
+
+# Ignore dependencies:
+node_modules
+.yarn
+
+# Ignore lock files:
+yarn.lock
+package-lock.json
