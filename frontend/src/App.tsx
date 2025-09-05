@@ -1,29 +1,22 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import Header from './layout/Header';
 import api from './api';
-
-interface Post {
-  id: number;
-  title: {
-    rendered: string;
-  };
-  excerpt: {
-    rendered: string;
-  };
-  link: string;
-}
+import { type WordpressPage } from './types';
+import { Route, Routes } from 'react-router-dom';
+import PageLayout from './layout/Page';
+import Home from './pages/Home';
+import About from './pages/About';
 
 function App() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [pages, setPages] = useState<WordpressPage[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPages = async () => {
       try {
-        const data = await api.fetchPosts();
-        setPosts(data);
+        const data = await api.fetchPages();
+        setPages(data);
       } catch (err) {
         setError('Failed to load posts. Check the console for details.');
       } finally {
@@ -31,7 +24,7 @@ function App() {
       }
     };
 
-    fetchPosts();
+    fetchPages();
   }, []);
 
   if (loading) return <div className="loading">Loading...</div>;
@@ -39,36 +32,12 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
-
-      <main className="main-content">
-        <h2>Latest Posts</h2>
-        <div className="posts-grid">
-          {posts.map((post) => (
-            <article key={post.id} className="post-card">
-              <h3 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
-              <div
-                className="post-excerpt"
-                dangerouslySetInnerHTML={{
-                  __html: post.excerpt.rendered.substring(0, 150) + '...',
-                }}
-              />
-              <a
-                href={post.link}
-                className="read-more"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Read More
-              </a>
-            </article>
+      <Routes>
+        {pages
+          .map((page) => (
+            <Route key={page.id} path={page.slug === 'home' ? '/' : `/${page.slug}`} element={<PageLayout page={page} />} />
           ))}
-        </div>
-      </main>
-
-      <footer className="footer">
-        <p>Powered by WordPress & React</p>
-      </footer>
+      </Routes>
     </div>
   );
 }

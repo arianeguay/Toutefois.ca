@@ -1,3 +1,5 @@
+import type { WordpressMenu, WordpressMenuItem, WordpressPage, WordpressPost } from "../types";
+
 class Api {
     private baseUrl: string;
 
@@ -27,20 +29,20 @@ class Api {
         return data;
     }
 
-    async fetchPosts() {
+    async fetchPosts(): Promise<WordpressPost[]> {
         return this.fetchFromApi('posts');
     }
 
-    async fetchPostById(id: number) {
+    async fetchPostById(id: number): Promise<WordpressPost> {
         return this.fetchFromApi(`posts/${id}`);
     }
 
-    async fetchPages() {
+    async fetchPages(): Promise<WordpressPage[]> {
         return this.fetchFromApi('pages');
     }
 
-    async fetchPageById(id: number) {
-        return this.fetchFromApi(`pages/${id}`);
+    async fetchPageBySlug(slug: string): Promise<WordpressPage> {
+        return this.fetchFromApi(`pages?slug=${slug}`);
     }
 
     async fetchProjects() {
@@ -49,6 +51,10 @@ class Api {
 
     async fetchProjectById(id: number) {
         return this.fetchFromApi(`projects/${id}`);
+    }
+
+    async fetchMenu(): Promise<WordpressMenuItem[]> {
+        return this.fetchFromApi('menu-items');
     }
 }
 

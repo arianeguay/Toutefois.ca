@@ -1,12 +1,5 @@
 import {
     getElement,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Paragraph,
 } from './styles';
 import type { TypographyProps } from './types';
 

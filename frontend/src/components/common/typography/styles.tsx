@@ -3,7 +3,7 @@ import type theme from '../../../theme';
 import type { ElementType } from './types';
 
 const getTypographyStyle = (variant: keyof typeof theme.fontSizes) => {
-  return css`
+    return css`
     font-size: ${({ theme }) => theme.fontSizes[variant]};
     font-weight: ${({ theme }) => theme.fontWeights.normal};
     line-height: ${({ theme }) => theme.lineHeights[variant]};
@@ -12,7 +12,7 @@ const getTypographyStyle = (variant: keyof typeof theme.fontSizes) => {
 };
 
 interface TypographyProps {
-  $variant: keyof typeof theme.fontSizes;
+    $variant: keyof typeof theme.fontSizes;
 }
 
 export const Paragraph = styled.p<TypographyProps>`
@@ -44,20 +44,20 @@ export const Heading6 = styled.h6<TypographyProps>`
 `;
 
 export const getElement = (element: ElementType) => {
-  switch (element) {
-    case 'h1':
-      return Heading1;
-    case 'h2':
-      return Heading2;
-    case 'h3':
-      return Heading3;
-    case 'h4':
-      return Heading4;
-    case 'h5':
-      return Heading5;
-    case 'h6':
-      return Heading6;
-    case 'p':
-      return Paragraph;
-  }
+    switch (element) {
+        case 'h1':
+            return Heading1;
+        case 'h2':
+            return Heading2;
+        case 'h3':
+            return Heading3;
+        case 'h4':
+            return Heading4;
+        case 'h5':
+            return Heading5;
+        case 'h6':
+            return Heading6;
+        case 'p':
+            return Paragraph;
+    }
 };

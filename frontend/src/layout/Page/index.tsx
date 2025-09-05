@@ -1,13 +1,18 @@
 import { PageContainer, MainContent } from "./styles";
 import Header from "../Header";
 import Footer from "../Footer";
+import type { WordpressPage } from "../../types";
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => {
+interface PageLayoutProps {
+    page: WordpressPage;
+}
+
+const PageLayout: React.FC<PageLayoutProps> = ({ page, }) => {
     return (
         <PageContainer>
             <Header />
             <MainContent>
-                {children}
+                {page.content.rendered}
             </MainContent>
             <Footer />
         </PageContainer>
