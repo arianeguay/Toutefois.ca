@@ -1,0 +1,1 @@
+(()=>{"use strict";const e=window.wp.blocks,o=window.React,t=window.wp.i18n,r=window.wp.blockEditor,n=JSON.parse('{"UU":"toutefois/featured-carousel"}');(0,e.registerBlockType)(n.UU,{edit:function(){return(0,o.createElement)("p",{...(0,r.useBlockProps)()},(0,t.__)("Featured Carousel Placeholder","toutefois-blocks"))},save:function(){return null}})})();

@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # Database
@@ -11,7 +11,7 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
       MYSQL_ROOT_PASSWORD: password
-    command: '--default-authentication-plugin=mysql_native_password'
+    command: "--default-authentication-plugin=mysql_native_password"
     volumes:
       - db_data:/var/lib/mysql
     networks:
@@ -23,7 +23,7 @@ services:
 
   # WordPress
   wordpress:
-    image: wordpress:5.3.2
+    image: wordpress:6.8.2
     restart: always
     depends_on:
       - db
@@ -37,7 +37,7 @@ services:
       - 80:80
       - 443:443
     networks:
-      - wp_network  
+      - wp_network
 
   # PHPMyAdmin
   phpmyadmin:

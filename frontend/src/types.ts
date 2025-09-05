@@ -27,6 +27,17 @@ export interface WordpressMenu {
   name: string;
 }
 
+export interface WordpressProject {
+  id: number;
+  title: string;
+  excerpt: string;
+  content: string;
+  featured_image_url: string;
+  meta: {
+    [key: string]: string[];
+  };
+}
+
 export interface WordpressMenuItem {
   id: number;
   title: {

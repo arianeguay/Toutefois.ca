@@ -1,0 +1,20 @@
+{
+  "name": "toutefois-blocks",
+  "version": "1.0.0",
+  "description": "Gutenberg blocks for the Toutefois theme.",
+  "main": "index.js",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "postbuild": "cpr src build --overwrite --filter='**/*.php'"
+  },
+  "devDependencies": {
+    "@babel/runtime": "^7.24.0",
+    "@wordpress/browserslist-config": "^6.30.0",
+    "@wordpress/scripts": "^27.9.0",
+    "cpr": "^3.0.1",
+    "npm-run-all": "^4.1.5",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
+  }
+}

@@ -39,6 +39,10 @@ wp-content/themes/twentysixteen/
 wp-content/themes/twentyseventeen/
 wp-content/themes/twentynineteen/
 wp-content/themes/twentytwenty/
+wp-content/themes/twentytwentyone/
+wp-content/themes/twentytwentyfive/
+wp-content/themes/twentytwentyfour/
+wp-content/themes/twentytwentythree/
 
 # Docker
 .docker/apache/000-default.conf

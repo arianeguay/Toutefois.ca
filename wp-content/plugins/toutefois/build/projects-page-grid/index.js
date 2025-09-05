@@ -1,0 +1,1 @@
+(()=>{"use strict";const e=window.wp.blocks,o=window.React,t=window.wp.i18n,r=window.wp.blockEditor,i=JSON.parse('{"UU":"toutefois/projects-page-grid"}');(0,e.registerBlockType)(i.UU,{edit:function(){return(0,o.createElement)("p",{...(0,r.useBlockProps)()},(0,t.__)("Projects Page Grid Placeholder","toutefois-blocks"))},save:function(){return null}})})();

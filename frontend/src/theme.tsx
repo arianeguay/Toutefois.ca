@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { createFontStyleCSS } from './components/common/typography/styles';
 
 export const theme = {
   colors: {
@@ -8,22 +9,22 @@ export const theme = {
 
     headerBackground: '#2F2C58',
     mainBackground: '#FFF4D8',
+
+    projects: '#862331',
   },
   fonts: {
     secondary: 'Poppins',
     primary: 'Montserrat',
   },
   fontSizes: {
-    h1: '2.5rem',
-    h2: '2rem',
-    h3: '1.5rem',
-    h4: '1.25rem',
-    h5: '1rem',
-    h6: '0.875rem',
-    body: '1rem',
-    small: '0.875rem',
-    subtitle: '1.25rem',
-    big: '2rem',
+    h1: 48,
+    h2: 36,
+    h3: 28,
+    h4: 22,
+    body: 16,
+    small: 14,
+    subtitle: 18,
+    big: 18,
   },
   fontWeights: {
     normal: '400',
@@ -32,28 +33,28 @@ export const theme = {
     bold: '700',
   },
   lineHeights: {
-    h1: '2.5rem',
-    h2: '2rem',
-    h3: '1.5rem',
-    h4: '1.25rem',
-    h5: '1rem',
-    h6: '0.875rem',
-    body: '1rem',
-    small: '0.875rem',
-    subtitle: '1.25rem',
-    big: '2rem',
+    h1: 58,
+    h2: 47,
+    h3: 36,
+    h4: 31,
+    h5: 24,
+    h6: 20,
+    body: 26,
+    small: 20,
+    subtitle: 29,
+    big: 29,
   },
   letterSpacings: {
-    h1: '0.05em',
-    h2: '0.05em',
-    h3: '0.05em',
-    h4: '0.05em',
-    h5: '0.05em',
-    h6: '0.05em',
-    body: '0.05em',
-    small: '0.05em',
-    subtitle: '0.05em',
-    big: '0.05em',
+    h1: -0.5,
+    h2: -0.3,
+    h3: 0,
+    h4: 0,
+    h5: 0,
+    h6: 0,
+    body: 0,
+    small: 0.25,
+    subtitle: 0,
+    big: 0,
   },
   spacing: {
     xs: 4,
@@ -91,7 +92,32 @@ body {
       width: 100%;
       
     }
+
+    h1 {${createFontStyleCSS('h1')}}
+    h2 {${createFontStyleCSS('h2')}}
+    h3 {${createFontStyleCSS('h3')}}
+    h4 {${createFontStyleCSS('h4')}}
+
+    p {${createFontStyleCSS('body')}}
+ 
 }`;
+
+export const Fonts = () => {
+  return (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="anonymous"
+      />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet"
+      />
+    </>
+  );
+};
 
 export type ThemeType = typeof theme;
 

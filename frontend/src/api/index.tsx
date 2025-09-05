@@ -56,6 +56,22 @@ class Api {
   async fetchMenu(): Promise<WordpressMenuItem[]> {
     return this.fetchFromApi('toutefois/v1/menu');
   }
+
+  async fetchFeaturedProjects() {
+    return this.fetchFromApi('toutefois/v1/featured-projects');
+  }
+
+  async fetchAllProjects() {
+    return this.fetchFromApi('toutefois/v1/projects');
+  }
+
+  async fetchAllNews() {
+    return this.fetchFromApi('toutefois/v1/news');
+  }
+
+  async fetchProjectsGrid(page = 1, perPage = 9) {
+    return this.fetchFromApi(`toutefois/v1/projects-grid?page=${page}&per_page=${perPage}`);
+  }
 }
 
 export default new Api();

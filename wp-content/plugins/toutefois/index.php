@@ -10,6 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
+// Include Components
+require_once plugin_dir_path(__FILE__) . 'components/featured-carousel.php';
+require_once plugin_dir_path(__FILE__) . 'components/projects-list.php';
+require_once plugin_dir_path(__FILE__) . 'components/news-list.php';
+require_once plugin_dir_path(__FILE__) . 'components/projects-page-grid.php';
+
 // 1. Register Custom Post Type and Meta Fields
 function projets_cpt_and_meta_init() {
 
@@ -104,6 +110,11 @@ function projets_cpt_and_meta_init() {
         'single' => true,
         'type' => 'integer',
     ) );
+    register_post_meta( 'projet', '_projet_is_featured', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'boolean',
+    ) );
 }
 add_action( 'init', 'projets_cpt_and_meta_init', 0 );
 
@@ -131,6 +142,7 @@ function projets_meta_box_callback( $post ) {
     $date_fin = get_post_meta( $post->ID, '_projet_date_fin', true );
     $lien = get_post_meta( $post->ID, '_projet_lien', true );
     $image_id = get_post_meta( $post->ID, '_projet_image_id', true );
+    $is_featured = get_post_meta( $post->ID, '_projet_is_featured', true );
 
     echo '<style> .projet-field { display: grid; grid-template-columns: 150px 1fr; gap: 10px; margin-bottom: 15px; align-items: center; } .projet-field label { font-weight: bold; } .projet-field input, .projet-field textarea { width: 100%; } </style>';
 
@@ -140,6 +152,7 @@ function projets_meta_box_callback( $post ) {
     echo '<div class="projet-field"><label for="projet_date_debut">Date de début :</label><input type="date" id="projet_date_debut" name="projet_date_debut" value="' . esc_attr( $date_debut ) . '" /></div>';
     echo '<div class="projet-field"><label for="projet_date_fin">Date de fin :</label><input type="date" id="projet_date_fin" name="projet_date_fin" value="' . esc_attr( $date_fin ) . '" /></div>';
     echo '<div class="projet-field"><label for="projet_lien">Lien de réservation :</label><input type="url" id="projet_lien" name="projet_lien" value="' . esc_attr( $lien ) . '" size="25" /></div>';
+    echo '<div class="projet-field"><label for="projet_is_featured">Projet vedette :</label><input type="checkbox" id="projet_is_featured" name="projet_is_featured" value="1" ' . checked( $is_featured, 1, false ) . ' /></div>';
 
     echo '<div class="projet-field"><label for="projet_image">Image :</label><div>';
     echo '<input type="hidden" name="projet_image_id" id="projet_image_id" value="' . esc_attr( $image_id ) . '" />';
@@ -171,6 +184,7 @@ function projets_save_meta_box_data( $post_id ) {
         'projet_date_fin' => 'sanitize_text_field',
         'projet_lien' => 'esc_url_raw',
         'projet_image_id' => 'intval',
+        'projet_is_featured' => 'boolval',
     ];
 
     foreach ( $fields as $key => $sanitize_callback ) {
@@ -266,4 +280,14 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true' // Make public
     ));
 });
+
+// 9. Register Gutenberg Blocks
+function toutefois_register_blocks() {
+    $block_folders = glob(plugin_dir_path(__FILE__) . 'build/*', GLOB_ONLYDIR);
+    foreach ($block_folders as $block_folder) {
+        register_block_type($block_folder);
+    }
+}
+add_action('init', 'toutefois_register_blocks');
+
 
