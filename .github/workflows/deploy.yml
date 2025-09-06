@@ -81,7 +81,7 @@ jobs:
 
             echo "Creating DigitalOcean credentials file..."
             sudo mkdir -p /etc/letsencrypt
-            echo "dns_digitalocean_token = ${{ secrets.DIGITALOCEAN_TOKEN }}" | sudo tee /etc/letsencrypt/digitalocean.ini > /dev/null
+            echo "dns_digitalocean_token = ${{ secrets.DIGITALOCEAN_API_TOKEN }}" | sudo tee /etc/letsencrypt/digitalocean.ini > /dev/null
             sudo chmod 600 /etc/letsencrypt/digitalocean.ini
 
             echo "Installing Certbot and DigitalOcean Plugin..."
