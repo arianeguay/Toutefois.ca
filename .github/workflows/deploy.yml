@@ -34,14 +34,18 @@ jobs:
           remote_user: ${{ secrets.REMOTE_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Run Post-Deployment Scripts
+  manage-ssl:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Setup Server and SSL
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            set -e # Exit immediately if a command exits with a non-zero status.
+            set -e
             echo "Moving Nginx configs..."
             sudo mv /var/www/toutefois_app/nginx/sites-available/*.conf /etc/nginx/sites-available/
 
@@ -51,35 +55,20 @@ jobs:
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.ca.conf /etc/nginx/sites-enabled/admin.toutefois.ca.conf
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/admin.toutefois.arianeguay.ca.conf
 
-            echo "Testing Nginx configuration..."
-            sudo nginx -t
-
-            echo "Reloading Nginx..."
-            sudo systemctl reload nginx
-
-  manage-ssl:
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-      - name: Install Certbot and Generate Certificate
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            set -e
+            echo "Installing Certbot..."
             if ! command -v certbot &> /dev/null; then
-              echo "Certbot not found, installing..."
               sudo snap install --classic certbot
               sudo ln -s /snap/bin/certbot /usr/bin/certbot
             fi
 
-            # Request certificate
+            echo "Requesting SSL certificate..."
             sudo certbot certonly --dns-digitalocean --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
               -d toutefois.ca -d *.toutefois.ca \
               -d toutefois.arianeguay.ca -d *.toutefois.arianeguay.ca \
               --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }}
 
-            echo "Reloading Nginx after cert generation..."
+            echo "Testing Nginx configuration..."
+            sudo nginx -t
+
+            echo "Reloading Nginx..."
             sudo systemctl reload nginx
