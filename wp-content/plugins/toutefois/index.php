@@ -10,6 +10,27 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
+// 1. Reverse Proxy Awareness
+// The following lines are crucial for making WordPress work correctly behind a reverse proxy.
+// They ensure that WordPress knows its correct public-facing address (HTTPS) and generates
+// the right URLs for REST API calls, which is essential for the Gutenberg editor.
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+}
+
+if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+    $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
+}
+
+// Define site URLs to prevent misconfiguration issues.
+// This hardcodes the correct URLs, avoiding potential errors where WordPress might guess the wrong ones.
+if (!defined('WP_HOME')) {
+    define('WP_HOME', 'https://admin.toutefois.arianeguay.ca');
+}
+if (!defined('WP_SITEURL')) {
+    define('WP_SITEURL', 'https://admin.toutefois.arianeguay.ca');
+}
+
 // Include Components
 require_once plugin_dir_path(__FILE__) . 'components/featured-carousel.php';
 require_once plugin_dir_path(__FILE__) . 'components/projects-list.php';
