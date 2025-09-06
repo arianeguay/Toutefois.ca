@@ -10,115 +10,302 @@ on:
       - "wp-content/**"
       - "nginx/**"
       - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+    inputs:
+      skip_ssl:
+        description: 'Skip SSL certificate renewal'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  NODE_VERSION: '20'
+  YARN_CACHE_FOLDER: ~/.yarn
 
 jobs:
   build-frontend:
     runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.yarn-cache.outputs.cache-hit }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-      - name: Install and Build Frontend
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+          cache-dependency-path: 'frontend/yarn.lock'
+
+      - name: Cache Yarn dependencies
+        id: yarn-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.yarn
+            frontend/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('frontend/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        working-directory: frontend
         run: |
-          cd frontend
-          yarn install
-          REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} yarn build
+          if [[ "${{ steps.yarn-cache.outputs.cache-hit }}" != "true" ]]; then
+            yarn install --frozen-lockfile --prefer-offline
+          fi
+
+      - name: Build Frontend
+        working-directory: frontend
+        env:
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          NODE_ENV: production
+        run: yarn build
+
       - name: Upload frontend artifact
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-dist
+          name: frontend-dist-${{ github.sha }}
           path: frontend/dist/
+          retention-days: 1
 
-  deploy:
+  prepare-deployment:
     runs-on: ubuntu-latest
     needs: [build-frontend]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Download frontend artifact
         uses: actions/download-artifact@v4
         with:
-          name: frontend-dist
+          name: frontend-dist-${{ github.sha }}
           path: frontend/dist/
+
       - name: Create production .env
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > frontend/dist/.env
+          echo "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> frontend/dist/.env
+          echo "COMMIT_SHA=${{ github.sha }}" >> frontend/dist/.env
+
+      - name: Validate deployment files
+        run: |
+          echo "Validating deployment structure..."
+          test -d frontend/dist || { echo "Frontend dist not found"; exit 1; }
+          test -d wp-content || { echo "WordPress content not found"; exit 1; }
+          test -d nginx/sites-available || { echo "Nginx configs not found"; exit 1; }
+          echo "All required files present ✓"
+
       - name: Deploy files via rsync
         uses: burnett01/rsync-deployments@6.0.0
         with:
-          switches: -avzr --delete
+          switches: -avzr --delete --exclude='.git*' --exclude='node_modules' --exclude='*.log'
           path: "./"
           remote_path: "/var/www/toutefois_app"
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-  configure-server:
+  configure-wordpress:
     runs-on: ubuntu-latest
-    needs: [deploy]
+    needs: [prepare-deployment]
     steps:
-      - name: Setup Server, SSL, and Reload Nginx
+      - name: Setup WordPress
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 300s
           script: |
             set -e
-            echo "Setting up WordPress..."
-            sudo mkdir -p /var/www/wordpress/wp-content
+            echo "=== WordPress Configuration ==="
+            
+            # Create WordPress directories
+            sudo mkdir -p /var/www/wordpress/wp-content/{plugins,themes,uploads}
+            
+            # Sync WordPress content with backup
+            echo "Backing up existing WordPress content..."
+            sudo mkdir -p /var/backups/wordpress-$(date +%Y%m%d-%H%M%S)
+            sudo cp -r /var/www/wordpress/wp-content/* /var/backups/wordpress-$(date +%Y%m%d-%H%M%S)/ 2>/dev/null || echo "No existing content to backup"
+            
+            echo "Syncing WordPress plugins and themes..."
             sudo rsync -avz --delete /var/www/toutefois_app/wp-content/plugins/ /var/www/wordpress/wp-content/plugins/
             sudo rsync -avz --delete /var/www/toutefois_app/wp-content/themes/ /var/www/wordpress/wp-content/themes/
-
+            
+            # Set proper permissions
             echo "Setting WordPress file permissions..."
             sudo find /var/www/wordpress/wp-content -type d -exec chmod 755 {} \;
             sudo find /var/www/wordpress/wp-content -type f -exec chmod 644 {} \;
             sudo chown -R www-data:www-data /var/www/wordpress/wp-content
+            
+            echo "WordPress configuration completed ✓"
 
-            echo "Deploying frontend files..."
+  configure-frontend:
+    runs-on: ubuntu-latest
+    needs: [prepare-deployment]
+    steps:
+      - name: Setup Frontend
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 300s
+          script: |
+            set -e
+            echo "=== Frontend Configuration ==="
+            
+            # Create frontend directory and backup
             sudo mkdir -p /var/www/frontend
+            if [ -d "/var/www/frontend" ] && [ "$(ls -A /var/www/frontend)" ]; then
+              echo "Backing up existing frontend..."
+              sudo mkdir -p /var/backups/frontend-$(date +%Y%m%d-%H%M%S)
+              sudo cp -r /var/www/frontend/* /var/backups/frontend-$(date +%Y%m%d-%H%M%S)/
+            fi
+            
+            echo "Deploying frontend files..."
             sudo rsync -avz --delete /var/www/toutefois_app/frontend/dist/ /var/www/frontend/
             sudo chown -R www-data:www-data /var/www/frontend
+            sudo chmod -R 755 /var/www/frontend
+            
+            echo "Frontend configuration completed ✓"
 
-            echo "Moving Nginx configs..."
-            sudo mv /var/www/toutefois_app/nginx/sites-available/*.conf /etc/nginx/sites-available/
-
-            echo "Creating symlinks..."
+  configure-nginx:
+    runs-on: ubuntu-latest
+    needs: [configure-wordpress, configure-frontend]
+    steps:
+      - name: Setup Nginx and SSL
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 600s
+          script: |
+            set -e
+            echo "=== Nginx Configuration ==="
+            
+            # Backup existing nginx configs
+            sudo mkdir -p /var/backups/nginx-$(date +%Y%m%d-%H%M%S)
+            sudo cp /etc/nginx/sites-available/*.conf /var/backups/nginx-$(date +%Y%m%d-%H%M%S)/ 2>/dev/null || echo "No existing configs to backup"
+            
+            # Deploy new nginx configs
+            echo "Updating Nginx configurations..."
+            sudo cp /var/www/toutefois_app/nginx/sites-available/*.conf /etc/nginx/sites-available/
+            
+            # Create symlinks
+            echo "Creating site symlinks..."
             sudo ln -sf /etc/nginx/sites-available/toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/toutefois.arianeguay.ca.conf
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/admin.toutefois.arianeguay.ca.conf
+            
+            # Test nginx configuration
+            echo "Testing Nginx configuration..."
+            sudo nginx -t
+            
+            echo "Nginx configuration completed ✓"
 
-            echo "Removing old certbot versions..."
-            sudo apt-get remove certbot -y || echo "Certbot not installed via apt."
-            sudo snap remove certbot-dns-digitalocean || echo "certbot-dns-digitalocean not installed."
-
-            echo "Creating DigitalOcean credentials file..."
+  setup-ssl:
+    runs-on: ubuntu-latest
+    needs: [configure-nginx]
+    if: ${{ !inputs.skip_ssl }}
+    steps:
+      - name: Setup SSL Certificates
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 900s
+          script: |
+            set -e
+            echo "=== SSL Certificate Setup ==="
+            
+            # Check if certificates already exist and are valid
+            if sudo certbot certificates 2>/dev/null | grep -q "toutefois.arianeguay.ca"; then
+              echo "Existing certificates found. Checking validity..."
+              if sudo certbot certificates 2>/dev/null | grep -A5 "toutefois.arianeguay.ca" | grep -q "VALID"; then
+                echo "Certificates are still valid. Skipping renewal."
+                exit 0
+              fi
+            fi
+            
+            # Clean up old certbot installations
+            echo "Cleaning up old Certbot installations..."
+            sudo apt-get remove certbot -y 2>/dev/null || echo "Certbot not installed via apt"
+            sudo snap remove certbot-dns-digitalocean 2>/dev/null || echo "certbot-dns-digitalocean not installed"
+            sudo snap remove certbot 2>/dev/null || echo "certbot not installed via snap"
+            
+            # Create DigitalOcean credentials
+            echo "Setting up DigitalOcean credentials..."
             sudo mkdir -p /etc/letsencrypt
             echo "dns_digitalocean_token = ${{ secrets.DIGITALOCEAN_API_TOKEN }}" | sudo tee /etc/letsencrypt/digitalocean.ini > /dev/null
             sudo chmod 600 /etc/letsencrypt/digitalocean.ini
-
-            echo "Installing Certbot and DigitalOcean Plugin..."
+            
+            # Install Certbot and DigitalOcean plugin
+            echo "Installing Certbot and DigitalOcean plugin..."
             sudo snap install --classic certbot
             sudo snap refresh certbot
             sudo ln -sf /snap/bin/certbot /usr/bin/certbot
-            echo "Connecting Certbot DNS plugin..."
+            
+            echo "Installing DigitalOcean DNS plugin..."
             sudo snap set certbot trust-plugin-with-root=ok
             sudo snap install certbot-dns-digitalocean
             sudo snap refresh certbot-dns-digitalocean
-
-            echo "Requesting SSL certificate..."
-            # Request certificate for primary domain and wildcard with explicit DNS validation
+            
+            # Request SSL certificates
+            echo "Requesting SSL certificates..."
             sudo certbot certonly --dns-digitalocean \
               --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
               --dns-digitalocean-propagation-seconds 60 \
               -d "toutefois.arianeguay.ca" \
               -d "admin.toutefois.arianeguay.ca" \
-              --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }}
+              --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }} \
+              --force-renewal
+            
+            echo "SSL certificates setup completed ✓"
 
-            echo "Testing Nginx configuration..."
+  finalize-deployment:
+    runs-on: ubuntu-latest
+    needs: [setup-ssl]
+    if: always() && (needs.setup-ssl.result == 'success' || needs.setup-ssl.result == 'skipped')
+    steps:
+      - name: Reload Services and Verify Deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 300s
+          script: |
+            set -e
+            echo "=== Finalizing Deployment ==="
+            
+            # Final nginx test and reload
+            echo "Final Nginx configuration test..."
             sudo nginx -t
-
+            
             echo "Reloading Nginx..."
             sudo systemctl reload nginx
+            
+            # Verify services are running
+            echo "Verifying services..."
+            sudo systemctl is-active nginx || { echo "Nginx is not running!"; exit 1; }
+            sudo systemctl is-active php8.1-fpm || sudo systemctl is-active php-fpm || echo "PHP-FPM status unknown"
+            
+            # Test website accessibility
+            echo "Testing website accessibility..."
+            curl -f -s -o /dev/null https://toutefois.arianeguay.ca || echo "Warning: Main site not accessible"
+            curl -f -s -o /dev/null https://admin.toutefois.arianeguay.ca || echo "Warning: Admin site not accessible"
+            
+            # Clean up old backups (keep last 5)
+            echo "Cleaning up old backups..."
+            sudo find /var/backups -name "wordpress-*" -type d | sort | head -n -5 | sudo xargs rm -rf 2>/dev/null || true
+            sudo find /var/backups -name "frontend-*" -type d | sort | head -n -5 | sudo xargs rm -rf 2>/dev/null || true
+            sudo find /var/backups -name "nginx-*" -type d | sort | head -n -5 | sudo xargs rm -rf 2>/dev/null || true
+            
+            echo "=== Deployment completed successfully! ==="
+            echo "Frontend: https://toutefois.arianeguay.ca"
+            echo "Admin: https://admin.toutefois.arianeguay.ca"
+            echo "Build SHA: ${{ github.sha }}"
