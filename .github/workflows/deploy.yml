@@ -6,9 +6,10 @@ on:
     branches:
       - main
     paths:
-      - 'frontend/**'
-      - 'wp-content/**'
-      - 'nginx/**'
+      - "frontend/**"
+      - "wp-content/**"
+      - "nginx/**"
+      - ".github/workflows/deploy.yml"
 
 jobs:
   filter:
@@ -29,6 +30,8 @@ jobs:
               - 'wp-content/**'
             nginx:
               - 'nginx/**'
+            deploy:
+              - '.github/workflows/deploy.yml'
 
   build-frontend:
     runs-on: ubuntu-latest
