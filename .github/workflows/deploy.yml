@@ -83,10 +83,10 @@ jobs:
             sudo snap install --classic certbot
             sudo snap refresh certbot
             sudo ln -sf /snap/bin/certbot /usr/bin/certbot
-            sudo snap install certbot-dns-digitalocean
-            sudo snap refresh certbot-dns-digitalocean
             echo "Connecting Certbot DNS plugin..."
             sudo snap set certbot trust-plugin-with-root=ok
+            sudo snap install certbot-dns-digitalocean
+            sudo snap refresh certbot-dns-digitalocean
             sudo snap connect certbot-dns-digitalocean:plugin certbot:plugin
 
             echo "Requesting SSL certificate..."
