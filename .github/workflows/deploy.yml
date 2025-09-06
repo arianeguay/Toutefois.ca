@@ -79,6 +79,11 @@ jobs:
             sudo apt-get remove certbot -y || echo "Certbot not installed via apt."
             sudo snap remove certbot-dns-digitalocean || echo "certbot-dns-digitalocean not installed."
 
+            echo "Creating DigitalOcean credentials file..."
+            sudo mkdir -p /etc/letsencrypt
+            echo "dns_digitalocean_token = ${{ secrets.DIGITALOCEAN_TOKEN }}" | sudo tee /etc/letsencrypt/digitalocean.ini > /dev/null
+            sudo chmod 600 /etc/letsencrypt/digitalocean.ini
+
             echo "Installing Certbot and DigitalOcean Plugin..."
             sudo snap install --classic certbot
             sudo snap refresh certbot
@@ -87,7 +92,6 @@ jobs:
             sudo snap set certbot trust-plugin-with-root=ok
             sudo snap install certbot-dns-digitalocean
             sudo snap refresh certbot-dns-digitalocean
-            sudo snap connect certbot-dns-digitalocean:plugin certbot:plugin
 
             echo "Requesting SSL certificate..."
             sudo certbot certonly --dns-digitalocean --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
