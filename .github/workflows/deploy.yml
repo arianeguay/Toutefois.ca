@@ -48,12 +48,12 @@ jobs:
         if: needs.filter.outputs.wordpress == 'true'
         run: |
           echo "Setting up WordPress..."
-          sudo rsync -avz --delete wp-content/ /var/www/toutefois_app/wp-content/
-          
+          sudo rsync -avz --delete wp-content/ /var/www/wordpress/wp-content/
+
           echo "Setting WordPress file permissions..."
-          sudo find /var/www/toutefois_app/wp-content -type d -exec chmod 755 {} \;
-          sudo find /var/www/toutefois_app/wp-content -type f -exec chmod 644 {} \;
-          sudo chown -R www-data:www-data /var/www/toutefois_app/wp-content
+          sudo find /var/www/wordpress/wp-content -type d -exec chmod 755 {} \;
+          sudo find /var/www/wordpress/wp-content -type f -exec chmod 644 {} \;
+          sudo chown -R www-data:www-data /var/www/wordpress/wp-content
       - name: Deploy files via rsync
         uses: burnett01/rsync-deployments@6.0.0
         with:
