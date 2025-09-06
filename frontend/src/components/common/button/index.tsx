@@ -7,10 +7,11 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
   variant = 'primary',
   size = 'md',
   to,
+  style,
 }) => {
   return (
     <ButtonLinkWrapper to={to}>
-      <ButtonContainerStyled $variant={variant} $size={size}>
+      <ButtonContainerStyled $variant={variant} $size={size} style={style}>
         {children}
       </ButtonContainerStyled>
     </ButtonLinkWrapper>

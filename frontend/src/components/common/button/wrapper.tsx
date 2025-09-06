@@ -7,7 +7,11 @@ const ButtonLinkWrapper: React.FC<
   React.PropsWithChildren<ButtonLinkWrapperProps>
 > = ({ to, children }) => {
   if (!to) return <>{children}</>;
-  return <Link to={to}>{children}</Link>;
+  return (
+    <Link to={to} style={{ textDecoration: 'none' }}>
+      {children}
+    </Link>
+  );
 };
 
 export default ButtonLinkWrapper;

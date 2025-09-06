@@ -20,6 +20,13 @@ const buttonThemes: Record<ButtonVariant, ButtonTheme> = {
     borderColor: theme.colors.buttonTertiaryBackground,
   },
 };
+
+const buttonSizeWeight: Record<ButtonSize, string> = {
+  sm: theme.fontWeights.normal,
+  md: theme.fontWeights.medium,
+  lg: theme.fontWeights.bold,
+};
+
 const getButtonColors = (variant: ButtonVariant) => {
   const buttonTheme = buttonThemes[variant];
   return css`
@@ -44,6 +51,7 @@ export const ButtonContainerStyled = styled.button<{
   transition: all 0.1s ease;
 
   ${({ $variant }) => getButtonColors($variant)}
+  font-weight: ${({ $size }) => buttonSizeWeight[$size]};
   &:hover {
     transform: translateY(-2px);
     box-shadow: ${({ theme }) => theme.boxShadow.md};

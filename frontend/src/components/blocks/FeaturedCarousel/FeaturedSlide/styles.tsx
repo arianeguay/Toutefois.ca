@@ -16,6 +16,7 @@ export const SlideBody = styled.div`
   flex-direction: column;
   position: relative;
   z-index: 1;
+  max-width: 450px;
   gap: ${({ theme }) => theme.spacing.sm}px;
   color: ${({ theme }) => theme.colors.lightText};
 `;

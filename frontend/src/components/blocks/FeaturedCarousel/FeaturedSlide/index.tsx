@@ -1,5 +1,6 @@
 import parse from 'html-react-parser';
 import { useEffect, useState } from 'react';
+import { useTheme } from 'styled-components';
 import Api from '../../../../api';
 import type { WordpressImage, WordpressProject } from '../../../../types';
 import Button from '../../../common/button';
@@ -14,6 +15,7 @@ import {
 const FeaturedSlide: React.FC<{ project: WordpressProject }> = ({
   project,
 }) => {
+  const theme = useTheme();
   const [image, setImage] = useState<WordpressImage | null>(null);
   useEffect(() => {
     const fetchImage = async () => {
@@ -39,7 +41,11 @@ const FeaturedSlide: React.FC<{ project: WordpressProject }> = ({
             {project.title}
           </Typography>
           <Typography variant="body">{parse(project.excerpt)}</Typography>
-          <Button variant="primary" to={`/projects/${project.id}`}>
+          <Button
+            variant="primary"
+            to={`/projects/${project.id}`}
+            style={{ marginBlockStart: theme.spacing.sm }}
+          >
             En savoir plus
           </Button>
         </SlideBody>
