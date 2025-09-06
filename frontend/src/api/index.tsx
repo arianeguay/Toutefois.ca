@@ -5,11 +5,12 @@ import type {
   WordpressPost,
 } from '../types';
 
+const API_URL = import.meta.env.VITE_API_URL;
 class Api {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = 'http://localhost/wp-json';
+    this.baseUrl = API_URL || 'http://localhost/wp-json';
   }
 
   async fetchFromApi(url: string) {

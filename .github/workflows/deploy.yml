@@ -44,6 +44,16 @@ jobs:
         with:
           name: frontend-dist
           path: frontend/dist/
+      - name: Deploy WordPress files
+        if: needs.filter.outputs.wordpress == 'true'
+        run: |
+          echo "Setting up WordPress..."
+          sudo rsync -avz --delete wp-content/ /var/www/toutefois_app/wp-content/
+          
+          echo "Setting WordPress file permissions..."
+          sudo find /var/www/toutefois_app/wp-content -type d -exec chmod 755 {} \;
+          sudo find /var/www/toutefois_app/wp-content -type f -exec chmod 644 {} \;
+          sudo chown -R www-data:www-data /var/www/toutefois_app/wp-content
       - name: Deploy files via rsync
         uses: burnett01/rsync-deployments@6.0.0
         with:
@@ -70,9 +80,7 @@ jobs:
             sudo mv /var/www/toutefois_app/nginx/sites-available/*.conf /etc/nginx/sites-available/
 
             echo "Creating symlinks..."
-            sudo ln -sf /etc/nginx/sites-available/toutefois.ca.conf /etc/nginx/sites-enabled/toutefois.ca.conf
             sudo ln -sf /etc/nginx/sites-available/toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/toutefois.arianeguay.ca.conf
-            sudo ln -sf /etc/nginx/sites-available/admin.toutefois.ca.conf /etc/nginx/sites-enabled/admin.toutefois.ca.conf
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/admin.toutefois.arianeguay.ca.conf
 
             echo "Removing old certbot versions..."
@@ -98,7 +106,7 @@ jobs:
             sudo certbot certonly --dns-digitalocean \
               --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
               --dns-digitalocean-propagation-seconds 60 \
-              -d toutefois.arianeguay.ca -d *.toutefois.arianeguay.ca \
+              -d *.arianeguay.ca \ 
               --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }}
 
 
