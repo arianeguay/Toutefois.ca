@@ -94,15 +94,13 @@ jobs:
             sudo snap refresh certbot-dns-digitalocean
 
             echo "Requesting SSL certificate..."
-            # Request certificate for primary domain and wildcard
-            sudo certbot certonly --dns-digitalocean --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
-              -d toutefois.ca -d *.toutefois.ca \
-              --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }}
-              
-            # Request separate certificate for arianeguay subdomains
-            sudo certbot certonly --dns-digitalocean --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
+            # Request certificate for primary domain and wildcard with explicit DNS validation
+            sudo certbot certonly --dns-digitalocean \
+              --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
+              --dns-digitalocean-propagation-seconds 60 \
               -d toutefois.arianeguay.ca -d *.toutefois.arianeguay.ca \
               --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }}
+
 
             echo "Testing Nginx configuration..."
             sudo nginx -t
