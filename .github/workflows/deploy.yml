@@ -48,7 +48,8 @@ jobs:
         if: needs.filter.outputs.wordpress == 'true'
         run: |
           echo "Setting up WordPress..."
-          sudo rsync -avz --delete wp-content/ /var/www/wordpress/wp-content/
+          sudo rsync -avz --delete wp-content/plugins/toutefois /var/www/wordpress/wp-content/plugins/toutefois/
+          sudo rsync -avz --delete wp-content/themes/api-placeholder-theme /var/www/wordpress/wp-content/themes/api-placeholder-theme/
 
           echo "Setting WordPress file permissions..."
           sudo find /var/www/wordpress/wp-content -type d -exec chmod 755 {} \;
