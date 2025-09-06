@@ -13,13 +13,13 @@ on:
   workflow_dispatch:
     inputs:
       skip_ssl:
-        description: 'Skip SSL certificate renewal'
+        description: "Skip SSL certificate renewal"
         required: false
-        default: 'false'
+        default: "false"
         type: boolean
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
   YARN_CACHE_FOLDER: ~/.yarn
 
 jobs:
@@ -35,8 +35,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'yarn'
-          cache-dependency-path: 'frontend/yarn.lock'
+          cache: "yarn"
+          cache-dependency-path: "frontend/yarn.lock"
 
       - name: Cache Yarn dependencies
         id: yarn-cache
@@ -53,7 +53,7 @@ jobs:
         working-directory: frontend
         run: |
           if [[ "${{ steps.yarn-cache.outputs.cache-hit }}" != "true" ]]; then
-            yarn install --frozen-lockfile --prefer-offline
+            yarn install --prefer-offline
           fi
 
       - name: Build Frontend
@@ -121,25 +121,25 @@ jobs:
           script: |
             set -e
             echo "=== WordPress Configuration ==="
-            
+
             # Create WordPress directories
             sudo mkdir -p /var/www/wordpress/wp-content/{plugins,themes,uploads}
-            
+
             # Sync WordPress content with backup
             echo "Backing up existing WordPress content..."
             sudo mkdir -p /var/backups/wordpress-$(date +%Y%m%d-%H%M%S)
             sudo cp -r /var/www/wordpress/wp-content/* /var/backups/wordpress-$(date +%Y%m%d-%H%M%S)/ 2>/dev/null || echo "No existing content to backup"
-            
+
             echo "Syncing WordPress plugins and themes..."
             sudo rsync -avz --delete /var/www/toutefois_app/wp-content/plugins/ /var/www/wordpress/wp-content/plugins/
             sudo rsync -avz --delete /var/www/toutefois_app/wp-content/themes/ /var/www/wordpress/wp-content/themes/
-            
+
             # Set proper permissions
             echo "Setting WordPress file permissions..."
             sudo find /var/www/wordpress/wp-content -type d -exec chmod 755 {} \;
             sudo find /var/www/wordpress/wp-content -type f -exec chmod 644 {} \;
             sudo chown -R www-data:www-data /var/www/wordpress/wp-content
-            
+
             echo "WordPress configuration completed ✓"
 
   configure-frontend:
@@ -156,7 +156,7 @@ jobs:
           script: |
             set -e
             echo "=== Frontend Configuration ==="
-            
+
             # Create frontend directory and backup
             sudo mkdir -p /var/www/frontend
             if [ -d "/var/www/frontend" ] && [ "$(ls -A /var/www/frontend)" ]; then
@@ -164,12 +164,12 @@ jobs:
               sudo mkdir -p /var/backups/frontend-$(date +%Y%m%d-%H%M%S)
               sudo cp -r /var/www/frontend/* /var/backups/frontend-$(date +%Y%m%d-%H%M%S)/
             fi
-            
+
             echo "Deploying frontend files..."
             sudo rsync -avz --delete /var/www/toutefois_app/frontend/dist/ /var/www/frontend/
             sudo chown -R www-data:www-data /var/www/frontend
             sudo chmod -R 755 /var/www/frontend
-            
+
             echo "Frontend configuration completed ✓"
 
   configure-nginx:
@@ -186,24 +186,24 @@ jobs:
           script: |
             set -e
             echo "=== Nginx Configuration ==="
-            
+
             # Backup existing nginx configs
             sudo mkdir -p /var/backups/nginx-$(date +%Y%m%d-%H%M%S)
             sudo cp /etc/nginx/sites-available/*.conf /var/backups/nginx-$(date +%Y%m%d-%H%M%S)/ 2>/dev/null || echo "No existing configs to backup"
-            
+
             # Deploy new nginx configs
             echo "Updating Nginx configurations..."
             sudo cp /var/www/toutefois_app/nginx/sites-available/*.conf /etc/nginx/sites-available/
-            
+
             # Create symlinks
             echo "Creating site symlinks..."
             sudo ln -sf /etc/nginx/sites-available/toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/toutefois.arianeguay.ca.conf
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/admin.toutefois.arianeguay.ca.conf
-            
+
             # Test nginx configuration
             echo "Testing Nginx configuration..."
             sudo nginx -t
-            
+
             echo "Nginx configuration completed ✓"
 
   setup-ssl:
@@ -221,7 +221,7 @@ jobs:
           script: |
             set -e
             echo "=== SSL Certificate Setup ==="
-            
+
             # Check if certificates already exist and are valid
             if sudo certbot certificates 2>/dev/null | grep -q "toutefois.arianeguay.ca"; then
               echo "Existing certificates found. Checking validity..."
@@ -230,30 +230,30 @@ jobs:
                 exit 0
               fi
             fi
-            
+
             # Clean up old certbot installations
             echo "Cleaning up old Certbot installations..."
             sudo apt-get remove certbot -y 2>/dev/null || echo "Certbot not installed via apt"
             sudo snap remove certbot-dns-digitalocean 2>/dev/null || echo "certbot-dns-digitalocean not installed"
             sudo snap remove certbot 2>/dev/null || echo "certbot not installed via snap"
-            
+
             # Create DigitalOcean credentials
             echo "Setting up DigitalOcean credentials..."
             sudo mkdir -p /etc/letsencrypt
             echo "dns_digitalocean_token = ${{ secrets.DIGITALOCEAN_API_TOKEN }}" | sudo tee /etc/letsencrypt/digitalocean.ini > /dev/null
             sudo chmod 600 /etc/letsencrypt/digitalocean.ini
-            
+
             # Install Certbot and DigitalOcean plugin
             echo "Installing Certbot and DigitalOcean plugin..."
             sudo snap install --classic certbot
             sudo snap refresh certbot
             sudo ln -sf /snap/bin/certbot /usr/bin/certbot
-            
+
             echo "Installing DigitalOcean DNS plugin..."
             sudo snap set certbot trust-plugin-with-root=ok
             sudo snap install certbot-dns-digitalocean
             sudo snap refresh certbot-dns-digitalocean
-            
+
             # Request SSL certificates
             echo "Requesting SSL certificates..."
             sudo certbot certonly --dns-digitalocean \
@@ -263,7 +263,7 @@ jobs:
               -d "admin.toutefois.arianeguay.ca" \
               --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }} \
               --force-renewal
-            
+
             echo "SSL certificates setup completed ✓"
 
   finalize-deployment:
@@ -281,30 +281,30 @@ jobs:
           script: |
             set -e
             echo "=== Finalizing Deployment ==="
-            
+
             # Final nginx test and reload
             echo "Final Nginx configuration test..."
             sudo nginx -t
-            
+
             echo "Reloading Nginx..."
             sudo systemctl reload nginx
-            
+
             # Verify services are running
             echo "Verifying services..."
             sudo systemctl is-active nginx || { echo "Nginx is not running!"; exit 1; }
             sudo systemctl is-active php8.1-fpm || sudo systemctl is-active php-fpm || echo "PHP-FPM status unknown"
-            
+
             # Test website accessibility
             echo "Testing website accessibility..."
             curl -f -s -o /dev/null https://toutefois.arianeguay.ca || echo "Warning: Main site not accessible"
             curl -f -s -o /dev/null https://admin.toutefois.arianeguay.ca || echo "Warning: Admin site not accessible"
-            
+
             # Clean up old backups (keep last 5)
             echo "Cleaning up old backups..."
             sudo find /var/backups -name "wordpress-*" -type d | sort | head -n -5 | sudo xargs rm -rf 2>/dev/null || true
             sudo find /var/backups -name "frontend-*" -type d | sort | head -n -5 | sudo xargs rm -rf 2>/dev/null || true
             sudo find /var/backups -name "nginx-*" -type d | sort | head -n -5 | sudo xargs rm -rf 2>/dev/null || true
-            
+
             echo "=== Deployment completed successfully! ==="
             echo "Frontend: https://toutefois.arianeguay.ca"
             echo "Admin: https://admin.toutefois.arianeguay.ca"
