@@ -59,7 +59,7 @@ jobs:
       - name: Build Frontend
         working-directory: frontend
         env:
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          VITE_API_URL: ${{ secrets.REACT_APP_API_URL }}
           NODE_ENV: production
         run: yarn build
 
