@@ -75,12 +75,15 @@ jobs:
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.ca.conf /etc/nginx/sites-enabled/admin.toutefois.ca.conf
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/admin.toutefois.arianeguay.ca.conf
 
+            echo "Removing old certbot versions..."
+            sudo apt-get remove certbot -y || echo "Certbot not installed via apt."
+
             echo "Installing Certbot and DigitalOcean Plugin..."
-            if ! command -v certbot &> /dev/null; then
-              sudo snap install --classic certbot
-              sudo ln -s /snap/bin/certbot /usr/bin/certbot
-            fi
+            sudo snap install --classic certbot
+            sudo snap refresh certbot
+            sudo ln -sf /snap/bin/certbot /usr/bin/certbot
             sudo snap install certbot-dns-digitalocean
+            sudo snap refresh certbot-dns-digitalocean
             echo "Connecting Certbot DNS plugin..."
             sudo snap set certbot trust-plugin-with-root=ok
             sudo snap connect certbot-dns-digitalocean:plugin certbot:plugin
