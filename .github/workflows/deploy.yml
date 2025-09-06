@@ -77,6 +77,7 @@ jobs:
 
             echo "Removing old certbot versions..."
             sudo apt-get remove certbot -y || echo "Certbot not installed via apt."
+            sudo snap remove certbot-dns-digitalocean || echo "certbot-dns-digitalocean not installed."
 
             echo "Installing Certbot and DigitalOcean Plugin..."
             sudo snap install --classic certbot
