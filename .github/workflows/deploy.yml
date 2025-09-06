@@ -43,17 +43,6 @@ jobs:
         with:
           name: frontend-dist
           path: frontend/dist/
-      - name: Deploy WordPress files
-        run: |
-          echo "Setting up WordPress..."
-          sudo mkdir -p /var/www/wordpress/wp-content
-          sudo rsync -avz --delete wp-content/plugins/ /var/www/wordpress/wp-content/plugins
-          sudo rsync -avz --delete wp-content/themes/ /var/www/wordpress/wp-content/themes
-
-          echo "Setting WordPress file permissions..."
-          sudo find /var/www/wordpress/wp-content -type d -exec chmod 755 {} \;
-          sudo find /var/www/wordpress/wp-content -type f -exec chmod 644 {} \;
-          sudo chown -R www-data:www-data /var/www/wordpress/wp-content
       - name: Deploy files via rsync
         uses: burnett01/rsync-deployments@6.0.0
         with:
@@ -76,6 +65,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             set -e
+            echo "Setting up WordPress..."
+            sudo mkdir -p /var/www/wordpress/wp-content
+            sudo rsync -avz --delete /var/www/toutefois_app/wp-content/plugins/ /var/www/wordpress/wp-content/plugins/
+            sudo rsync -avz --delete /var/www/toutefois_app/wp-content/themes/ /var/www/wordpress/wp-content/themes/
+
+            echo "Setting WordPress file permissions..."
+            sudo find /var/www/wordpress/wp-content -type d -exec chmod 755 {} \;
+            sudo find /var/www/wordpress/wp-content -type f -exec chmod 644 {} \;
+            sudo chown -R www-data:www-data /var/www/wordpress/wp-content
+
             echo "Moving Nginx configs..."
             sudo mv /var/www/toutefois_app/nginx/sites-available/*.conf /etc/nginx/sites-available/
 
