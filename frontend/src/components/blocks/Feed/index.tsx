@@ -1,7 +1,7 @@
 import React from 'react';
 
 const FEED_PAGE_ID = 'https://www.facebook.com/profile.php?id=100094501037202';
-const Feed = React.memo((props) => {
+const Feed = React.memo(() => {
   React.useEffect(() => {
     const script = document.createElement('script');
 
