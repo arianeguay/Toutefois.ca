@@ -22,14 +22,6 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
     $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
 }
 
-// Define site URLs to prevent misconfiguration issues.
-// This hardcodes the correct URLs, avoiding potential errors where WordPress might guess the wrong ones.
-if (!defined('WP_HOME')) {
-    define('WP_HOME', 'https://admin.toutefois.arianeguay.ca');
-}
-if (!defined('WP_SITEURL')) {
-    define('WP_SITEURL', 'https://admin.toutefois.arianeguay.ca');
-}
 
 // Include Components
 require_once plugin_dir_path(__FILE__) . 'components/featured-carousel.php';
@@ -302,39 +294,15 @@ add_action('rest_api_init', function () {
     ));
 });
 
-// 9. Add CORS headers for REST API
-function add_cors_http_header() {
-    // Allow requests from your frontend domain
-    $allowed_origins = array(
-        'https://toutefois.arianeguay.ca',
-        'http://localhost:3000', // For development
-        'http://localhost:5173'  // For Vite dev server
-    );
-    
-    $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-    
-    if (in_array($origin, $allowed_origins)) {
-        header("Access-Control-Allow-Origin: $origin");
-    }
-    
-    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization, X-WP-Nonce");
-    header("Access-Control-Allow-Credentials: true");
-    
-    // Handle preflight OPTIONS requests
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        status_header(200);
-        exit();
-    }
-}
-add_action('init', 'add_cors_http_header');
 
 // 10. Add CORS headers specifically for REST API requests
 function add_cors_rest_headers($response, $handler, $request) {
     $allowed_origins = array(
         'https://toutefois.arianeguay.ca',
+        'https://admin.toutefois.arianeguay.ca',
         'http://localhost:3000',
-        'http://localhost:5173'
+        'http://localhost:5173',
+        'http://localhost'
     );
     
     $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
@@ -359,5 +327,3 @@ function toutefois_register_blocks() {
     }
 }
 add_action('init', 'toutefois_register_blocks');
-
-
