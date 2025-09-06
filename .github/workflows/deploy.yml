@@ -107,9 +107,8 @@ jobs:
             sudo certbot certonly --dns-digitalocean \
               --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
               --dns-digitalocean-propagation-seconds 60 \
-              -d *.arianeguay.ca \ 
+              -d "*.arianeguay.ca" \
               --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }}
-
 
             echo "Testing Nginx configuration..."
             sudo nginx -t
