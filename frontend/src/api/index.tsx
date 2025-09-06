@@ -10,7 +10,7 @@ class Api {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = API_URL || 'http://localhost/wp-json';
+    this.baseUrl = API_URL || 'https://admin.toutefois.arianeguay.ca/wp-json';
   }
 
   async fetchFromApi(url: string) {
