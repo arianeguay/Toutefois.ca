@@ -39,13 +39,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Download frontend artifact
-        if: needs.filter.outputs.frontend == 'true'
         uses: actions/download-artifact@v4
         with:
           name: frontend-dist
           path: frontend/dist/
       - name: Deploy WordPress files
-        if: needs.filter.outputs.wordpress == 'true'
         run: |
           echo "Setting up WordPress..."
           sudo rsync -avz --delete wp-content/plugins/toutefois /var/www/wordpress/wp-content/plugins/toutefois/
