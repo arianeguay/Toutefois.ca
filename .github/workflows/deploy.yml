@@ -43,6 +43,9 @@ jobs:
         with:
           name: frontend-dist
           path: frontend/dist/
+      - name: Create production .env
+        run: |
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > frontend/dist/.env
       - name: Deploy files via rsync
         uses: burnett01/rsync-deployments@6.0.0
         with:
@@ -74,6 +77,11 @@ jobs:
             sudo find /var/www/wordpress/wp-content -type d -exec chmod 755 {} \;
             sudo find /var/www/wordpress/wp-content -type f -exec chmod 644 {} \;
             sudo chown -R www-data:www-data /var/www/wordpress/wp-content
+
+            echo "Deploying frontend files..."
+            sudo mkdir -p /var/www/frontend
+            sudo rsync -avz --delete /var/www/toutefois_app/frontend/dist/ /var/www/frontend/
+            sudo chown -R www-data:www-data /var/www/frontend
 
             echo "Moving Nginx configs..."
             sudo mv /var/www/toutefois_app/nginx/sites-available/*.conf /etc/nginx/sites-available/
