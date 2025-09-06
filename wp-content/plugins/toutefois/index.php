@@ -281,7 +281,56 @@ add_action('rest_api_init', function () {
     ));
 });
 
-// 9. Register Gutenberg Blocks
+// 9. Add CORS headers for REST API
+function add_cors_http_header() {
+    // Allow requests from your frontend domain
+    $allowed_origins = array(
+        'https://toutefois.arianeguay.ca',
+        'http://localhost:3000', // For development
+        'http://localhost:5173'  // For Vite dev server
+    );
+    
+    $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+    
+    if (in_array($origin, $allowed_origins)) {
+        header("Access-Control-Allow-Origin: $origin");
+    }
+    
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization, X-WP-Nonce");
+    header("Access-Control-Allow-Credentials: true");
+    
+    // Handle preflight OPTIONS requests
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        status_header(200);
+        exit();
+    }
+}
+add_action('init', 'add_cors_http_header');
+
+// 10. Add CORS headers specifically for REST API requests
+function add_cors_rest_headers($response, $handler, $request) {
+    $allowed_origins = array(
+        'https://toutefois.arianeguay.ca',
+        'http://localhost:3000',
+        'http://localhost:5173'
+    );
+    
+    $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+    
+    if (in_array($origin, $allowed_origins)) {
+        $response->header('Access-Control-Allow-Origin', $origin);
+    }
+    
+    $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-WP-Nonce');
+    $response->header('Access-Control-Allow-Credentials', 'true');
+    
+    return $response;
+}
+add_filter('rest_pre_serve_request', 'add_cors_rest_headers', 10, 3);
+
+// 11. Register Gutenberg Blocks
 function toutefois_register_blocks() {
     $block_folders = glob(plugin_dir_path(__FILE__) . 'build/*', GLOB_ONLYDIR);
     foreach ($block_folders as $block_folder) {
