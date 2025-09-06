@@ -83,20 +83,75 @@ export const theme = {
 };
 
 const WordpressStyling = css`
-  .wp-block-group {
-    max-width: 1200px;
+  /* Default styles for all WordPress blocks */
+  [class*='wp-block-'] {
+    max-width: 1200px; /* Or your preferred content width */
     width: 100%;
-    margin-inline: auto;
-    padding-block: ${({ theme }) => theme.spacing.xxl}px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: ${({ theme }) => theme.spacing.md}px;
   }
 
-  .wp-block-image {
-    max-width: 1200px;
-    width: 100%;
-    margin-inline: auto;
+  .wp-block-group,
+  .wp-block-columns,
+  .wp-block-cover,
+  .wp-block-media-text {
+    max-width: none; /* These are container blocks, let them be full-width by default */
   }
 
-  .wp-block-button {
+  .wp-block-image img {
+    width: 100%;
+    height: auto;
+  }
+
+  .wp-block-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: ${({ theme }) => theme.spacing.md}px;
+  }
+
+  .wp-block-quote {
+    border-left: 4px solid ${({ theme }) => theme.colors.primaryText};
+    padding-left: ${({ theme }) => theme.spacing.md}px;
+    font-style: italic;
+  }
+
+  .wp-block-pullquote {
+    border-top: 4px solid ${({ theme }) => theme.colors.primaryText};
+    border-bottom: 4px solid ${({ theme }) => theme.colors.primaryText};
+    text-align: center;
+    padding: ${({ theme }) => theme.spacing.lg}px 0;
+  }
+
+  .wp-block-button__link {
+    background-color: ${({ theme }) => theme.colors.primaryText};
+    color: ${({ theme }) => theme.colors.lightText};
+    padding: ${({ theme }) => theme.spacing.sm}px ${({ theme }) => theme.spacing.md}px;
+    border-radius: ${({ theme }) => theme.borderRadius.sm}px;
+    text-decoration: none;
+  }
+
+  .wp-block-separator {
+    border: none;
+    border-top: 1px solid ${({ theme }) => theme.colors.secondaryText};
+    opacity: 0.5;
+    max-width: 200px;
+  }
+
+  .wp-block-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .wp-block-table th,
+  .wp-block-table td {
+    border: 1px solid ${({ theme }) => theme.colors.secondaryText};
+    padding: ${({ theme }) => theme.spacing.sm}px;
+  }
+
+  ul,
+  ol {
+    padding-left: ${({ theme }) => theme.spacing.lg}px;
   }
 `;
 

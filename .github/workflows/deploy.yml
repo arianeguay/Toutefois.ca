@@ -81,7 +81,7 @@ jobs:
   configure-server:
     runs-on: ubuntu-latest
     needs: [filter, deploy]
-    if: always() && needs.filter.outputs.nginx == 'true'
+    if: always() && (needs.filter.outputs.nginx == 'true' || needs.filter.outputs.deploy == 'true')
     steps:
       - name: Setup Server, SSL, and Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
