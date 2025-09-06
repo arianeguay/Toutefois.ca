@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react';
 import Api from '../../../api';
 import type { WordpressProject } from '../../../types';
-import Container from '../../common/Container';
-import {
-  ArticleExcerpt,
-  ArticleImage,
-  ArticleTitle,
-  ListContainer,
-  ListItem,
-} from './styles';
+import Feed from '../Feed';
 
 const NewsList = () => {
   const [articles, setArticles] = useState<WordpressProject[]>([]);
@@ -37,26 +30,7 @@ const NewsList = () => {
     return <p>No news found.</p>;
   }
 
-  return (
-    <Container>
-      <ListContainer>
-        {articles.map((article) => (
-          <ListItem key={article.id}>
-            {article.featured_image_url && (
-              <ArticleImage
-                src={article.featured_image_url}
-                alt={article.title}
-              />
-            )}
-            <ArticleTitle>{article.title}</ArticleTitle>
-            <ArticleExcerpt
-              dangerouslySetInnerHTML={{ __html: article.excerpt }}
-            />
-          </ListItem>
-        ))}
-      </ListContainer>
-    </Container>
-  );
+  return <Feed />;
 };
 
 export default NewsList;

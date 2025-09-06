@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import api from './api';
 import PageLayout from './layout/Page';
+import ProjectsPage from './pages/projects';
+import ProjectSinglePage from './pages/projects/[id]';
 import { type WordpressPage } from './types';
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
             element={<PageLayout page={page} />}
           />
         ))}
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:id" element={<ProjectSinglePage />} />
       </Routes>
     </div>
   );

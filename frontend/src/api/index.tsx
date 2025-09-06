@@ -1,4 +1,9 @@
-import type { WordpressMenuItem, WordpressPage, WordpressPost } from '../types';
+import type {
+  WordpressImage,
+  WordpressMenuItem,
+  WordpressPage,
+  WordpressPost,
+} from '../types';
 
 class Api {
   private baseUrl: string;
@@ -41,6 +46,9 @@ class Api {
     return this.fetchFromApi('wp/v2/pages');
   }
 
+  async fetchImageById(id: number): Promise<WordpressImage> {
+    return this.fetchFromApi(`wp/v2/media/${id}`);
+  }
   async fetchPageBySlug(slug: string): Promise<WordpressPage> {
     return this.fetchFromApi(`wp/v2/pages?slug=${slug}`);
   }
@@ -70,7 +78,9 @@ class Api {
   }
 
   async fetchProjectsGrid(page = 1, perPage = 9) {
-    return this.fetchFromApi(`toutefois/v1/projects-grid?page=${page}&per_page=${perPage}`);
+    return this.fetchFromApi(
+      `toutefois/v1/projects-grid?page=${page}&per_page=${perPage}`,
+    );
   }
 }
 

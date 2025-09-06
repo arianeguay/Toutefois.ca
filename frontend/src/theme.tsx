@@ -11,6 +11,13 @@ export const theme = {
     mainBackground: '#FFF4D8',
 
     projects: '#862331',
+
+    buttonPrimaryBackground: '#E1A42B',
+    buttonPrimaryColor: '#2F2C58',
+    buttonSecondaryBackground: '#6B1E2C',
+    buttonSecondaryColor: '#F5F3EE',
+    buttonTertiaryBackground: '#2F2C58',
+    buttonTertiaryColor: '#F5F3EE',
   },
   fonts: {
     secondary: 'Poppins',
@@ -80,23 +87,27 @@ export const theme = {
     xl: '0 32px 64px rgba(0, 0, 0, 0.1)',
     xxl: '0 64px 128px rgba(0, 0, 0, 0.1)',
   },
+  buttonSize: {
+    height_sm: '24px',
+    height_md: '32px',
+    height_lg: '40px',
+    width_sm: '120px',
+    width_md: '160px',
+    width_lg: '200px',
+  },
 };
 
 const WordpressStyling = css`
-  /* Default styles for all WordPress blocks */
-  [class*='wp-block-'] {
-    max-width: 1200px; /* Or your preferred content width */
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: ${({ theme }) => theme.spacing.md}px;
-  }
-
   .wp-block-group,
   .wp-block-columns,
   .wp-block-cover,
   .wp-block-media-text {
-    max-width: none; /* These are container blocks, let them be full-width by default */
+    max-width: 1200px;
+    width: 100%;
+    margin-inline: auto;
+    margin-bottom: ${({ theme }) => theme.spacing.md}px;
+
+    padding-block: ${({ theme }) => theme.spacing.xl}px;
   }
 
   .wp-block-image img {
@@ -126,7 +137,8 @@ const WordpressStyling = css`
   .wp-block-button__link {
     background-color: ${({ theme }) => theme.colors.primaryText};
     color: ${({ theme }) => theme.colors.lightText};
-    padding: ${({ theme }) => theme.spacing.sm}px ${({ theme }) => theme.spacing.md}px;
+    padding: ${({ theme }) => theme.spacing.sm}px
+      ${({ theme }) => theme.spacing.md}px;
     border-radius: ${({ theme }) => theme.borderRadius.sm}px;
     text-decoration: none;
   }

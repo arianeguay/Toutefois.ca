@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react';
 import { A11y, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-
 import Api from '../../../api';
 import type { WordpressProject } from '../../../types';
-import {
-  CarouselContainer,
-  ProjectExcerpt,
-  ProjectImage,
-  ProjectTitle,
-  SlideContent,
-} from './styles';
+import FeaturedSlide from './FeaturedSlide';
+import { CarouselContainer } from './styles';
 
 const FeaturedCarousel = () => {
   const [projects, setProjects] = useState<WordpressProject[]>([]);
@@ -50,18 +44,7 @@ const FeaturedCarousel = () => {
       >
         {projects.map((project) => (
           <SwiperSlide key={project.id}>
-            <SlideContent>
-              {project.featured_image_url && (
-                <ProjectImage
-                  src={project.featured_image_url}
-                  alt={project.title}
-                />
-              )}
-              <ProjectTitle>{project.title}</ProjectTitle>
-              <ProjectExcerpt
-                dangerouslySetInnerHTML={{ __html: project.excerpt }}
-              />
-            </SlideContent>
+            <FeaturedSlide project={project} />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -7,4 +7,7 @@ export const HeaderContainer = styled.header`
   border-bottom: 3px solid ${({ theme }) => theme.colors.mainBackground};
   padding-block: ${({ theme }) => theme.spacing.md}px;
   padding-inline: ${({ theme }) => theme.spacing.xxl}px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 `;
