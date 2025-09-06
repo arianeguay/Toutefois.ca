@@ -55,11 +55,12 @@ jobs:
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.ca.conf /etc/nginx/sites-enabled/admin.toutefois.ca.conf
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/admin.toutefois.arianeguay.ca.conf
 
-            echo "Installing Certbot..."
+            echo "Installing Certbot and DigitalOcean Plugin..."
             if ! command -v certbot &> /dev/null; then
               sudo snap install --classic certbot
               sudo ln -s /snap/bin/certbot /usr/bin/certbot
             fi
+            sudo snap install certbot-dns-digitalocean
 
             echo "Requesting SSL certificate..."
             sudo certbot certonly --dns-digitalocean --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
