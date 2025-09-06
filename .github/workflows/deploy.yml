@@ -47,8 +47,8 @@ jobs:
         run: |
           echo "Setting up WordPress..."
           sudo mkdir -p /var/www/wordpress/wp-content
-          sudo rsync -avz --delete wp-content/plugins/ /var/www/wordpress/wp-content/plugins/
-          sudo rsync -avz --delete wp-content/themes/ /var/www/wordpress/wp-content/themes/
+          sudo rsync -avz --delete wp-content/plugins/* /var/www/wordpress/wp-content/plugins/
+          sudo rsync -avz --delete wp-content/themes/* /var/www/wordpress/wp-content/themes/
 
           echo "Setting WordPress file permissions..."
           sudo find /var/www/wordpress/wp-content -type d -exec chmod 755 {} \;
@@ -106,7 +106,8 @@ jobs:
             sudo certbot certonly --dns-digitalocean \
               --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
               --dns-digitalocean-propagation-seconds 60 \
-              -d "*.arianeguay.ca" \
+              -d "toutefois.arianeguay.ca" \
+              -d "admin.toutefois.arianeguay.ca" \
               --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }}
 
             echo "Testing Nginx configuration..."
