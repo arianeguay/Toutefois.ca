@@ -297,7 +297,7 @@ add_action('rest_api_init', function () {
 
 // 9. Add CORS support for the REST API
 function add_cors_headers() {
-    // Only add headers for REST API requests
+    // Always enable CORS for REST API requests
     if (strpos($_SERVER['REQUEST_URI'], '/wp-json/') === false) {
         return;
     }
@@ -311,17 +311,26 @@ function add_cors_headers() {
     
     $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
     
+    // If origin is in allowed list, use that origin
     if (in_array($origin, $allowed_origins)) {
         header('Access-Control-Allow-Origin: ' . $origin);
-        header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
-        header('Access-Control-Allow-Credentials: true');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
-        
-        // Handle preflight requests
-        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-            status_header(200);
-            exit();
-        }
+    } else {
+        // Fallback to the main site URL for production
+        header('Access-Control-Allow-Origin: https://toutefois.arianeguay.ca');
+    }
+    
+    // Set standard CORS headers
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Authorization, Content-Type, X-Requested-With');
+    header('Access-Control-Expose-Headers: X-WP-Total, X-WP-TotalPages');
+    
+    // Explicitly disable credentials since we're using 'omit' in the frontend
+    header('Access-Control-Allow-Credentials: false');
+    
+    // Handle preflight requests
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        status_header(200);
+        exit();
     }
 }
 

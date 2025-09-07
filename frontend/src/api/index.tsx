@@ -15,24 +15,53 @@ class Api {
 
   async fetchFromApi(url: string) {
     const apiUrl = `${this.baseUrl}/${url}`;
+    console.log('Fetching from API:', apiUrl);
+    
+    try {
+      // First try with no Content-Type header
+      console.log('Attempting fetch without Content-Type header');
+      let response = await fetch(apiUrl, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'omit', // No credentials to avoid cookie issues
+        headers: {
+          'Accept': 'application/json',
+          // No Content-Type header
+        },
+        cache: 'no-store', // Skip cache completely
+      });
+      
+      // Log response details for debugging
+      console.log('Response status:', response.status);
+      console.log('Response headers:', [...response.headers.entries()]);
 
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}, URL: ${apiUrl}`);
+      }
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      // Check if the response is actually JSON
+      const contentType = response.headers.get('content-type');
+      console.log('Content-Type:', contentType);
+      
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Received non-JSON response:', text.substring(0, 500) + '...');
+        
+        // The response is HTML instead of JSON, which typically means:
+        // 1. WordPress is returning an error page
+        // 2. WordPress REST API might not be properly configured
+        // 3. A redirect is happening to a login page
+        throw new Error(`Received non-JSON response from API (${contentType}). Check server configuration.`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('API fetch error:', error);
+      throw error;
     }
-
-    const data = await response.json();
-
-    return data;
   }
 
   async fetchPosts(): Promise<WordpressPost[]> {

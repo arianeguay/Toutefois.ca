@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import api from './api';
+import ErrorPage from './components/error';
 import PageLayout from './layout/Page';
 import ProjectsPage from './pages/projects';
 import ProjectSinglePage from './pages/projects/[id]';
@@ -29,8 +30,8 @@ function App() {
     fetchPages();
   }, []);
 
-  if (loading) return <div className="loading">Loading...</div>;
-  if (error) return <div className="error">Error: {error}</div>;
+  if (loading) return null;
+  if (error) return <ErrorPage error={error} />;
 
   return (
     <div className="app">
