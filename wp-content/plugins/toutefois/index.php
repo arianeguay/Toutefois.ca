@@ -295,6 +295,40 @@ add_action('rest_api_init', function () {
     ));
 });
 
+// 9. Add CORS support for the REST API
+function add_cors_headers() {
+    // Only add headers for REST API requests
+    if (strpos($_SERVER['REQUEST_URI'], '/wp-json/') === false) {
+        return;
+    }
+    
+    $allowed_origins = array(
+        'https://toutefois.arianeguay.ca',
+        'https://admin.toutefois.arianeguay.ca',
+        'http://localhost:3000',
+        'http://localhost:5173'
+    );
+    
+    $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+    
+    if (in_array($origin, $allowed_origins)) {
+        header('Access-Control-Allow-Origin: ' . $origin);
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        
+        // Handle preflight requests
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            status_header(200);
+            exit();
+        }
+    }
+}
+
+// Hook into WordPress to add CORS headers
+add_action('init', 'add_cors_headers', 1);
+add_action('rest_api_init', 'add_cors_headers', 1);
+
 
 
 // 11. Register Gutenberg Blocks
