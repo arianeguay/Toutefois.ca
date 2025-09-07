@@ -108,6 +108,15 @@ export const WordpressStyling = css`
     background: none;
     text-align: center;
   }
+  .has-text-align-center {
+    text-align: center;
+  }
+  .has-text-align-left {
+    text-align: left;
+  }
+  .has-text-align-right {
+    text-align: right;
+  }
   .wp-block-separator.is-style-dots::before {
     content: '···';
     letter-spacing: 16px;
