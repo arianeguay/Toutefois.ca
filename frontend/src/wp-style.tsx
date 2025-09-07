@@ -1,0 +1,454 @@
+// styles/wordpress.ts
+import { css } from 'styled-components';
+
+export const WordpressStyling = css`
+  /* Container-like blocks get the site width and spacing */
+  .wp-block-group,
+  .wp-block-columns,
+  .wp-block-cover,
+  .wp-block-media-text,
+  .wp-block-query,
+  .wp-block-embed,
+  .wp-block-gallery,
+  .wp-block-table,
+  .wp-block-image,
+  .wp-block-pullquote,
+  .wp-block-separator,
+  .wp-block-quote {
+    max-width: ${({ theme }) => theme.content.maxWidth}px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: ${({ theme }) => theme.spacing.md}px;
+    padding-left: ${({ theme }) => theme.content.padX}px;
+    padding-right: ${({ theme }) => theme.content.padX}px;
+    /* vertical padding only for “sectiony” blocks */
+  }
+
+  /* Tighter defaults for pure text blocks */
+  .wp-block-paragraph,
+  .wp-block-list,
+  .wp-block-heading {
+    max-width: ${({ theme }) => theme.content.maxWidth}px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: ${({ theme }) => theme.content.padX}px;
+    padding-right: ${({ theme }) => theme.content.padX}px;
+  }
+
+  /* Alignments (Gutenberg) */
+  .alignwide,
+  .wp-block[data-align='wide'] {
+    max-width: ${({ theme }) => Math.round(theme.content.maxWidth * 1.1)}px;
+  }
+  .alignfull,
+  .wp-block[data-align='full'] {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .alignleft {
+    float: left;
+    margin: 4px 16px 8px 0;
+    max-width: 50%;
+  }
+  .alignright {
+    float: right;
+    margin: 4px 0 8px 16px;
+    max-width: 50%;
+  }
+  .aligncenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Typography helpers (uses your createFontStyleCSS in GlobalStyle for h1..p) */
+  a {
+    color: ${({ theme }) => theme.prose.link};
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+  a:hover {
+    color: ${({ theme }) => theme.prose.linkHover};
+  }
+
+  /* Paragraphs and spacing */
+  p {
+    margin: 16px auto;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    padding-left: ${({ theme }) => theme.spacing.lg}px;
+    margin: 12px auto;
+  }
+  li {
+    margin: 6px 0;
+  }
+  ul ul,
+  ol ol,
+  ul ol,
+  ol ul {
+    margin: 6px 0 6px 12px;
+  }
+
+  /* Separator / HR */
+  .wp-block-separator,
+  hr {
+    border: none;
+    height: 1px;
+    background: ${({ theme }) => theme.prose.hr};
+    margin: 32px auto;
+    max-width: 200px;
+  }
+  .wp-block-separator.is-style-dots {
+    background: none;
+    text-align: center;
+  }
+  .wp-block-separator.is-style-dots::before {
+    content: '···';
+    letter-spacing: 16px;
+    color: ${({ theme }) => theme.colors.secondaryText};
+  }
+
+  /* Quotes */
+  .wp-block-quote,
+  blockquote {
+    border-left: 4px solid ${({ theme }) => theme.prose.quoteBar};
+    padding-left: ${({ theme }) => theme.spacing.md}px;
+    margin: 20px auto;
+    color: ${({ theme }) => theme.colors.secondaryText};
+    font-style: italic;
+    background: ${({ theme }) => theme.prose.softBg};
+  }
+  .wp-block-quote cite,
+  blockquote cite {
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+    color: ${({ theme }) => theme.colors.primaryText};
+  }
+
+  /* Pullquote */
+  .wp-block-pullquote {
+    border-top: 4px solid ${({ theme }) => theme.prose.quoteBar};
+    border-bottom: 4px solid ${({ theme }) => theme.prose.quoteBar};
+    text-align: center;
+    padding: ${({ theme }) => theme.spacing.lg}px 0;
+    margin: 28px auto;
+  }
+  .wp-block-pullquote cite {
+    color: ${({ theme }) => theme.colors.secondaryText};
+  }
+
+  /* Images */
+  .wp-block-image img,
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: ${({ theme }) => theme.content.mediaRadius}px;
+    box-shadow: ${({ theme }) => theme.boxShadow.xs};
+  }
+  figure {
+    margin: 16px auto;
+  }
+  figcaption,
+  .wp-caption-text {
+    font-size: ${({ theme }) => theme.fontSizes.small}px;
+    line-height: ${({ theme }) => theme.lineHeights.small}px;
+    color: ${({ theme }) => theme.colors.secondaryText};
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* Gallery */
+  .wp-block-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: ${({ theme }) => theme.spacing.md}px;
+  }
+  .wp-block-gallery .wp-block-image img {
+    border-radius: ${({ theme }) => theme.borderRadius.md}px;
+  }
+  .wp-block-image.is-style-rounded img {
+    border-radius: 9999px;
+  }
+
+  /* Embeds (YouTube, Vimeo, etc.) */
+  .wp-block-embed,
+  .wp-block-embed__wrapper,
+  iframe[src*='youtube'],
+  iframe[src*='vimeo'] {
+    position: relative;
+    width: 100%;
+    margin: 0 auto 16px;
+    display: block;
+  }
+  .wp-embed-aspect-16-9 .wp-block-embed__wrapper,
+  .responsive-embed.is-16by9 {
+    padding-bottom: 56.25%;
+  }
+  .wp-embed-aspect-4-3 .wp-block-embed__wrapper,
+  .responsive-embed.is-4by3 {
+    padding-bottom: 75%;
+  }
+  .wp-block-embed__wrapper iframe,
+  .responsive-embed iframe,
+  .responsive-embed video,
+  .responsive-embed object,
+  .responsive-embed embed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: ${({ theme }) => theme.content.mediaRadius}px;
+  }
+
+  /* Tables */
+  .wp-block-table,
+  .wp-block-table table,
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: ${({ theme }) => theme.borders.subtle};
+    border-radius: ${({ theme }) => theme.borderRadius.md}px;
+    overflow: hidden;
+    max-width: ${({ theme }) => theme.content.maxWidth}px;
+  }
+  .wp-block-table th,
+  .wp-block-table td,
+  th,
+  td {
+    padding: ${({ theme }) => theme.spacing.sm}px
+      ${({ theme }) => theme.spacing.md}px;
+    border-bottom: ${({ theme }) => theme.borders.subtle};
+    text-align: left;
+  }
+  thead th {
+    background: ${({ theme }) => theme.prose.softBg};
+    font-weight: ${({ theme }) => theme.fontWeights.bold};
+  }
+  tbody tr:nth-child(odd) {
+    background: ${({ theme }) => theme.prose.zebra};
+  }
+
+  /* Code / Pre */
+  code,
+  kbd,
+  samp {
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+      'Courier New', monospace;
+    font-size: ${({ theme }) => Math.round(theme.fontSizes.body * 0.95)}px;
+    background: rgba(0, 0, 0, 0.06);
+    padding: 2px 6px;
+    border-radius: ${({ theme }) => theme.borderRadius.xs}px;
+  }
+  pre,
+  .wp-block-code {
+    background: ${({ theme }) => theme.prose.codeBg};
+    color: ${({ theme }) => theme.prose.codeFg};
+    border-radius: ${({ theme }) => theme.borderRadius.md}px;
+    padding: 16px 20px;
+    overflow: auto;
+    line-height: ${({ theme }) => theme.lineHeights.body}px;
+    box-shadow: ${({ theme }) => theme.boxShadow.xs};
+  }
+  pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* Buttons (map to your theme buttons) */
+  .wp-block-button .wp-block-button__link,
+  .button,
+  button,
+  input[type='submit'],
+  input[type='button'] {
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: ${({ theme }) => theme.borderRadius.sm}px;
+    padding: ${({ theme }) => theme.spacing.sm}px
+      ${({ theme }) => theme.spacing.md}px;
+    font-weight: ${({ theme }) => theme.fontWeights.semibold};
+    line-height: 1;
+    background: ${({ theme }) => theme.colors.buttonPrimaryBackground};
+    color: ${({ theme }) => theme.colors.buttonPrimaryColor};
+    text-decoration: none;
+    transition:
+      transform 60ms ease,
+      opacity 150ms ease,
+      background 150ms ease;
+    box-shadow: ${({ theme }) => theme.boxShadow.xs};
+  }
+  .wp-block-button.is-style-outline .wp-block-button__link {
+    background: transparent;
+    color: ${({ theme }) => theme.colors.buttonTertiaryBackground};
+    border-color: ${({ theme }) => theme.colors.buttonTertiaryBackground};
+  }
+  .wp-block-button .wp-block-button__link:hover,
+  .button:hover,
+  button:hover,
+  input[type='submit']:hover,
+  input[type='button']:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+
+  /* Secondary & Tertiary utility (if authors add classes) */
+  .btn-secondary,
+  .is-style-secondary .wp-block-button__link {
+    background: ${({ theme }) => theme.colors.buttonSecondaryBackground};
+    color: ${({ theme }) => theme.colors.buttonSecondaryColor};
+  }
+  .btn-tertiary,
+  .is-style-tertiary .wp-block-button__link {
+    background: ${({ theme }) => theme.colors.buttonTertiaryBackground};
+    color: ${({ theme }) => theme.colors.buttonTertiaryColor};
+  }
+
+  /* Forms inside content */
+  input[type='text'],
+  input[type='email'],
+  input[type='url'],
+  input[type='search'],
+  textarea,
+  select {
+    width: 100%;
+    max-width: ${({ theme }) => theme.content.narrow}px;
+    background: ${({ theme }) => theme.colors.lightText}1A; /* light overlay */
+    color: ${({ theme }) => theme.colors.primaryText};
+    border: ${({ theme }) => theme.borders.subtle};
+    border-radius: ${({ theme }) => theme.borderRadius.sm}px;
+    padding: 10px 12px;
+    outline: none;
+  }
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border: ${({ theme }) => theme.borders.strong};
+    box-shadow: 0 0 0 3px rgba(226, 164, 43, 0.25); /* E1A42B glow */
+  }
+
+  /* Media & Text */
+  .wp-block-media-text {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: ${({ theme }) => theme.spacing.md}px;
+    align-items: center;
+    padding-top: ${({ theme }) => theme.content.padY}px;
+    padding-bottom: ${({ theme }) => theme.content.padY}px;
+  }
+  .wp-block-media-text .wp-block-media-text__content {
+    padding: 0 12px;
+  }
+  @media (max-width: 781px) {
+    .wp-block-media-text {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Columns */
+  .wp-block-columns {
+    display: grid;
+    gap: ${({ theme }) => theme.spacing.md}px;
+    align-items: start;
+    padding-top: ${({ theme }) => theme.content.padY}px;
+    padding-bottom: ${({ theme }) => theme.content.padY}px;
+  }
+  /* Gutenberg sets inline styles for number of columns; we just gap/stack on mobile */
+  @media (max-width: 781px) {
+    .wp-block-columns {
+      display: block;
+    }
+    .wp-block-column {
+      margin-bottom: ${({ theme }) => theme.spacing.md}px;
+    }
+  }
+
+  /* Cover */
+  .wp-block-cover {
+    border-radius: ${({ theme }) => theme.borderRadius.lg}px;
+    overflow: hidden;
+    padding-top: ${({ theme }) => theme.content.padY}px;
+    padding-bottom: ${({ theme }) => theme.content.padY}px;
+  }
+  .wp-block-cover .wp-block-cover__image-background,
+  .wp-block-cover video {
+    filter: saturate(1.05);
+  }
+  .wp-block-cover__inner-container {
+    padding: 24px;
+  }
+
+  /* Pagination / Page Links */
+  .page-links,
+  .wp-block-query-pagination {
+    display: flex;
+    gap: ${({ theme }) => theme.spacing.sm}px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 24px 0;
+  }
+  .page-links a,
+  .wp-block-query-pagination a,
+  .wp-block-query-pagination .page-numbers {
+    padding: 8px 12px;
+    border: ${({ theme }) => theme.borders.subtle};
+    border-radius: ${({ theme }) => theme.borderRadius.sm}px;
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.primaryText};
+    background: ${({ theme }) => theme.colors.lightText}14;
+  }
+  .page-links .current,
+  .wp-block-query-pagination .current {
+    background: ${({ theme }) => theme.colors.buttonPrimaryBackground};
+    color: ${({ theme }) => theme.colors.buttonPrimaryColor};
+    border-color: transparent;
+  }
+
+  /* Footnotes (common plugins) */
+  .footnotes,
+  .simple-footnotes {
+    font-size: ${({ theme }) => theme.fontSizes.small}px;
+    line-height: ${({ theme }) => theme.lineHeights.small}px;
+    color: ${({ theme }) => theme.colors.secondaryText};
+    border-top: 1px dashed ${({ theme }) => theme.prose.hr};
+    margin-top: 32px;
+    padding-top: 16px;
+  }
+  .footnotes ol {
+    padding-left: ${({ theme }) => theme.spacing.lg}px;
+  }
+
+  /* Screen-reader helper (WP uses this) */
+  .screen-reader-text {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+  }
+
+  /* Long words/URLs wrapping */
+  p,
+  li,
+  blockquote,
+  figcaption {
+    overflow-wrap: anywhere;
+  }
+
+  /* Clear floats from classic alignments */
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+`;
