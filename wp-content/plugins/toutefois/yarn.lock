@@ -13241,6 +13241,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swiper@npm:^11.0.5":
+  version: 11.2.10
+  resolution: "swiper@npm:11.2.10"
+  checksum: 10c0/b7e3a7c79d92ccc62af77744edc376c9aefc771a0abd50c4adf07b5e3450b5da9ca7f84f5809e275ff65e1bc9d4500d930628e84a76fc7f2db403291c69b7fac
+  languageName: node
+  linkType: hard
+
 "symbol-tree@npm:^3.2.4":
   version: 3.2.4
   resolution: "symbol-tree@npm:3.2.4"
@@ -13492,6 +13499,7 @@ __metadata:
     "@wordpress/scripts": "npm:^27.9.0"
     cpr: "npm:^3.0.1"
     npm-run-all: "npm:^4.1.5"
+    swiper: "npm:^11.0.5"
     webpack: "npm:^5.90.3"
     webpack-cli: "npm:^5.1.4"
   languageName: unknown

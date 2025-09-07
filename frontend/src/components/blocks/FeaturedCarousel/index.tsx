@@ -25,13 +25,8 @@ const FeaturedCarousel = () => {
     getProjects();
   }, []);
 
-  if (loading) {
-    return <p>Loading featured projects...</p>;
-  }
-
-  if (!projects.length) {
-    return null; // Don't render anything if there are no featured projects
-  }
+  if (loading) return null;
+  if (!projects?.length) return null;
 
   return (
     <CarouselContainer>

@@ -33,6 +33,7 @@ const RAW_RUNTIME_STATE =
           ["@wordpress/scripts", "virtual:52ee883143b954d6807a82299c16675073ac6f3a403e043a07643b243362080033a554c597efeb61df0710200de6a283066d1f8b084c758501cd6a32519d4715#npm:27.9.0"],\
           ["cpr", "npm:3.0.1"],\
           ["npm-run-all", "npm:4.1.5"],\
+          ["swiper", "npm:11.2.10"],\
           ["toutefois-blocks", "workspace:."],\
           ["webpack", "virtual:52ee883143b954d6807a82299c16675073ac6f3a403e043a07643b243362080033a554c597efeb61df0710200de6a283066d1f8b084c758501cd6a32519d4715#npm:5.101.3"],\
           ["webpack-cli", "virtual:52ee883143b954d6807a82299c16675073ac6f3a403e043a07643b243362080033a554c597efeb61df0710200de6a283066d1f8b084c758501cd6a32519d4715#npm:5.1.4"]\
@@ -17392,6 +17393,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["swiper", [\
+      ["npm:11.2.10", {\
+        "packageLocation": "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/",\
+        "packageDependencies": [\
+          ["swiper", "npm:11.2.10"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["symbol-tree", [\
       ["npm:3.2.4", {\
         "packageLocation": "../../../../../../AppData/Local/Yarn/Berry/cache/symbol-tree-npm-3.2.4-fe70cdb75b-10c0.zip/node_modules/symbol-tree/",\
@@ -17716,6 +17726,7 @@ const RAW_RUNTIME_STATE =
           ["@wordpress/scripts", "virtual:52ee883143b954d6807a82299c16675073ac6f3a403e043a07643b243362080033a554c597efeb61df0710200de6a283066d1f8b084c758501cd6a32519d4715#npm:27.9.0"],\
           ["cpr", "npm:3.0.1"],\
           ["npm-run-all", "npm:4.1.5"],\
+          ["swiper", "npm:11.2.10"],\
           ["toutefois-blocks", "workspace:."],\
           ["webpack", "virtual:52ee883143b954d6807a82299c16675073ac6f3a403e043a07643b243362080033a554c597efeb61df0710200de6a283066d1f8b084c758501cd6a32519d4715#npm:5.101.3"],\
           ["webpack-cli", "virtual:52ee883143b954d6807a82299c16675073ac6f3a403e043a07643b243362080033a554c597efeb61df0710200de6a283066d1f8b084c758501cd6a32519d4715#npm:5.1.4"]\

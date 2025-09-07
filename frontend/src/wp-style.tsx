@@ -3,7 +3,6 @@ import { css } from 'styled-components';
 
 export const WordpressStyling = css`
   /* Container-like blocks get the site width and spacing */
-  .wp-block-group,
   .wp-block-columns,
   .wp-block-cover,
   .wp-block-media-text,
@@ -23,6 +22,44 @@ export const WordpressStyling = css`
     padding-left: ${({ theme }) => theme.content.padX}px;
     padding-right: ${({ theme }) => theme.content.padX}px;
     /* vertical padding only for “sectiony” blocks */
+  }
+
+  .has-background {
+    &.has-toutefois-dark-background-color {
+      background-color: ${({ theme }) => theme.colors.sectionColor3};
+    }
+    &.has-toutefois-red-background-color {
+      background-color: ${({ theme }) => theme.colors.sectionColor1};
+    }
+    &.has-toutefois-teal-background-color {
+      background-color: ${({ theme }) => theme.colors.sectionColor4};
+    }
+    &.has-toutefois-purple-background-color {
+      background-color: ${({ theme }) => theme.colors.sectionColor2};
+    }
+  }
+  .has-text-color {
+    &.has-toutefois-light-text-color {
+      color: ${({ theme }) => theme.colors.lightText};
+    }
+    &.has-toutefois-primary-text-color {
+      color: ${({ theme }) => theme.colors.primaryText};
+    }
+    &.has-toutefois-secondary-text-color {
+      color: ${({ theme }) => theme.colors.secondaryText};
+    }
+    a {
+      color: inherit;
+    }
+  }
+  .wp-block-group {
+    padding-block: ${({ theme }) => theme.spacing.xxl}px;
+
+    .wp-block-group__inner-container {
+      max-width: ${({ theme }) => theme.content.maxWidth}px;
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 
   /* Tighter defaults for pure text blocks */

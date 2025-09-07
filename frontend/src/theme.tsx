@@ -10,7 +10,10 @@ export const theme = {
     headerBackground: '#2F2C58',
     mainBackground: '#FFF4D8',
 
-    projects: '#862331',
+    sectionColor1: '#862331',
+    sectionColor2: '#5A3D55',
+    sectionColor3: '#333333',
+    sectionColor4: '#588B8B',
 
     buttonPrimaryBackground: '#E1A42B',
     buttonPrimaryColor: '#2F2C58',

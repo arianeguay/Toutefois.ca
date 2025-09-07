@@ -1,30 +1,29 @@
 import apiFetch from "@wordpress/api-fetch";
-import { useBlockProps } from "@wordpress/block-editor";
 import { useEffect, useState } from "@wordpress/element";
 import ProjectCard from "./projectCard";
-import Carousel from "./Carousel";
 
-export default function Edit() {
-  const blockProps = useBlockProps({
-    className: "wp-block-toutefois-featured-carousel",
-  });
+const Render = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     apiFetch({ path: "/toutefois/v1/featured-projects" })
       .then((data) => {
         setProjects(data || []);
+        setLoading(false);
       })
-      .catch(() => {});
+      .catch(() => setLoading(false));
   }, []);
 
   return (
-    <div {...blockProps}>
-      <Carousel>
+    <div>
+      <h2>Featured Projects</h2>
+      <div className="featured-carousel-content">
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
-      </Carousel>
+      </div>
     </div>
   );
-}
+};
+
+export default Render;
