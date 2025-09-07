@@ -40,7 +40,7 @@ const ProjectsList = () => {
   }
 
   return (
-    <Container background={theme.colors.projects}>
+    <Container background={theme.colors.sectionColor1}>
       <ListContainer>
         {projects.map((project) => (
           <ListItem key={project.id}>
