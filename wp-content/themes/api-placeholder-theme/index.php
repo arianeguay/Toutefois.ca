@@ -1,3 +1,14 @@
+<?php
+/**
+ * CRITICAL FIX: Check if this is a REST API request and exit early
+ * This ensures REST API requests are properly handled and not intercepted by the theme
+ */
+if (defined('REST_REQUEST') && REST_REQUEST) {
+    return;
+}
+
+// Continue with normal HTML output for non-REST requests
+?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
