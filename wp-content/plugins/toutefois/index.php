@@ -22,6 +22,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
     $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
 }
 
+define('FORCE_SSL_ADMIN', true);
 
 // Include Components
 require_once plugin_dir_path(__FILE__) . 'components/featured-carousel.php';
@@ -304,3 +305,5 @@ function toutefois_register_blocks() {
     }
 }
 add_action('init', 'toutefois_register_blocks');
+
+
