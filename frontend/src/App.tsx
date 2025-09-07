@@ -17,8 +17,10 @@ function App() {
       try {
         const data = await api.fetchPages();
         setPages(data);
-      } catch (err) {
-        setError('Failed to load posts. Check the console for details.');
+      } catch (err: any) {
+        setError(
+          'Failed to load posts. Check the console for details' + err.message,
+        );
       } finally {
         setLoading(false);
       }
