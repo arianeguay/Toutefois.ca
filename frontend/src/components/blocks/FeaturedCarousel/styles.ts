@@ -2,6 +2,11 @@ import styled from 'styled-components';
 
 export const CarouselContainer = styled.div`
   width: 100%;
+  border-bottom: 3px solid ${({ theme }) => theme.colors.mainBackground};
+
+  img {
+    border-radius: 0 !important;
+  }
 
   .swiper-button-next,
   .swiper-button-prev {

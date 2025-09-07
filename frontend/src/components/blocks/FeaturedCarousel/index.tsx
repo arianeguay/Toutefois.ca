@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { A11y, Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Api from '../../../api';
 import type { WordpressProject } from '../../../types';
 import FeaturedSlide from './FeaturedSlide';
 import { CarouselContainer } from './styles';
-
 const FeaturedCarousel = () => {
   const [projects, setProjects] = useState<WordpressProject[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,11 +33,20 @@ const FeaturedCarousel = () => {
   return (
     <CarouselContainer>
       <Swiper
-        modules={[Navigation, Pagination, A11y]}
-        spaceBetween={50}
         slidesPerView={1}
-        navigation
-        pagination={{ clickable: true }}
+        spaceBetween={30}
+        centeredSlides={true}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        loop
+        navigation={true}
+        modules={[Autoplay, Pagination, Navigation]}
+        className="hero"
       >
         {projects.map((project) => (
           <SwiperSlide key={project.id}>
