@@ -50,6 +50,7 @@ export interface WordpressProject {
   excerpt: string;
   content: string;
   featured_image_url: string;
+  slug: string;
   meta: {
     [key: string]: string[];
     _projet_image_id: string[];

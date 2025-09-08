@@ -17,6 +17,7 @@ const FeaturedSlide: React.FC<{ project: WordpressProject }> = ({
 }) => {
   const theme = useTheme();
   const [image, setImage] = useState<WordpressImage | null>(null);
+  console.log(project);
   useEffect(() => {
     const fetchImage = async () => {
       const image = await Api.fetchImageById(
@@ -43,7 +44,7 @@ const FeaturedSlide: React.FC<{ project: WordpressProject }> = ({
           <Typography variant="body">{parse(project.excerpt)}</Typography>
           <Button
             variant="primary"
-            to={`/projects/${project.id}`}
+            to={`/projects/${project.slug}`}
             style={{ marginBlockStart: theme.spacing.sm }}
           >
             En savoir plus

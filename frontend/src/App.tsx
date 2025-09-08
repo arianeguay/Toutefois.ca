@@ -44,7 +44,7 @@ function App() {
           />
         ))}
         <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/projects/:id" element={<ProjectSinglePage />} />
+        <Route path="/projects/:slug" element={<ProjectSinglePage />} />
       </Routes>
     </div>
   );
