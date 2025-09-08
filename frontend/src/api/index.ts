@@ -35,7 +35,9 @@ class Api {
 
       // Log response details for debugging
       console.log('Response status:', response.status);
-      console.log('Response headers:', [...response.headers.entries()]);
+      console.log('Response headers:', [
+        ...new Array(response.headers.entries()),
+      ]);
 
       if (!response.ok) {
         const errorText = await response.text();
