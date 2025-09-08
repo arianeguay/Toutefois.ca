@@ -116,6 +116,18 @@ export const WordpressStyling = css`
     margin: 16px auto;
   }
 
+  & > p,
+  & > ul,
+  & > ol,
+  & > h1,
+  & > h2,
+  & > h3,
+  & > h4,
+  & > h5,
+  & > h6 {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   /* Lists */
   ul,
   ol {

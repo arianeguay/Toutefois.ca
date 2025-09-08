@@ -122,6 +122,19 @@ class Api {
       `toutefois/v1/projects-grid?page=${page}&per_page=${perPage}`,
     );
   }
+
+  async fetchMenuItems(): Promise<WordpressMenuItem[]> {
+    return this.fetchFromApi('wp/v2/top-nav');
+  }
+
+  async fetchSpecialProjects(): Promise<WordpressMenuItem | null> {
+    const specialProjects = await this.fetchFromApi('wp/v2/special-projects');
+
+    if (!specialProjects?.length) {
+      return null;
+    }
+    return specialProjects[0];
+  }
 }
 
 // Create a singleton instance

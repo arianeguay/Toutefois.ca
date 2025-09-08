@@ -65,10 +65,8 @@ export interface WordpressProject {
 }
 
 export interface WordpressMenuItem {
-  id: number;
-  title: {
-    rendered: string;
-  };
-  link: string;
-  slug: string;
+  name: string;
+  href: string;
+  mainColor: string;
+  previewImage: string;
 }

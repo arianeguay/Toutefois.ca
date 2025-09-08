@@ -18,9 +18,9 @@ interface PageLayoutProps {
 }
 
 const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
-  const menuItems = await api.fetchMenu();
   const projects = await api.fetchAllProjects();
-
+  const menuItems = await api.fetchMenuItems();
+  const specialProject = await api.fetchSpecialProjects();
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.attribs) {
@@ -57,7 +57,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
 
   return (
     <PageContainer>
-      <Header menuItems={menuItems} />
+      <Header menuItems={menuItems} specialProject={specialProject} />
       <MainContent>{parse(page.content.rendered, options)}</MainContent>
       <Footer />
     </PageContainer>
