@@ -1,51 +1,39 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import Carousel from '@/components/common/Carousel';
 import Api from '../../../api';
-import type { WordpressProject } from '../../../types';
 import FeaturedSlide from './FeaturedSlide';
-import useCarouselTimer from './hooks/useCarouselTimer';
 import { CarouselContainer } from './styles';
 
 // Import Swiper styles
+import { WordpressImage } from '@/types';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const FeaturedCarousel = () => {
-  const [projects, setProjects] = useState<WordpressProject[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { slideIndex, startTimer, stopTimer } = useCarouselTimer(
-    projects.length,
-  );
-
-  useEffect(() => {
-    const getProjects = async () => {
-      try {
-        const data = await Api.fetchFeaturedProjects();
-        setProjects(data);
-      } catch (error) {
-        console.error('Failed to fetch featured projects:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getProjects();
-  }, []);
-
-  if (loading) return null;
+const FeaturedCarousel = async () => {
+  const projects = await Api.fetchFeaturedProjects();
+  const images: Record<string, WordpressImage> = {};
+  for (const project of projects) {
+    if (project.meta._projet_image_id) {
+      images[project.id] = await Api.fetchImageById(
+        project.meta._projet_image_id[0],
+      );
+    }
+  }
   if (!projects?.length) return null;
 
   return (
-    <CarouselContainer onMouseEnter={stopTimer} onMouseLeave={startTimer}>
-      {projects.map((project, index) => (
-        <FeaturedSlide
-          key={project.id}
-          project={project}
-          isCurrent={index === slideIndex}
-        />
-      ))}
+    <CarouselContainer>
+      <Carousel>
+        {projects.map((project) => (
+          <FeaturedSlide
+            key={project.id}
+            project={project}
+            image={images[project.id]}
+          />
+        ))}
+      </Carousel>
     </CarouselContainer>
   );
 };

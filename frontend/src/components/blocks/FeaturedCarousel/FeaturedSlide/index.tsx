@@ -1,50 +1,39 @@
 'use client';
 
 import parse from 'html-react-parser';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { useTheme } from 'styled-components';
-import Api from '../../../../api';
 import type { WordpressImage, WordpressProject } from '../../../../types';
 import Button from '../../../common/button';
 import Typography from '../../../common/typography';
 import {
+  FeaturedSlideContainer,
+  FeaturedSlideContent,
+  FeaturedSlideOverlay,
   ProjectImage,
   SlideBody,
-  SlideBodyWrapper,
-  SlideContent,
   SlideCover,
 } from './styles';
 
 const FeaturedSlide: React.FC<{
   project: WordpressProject;
-  isCurrent: boolean;
-}> = ({ project, isCurrent }) => {
+  image: WordpressImage;
+}> = ({ project, image }) => {
   const theme = useTheme();
-  const [image, setImage] = useState<WordpressImage | null>(null);
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      const image = await Api.fetchImageById(
-        parseInt(project.meta._projet_image_id[0]),
-      );
-      setImage(image);
-    };
-    fetchImage();
-  }, [project.meta._projet_image_id]);
-  
   return (
-    <SlideContent $backgroundUrl={image?.source_url} $isCurrent={isCurrent}>
-      <SlideBodyWrapper>
+    <FeaturedSlideContainer>
+      <FeaturedSlideOverlay $backgroundUrl={image?.source_url} />
+      <FeaturedSlideContent>
         <SlideBody>
           <Typography variant="h1" element="h2">
             {project.title}
           </Typography>
           <Typography variant="body">{parse(project.excerpt)}</Typography>
           <Button
+            size="lg"
             variant="primary"
             href={`/projects/${project.slug}`}
-            style={{ marginBlockStart: theme.spacing.sm }}
+            style={{ marginBlockStart: theme.spacing.md }}
           >
             En savoir plus
           </Button>
@@ -52,8 +41,8 @@ const FeaturedSlide: React.FC<{
         <SlideCover>
           {image && <ProjectImage src={image.source_url} alt={project.title} />}
         </SlideCover>
-      </SlideBodyWrapper>
-    </SlideContent>
+      </FeaturedSlideContent>
+    </FeaturedSlideContainer>
   );
 };
 

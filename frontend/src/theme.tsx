@@ -21,6 +21,9 @@ export const theme = {
     buttonSecondaryColor: '#F5F3EE',
     buttonTertiaryBackground: '#2F2C58',
     buttonTertiaryColor: '#F5F3EE',
+
+    borderColor1: '#B1B1B1',
+    borderColor2: '#E1A42B',
   },
   fonts: {
     secondary: 'Poppins',
@@ -75,12 +78,12 @@ export const theme = {
     xxl: 54,
   },
   borderRadius: {
-    xs: 4,
-    sm: 8,
-    md: 12,
-    lg: 16,
-    xl: 20,
-    xxl: 24,
+    xs: 2,
+    sm: 4,
+    md: 8,
+    lg: 12,
+    xl: 16,
+    xxl: 20,
   },
   boxShadow: {
     xs: '0 2px 4px rgba(0, 0, 0, 0.1)',

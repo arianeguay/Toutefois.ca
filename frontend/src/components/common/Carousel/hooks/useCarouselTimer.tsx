@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 const useCarouselTimer = (slides: number) => {
   const [slideIndex, setSlideIndex] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(true);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

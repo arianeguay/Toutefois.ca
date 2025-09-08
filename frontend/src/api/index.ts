@@ -81,7 +81,7 @@ class Api {
     return this.fetchFromApi('wp/v2/pages');
   }
 
-  async fetchImageById(id: number): Promise<WordpressImage> {
+  async fetchImageById(id: string): Promise<WordpressImage> {
     return this.fetchFromApi(`wp/v2/media/${id}`);
   }
 
@@ -105,7 +105,7 @@ class Api {
     return this.fetchFromApi('toutefois/v1/menu');
   }
 
-  async fetchFeaturedProjects() {
+  async fetchFeaturedProjects(): Promise<WordpressProject[]> {
     return this.fetchFromApi('toutefois/v1/featured-projects');
   }
 
