@@ -1,11 +1,24 @@
 import styled from 'styled-components';
 
 export const CarouselContainer = styled.div`
-  width: 100%;
   border-bottom: 3px solid ${({ theme }) => theme.colors.mainBackground};
 
-  img {
-    border-radius: 0 !important;
+  height: calc(
+    100vh - ${({ theme }) => theme.appearance.headerHeight} -
+      ${({ theme }) => theme.spacing.xxl}px
+  );
+  overflow: hidden;
+  min-height: 720px;
+  width: 100%;
+
+  .swiper {
+    height: 100%;
+  }
+  @media (max-width: 1200px) {
+    .c-slider {
+      height: 100%;
+      padding-bottom: 40px;
+    }
   }
 
   .swiper-button-next,

@@ -119,6 +119,9 @@ export const theme = {
     zebra: 'rgba(0,0,0,0.03)',
     softBg: 'rgba(0,0,0,0.04)',
   },
+  appearance: {
+    headerHeight: '70px',
+  },
 };
 
 export const DefaultStyling = createGlobalStyle`

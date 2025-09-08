@@ -10,14 +10,17 @@ import {
   SlideBody,
   SlideBodyWrapper,
   SlideContent,
+  SlideCover,
 } from './styles';
+import { useImageTone } from './useImageTone';
 
 const FeaturedSlide: React.FC<{ project: WordpressProject }> = ({
   project,
 }) => {
   const theme = useTheme();
   const [image, setImage] = useState<WordpressImage | null>(null);
-  console.log(project);
+  const tone = useImageTone(image?.source_url);
+
   useEffect(() => {
     const fetchImage = async () => {
       const image = await Api.fetchImageById(
@@ -28,15 +31,8 @@ const FeaturedSlide: React.FC<{ project: WordpressProject }> = ({
     fetchImage();
   }, [project.meta._projet_image_id]);
   return (
-    <SlideContent>
-      {image && (
-        <ProjectImage
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          src={image.source_url}
-          alt={project.title}
-        />
-      )}
-      <SlideBodyWrapper>
+    <SlideContent $backgroundUrl={image?.source_url}>
+      <SlideBodyWrapper $tone={tone ?? 'dark'}>
         <SlideBody>
           <Typography variant="h1" element="h2">
             {project.title}
@@ -50,6 +46,9 @@ const FeaturedSlide: React.FC<{ project: WordpressProject }> = ({
             En savoir plus
           </Button>
         </SlideBody>
+        <SlideCover>
+          {image && <ProjectImage src={image.source_url} alt={project.title} />}
+        </SlideCover>
       </SlideBodyWrapper>
     </SlideContent>
   );
