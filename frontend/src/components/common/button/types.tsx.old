@@ -6,6 +6,6 @@ export interface ButtonProps {
   size?: ButtonSize;
   children: React.ReactNode;
   onClick?: () => void;
-  href?: string; // Changed from 'to' to 'href' to match Next.js Link API
+  to?: string;
   style?: React.CSSProperties;
 }

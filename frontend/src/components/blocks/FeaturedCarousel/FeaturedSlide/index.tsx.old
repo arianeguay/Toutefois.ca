@@ -1,7 +1,4 @@
-'use client';
-
 import parse from 'html-react-parser';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'styled-components';
 import Api from '../../../../api';
@@ -32,7 +29,6 @@ const FeaturedSlide: React.FC<{
     };
     fetchImage();
   }, [project.meta._projet_image_id]);
-  
   return (
     <SlideContent $backgroundUrl={image?.source_url} $isCurrent={isCurrent}>
       <SlideBodyWrapper>
@@ -43,7 +39,7 @@ const FeaturedSlide: React.FC<{
           <Typography variant="body">{parse(project.excerpt)}</Typography>
           <Button
             variant="primary"
-            href={`/projects/${project.slug}`}
+            to={`/projects/${project.slug}`}
             style={{ marginBlockStart: theme.spacing.sm }}
           >
             En savoir plus

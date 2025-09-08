@@ -1,36 +1,27 @@
-import { useEffect, useState } from 'react';
+import Container from '@/components/common/Container';
+import Typography from '@/components/common/typography';
 import Api from '../../../api';
-import type { WordpressProject } from '../../../types';
-import Feed from '../Feed';
+import { ListContainer, ListItem } from './styles';
 
-const NewsList = () => {
-  const [articles, setArticles] = useState<WordpressProject[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const getArticles = async () => {
-      try {
-        const data = await Api.fetchAllNews();
-        setArticles(data);
-      } catch (error) {
-        console.error('Failed to fetch news:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getArticles();
-  }, []);
-
-  if (loading) {
-    return <p>Loading news...</p>;
-  }
+const NewsList = async () => {
+  const articles = await Api.fetchAllNews();
 
   if (!articles.length) {
     return <p>No news found.</p>;
   }
 
-  return <Feed />;
+  return (
+    <Container>
+      <ListContainer>
+        {articles.map((article) => (
+          <ListItem key={article.id}>
+            <Typography variant="h3">{article.title.rendered}</Typography>
+            <Typography variant="body">{article.excerpt.rendered}</Typography>
+          </ListItem>
+        ))}
+      </ListContainer>
+    </Container>
+  );
 };
 
 export default NewsList;

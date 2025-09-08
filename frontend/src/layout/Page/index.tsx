@@ -1,3 +1,4 @@
+import api from '@/api';
 import {
   Element,
   default as parse,
@@ -16,38 +17,47 @@ interface PageLayoutProps {
   page: WordpressPage;
 }
 
-const options: HTMLReactParserOptions = {
-  replace: (domNode) => {
-    if (domNode instanceof Element && domNode.attribs) {
-      if (
-        domNode.attribs.class?.includes('wp-block-toutefois-featured-carousel')
-      ) {
-        return <FeaturedCarousel />;
-      }
-      if (domNode.attribs.class?.includes('wp-block-toutefois-projects-list')) {
-        return <ProjectsList />;
-      }
-      if (domNode.attribs.class?.includes('wp-block-toutefois-news-list')) {
-        return <NewsList />;
-      }
-      //   if (domNode.attribs.class?.includes('wp-block-group ')) {
-      //     if (!domNode.children) return null;
-      //     return <Container>{domToReact(domNode.  )}</Container>;
-      //   }
-      if (
-        domNode.attribs.class?.includes('wp-block-toutefois-projects-page-grid')
-      ) {
-        return <ProjectsPageGrid />;
-      }
-    }
-    return domNode;
-  },
-};
+const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
+  const menuItems = await api.fetchMenu();
+  const projects = await api.fetchAllProjects();
 
-const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
+  const options: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (domNode instanceof Element && domNode.attribs) {
+        if (
+          domNode.attribs.class?.includes(
+            'wp-block-toutefois-featured-carousel',
+          )
+        ) {
+          return <FeaturedCarousel />;
+        }
+        if (
+          domNode.attribs.class?.includes('wp-block-toutefois-projects-list')
+        ) {
+          return <ProjectsList />;
+        }
+        if (domNode.attribs.class?.includes('wp-block-toutefois-news-list')) {
+          return <NewsList />;
+        }
+        //   if (domNode.attribs.class?.includes('wp-block-group ')) {
+        //     if (!domNode.children) return null;
+        //     return <Container>{domToReact(domNode.  )}</Container>;
+        //   }
+        if (
+          domNode.attribs.class?.includes(
+            'wp-block-toutefois-projects-page-grid',
+          )
+        ) {
+          return <ProjectsPageGrid projects={projects} />;
+        }
+      }
+      return domNode;
+    },
+  };
+
   return (
     <PageContainer>
-      <Header />
+      <Header menuItems={menuItems} />
       <MainContent>{parse(page.content.rendered, options)}</MainContent>
       <Footer />
     </PageContainer>

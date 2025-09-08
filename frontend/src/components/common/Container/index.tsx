@@ -1,3 +1,5 @@
+'use client';
+
 import { ContainerContentStyled, ContainerStyled } from './styles';
 
 interface ContainerProps {

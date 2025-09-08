@@ -1,10 +1,36 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
-export const SlideContent = styled.div<{ $backgroundUrl: string | undefined }>`
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+export const SlideContent = styled.div<{
+  $backgroundUrl: string | undefined;
+  $isCurrent: boolean;
+}>`
   width: 100%;
   height: 100%;
   position: relative;
 
+  transition: opacity 1s ease-in-out;
+
+  ${({ $isCurrent }) =>
+    $isCurrent
+      ? css`
+          opacity: 1;
+        `
+      : css`
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        `};
   ${({ $backgroundUrl }) => {
     if ($backgroundUrl) {
       return css`

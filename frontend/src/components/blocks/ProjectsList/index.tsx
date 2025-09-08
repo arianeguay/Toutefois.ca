@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useTheme } from 'styled-components';
 import Api from '../../../api';
-import type { WordpressProject } from '../../../types';
 import Container from '../../common/Container';
 import {
   ListContainer,
@@ -11,36 +8,15 @@ import {
   ProjectTitle,
 } from './styles';
 
-const ProjectsList = () => {
-  const theme = useTheme();
-  const [projects, setProjects] = useState<WordpressProject[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const getProjects = async () => {
-      try {
-        const data = await Api.fetchAllProjects();
-        setProjects(data);
-      } catch (error) {
-        console.error('Failed to fetch projects:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getProjects();
-  }, []);
-
-  if (loading) {
-    return <p>Loading projects...</p>;
-  }
+const ProjectsList = async () => {
+  const projects = await Api.fetchAllProjects();
 
   if (!projects.length) {
     return <p>No projects found.</p>;
   }
 
   return (
-    <Container background={theme.colors.sectionColor1}>
+    <Container>
       <ListContainer>
         {projects.map((project) => (
           <ListItem key={project.id}>
