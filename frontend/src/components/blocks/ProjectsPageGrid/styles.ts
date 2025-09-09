@@ -7,6 +7,42 @@ export const GridContainer = styled.div`
   gap: ${({ theme }) => theme.spacing.md}px;
   margin: ${({ theme }) => theme.spacing.md}px auto;
   max-width: 1200px;
+
+  .swiper {
+    margin-left: -30px;
+    margin-right: -30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    width: calc(100% + 60px);
+    padding-block: 4px;
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+
+      width: 30px;
+      height: 100%;
+      z-index: 9;
+    }
+    &:after {
+      top: 0;
+      left: 0;
+      background: linear-gradient(
+        to left,
+        transparent,
+        ${({ theme }) => theme.colors.mainBackground}
+      );
+    }
+    &:before {
+      top: 0;
+      right: 0;
+      background: linear-gradient(
+        to left,
+        ${({ theme }) => theme.colors.mainBackground},
+        transparent
+      );
+    }
+  }
 `;
 
 export const CategorySection = styled.div`
