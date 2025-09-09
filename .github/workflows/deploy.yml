@@ -60,7 +60,7 @@ jobs:
             sudo ln -sf /etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/admin.toutefois.arianeguay.ca.conf
             # Reload services
             sudo systemctl reload nginx
-            sudo systemctl reload php8.1-fpm
+            sudo systemctl reload php8.4-fpm
             echo "=== Backend Deployed Successfully ==="
 
   build-frontend:
