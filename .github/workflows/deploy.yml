@@ -160,6 +160,8 @@ jobs:
             set -e
             echo "=== Frontend Server Configuration ==="
             cd /var/www/frontend
+            # Install yarn globally
+            sudo npm install -g yarn
             # Install production dependencies
             sudo yarn install --production --frozen-lockfile
             # Set up PM2
