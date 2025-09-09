@@ -11,4 +11,7 @@ export type Variant =
 export interface TypographyProps {
   variant?: Variant;
   element?: ElementType;
+  style?: React.CSSProperties;
+  className?: string;
+  onClick?: React.MouseEventHandler;
 }

@@ -1,4 +1,5 @@
 import api from '@/api';
+import Typography from '@/components/common/typography';
 import {
   Element,
   default as parse,
@@ -21,6 +22,8 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
   const projects = await api.fetchAllProjects();
   const menuItems = await api.fetchMenuItems();
   const specialProject = await api.fetchSpecialProjects();
+
+  const isHome = page.slug === 'home';
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.attribs) {
@@ -58,7 +61,18 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
   return (
     <PageContainer>
       <Header menuItems={menuItems} specialProject={specialProject} />
-      <MainContent>{parse(page.content.rendered, options)}</MainContent>
+      <MainContent>
+        {!isHome && (
+          <Typography
+            variant="h2"
+            element="h1"
+            style={{ marginBlockStart: 55 }}
+          >
+            {page.title.rendered}
+          </Typography>
+        )}
+        {parse(page.content.rendered, options)}
+      </MainContent>
       <Footer />
     </PageContainer>
   );

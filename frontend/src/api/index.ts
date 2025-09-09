@@ -126,11 +126,11 @@ class Api {
   }
 
   async fetchMenuItems(): Promise<WordpressMenuItem[]> {
-    return this.fetchFromApi('wp/v2/top-nav');
+    return this.fetchFromApi('toutefois/v1/menu');
   }
 
   async fetchSpecialProjects(): Promise<WordpressMenuItem | null> {
-    const specialProjects = await this.fetchFromApi('wp/v2/special-projects');
+    const specialProjects = await this.fetchFromApi('toutefois/v1/special-projects');
 
     if (!specialProjects?.length) {
       return null;
