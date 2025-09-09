@@ -1,5 +1,9 @@
+'use client';
 import { WordpressMenuItem } from '@/types';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
+import { useTheme } from 'styled-components';
 import { SpecialProjectContainer } from './styles';
 
 const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
@@ -8,20 +12,35 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
   mainColor,
   previewImage,
 }) => {
-  const getPathFromUrl = (url: string) => {
-    try {
-      return new URL(url).pathname;
-    } catch (e) {
-      return url; // Fallback for relative paths or invalid URLs
+  const currentPathname = usePathname();
+  const theme = useTheme();
+  const pathName = useMemo(() => {
+    let path = new URL(href).pathname;
+
+    if (path.endsWith('/')) {
+      path = path.slice(0, -1);
     }
-  };
+    if (path === currentPathname) {
+      return '/';
+    }
+    return path;
+  }, [href, currentPathname]);
+
+  console.log(pathName, currentPathname);
   return (
-    <Link href={getPathFromUrl(href)}>
+    <Link href={pathName}>
       <SpecialProjectContainer
-        $mainColor={mainColor}
-        $previewImage={previewImage}
+        $mainColor={
+          pathName === '/' ? theme.colors.headerBackground : mainColor
+        }
+        $textColor={
+          pathName === '/'
+            ? theme.colors.buttonSecondaryBackground
+            : theme.colors.primaryText
+        }
+        $previewImage={pathName !== '/' ? previewImage : '/logo.png'}
       >
-        {name}
+        {pathName !== '/' ? name : 'Théâtre de Toutefois'}
       </SpecialProjectContainer>
     </Link>
   );

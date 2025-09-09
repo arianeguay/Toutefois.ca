@@ -25,10 +25,11 @@ export const ArticleCardContainer = styled.div`
 
 export const ArticleListContainer = styled.div`
   max-width: 100%;
-
+  position: relative;
   .swiper {
     width: 100%;
     .swiper-wrapper {
+      padding-block: 2px;
       width: 100%;
       align-items: stretch;
 
@@ -37,6 +38,17 @@ export const ArticleListContainer = styled.div`
       }
     }
   }
+`;
+
+export const BackgroundImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  user-select: none;
+  opacity: 0.2;
 `;
 export const ArticleCardContent = styled.div`
   padding-inline: ${({ theme }) => theme.spacing.lg}px;

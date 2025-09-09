@@ -25,6 +25,9 @@ export const WordpressStyling = css`
   }
 
   .has-background {
+    border-bottom: 3px solid ${({ theme }) => theme.colors.mainBackground};
+    box-shadow: ${({ theme }) => theme.boxShadow.md};
+    position: relative;
     &.has-toutefois-dark-background-color {
       background-color: ${({ theme }) => theme.colors.sectionColor3};
     }
@@ -54,6 +57,18 @@ export const WordpressStyling = css`
   }
   .wp-block-group {
     padding-block: ${({ theme }) => theme.spacing.xxl}px;
+
+    &.is-nowrap {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+
+    &:not(& > .wp-block-group__inner-container):not(&.has-background) {
+      max-width: ${({ theme }) => theme.content.maxWidth}px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-block: ${({ theme }) => theme.spacing.md}px;
+    }
 
     .wp-block-group__inner-container {
       max-width: ${({ theme }) => theme.content.maxWidth}px;

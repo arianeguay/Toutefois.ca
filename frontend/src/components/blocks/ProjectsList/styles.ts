@@ -8,6 +8,17 @@ export const ListContainer = styled.div`
   gap: ${({ theme }) => theme.spacing.md}px;
 `;
 
+export const BackgroundImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  user-select: none;
+  opacity: 0.2;
+`;
+
 export const ProjectCardContainer = styled.div`
   display: flex;
   flex-direction: column;

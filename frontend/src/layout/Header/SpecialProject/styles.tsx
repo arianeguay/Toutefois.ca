@@ -41,9 +41,10 @@ const noBackgroundImageStyling = (mainColor: string) => css`
 
 export const SpecialProjectContainer = styled.div<{
   $mainColor: string;
+  $textColor: string;
   $previewImage: string | null;
 }>`
-  ${({ $previewImage, $mainColor }) =>
+  ${({ $previewImage, $mainColor, $textColor }) =>
     $previewImage
       ? backgroundImageStyling($mainColor, $previewImage)
       : noBackgroundImageStyling($mainColor)}
@@ -57,7 +58,7 @@ export const SpecialProjectContainer = styled.div<{
   justify-content: center;
   height: ${({ theme }) =>
     Number(theme.appearance.headerHeight.replace('px', '')) - 3}px;
-
+  color: ${({ $textColor }) => $textColor};
   font-size: ${({ theme }) => theme.fontSizes.body}px;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   cursor: pointer;
