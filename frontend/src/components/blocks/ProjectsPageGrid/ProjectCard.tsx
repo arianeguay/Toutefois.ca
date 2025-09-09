@@ -23,7 +23,9 @@ const ProjectCard: React.FC<WordpressProject> = ({
         </ProjectCardCover>
         <ProjectCardBody>
           <Typography variant="h4">{title}</Typography>
-          <Typography variant="body">{excerpt}</Typography>
+          <Typography variant="body" lineClamp={4}>
+            {excerpt}
+          </Typography>
         </ProjectCardBody>
       </ProjectCardContainer>
     </ProjectCardLink>

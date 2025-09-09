@@ -5,6 +5,7 @@ import type {
   WordpressPost,
   WordpressProject,
   WordpressProjectFull,
+  WordpressProjectGridData,
 } from '../types';
 
 class Api {
@@ -167,7 +168,10 @@ class Api {
     return this.fetchFromApi('toutefois/v1/news');
   }
 
-  async fetchProjectsGrid(page = 1, perPage = 9): Promise<WordpressProject[]> {
+  async fetchProjectsGrid(
+    page = 1,
+    perPage = 9,
+  ): Promise<WordpressProjectGridData> {
     return this.fetchFromApi(
       `toutefois/v1/projects-grid?page=${page}&per_page=${perPage}`,
     );

@@ -5,12 +5,14 @@ export const GridContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.md}px;
-  margin: ${({ theme }) => theme.spacing.md}px 0;
+  margin: ${({ theme }) => theme.spacing.md}px auto;
+  max-width: 1200px;
 `;
 
-export const GridItem = styled.div`
+export const CategorySection = styled.div`
   display: flex;
   flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.sm}px;
 `;
 
 export const ProjectImage = styled.img`
@@ -41,7 +43,6 @@ export const PaginationButton = styled.button`
   padding: 0.5rem 1rem;
   border: 1px solid ${({ theme }) => theme.colors.primaryText};
   background-color: transparent;
-  color: ${({ theme }) => theme.colors.primaryText};
   cursor: pointer;
 
   &:disabled {
@@ -50,19 +51,45 @@ export const PaginationButton = styled.button`
   }
 `;
 
-export const ProjectCardContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${({ theme }) => theme.spacing.xl}px;
-  max-width: 1200px;
-  align-items: center;
-  margin: 0 auto;
+export const ProjectCardBody = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  color: ${({ theme }) => theme.colors.primaryText};
+  height: 100%;
+  z-index: 1;
+  background-color: #ffffff40;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  padding: ${({ theme }) => theme.spacing.md}px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: opacity 0.3s ease-in-out;
+  text-align: left;
+  p {
+    margin: 0;
+  }
+  color: ${({ theme }) => theme.colors.lightText};
+`;
 
+export const ProjectCardContainer = styled.div`
+  width: 300px;
+  aspect-ratio: 1;
+  border-radius: ${({ theme }) => theme.borderRadius.md}px;
+  overflow: hidden;
+  color: ${({ theme }) => theme.colors.primaryText};
+  position: relative;
+
+  ${ProjectCardBody} {
+    opacity: 0;
+  }
   &:hover {
     cursor: pointer;
     transform: translateY(-2px);
+    ${ProjectCardBody} {
+      opacity: 1;
+    }
   }
 `;
 
@@ -74,13 +101,13 @@ export const ProjectCardLink = styled(Link)`
   }
 `;
 export const ProjectCardCover = styled.div`
-  width: 300px;
-  aspect-ratio: 16/9;
   flex-shrink: 0;
   border-radius: ${({ theme }) => theme.borderRadius.md}px;
   overflow: hidden;
   background-color: ${({ theme }) => theme.colors.primaryText};
   box-shadow: ${({ theme }) => theme.boxShadow.md};
+  width: 100%;
+  height: 100%;
   img {
     width: 100%;
     height: 100%;
@@ -88,6 +115,8 @@ export const ProjectCardCover = styled.div`
   }
 `;
 
-export const ProjectCardBody = styled.div`
-  flex: 1;
+export const ProjectCardsRow = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.md}px;
+  flex-direction: row;
 `;

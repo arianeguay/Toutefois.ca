@@ -82,6 +82,18 @@ export interface WordpressProject {
   };
 }
 
+export interface WordpressProjectGridData {
+  all_projects: WordpressProject[];
+  by_category: {
+    category: {
+      id: number;
+      name: string;
+      slug: string;
+    };
+    projects: WordpressProject[];
+  }[];
+}
+
 export interface WordpressProjectFull {
   id: number;
   title: {
