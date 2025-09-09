@@ -1,12 +1,10 @@
-'use client';
-
 import Footer from '@/layout/Footer';
 import Header from '@/layout/Header';
 
 export default function NotFound() {
   return (
     <>
-      <Header menuItems={[]} specialProject={null} />
+      <Header />
       <div
         className="flex flex-col items-center justify-center min-h-screen py-12 px-4"
         style={{
