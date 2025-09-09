@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Featured Carousel Component
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
@@ -17,7 +18,8 @@ add_action('rest_api_init', function () {
 });
 
 // 2. Callback Function
-function get_featured_projects() {
+function get_featured_projects()
+{
     $args = array(
         'post_type' => 'projet',
         'posts_per_page' => -1,
@@ -38,7 +40,6 @@ function get_featured_projects() {
             $query->the_post();
             $post_id = get_the_ID();
             $post_meta = get_post_meta($post_id);
-            $featured_image_id = get_post_thumbnail_id($post_id);
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
 
             $posts[] = array(

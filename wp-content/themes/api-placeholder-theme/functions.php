@@ -11,6 +11,7 @@
  */
 
 add_theme_support('menus');
+add_theme_support('post-thumbnails');
 
 
 function api_placeholder_theme_colors()
@@ -138,21 +139,21 @@ function api_placeholder_render_page_meta_box($post)
     <p>
         <label for="api_placeholder_preview_image_id"><strong><?php _e('Preview Image', 'api-placeholder-theme'); ?></strong></label><br />
         <input type="number" id="api_placeholder_preview_image_id" name="api_placeholder_preview_image_id" value="<?php echo esc_attr($preview_id); ?>" placeholder="<?php esc_attr_e('Attachment ID', 'api-placeholder-theme'); ?>" style="width:100%;" />
-        <div style="margin-top:8px; display:flex; gap:8px;">
-            <button type="button" class="button" id="api_placeholder_select_image"><?php _e('Select Image', 'api-placeholder-theme'); ?></button>
-            <button type="button" class="button" id="api_placeholder_remove_image"><?php _e('Remove', 'api-placeholder-theme'); ?></button>
-        </div>
-        <br />
-        <img id="api_placeholder_preview_image_preview" src="<?php echo esc_url($preview_url); ?>" alt="" style="max-width:100%;height:auto;margin-top:8px;border:1px solid #ddd; <?php echo $preview_url ? '' : 'display:none;'; ?>" />
-        <small><?php _e('Use the button to choose an image from the Media Library, or enter an attachment ID. (Optional)', 'api-placeholder-theme'); ?></small>
+    <div style="margin-top:8px; display:flex; gap:8px;">
+        <button type="button" class="button" id="api_placeholder_select_image"><?php _e('Select Image', 'api-placeholder-theme'); ?></button>
+        <button type="button" class="button" id="api_placeholder_remove_image"><?php _e('Remove', 'api-placeholder-theme'); ?></button>
+    </div>
+    <br />
+    <img id="api_placeholder_preview_image_preview" src="<?php echo esc_url($preview_url); ?>" alt="" style="max-width:100%;height:auto;margin-top:8px;border:1px solid #ddd; <?php echo $preview_url ? '' : 'display:none;'; ?>" />
+    <small><?php _e('Use the button to choose an image from the Media Library, or enter an attachment ID. (Optional)', 'api-placeholder-theme'); ?></small>
     </p>
     <script type="text/javascript">
-        jQuery(function ($) {
+        jQuery(function($) {
             var frame;
             var idInput = $('#api_placeholder_preview_image_id');
             var img = $('#api_placeholder_preview_image_preview');
 
-            $('#api_placeholder_select_image').on('click', function (e) {
+            $('#api_placeholder_select_image').on('click', function(e) {
                 e.preventDefault();
                 if (frame) {
                     frame.open();
@@ -160,11 +161,15 @@ function api_placeholder_render_page_meta_box($post)
                 }
                 frame = wp.media({
                     title: '<?php echo esc_js(__('Select or Upload Preview Image', 'api-placeholder-theme')); ?>',
-                    button: { text: '<?php echo esc_js(__('Use this image', 'api-placeholder-theme')); ?>' },
-                    library: { type: 'image' },
+                    button: {
+                        text: '<?php echo esc_js(__('Use this image', 'api-placeholder-theme')); ?>'
+                    },
+                    library: {
+                        type: 'image'
+                    },
                     multiple: false
                 });
-                frame.on('select', function () {
+                frame.on('select', function() {
                     var attachment = frame.state().get('selection').first().toJSON();
                     idInput.val(attachment.id);
                     var url = (attachment.sizes && (attachment.sizes.medium || attachment.sizes.full) ? (attachment.sizes.medium || attachment.sizes.full).url : attachment.url);
@@ -173,7 +178,7 @@ function api_placeholder_render_page_meta_box($post)
                 frame.open();
             });
 
-            $('#api_placeholder_remove_image').on('click', function (e) {
+            $('#api_placeholder_remove_image').on('click', function(e) {
                 e.preventDefault();
                 idInput.val('');
                 img.attr('src', '').hide();
@@ -230,4 +235,3 @@ function api_placeholder_admin_enqueue($hook)
     }
 }
 add_action('admin_enqueue_scripts', 'api_placeholder_admin_enqueue');
-

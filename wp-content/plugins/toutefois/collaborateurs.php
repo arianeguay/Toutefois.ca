@@ -209,3 +209,4 @@ function collaborateurs_add_inline_media_script()
 <?php
 }
 add_action('admin_footer', 'collaborateurs_add_inline_media_script');
+add_post_type_support('collaborateur', 'thumbnail');

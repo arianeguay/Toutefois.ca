@@ -10,6 +10,9 @@ if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
+add_post_type_support('projet', 'thumbnail');
+
+
 // 1. Register Custom Post Type and Meta Fields
 function projets_cpt_and_meta_init()
 {

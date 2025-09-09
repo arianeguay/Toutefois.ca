@@ -1,9 +1,10 @@
 <?php
+
 /**
  * News List Component
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
@@ -17,10 +18,13 @@ add_action('rest_api_init', function () {
 });
 
 // 2. Callback Function
-function get_all_news() {
+function get_all_news()
+{
     $args = array(
         'post_type' => 'post',
-        'posts_per_page' => -1,
+        'posts_per_page' => 6,
+        'order' => 'DESC',
+        'orderby' => 'date',
     );
 
     $query = new WP_Query($args);

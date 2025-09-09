@@ -22,7 +22,11 @@ function get_all_projects()
 {
     $args = array(
         'post_type' => 'projet',
-        'posts_per_page' => -1,
+        'posts_per_page' => 6,
+        'order' => 'DESC',
+        'orderby' => 'date',
+        ç
+
     );
 
     $query = new WP_Query($args);
@@ -33,7 +37,6 @@ function get_all_projects()
             $query->the_post();
             $post_id = get_the_ID();
             $post_meta = get_post_meta($post_id);
-            $featured_image_id = get_post_thumbnail_id($post_id);
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
             $slug = get_post_field('post_name', $post_id);
             $posts[] = array(
