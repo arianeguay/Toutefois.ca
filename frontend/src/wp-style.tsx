@@ -128,6 +128,22 @@ export const WordpressStyling = css`
     max-width: 1200px;
     margin: 0 auto;
   }
+
+  .is-content-justification-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .is-content-justification-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .is-content-justification-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
   /* Lists */
   ul,
   ol {
@@ -210,6 +226,10 @@ export const WordpressStyling = css`
     display: block;
     border-radius: ${({ theme }) => theme.content.mediaRadius}px;
     box-shadow: ${({ theme }) => theme.boxShadow.xs};
+  }
+
+  .wp-block-image {
+    width: fit-content;
   }
   figure {
     margin: 16px auto;

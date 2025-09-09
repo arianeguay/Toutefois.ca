@@ -1,15 +1,18 @@
 'use client';
 
-import { useState } from 'react';
-import type { WordpressProject } from '../../../types';
+import api from '@/api';
 import ProjectCard from './ProjectCard';
 import { GridContainer, PaginationButton, PaginationContainer } from './styles';
 
-interface ProjectsPageGridProps {
-  projects: WordpressProject[];
-}
-const ProjectsPageGrid: React.FC<ProjectsPageGridProps> = ({ projects }) => {
-  const [page, setPage] = useState(1);
+const ProjectsPageGrid: React.FC = async () => {
+  const projects = await api.fetchAllProjects();
+
+  let page = 1;
+
+  const setPage = (newPage: number) => {
+    page = newPage;
+  };
+
   const totalPages = Math.ceil(projects.length / 9);
 
   if (!projects.length) {
@@ -25,7 +28,7 @@ const ProjectsPageGrid: React.FC<ProjectsPageGridProps> = ({ projects }) => {
       </GridContainer>
       <PaginationContainer>
         <PaginationButton
-          onClick={() => setPage((p) => p - 1)}
+          onClick={() => setPage(page - 1)}
           disabled={page === 1}
         >
           Previous
@@ -34,7 +37,7 @@ const ProjectsPageGrid: React.FC<ProjectsPageGridProps> = ({ projects }) => {
           Page {page} of {totalPages}
         </span>
         <PaginationButton
-          onClick={() => setPage((p) => p + 1)}
+          onClick={() => setPage(page + 1)}
           disabled={page === totalPages}
         >
           Next

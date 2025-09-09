@@ -1,12 +1,10 @@
 import Api from '../../../api';
 import Container from '../../common/Container';
-import {
-  ListContainer,
-  ListItem,
-  ProjectExcerpt,
-  ProjectImage,
-  ProjectTitle,
-} from './styles';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import ProjectsListCarousel from './List';
 
 const ProjectsList = async () => {
   const projects = await Api.fetchAllProjects();
@@ -17,22 +15,7 @@ const ProjectsList = async () => {
 
   return (
     <Container>
-      <ListContainer>
-        {projects.map((project) => (
-          <ListItem key={project.id}>
-            {project.featured_image_url && (
-              <ProjectImage
-                src={project.featured_image_url}
-                alt={project.title}
-              />
-            )}
-            <ProjectTitle>{project.title}</ProjectTitle>
-            <ProjectExcerpt
-              dangerouslySetInnerHTML={{ __html: project.excerpt }}
-            />
-          </ListItem>
-        ))}
-      </ListContainer>
+      <ProjectsListCarousel projects={projects} />
     </Container>
   );
 };

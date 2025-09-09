@@ -1,3 +1,5 @@
+'use client';
+
 import useCarouselTimer from './hooks/useCarouselTimer';
 import Slide from './Slide';
 import {

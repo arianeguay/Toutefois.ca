@@ -1,16 +1,13 @@
-'use client';
-
-import type { WordpressMenuItem } from '../../types';
+import api from '@/api';
 import Logo from './Logo';
 import Menu from './Menu';
 import SpecialProjectMenuItem from './SpecialProject';
 import { HeaderContainer } from './styles';
 
-interface HeaderProps {
-  menuItems: WordpressMenuItem[];
-  specialProject: WordpressMenuItem | null;
-}
-const Header = ({ menuItems, specialProject }: HeaderProps) => {
+const Header = async () => {
+  const menuItems = await api.fetchMenuItems();
+  const specialProject = await api.fetchSpecialProjects();
+
   return (
     <HeaderContainer>
       <Logo />

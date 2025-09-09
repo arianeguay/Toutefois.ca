@@ -2,10 +2,10 @@
 
 import styled from 'styled-components';
 
-export const ListContainer = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 2rem 0;
+export const ListContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: ${({ theme }) => theme.spacing.md}px;
 `;
 
 export const ListItem = styled.li`

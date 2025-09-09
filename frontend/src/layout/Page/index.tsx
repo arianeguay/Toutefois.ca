@@ -1,4 +1,3 @@
-import api from '@/api';
 import Typography from '@/components/common/typography';
 import {
   Element,
@@ -12,17 +11,14 @@ import ProjectsPageGrid from '../../components/blocks/ProjectsPageGrid';
 import type { WordpressPage } from '../../types';
 import Footer from '../Footer';
 import Header from '../Header';
-import { MainContent, PageContainer } from './styles';
+import { MainContent } from './styles';
+import PageWrapper from './wrapper';
 
 interface PageLayoutProps {
   page: WordpressPage;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
-  const projects = await api.fetchAllProjects();
-  const menuItems = await api.fetchMenuItems();
-  const specialProject = await api.fetchSpecialProjects();
-
+const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
   const isHome = page.slug === 'home';
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
@@ -42,16 +38,12 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
         if (domNode.attribs.class?.includes('wp-block-toutefois-news-list')) {
           return <NewsList />;
         }
-        //   if (domNode.attribs.class?.includes('wp-block-group ')) {
-        //     if (!domNode.children) return null;
-        //     return <Container>{domToReact(domNode.  )}</Container>;
-        //   }
         if (
           domNode.attribs.class?.includes(
             'wp-block-toutefois-projects-page-grid',
           )
         ) {
-          return <ProjectsPageGrid projects={projects} />;
+          return <ProjectsPageGrid />;
         }
       }
       return domNode;
@@ -59,22 +51,22 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
   };
 
   return (
-    <PageContainer>
-      <Header menuItems={menuItems} specialProject={specialProject} />
+    <PageWrapper>
+      <Header />
       <MainContent>
-        {!isHome && (
+        {!isHome && !!page.title?.rendered && (
           <Typography
             variant="h2"
             element="h1"
             style={{ marginBlockStart: 55 }}
           >
-            {page.title.rendered}
+            {parse(page.title.rendered)}
           </Typography>
         )}
-        {parse(page.content.rendered, options)}
+        {!!page.content?.rendered && parse(page.content.rendered, options)}
       </MainContent>
       <Footer />
-    </PageContainer>
+    </PageWrapper>
   );
 };
 

@@ -1,11 +1,7 @@
 export interface WordpressPost {
   id: number;
-  title: {
-    rendered: string;
-  };
-  excerpt: {
-    rendered: string;
-  };
+  title: string;
+  excerpt: string;
   link: string;
 }
 
@@ -17,8 +13,16 @@ export interface WordpressPage {
   content: {
     rendered: string;
   };
+  excerpt?: {
+    rendered: string;
+  };
   link: string;
   slug: string;
+  parent?: number; // Parent page ID for hierarchical pages
+  // Add additional WordPress fields that might be useful for debugging
+  _links?: {
+    [key: string]: any;
+  };
 }
 
 export interface WordpressImage {

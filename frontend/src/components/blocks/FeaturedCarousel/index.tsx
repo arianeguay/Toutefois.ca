@@ -1,5 +1,3 @@
-'use client';
-
 import Carousel from '@/components/common/Carousel';
 import Api from '../../../api';
 import FeaturedSlide from './FeaturedSlide';

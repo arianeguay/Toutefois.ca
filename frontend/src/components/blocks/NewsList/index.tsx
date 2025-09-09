@@ -15,8 +15,8 @@ const NewsList = async () => {
       <ListContainer>
         {articles.map((article) => (
           <ListItem key={article.id}>
-            <Typography variant="h3">{article.title.rendered}</Typography>
-            <Typography variant="body">{article.excerpt.rendered}</Typography>
+            <Typography variant="h3">{article.title}</Typography>
+            <Typography variant="body">{article.excerpt}</Typography>
           </ListItem>
         ))}
       </ListContainer>
