@@ -16,10 +16,12 @@ const useCarouselTimer = (slides: number) => {
     return () => clearInterval(interval);
   }, [slides, isRunning]);
 
+  const setCurrentSlide = (index: number) => setSlideIndex(index);
+
   const startTimer = () => setIsRunning(true);
   const stopTimer = () => setIsRunning(false);
 
-  return { slideIndex, startTimer, stopTimer };
+  return { slideIndex, setCurrentSlide, startTimer, stopTimer };
 };
 
 export default useCarouselTimer;

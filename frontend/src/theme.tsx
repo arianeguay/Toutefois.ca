@@ -39,6 +39,14 @@ export const theme = {
     subtitle: 18,
     big: 18,
   },
+  breakpoints: {
+    xs: '480px',
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
+    xxl: '1536px',
+  },
   fontWeights: {
     normal: '400',
     medium: '500',

@@ -1,6 +1,10 @@
 import useCarouselTimer from './hooks/useCarouselTimer';
 import Slide from './Slide';
-import { CarouselContainer } from './styles';
+import {
+  CarouselContainer,
+  CarouselPagination,
+  CarouselPaginationButton,
+} from './styles';
 
 interface CarouselProps {
   children: React.ReactNode[];
@@ -8,9 +12,7 @@ interface CarouselProps {
 const Carousel: React.FC<React.PropsWithChildren<CarouselProps>> = ({
   children,
 }) => {
-  const { slideIndex, startTimer, stopTimer } = useCarouselTimer(
-    children.length,
-  );
+  const { slideIndex, setCurrentSlide } = useCarouselTimer(children.length);
 
   return (
     <CarouselContainer>
@@ -19,6 +21,15 @@ const Carousel: React.FC<React.PropsWithChildren<CarouselProps>> = ({
           {child}
         </Slide>
       ))}
+      <CarouselPagination>
+        {children.map((_, index) => (
+          <CarouselPaginationButton
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            $isActive={index === slideIndex}
+          />
+        ))}
+      </CarouselPagination>
     </CarouselContainer>
   );
 };

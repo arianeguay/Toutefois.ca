@@ -7,14 +7,18 @@ export const SlideBody = styled.div`
 `;
 
 export const ProjectImage = styled.img`
-  max-width: 100%;
-  aspect-ratio: 16/9;
   object-position: center;
-  object-fit: cover;
-  height: 100%;
+  object-fit: contain;
+
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+
   box-shadow: ${({ theme }) => theme.boxShadow.lg};
   overflow: hidden;
   border: 1px solid ${({ theme }) => theme.colors.borderColor1};
+  background-color: #111;
 `;
 
 export const SlideCover = styled.div`
@@ -24,9 +28,12 @@ export const SlideCover = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-
+  justify-content: center;
+  padding-block: ${({ theme }) => theme.spacing.xxl}px;
   ${ProjectImage} {
     border-radius: ${({ theme }) => theme.borderRadius.sm}px;
+    width: auto;
+    height: auto;
   }
 `;
 
@@ -82,4 +89,9 @@ export const FeaturedSlideContent = styled.div`
   padding-block: ${({ theme }) => theme.spacing.xxl}px;
   position: relative;
   z-index: 2;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    flex-direction: column-reverse;
+    gap: ${({ theme }) => theme.spacing.md}px;
+  }
 `;
