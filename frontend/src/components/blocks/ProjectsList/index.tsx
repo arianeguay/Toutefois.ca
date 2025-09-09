@@ -1,5 +1,4 @@
 import Api from '../../../api';
-import Container from '../../common/Container';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -13,11 +12,7 @@ const ProjectsList = async () => {
     return <p>No projects found.</p>;
   }
 
-  return (
-    <Container>
-      <ProjectsListCarousel projects={projects} />
-    </Container>
-  );
+  return <ProjectsListCarousel projects={projects} />;
 };
 
 export default ProjectsList;

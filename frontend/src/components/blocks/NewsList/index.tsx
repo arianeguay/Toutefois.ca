@@ -1,27 +1,28 @@
-import Container from '@/components/common/Container';
-import Typography from '@/components/common/typography';
+import { getMockFacebookPosts } from '@/api/facebook';
 import Api from '../../../api';
-import { ListContainer, ListItem } from './styles';
+import ArticleListCarousel from './List';
 
 const NewsList = async () => {
   const articles = await Api.fetchAllNews();
 
-  if (!articles.length) {
+  // Use mock data in development or call the actual API
+  // Replace this with fetchFacebookPosts() when you have a valid Facebook API token
+  const facebookPosts = getMockFacebookPosts();
+
+  // Add 'wordpress' type to WordPress articles
+  const typedArticles = articles.map((article) => ({
+    ...article,
+    type: 'wordpress' as const,
+  }));
+
+  // Combine WordPress articles and Facebook posts
+  const allItems = [...typedArticles, ...facebookPosts];
+
+  if (!allItems.length) {
     return <p>No news found.</p>;
   }
 
-  return (
-    <Container>
-      <ListContainer>
-        {articles.map((article) => (
-          <ListItem key={article.id}>
-            <Typography variant="h3">{article.title}</Typography>
-            <Typography variant="body">{article.excerpt}</Typography>
-          </ListItem>
-        ))}
-      </ListContainer>
-    </Container>
-  );
+  return <ArticleListCarousel items={allItems} />;
 };
 
 export default NewsList;

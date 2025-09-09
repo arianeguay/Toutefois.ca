@@ -1857,6 +1857,7 @@ __metadata:
     prettier: "npm:^3.6.2"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
+    react-facebook: "npm:^10.0.1"
     styled-components: "npm:^6.1.19"
     swiper: "npm:^11.2.10"
     typescript: "npm:~5.8.3"
@@ -3066,6 +3067,16 @@ __metadata:
   peerDependencies:
     react: ^18.3.1
   checksum: 10c0/a752496c1941f958f2e8ac56239172296fcddce1365ce45222d04a1947e0cc5547df3e8447f855a81d6d39f008d7c32eab43db3712077f09e3f67c4874973e85
+  languageName: node
+  linkType: hard
+
+"react-facebook@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "react-facebook@npm:10.0.1"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/30ecebb2cc158522d935ae45ce9fd48d36751d161b017bddeb1f50bc218b4fb68f0afa62c7d1d65e5f1889574555de25a953aad5c8872c8522ced54ab0537e97
   languageName: node
   linkType: hard
 

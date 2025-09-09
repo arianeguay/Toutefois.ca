@@ -3,7 +3,21 @@ export interface WordpressPost {
   title: string;
   excerpt: string;
   link: string;
+  featured_image_url: string;
+  type?: 'wordpress';
+  slug?: string;
 }
+
+export interface FacebookPost {
+  id: string;
+  message: string;
+  picture?: string;
+  created_time: string;
+  permalink_url: string;
+  type: 'facebook';
+}
+
+export type PostItem = WordpressPost | FacebookPost;
 
 export interface WordpressPage {
   id: number;

@@ -3,7 +3,7 @@ import type { ElementType, Variant } from './types';
 
 const HeadingVariant: Variant[] = ['h1', 'h2', 'h3', 'h4'];
 
-export const createFontStyleCSS = (variant: Variant) => {
+export const createFontStyleCSS = (variant: Variant, lineClamp?: number) => {
   return css`
     font-size: ${({ theme }) => theme.fontSizes[variant]}px;
     font-weight: ${({ theme }) => theme.fontWeights.normal};
@@ -15,39 +15,49 @@ export const createFontStyleCSS = (variant: Variant) => {
       font-weight: ${({ theme }) => theme.fontWeights.bold};
       font-family: ${({ theme }) => theme.fonts.secondary};
     `}
+
+    ${lineClamp &&
+    css`
+      display: -webkit-box;
+      -webkit-line-clamp: ${lineClamp};
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    `}
   `;
 };
 
 interface TypographyProps {
   $variant: Variant;
+  $lineClamp?: number;
 }
 
 export const Paragraph = styled.p<TypographyProps>`
-  ${(props) => createFontStyleCSS(props.$variant)}
+  ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
 `;
 
 export const Heading1 = styled.h1<TypographyProps>`
-  ${(props) => createFontStyleCSS(props.$variant)}
+  ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
 `;
 
 export const Heading2 = styled.h2<TypographyProps>`
-  ${(props) => createFontStyleCSS(props.$variant)}
+  ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
 `;
 
 export const Heading3 = styled.h3<TypographyProps>`
-  ${(props) => createFontStyleCSS(props.$variant)}
+  ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
 `;
 
 export const Heading4 = styled.h4<TypographyProps>`
-  ${(props) => createFontStyleCSS(props.$variant)}
+  ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
 `;
 
 export const Heading5 = styled.h5<TypographyProps>`
-  ${(props) => createFontStyleCSS(props.$variant)}
+  ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
 `;
 
 export const Heading6 = styled.h6<TypographyProps>`
-  ${(props) => createFontStyleCSS(props.$variant)}
+  ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
 `;
 
 export const getElement = (element: ElementType) => {

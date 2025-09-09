@@ -43,6 +43,8 @@ function get_all_news()
                 'title' => get_the_title(),
                 'excerpt' => get_the_excerpt(),
                 'content' => get_the_content(),
+                'slug' => get_post_field('post_name', $post_id),
+
                 'meta' => $post_meta,
                 'featured_image_url' => $featured_image_url
             );

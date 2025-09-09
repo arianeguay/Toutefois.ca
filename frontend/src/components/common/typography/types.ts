@@ -14,4 +14,5 @@ export interface TypographyProps {
   style?: React.CSSProperties;
   className?: string;
   onClick?: React.MouseEventHandler;
+  lineClamp?: number;
 }

@@ -2,37 +2,71 @@
 
 import styled from 'styled-components';
 
-export const ListContainer = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 2rem 0;
+export const ListContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: ${({ theme }) => theme.spacing.md}px;
 `;
 
-export const ListItem = styled.li`
+export const ArticleCardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.secondaryText};
-  padding-bottom: 2rem;
+  color: ${({ theme }) => theme.colors.primaryText};
+  height: 100%;
+  border-radius: ${({ theme }) => theme.borderRadius.md}px;
+  box-shadow: ${({ theme }) => theme.boxShadow.md};
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) => theme.boxShadow.lg};
+  }
+`;
 
-  &:last-child {
-    border-bottom: none;
+export const ArticleListContainer = styled.div`
+  max-width: 100%;
+
+  .swiper {
+    width: 100%;
+    .swiper-wrapper {
+      width: 100%;
+      align-items: stretch;
+
+      & > * {
+        height: auto;
+      }
+    }
+  }
+`;
+export const ArticleCardContent = styled.div`
+  padding-inline: ${({ theme }) => theme.spacing.lg}px;
+  padding-block: ${({ theme }) => theme.spacing.md}px;
+  background-color: white;
+
+  margin-top: -${({ theme }) => theme.spacing.md * 2}px;
+  border-radius: ${({ theme }) => theme.borderRadius.md}px;
+  border: 1px solid ${({ theme }) => theme.colors.borderColor1};
+
+  flex: 1;
+  p {
+    margin: 0;
   }
 `;
 
 export const ArticleImage = styled.img`
   max-width: 100%;
   height: auto;
-  max-height: 300px;
+  aspect-ratio: 16/9;
+  background-color: ${({ theme }) => theme.colors.headerBackground};
+  border-radius: ${({ theme }) => theme.borderRadius.md}px;
+  border: 1px solid ${({ theme }) => theme.colors.borderColor1};
   object-fit: cover;
   margin-bottom: 1rem;
 `;
 
-export const ArticleTitle = styled.h3`
-  font-size: ${({ theme }) => theme.fontSizes.h3};
-  margin-bottom: 0.5rem;
-`;
-
-export const ArticleExcerpt = styled.div`
-  font-size: ${({ theme }) => theme.fontSizes.body};
+export const ArticleListHeader = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
