@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "buildCommand": "yarn build",
+  "outputDirectory": ".next",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
