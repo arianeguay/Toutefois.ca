@@ -124,15 +124,9 @@ export default async function Page({
           // Format the project data to match WordpressPage structure expected by PageLayout
           const formattedProjectPage = {
             id: project.id,
-            // title: {
-            //   rendered: project.title || '',
-            // },
-            // content: {
-            //   rendered: project.content || '',
-            // },
-            excerpt: {
-              rendered: project.excerpt || '',
-            },
+            title: project.title,
+            content: project.content,
+            excerpt: project.excerpt,
             link: project.slug ? `/projets/${project.slug}` : '',
             slug: project.slug || '',
             // Include all original project data for custom components to use

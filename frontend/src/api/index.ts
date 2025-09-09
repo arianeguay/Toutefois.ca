@@ -4,6 +4,7 @@ import type {
   WordpressPage,
   WordpressPost,
   WordpressProject,
+  WordpressProjectFull,
 } from '../types';
 
 class Api {
@@ -145,7 +146,7 @@ class Api {
     return this.fetchFromApi(`wp/v2/projet/${id}`);
   }
 
-  async fetchProjectBySlug(slug: string): Promise<WordpressProject> {
+  async fetchProjectBySlug(slug: string): Promise<WordpressProjectFull> {
     console.log(`Fetching project with slug: ${slug}`);
     return this.fetchFromApi(`wp/v2/projet?slug=${slug}`);
   }

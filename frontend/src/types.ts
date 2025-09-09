@@ -82,6 +82,17 @@ export interface WordpressProject {
   };
 }
 
+export interface WordpressProjectFull {
+  id: number;
+  title: {
+    rendered: string;
+  };
+  content: {
+    rendered: string;
+  };
+  featured_image_url: string;
+}
+
 export interface WordpressMenuItem {
   name: string;
   href: string;
