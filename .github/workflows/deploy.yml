@@ -131,246 +131,102 @@ jobs:
           retention-days: 1
 
 
-  configure-frontend:
+  deploy-frontend:
     runs-on: ubuntu-latest
-    needs: [prepare-deployment]
+    needs: build-frontend
     steps:
-      - name: Setup Frontend
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-nextjs-${{ github.sha }}
+          path: frontend-build/
+
+      - name: Deploy frontend files via rsync
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --delete
+          path: "frontend-build/"
+          remote_path: "/var/www/frontend"
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Configure Frontend Server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          timeout: 300s
           script: |
             set -e
-            echo "=== Frontend Configuration ==="
-
-            # Create frontend directory and backup
-            sudo mkdir -p /var/www/frontend
-            if [ -d "/var/www/frontend" ] && [ "$(ls -A /var/www/frontend)" ]; then
-              echo "Backing up existing frontend..."
-              sudo mkdir -p /var/backups/frontend-$(date +%Y%m%d-%H%M%S)
-              sudo cp -r /var/www/frontend/* /var/backups/frontend-$(date +%Y%m%d-%H%M%S)/
-            fi
-
-            echo "Deploying frontend files..."
-            sudo mkdir -p /var/www/frontend/.next /var/www/frontend/public
-
-            # Copy Next.js build files
-            sudo rsync -avz --delete /var/www/toutefois_app/frontend/.next/ /var/www/frontend/.next/
-            sudo rsync -avz --delete /var/www/toutefois_app/frontend/public/ /var/www/frontend/public/
-            sudo cp /var/www/toutefois_app/frontend/next.config.mjs /var/www/frontend/
-            sudo cp /var/www/toutefois_app/frontend/package.json /var/www/frontend/
-            sudo cp /var/www/toutefois_app/frontend/.env /var/www/frontend/ 2>/dev/null || echo "No .env file found"
-
+            echo "=== Frontend Server Configuration ==="
+            cd /var/www/frontend
             # Install production dependencies
-            cd /var/www/frontend
             sudo yarn install --production --frozen-lockfile
-
-            # Set permissions
-            sudo chown -R www-data:www-data /var/www/frontend
-            sudo chmod -R 755 /var/www/frontend
-
-            # Set up PM2 to run Next.js
+            # Set up PM2
             sudo npm install -g pm2
-            cd /var/www/frontend
-
-            # Create PM2 ecosystem file
-            cat << EOF | sudo tee /var/www/frontend/ecosystem.config.js
+            cat << EOF | sudo tee ecosystem.config.js
             module.exports = {
               apps: [
                 {
                   name: 'toutefois',
                   script: 'yarn',
                   args: 'start',
-                  cwd: '/var/www/frontend',
-                  env: {
-                    NODE_ENV: 'production',
-                    PORT: 3000
-                  }
+                  env: { NODE_ENV: 'production', PORT: 3000 }
                 }
               ]
             };
             EOF
-
-            # Start or restart the Next.js server
-            sudo pm2 describe toutefois > /dev/null 
-            if [ $? -eq 0 ]; then
+            # Start or restart app
+            if sudo pm2 describe toutefois > /dev/null; then
               sudo pm2 reload toutefois
             else
               sudo pm2 start ecosystem.config.js
             fi
-
-            # Save PM2 configuration
             sudo pm2 save
             sudo pm2 startup
+            echo "=== Frontend Deployed Successfully ==="
 
-            echo "Frontend configuration completed ✓"
-
-  configure-nginx:
+  finalize-deployment:
     runs-on: ubuntu-latest
-    needs: [configure-wordpress, configure-frontend]
+    needs: [deploy-frontend]
     steps:
-      - name: Setup Nginx and SSL
+      - name: Finalize and Verify
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          timeout: 600s
           script: |
             set -e
-            echo "=== Nginx Configuration ==="
-
-            # Backup existing nginx configs
-            sudo mkdir -p /var/backups/nginx-$(date +%Y%m%d-%H%M%S)
-            sudo cp /etc/nginx/sites-available/*.conf /var/backups/nginx-$(date +%Y%m%d-%H%M%S)/ 2>/dev/null || echo "No existing configs to backup"
-
-            # Update Nginx configuration for Next.js
-            echo "Updating Nginx configuration for Next.js..."
+            echo "=== Finalizing Deployment ==="
+            # Final Nginx config for frontend
             cat << EOF | sudo tee /etc/nginx/sites-available/toutefois.arianeguay.ca.conf
             server {
-                listen 80;
-                server_name toutefois.arianeguay.ca;
-                
-                # Redirect HTTP to HTTPS
-                location / {
-                    return 301 https://\$host\$request_uri;
-                }
+                listen 80; server_name toutefois.arianeguay.ca;
+                location / { return 301 https://\$host\$request_uri; }
             }
-
             server {
-                listen 443 ssl http2;
-                server_name toutefois.arianeguay.ca;
-
-                # SSL Configuration
+                listen 443 ssl http2; server_name toutefois.arianeguay.ca;
                 ssl_certificate /etc/letsencrypt/live/toutefois.arianeguay.ca/fullchain.pem;
                 ssl_certificate_key /etc/letsencrypt/live/toutefois.arianeguay.ca/privkey.pem;
-                ssl_protocols TLSv1.2 TLSv1.3;
-                ssl_prefer_server_ciphers on;
-                ssl_session_cache shared:SSL:10m;
-                ssl_session_timeout 10m;
-
-                # Proxy Next.js server
                 location / {
                     proxy_pass http://localhost:3000;
+                    proxy_set_header Host \$host;
                     proxy_http_version 1.1;
                     proxy_set_header Upgrade \$http_upgrade;
                     proxy_set_header Connection 'upgrade';
-                    proxy_set_header Host \$host;
-                    proxy_cache_bypass \$http_upgrade;
                     proxy_set_header X-Real-IP \$remote_addr;
                     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
                     proxy_set_header X-Forwarded-Proto \$scheme;
-                }
-
-                # Static files with long cache
-                location /_next/static {
-                    proxy_pass http://localhost:3000;
-                    proxy_http_version 1.1;
-                    proxy_set_header Upgrade \$http_upgrade;
-                    proxy_set_header Connection 'upgrade';
-                    proxy_set_header Host \$host;
-                    proxy_cache_bypass \$http_upgrade;
-                    proxy_set_header X-Real-IP \$remote_addr;
-                    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-                    proxy_set_header X-Forwarded-Proto \$scheme;
-                    
-                    # Cache static assets
-                    expires 30d;
-                    add_header Cache-Control "public, max-age=2592000";
-                }
-
-                # Public assets with cache
-                location /public {
-                    proxy_pass http://localhost:3000;
-                    proxy_http_version 1.1;
-                    proxy_set_header Upgrade \$http_upgrade;
-                    proxy_set_header Connection 'upgrade';
-                    proxy_set_header Host \$host;
-                    proxy_cache_bypass \$http_upgrade;
-                    
-                    # Cache public assets
-                    expires 7d;
-                    add_header Cache-Control "public, max-age=604800";
                 }
             }
             EOF
-
-            # Deploy WordPress admin nginx config
-            sudo cp /var/www/toutefois_app/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-available/
-
-            # Create symlinks
-            echo "Creating site symlinks..."
             sudo ln -sf /etc/nginx/sites-available/toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/toutefois.arianeguay.ca.conf
-            sudo ln -sf /etc/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-enabled/admin.toutefois.arianeguay.ca.conf
+            # Test and reload Nginx
+            sudo nginx -t && sudo systemctl reload nginx
+            echo "=== Nginx and Frontend Configured ==="
 
-            # Test nginx configuration
-            echo "Testing Nginx configuration..."
-            sudo nginx -t
-
-            echo "Nginx configuration completed ✓"
-
-  setup-ssl:
-    runs-on: ubuntu-latest
-    needs: [configure-nginx]
-    if: ${{ !inputs.skip_ssl }}
-    steps:
-      - name: Setup SSL Certificates
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          timeout: 900s
-          script: |
-            set -e
-            echo "=== SSL Certificate Setup ==="
-
-            # Check if certificates already exist and are valid
-            if sudo certbot certificates 2>/dev/null | grep -q "toutefois.arianeguay.ca"; then
-              echo "Existing certificates found. Checking validity..."
-              if sudo certbot certificates 2>/dev/null | grep -A5 "toutefois.arianeguay.ca" | grep -q "VALID"; then
-                echo "Certificates are still valid. Skipping renewal."
-                exit 0
-              fi
-            fi
-
-            # Clean up old certbot installations
-            echo "Cleaning up old Certbot installations..."
-            sudo apt-get remove certbot -y 2>/dev/null || echo "Certbot not installed via apt"
-            sudo snap remove certbot-dns-digitalocean 2>/dev/null || echo "certbot-dns-digitalocean not installed"
-            sudo snap remove certbot 2>/dev/null || echo "certbot not installed via snap"
-
-            # Create DigitalOcean credentials
-            echo "Setting up DigitalOcean credentials..."
-            sudo mkdir -p /etc/letsencrypt
-            echo "dns_digitalocean_token = ${{ secrets.DIGITALOCEAN_API_TOKEN }}" | sudo tee /etc/letsencrypt/digitalocean.ini > /dev/null
-            sudo chmod 600 /etc/letsencrypt/digitalocean.ini
-
-            # Install Certbot and DigitalOcean plugin
-            echo "Installing Certbot and DigitalOcean plugin..."
-            sudo snap install --classic certbot
-            sudo snap refresh certbot
-            sudo ln -sf /snap/bin/certbot /usr/bin/certbot
-
-            echo "Installing DigitalOcean DNS plugin..."
-            sudo snap set certbot trust-plugin-with-root=ok
-            sudo snap install certbot-dns-digitalocean
-            sudo snap refresh certbot-dns-digitalocean
-
-            # Request SSL certificates
-            echo "Requesting SSL certificates..."
-            sudo certbot certonly --dns-digitalocean \
-              --dns-digitalocean-credentials /etc/letsencrypt/digitalocean.ini \
-              --dns-digitalocean-propagation-seconds 60 \
-              -d "toutefois.arianeguay.ca" \
-              -d "admin.toutefois.arianeguay.ca" \
-              --non-interactive --agree-tos -m ${{ secrets.CERTBOT_EMAIL }} \
-              --force-renewal
-
-            echo "SSL certificates setup completed ✓"
 
   finalize-deployment:
     runs-on: ubuntu-latest
