@@ -87,38 +87,48 @@ class Api {
     return this.fetchFromApi(`wp/v2/media/${id}`);
   }
 
-  async fetchPageBySlug(slug: string): Promise<WordpressPage | WordpressPage[]> {
+  async fetchPageBySlug(
+    slug: string,
+  ): Promise<WordpressPage | WordpressPage[]> {
+    console.log(slug);
     // First try direct slug match (which works for top-level pages)
-    const directMatch = await this.fetchFromApi(`wp/v2/pages?slug=${encodeURIComponent(slug)}`);
-    
+    const directMatch = await this.fetchFromApi(
+      `wp/v2/pages?slug=${encodeURIComponent(slug)}`,
+    );
+    console.log(directMatch);
+
     // If we found a direct match, return it
     if (Array.isArray(directMatch) && directMatch.length > 0) {
       return directMatch;
     }
-    
+
     // If no direct match, try fetching by path (which works for hierarchical pages)
     try {
       // WordPress API has issues with hierarchical slugs, so we need to try a different approach
       // Fetch all pages and filter on the client side
       const allPages = await this.fetchPages();
-      
+
       // Find pages with matching path
-      const matchingPages = allPages.filter(page => {
+      const matchingPages = allPages.filter((page) => {
         // Normalize paths for comparison
         const normalizedSlug = slug.replace(/^\/|\/$/g, ''); // Remove leading/trailing slashes
         const normalizedPageSlug = page.slug.replace(/^\/|\/$/g, '');
-        const normalizedPageLink = page.link.replace(/https?:\/\/[^/]+\//g, '').replace(/^\/|\/$/g, '');
-        
+        const normalizedPageLink = page.link
+          .replace(/https?:\/\/[^/]+\//g, '')
+          .replace(/^\/|\/$/g, '');
+
         // Try multiple matching strategies
-        return normalizedPageSlug === normalizedSlug || 
-               normalizedPageLink === normalizedSlug ||
-               normalizedPageLink.includes(normalizedSlug);
+        return (
+          normalizedPageSlug === normalizedSlug ||
+          normalizedPageLink === normalizedSlug ||
+          normalizedPageLink.includes(normalizedSlug)
+        );
       });
-      
+
       if (matchingPages.length > 0) {
         return matchingPages;
       }
-      
+
       // If still no match, return an empty array that can be handled as "not found" by consumers
       return [] as unknown as WordpressPage[];
     } catch (error) {
@@ -167,7 +177,9 @@ class Api {
   }
 
   async fetchSpecialProjects(): Promise<WordpressMenuItem | null> {
-    const specialProjects = await this.fetchFromApi('toutefois/v1/special-projects');
+    const specialProjects = await this.fetchFromApi(
+      'toutefois/v1/special-projects',
+    );
 
     if (!specialProjects?.length) {
       return null;

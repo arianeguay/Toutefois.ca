@@ -25,8 +25,6 @@ function get_all_projects()
         'posts_per_page' => 6,
         'order' => 'DESC',
         'orderby' => 'date',
-        ç
-
     );
 
     $query = new WP_Query($args);

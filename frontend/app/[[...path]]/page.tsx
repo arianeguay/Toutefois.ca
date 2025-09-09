@@ -87,7 +87,8 @@ export default async function Page({
     // This is the root route - render your homepage
     // Fetch homepage data or use default
     try {
-      const homePage = await api.fetchPageBySlug('home');
+      const homePage = await api.fetchPageBySlug('');
+      console.log(homePage);
       const homePageData = Array.isArray(homePage) ? homePage[0] : homePage;
 
       return <PageLayout page={homePageData} />;
