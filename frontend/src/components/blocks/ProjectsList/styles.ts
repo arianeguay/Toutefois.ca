@@ -36,10 +36,11 @@ export const ProjectCardContainer = styled.div`
 
 export const ProjectListContainer = styled.div`
   max-width: 100%;
-
+  position: relative;
   .swiper {
     width: 100%;
     .swiper-wrapper {
+      padding-block: ${({ theme }) => theme.spacing.md}px;
       width: 100%;
       align-items: stretch;
 

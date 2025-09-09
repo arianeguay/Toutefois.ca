@@ -28,7 +28,7 @@ interface ArticleListCarouselProps {
 const ArticleListCarousel: React.FC<ArticleListCarouselProps> = ({
   items,
   title = 'Quoi de neuf?',
-  viewAllUrl = '/actualites',
+  viewAllUrl = '/archives',
   viewAllText = 'Voir tous les articles',
 }) => {
   const theme = useTheme();
