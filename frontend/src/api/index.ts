@@ -1,4 +1,5 @@
 import type {
+  WordpressFooter,
   WordpressImage,
   WordpressMenuItem,
   WordpressPage,
@@ -190,6 +191,15 @@ class Api {
       return null;
     }
     return specialProjects[0];
+  }
+
+  async fetchFooter(): Promise<WordpressFooter | null> {
+    const footer = await this.fetchFromApi('toutefois/v1/footer');
+
+    if (!footer?.length) {
+      return null;
+    }
+    return footer[0];
   }
 }
 

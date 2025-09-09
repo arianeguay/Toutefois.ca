@@ -2,20 +2,20 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/news-list/block.json":
-/*!**********************************!*\
-  !*** ./src/news-list/block.json ***!
-  \**********************************/
+/***/ "./src/news-list copy/block.json":
+/*!***************************************!*\
+  !*** ./src/news-list copy/block.json ***!
+  \***************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/news-list","version":"0.1.0","title":"News List","category":"widgets","icon":"text-page","description":"Displays a list of all news articles.","editorScript":"file:./index.js","render":"file:./render.php","attributes":{"layout":{"type":"string","default":"grid"}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/news-list","version":"0.1.0","title":"News List","category":"widgets","icon":"text-page","description":"Displays a list of all news articles.","editorScript":"file:./index.js","render":"file:./render.php"}');
 
 /***/ }),
 
-/***/ "./src/news-list/edit.js":
-/*!*******************************!*\
-  !*** ./src/news-list/edit.js ***!
-  \*******************************/
+/***/ "./src/news-list copy/edit.js":
+/*!************************************!*\
+  !*** ./src/news-list copy/edit.js ***!
+  \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -39,10 +39,10 @@ function Edit() {
 
 /***/ }),
 
-/***/ "./src/news-list/save.js":
-/*!*******************************!*\
-  !*** ./src/news-list/save.js ***!
-  \*******************************/
+/***/ "./src/news-list copy/save.js":
+/*!************************************!*\
+  !*** ./src/news-list copy/save.js ***!
+  \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -166,15 +166,15 @@ module.exports = window["React"];
 var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
-/*!********************************!*\
-  !*** ./src/news-list/index.js ***!
-  \********************************/
+/*!*************************************!*\
+  !*** ./src/news-list copy/index.js ***!
+  \*************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./src/news-list/edit.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./save */ "./src/news-list/save.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./src/news-list/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./src/news-list copy/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./save */ "./src/news-list copy/save.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./src/news-list copy/block.json");
 
 
 

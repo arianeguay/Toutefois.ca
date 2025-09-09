@@ -1,29 +1,32 @@
+import api from '@/api';
 import Typography from '@/components/common/typography';
-import FacebookIcon from './icons/Facebook';
-import InstagramIcon from './icons/Instagram';
+import Socials from './socials';
 import { FooterContainer, FooterContent } from './styles';
 
-const Footer = () => {
+const Footer = async () => {
+  const footer = await api.fetchFooter();
   return (
     <FooterContainer>
       <FooterContent>
-        <div>
-          <Typography variant="body" element="p">
-            Nous joindre
-          </Typography>
-          <Typography variant="body" element="p">
-            514-288-2222
-          </Typography>
-          <Typography variant="body" element="p">
-            info@toutefois.ca
-          </Typography>
-          <a href="https://www.instagram.com/toutefois/">
-            <InstagramIcon />
-          </a>
-          <a href="https://www.facebook.com/toutefois">
-            <FacebookIcon />
-          </a>
-        </div>
+        {!!footer ? (
+          <div>
+            <Typography variant="body" element="p">
+              Nous joindre
+            </Typography>
+            <Typography variant="body" element="p">
+              {footer?.phone}
+            </Typography>
+            <Typography variant="body" element="p">
+              {footer?.email}
+            </Typography>
+            <Socials
+              instagram={footer?.instagram}
+              facebook={footer?.facebook}
+            />
+          </div>
+        ) : (
+          <div></div>
+        )}
         <Typography variant="body" element="p" style={{ textAlign: 'center' }}>
           Théâtre de Toutefois © 2025
         </Typography>

@@ -114,3 +114,10 @@ export interface WordpressMenuItem {
   mainColor: string;
   previewImage: string;
 }
+
+export interface WordpressFooter {
+  phone: string;
+  email: string;
+  instagram: string;
+  facebook: string;
+}

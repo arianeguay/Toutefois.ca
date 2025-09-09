@@ -78,21 +78,7 @@ function projets_cpt_and_meta_init()
     register_post_type('projet', $args);
 
     // Register Meta Fields for REST API
-    register_post_meta('projet', '_projet_type', array(
-        'show_in_rest' => true,
-        'single' => true,
-        'type' => 'string',
-    ));
-    register_post_meta('projet', '_projet_credits', array(
-        'show_in_rest' => true,
-        'single' => true,
-        'type' => 'string',
-    ));
-    register_post_meta('projet', '_projet_personnes', array(
-        'show_in_rest' => true,
-        'single' => true,
-        'type' => 'string',
-    ));
+
     register_post_meta('projet', '_projet_date_debut', array(
         'show_in_rest' => true,
         'single' => true,
@@ -107,11 +93,6 @@ function projets_cpt_and_meta_init()
         'show_in_rest' => true,
         'single' => true,
         'type' => 'string',
-    ));
-    register_post_meta('projet', '_projet_image_id', array(
-        'show_in_rest' => true,
-        'single' => true,
-        'type' => 'integer',
     ));
     register_post_meta('projet', '_projet_is_featured', array(
         'show_in_rest' => true,
@@ -140,24 +121,17 @@ function projets_meta_box_callback($post)
 {
     wp_nonce_field('projets_save_meta_box_data', 'projets_meta_box_nonce');
 
-    $type = get_post_meta($post->ID, '_projet_type', true);
-    $credits = get_post_meta($post->ID, '_projet_credits', true);
-    $personnes = get_post_meta($post->ID, '_projet_personnes', true);
     $date_debut = get_post_meta($post->ID, '_projet_date_debut', true);
     $date_fin = get_post_meta($post->ID, '_projet_date_fin', true);
     $lien = get_post_meta($post->ID, '_projet_lien', true);
-    $image_id = get_post_meta($post->ID, '_projet_image_id', true);
     $is_featured = get_post_meta($post->ID, '_projet_is_featured', true);
 
     echo '<style> .projet-field { display: grid; grid-template-columns: 150px 1fr; gap: 10px; margin-bottom: 15px; align-items: center; } .projet-field label { font-weight: bold; } .projet-field input, .projet-field textarea { width: 100%; } </style>';
 
-    echo '<div class="projet-field"><label for="projet_type">Type :</label><input type="text" id="projet_type" name="projet_type" value="' . esc_attr($type) . '" size="25" /></div>';
-    echo '<div class="projet-field"><label for="projet_credits">Crédits :</label><textarea id="projet_credits" name="projet_credits" rows="4">' . esc_textarea($credits) . '</textarea></div>';
-    echo '<div class="projet-field"><label for="projet_personnes">Personnes impliquées :</label><textarea id="projet_personnes" name="projet_personnes" rows="4">' . esc_textarea($personnes) . '</textarea></div>';
     echo '<div class="projet-field"><label for="projet_date_debut">Date de début :</label><input type="date" id="projet_date_debut" name="projet_date_debut" value="' . esc_attr($date_debut) . '" /></div>';
     echo '<div class="projet-field"><label for="projet_date_fin">Date de fin :</label><input type="date" id="projet_date_fin" name="projet_date_fin" value="' . esc_attr($date_fin) . '" /></div>';
     echo '<div class="projet-field"><label for="projet_lien">Lien de réservation :</label><input type="url" id="projet_lien" name="projet_lien" value="' . esc_attr($lien) . '" size="25" /></div>';
-    echo '<div class="projet-field"><label for="projet_is_featured">Projet vedette :</label><input type="checkbox" id="projet_is_featured" name="projet_is_featured" value="1" ' . checked($is_featured, 1, false) . ' /></div>';
+    echo '<div class="projet-field"><label for="projet_is_featured">Projet vedette :</label><input type="checkbox" id="projet_is_featured" style="width:20px; height:20px;" name="projet_is_featured" value="1" ' . checked($is_featured, 1, false) . ' /></div>';
 
     echo '<div class="projet-field"><label for="projet_image">Image :</label><div>';
     echo '<input type="hidden" name="projet_image_id" id="projet_image_id" value="' . esc_attr($image_id) . '" />';

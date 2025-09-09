@@ -8,11 +8,5 @@
   "icon": "text-page",
   "description": "Displays a list of all news articles.",
   "editorScript": "file:./index.js",
-  "render": "file:./render.php",
-  "attributes": {
-    "layout": {
-      "type": "string",
-      "default": "grid"
-    }
-  }
+  "render": "file:./render.php"
 }
