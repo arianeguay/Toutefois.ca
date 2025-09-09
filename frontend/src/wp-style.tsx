@@ -111,11 +111,6 @@ export const WordpressStyling = css`
     color: ${({ theme }) => theme.prose.linkHover};
   }
 
-  /* Paragraphs and spacing */
-  p {
-    margin: 16px auto;
-  }
-
   & > p,
   & > ul,
   & > ol,
@@ -219,13 +214,10 @@ export const WordpressStyling = css`
   }
 
   /* Images */
-  .wp-block-image img,
-  img {
+  .wp-block-image img {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: ${({ theme }) => theme.content.mediaRadius}px;
-    box-shadow: ${({ theme }) => theme.boxShadow.xs};
   }
 
   .wp-block-image {

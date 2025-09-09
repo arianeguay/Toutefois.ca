@@ -1,17 +1,23 @@
 import api from '@/api';
+import { WordpressPage } from '@/types';
 import Logo from './Logo';
 import Menu from './Menu';
 import SpecialProjectMenuItem from './SpecialProject';
 import { HeaderContainer } from './styles';
 
-const Header = async () => {
+interface HeaderProps {
+  currentPage?: WordpressPage;
+}
+const Header = async ({ currentPage }: HeaderProps) => {
   const menuItems = await api.fetchMenuItems();
   const specialProject = await api.fetchSpecialProjects();
 
+  const mainColor = currentPage?.meta?.main_color;
+
   return (
-    <HeaderContainer>
+    <HeaderContainer $mainColor={mainColor}>
       <Logo />
-      <Menu menuItems={menuItems} />
+      <Menu menuItems={menuItems} currentPage={currentPage} />
       {specialProject && <SpecialProjectMenuItem {...specialProject} />}
     </HeaderContainer>
   );

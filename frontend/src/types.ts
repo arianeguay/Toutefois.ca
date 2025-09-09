@@ -37,6 +37,9 @@ export interface WordpressPage {
   _links?: {
     [key: string]: any;
   };
+  meta?: {
+    main_color: string;
+  };
 }
 
 export interface WordpressImage {

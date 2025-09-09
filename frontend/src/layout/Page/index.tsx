@@ -52,7 +52,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
 
   return (
     <PageWrapper>
-      <Header />
+      <Header currentPage={page} />
       <MainContent>
         {!isHome && !!page.title?.rendered && (
           <Typography
