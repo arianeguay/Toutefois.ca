@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Projects List Component
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
@@ -17,7 +18,8 @@ add_action('rest_api_init', function () {
 });
 
 // 2. Callback Function
-function get_all_projects() {
+function get_all_projects()
+{
     $args = array(
         'post_type' => 'projet',
         'posts_per_page' => -1,
@@ -33,14 +35,15 @@ function get_all_projects() {
             $post_meta = get_post_meta($post_id);
             $featured_image_id = get_post_thumbnail_id($post_id);
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
-
+            $slug = get_post_field('post_name', $post_id);
             $posts[] = array(
                 'id' => $post_id,
                 'title' => get_the_title(),
                 'excerpt' => get_the_excerpt(),
                 'content' => get_the_content(),
                 'meta' => $post_meta,
-                'featured_image_url' => $featured_image_url
+                'featured_image_url' => $featured_image_url,
+                'slug' => $slug,
             );
         }
         wp_reset_postdata();

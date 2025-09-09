@@ -1,5 +1,5 @@
 # .github/workflows/deploy.yml
-name: Deploy to DigitalOcean
+name: Deploy to DigitalOcean (Next.js)
 
 on:
   push:
@@ -23,8 +23,112 @@ env:
   YARN_CACHE_FOLDER: ~/.yarn
 
 jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.yarn-cache.outputs.cache-hit }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+          cache-dependency-path: "frontend/yarn.lock"
+
+      - name: Cache Yarn dependencies
+        id: yarn-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.yarn
+            frontend/node_modules
+            frontend/.next/cache
+          key: ${{ runner.os }}-yarn-nextjs-${{ hashFiles('frontend/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-nextjs-
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: |
+          if [[ "${{ steps.yarn-cache.outputs.cache-hit }}" != "true" ]]; then
+            yarn install --prefer-offline
+          fi
+
+      - name: Build Frontend
+        working-directory: frontend
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          NODE_ENV: production
+        run: |
+          # Use package.json.next if it exists
+          if [ -f "package.json.next" ]; then
+            mv package.json package.json.old
+            mv package.json.next package.json
+          fi
+
+          # Use tsconfig.next.json if it exists
+          if [ -f "tsconfig.next.json" ]; then
+            mv tsconfig.json tsconfig.json.old
+            mv tsconfig.next.json tsconfig.json
+          fi
+
+          # Build the Next.js app
+          yarn build
+
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-nextjs-${{ github.sha }}
+          path: |
+            frontend/.next/
+            frontend/public/
+            frontend/next.config.mjs
+            frontend/package.json
+          retention-days: 1
+
+  prepare-deployment:
+    runs-on: ubuntu-latest
+    needs: [build-frontend]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-nextjs-${{ github.sha }}
+          path: frontend/
+
+      - name: Create production .env
+        run: |
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.REACT_APP_API_URL }}" > frontend/.env
+          echo "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> frontend/.env
+          echo "COMMIT_SHA=${{ github.sha }}" >> frontend/.env
+
+      - name: Validate deployment files
+        run: |
+          echo "Validating deployment structure..."
+          test -d frontend/.next || { echo "Frontend .next dir not found"; exit 1; }
+          test -d wp-content || { echo "WordPress content not found"; exit 1; }
+          test -d nginx/sites-available || { echo "Nginx configs not found"; exit 1; }
+          echo "All required files present ✓"
+
+      - name: Deploy files via rsync
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --delete --exclude='.git*' --exclude='node_modules' --exclude='*.log'
+          path: "./"
+          remote_path: "/var/www/toutefois_app"
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
   configure-wordpress:
     runs-on: ubuntu-latest
+    needs: [prepare-deployment]
     steps:
       - name: Setup WordPress
         uses: appleboy/ssh-action@v1.0.3
@@ -56,90 +160,6 @@ jobs:
             sudo chown -R www-data:www-data /var/www/wordpress/wp-content
 
             echo "WordPress configuration completed ✓"
-  build-frontend:
-    runs-on: ubuntu-latest
-    needs: [configure-wordpress]
-    outputs:
-      cache-hit: ${{ steps.yarn-cache.outputs.cache-hit }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "yarn"
-          cache-dependency-path: "frontend/yarn.lock"
-
-      - name: Cache Yarn dependencies
-        id: yarn-cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.yarn
-            frontend/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('frontend/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        working-directory: frontend
-        run: |
-          if [[ "${{ steps.yarn-cache.outputs.cache-hit }}" != "true" ]]; then
-            yarn install --prefer-offline
-          fi
-
-      - name: Build Frontend
-        working-directory: frontend
-        env:
-          VITE_API_URL: ${{ secrets.REACT_APP_API_URL }}
-          NODE_ENV: production
-        run: yarn build
-
-      - name: Upload frontend artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist-${{ github.sha }}
-          path: frontend/dist/
-          retention-days: 1
-
-  prepare-deployment:
-    runs-on: ubuntu-latest
-    needs: [build-frontend]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download frontend artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-dist-${{ github.sha }}
-          path: frontend/dist/
-
-      - name: Create production .env
-        run: |
-          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > frontend/dist/.env
-          echo "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> frontend/dist/.env
-          echo "COMMIT_SHA=${{ github.sha }}" >> frontend/dist/.env
-
-      - name: Validate deployment files
-        run: |
-          echo "Validating deployment structure..."
-          test -d frontend/dist || { echo "Frontend dist not found"; exit 1; }
-          test -d wp-content || { echo "WordPress content not found"; exit 1; }
-          test -d nginx/sites-available || { echo "Nginx configs not found"; exit 1; }
-          echo "All required files present ✓"
-
-      - name: Deploy files via rsync
-        uses: burnett01/rsync-deployments@6.0.0
-        with:
-          switches: -avzr --delete --exclude='.git*' --exclude='node_modules' --exclude='*.log'
-          path: "./"
-          remote_path: "/var/www/toutefois_app"
-          remote_host: ${{ secrets.REMOTE_HOST }}
-          remote_user: ${{ secrets.REMOTE_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
   configure-frontend:
     runs-on: ubuntu-latest
@@ -165,9 +185,56 @@ jobs:
             fi
 
             echo "Deploying frontend files..."
-            sudo rsync -avz --delete /var/www/toutefois_app/frontend/dist/ /var/www/frontend/
+            sudo mkdir -p /var/www/frontend/.next /var/www/frontend/public
+
+            # Copy Next.js build files
+            sudo rsync -avz --delete /var/www/toutefois_app/frontend/.next/ /var/www/frontend/.next/
+            sudo rsync -avz --delete /var/www/toutefois_app/frontend/public/ /var/www/frontend/public/
+            sudo cp /var/www/toutefois_app/frontend/next.config.mjs /var/www/frontend/
+            sudo cp /var/www/toutefois_app/frontend/package.json /var/www/frontend/
+            sudo cp /var/www/toutefois_app/frontend/.env /var/www/frontend/ 2>/dev/null || echo "No .env file found"
+
+            # Install production dependencies
+            cd /var/www/frontend
+            sudo yarn install --production --frozen-lockfile
+
+            # Set permissions
             sudo chown -R www-data:www-data /var/www/frontend
             sudo chmod -R 755 /var/www/frontend
+
+            # Set up PM2 to run Next.js
+            sudo npm install -g pm2
+            cd /var/www/frontend
+
+            # Create PM2 ecosystem file
+            cat << EOF | sudo tee /var/www/frontend/ecosystem.config.js
+            module.exports = {
+              apps: [
+                {
+                  name: 'toutefois',
+                  script: 'yarn',
+                  args: 'start',
+                  cwd: '/var/www/frontend',
+                  env: {
+                    NODE_ENV: 'production',
+                    PORT: 3000
+                  }
+                }
+              ]
+            };
+            EOF
+
+            # Start or restart the Next.js server
+            sudo pm2 describe toutefois > /dev/null 
+            if [ $? -eq 0 ]; then
+              sudo pm2 reload toutefois
+            else
+              sudo pm2 start ecosystem.config.js
+            fi
+
+            # Save PM2 configuration
+            sudo pm2 save
+            sudo pm2 startup
 
             echo "Frontend configuration completed ✓"
 
@@ -190,9 +257,79 @@ jobs:
             sudo mkdir -p /var/backups/nginx-$(date +%Y%m%d-%H%M%S)
             sudo cp /etc/nginx/sites-available/*.conf /var/backups/nginx-$(date +%Y%m%d-%H%M%S)/ 2>/dev/null || echo "No existing configs to backup"
 
-            # Deploy new nginx configs
-            echo "Updating Nginx configurations..."
-            sudo cp /var/www/toutefois_app/nginx/sites-available/*.conf /etc/nginx/sites-available/
+            # Update Nginx configuration for Next.js
+            echo "Updating Nginx configuration for Next.js..."
+            cat << EOF | sudo tee /etc/nginx/sites-available/toutefois.arianeguay.ca.conf
+            server {
+                listen 80;
+                server_name toutefois.arianeguay.ca;
+                
+                # Redirect HTTP to HTTPS
+                location / {
+                    return 301 https://\$host\$request_uri;
+                }
+            }
+
+            server {
+                listen 443 ssl http2;
+                server_name toutefois.arianeguay.ca;
+
+                # SSL Configuration
+                ssl_certificate /etc/letsencrypt/live/toutefois.arianeguay.ca/fullchain.pem;
+                ssl_certificate_key /etc/letsencrypt/live/toutefois.arianeguay.ca/privkey.pem;
+                ssl_protocols TLSv1.2 TLSv1.3;
+                ssl_prefer_server_ciphers on;
+                ssl_session_cache shared:SSL:10m;
+                ssl_session_timeout 10m;
+
+                # Proxy Next.js server
+                location / {
+                    proxy_pass http://localhost:3000;
+                    proxy_http_version 1.1;
+                    proxy_set_header Upgrade \$http_upgrade;
+                    proxy_set_header Connection 'upgrade';
+                    proxy_set_header Host \$host;
+                    proxy_cache_bypass \$http_upgrade;
+                    proxy_set_header X-Real-IP \$remote_addr;
+                    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto \$scheme;
+                }
+
+                # Static files with long cache
+                location /_next/static {
+                    proxy_pass http://localhost:3000;
+                    proxy_http_version 1.1;
+                    proxy_set_header Upgrade \$http_upgrade;
+                    proxy_set_header Connection 'upgrade';
+                    proxy_set_header Host \$host;
+                    proxy_cache_bypass \$http_upgrade;
+                    proxy_set_header X-Real-IP \$remote_addr;
+                    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto \$scheme;
+                    
+                    # Cache static assets
+                    expires 30d;
+                    add_header Cache-Control "public, max-age=2592000";
+                }
+
+                # Public assets with cache
+                location /public {
+                    proxy_pass http://localhost:3000;
+                    proxy_http_version 1.1;
+                    proxy_set_header Upgrade \$http_upgrade;
+                    proxy_set_header Connection 'upgrade';
+                    proxy_set_header Host \$host;
+                    proxy_cache_bypass \$http_upgrade;
+                    
+                    # Cache public assets
+                    expires 7d;
+                    add_header Cache-Control "public, max-age=604800";
+                }
+            }
+            EOF
+
+            # Deploy WordPress admin nginx config
+            sudo cp /var/www/toutefois_app/nginx/sites-available/admin.toutefois.arianeguay.ca.conf /etc/nginx/sites-available/
 
             # Create symlinks
             echo "Creating site symlinks..."
@@ -291,7 +428,8 @@ jobs:
             # Verify services are running
             echo "Verifying services..."
             sudo systemctl is-active nginx || { echo "Nginx is not running!"; exit 1; }
-            sudo systemctl is-active php8.1-fpm || sudo systemctl is-active php-fpm || echo "PHP-FPM status unknown"
+            sudo pm2 list
+            sudo pm2 describe toutefois || { echo "Next.js app is not running!"; exit 1; }
 
             # Test website accessibility
             echo "Testing website accessibility..."

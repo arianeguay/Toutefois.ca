@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Projects Page Grid Component
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
@@ -15,12 +16,12 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true', // Make public
         'args' => array(
             'page' => array(
-                'validate_callback' => function($param, $request, $key) {
+                'validate_callback' => function ($param, $request, $key) {
                     return is_numeric($param);
                 }
             ),
             'per_page' => array(
-                'validate_callback' => function($param, $request, $key) {
+                'validate_callback' => function ($param, $request, $key) {
                     return is_numeric($param);
                 }
             ),
@@ -29,7 +30,8 @@ add_action('rest_api_init', function () {
 });
 
 // 2. Callback Function
-function get_projects_for_grid($request) {
+function get_projects_for_grid($request)
+{
     $page = $request->get_param('page') ? (int)$request->get_param('page') : 1;
     $per_page = $request->get_param('per_page') ? (int)$request->get_param('per_page') : 9;
 
@@ -47,15 +49,21 @@ function get_projects_for_grid($request) {
             $query->the_post();
             $post_id = get_the_ID();
             $post_meta = get_post_meta($post_id);
+
+            $slug = get_post_field('post_name', $post_id);
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'large');
+            $image_id = get_post_meta($post_id, '_projet_image_id', true);
+            $image_url = wp_get_attachment_image_url($image_id, 'large');
+
 
             $posts[] = array(
                 'id' => $post_id,
                 'title' => get_the_title(),
+                'slug' => $slug,
                 'excerpt' => get_the_excerpt(),
                 'content' => get_the_content(),
                 'meta' => $post_meta,
-                'featured_image_url' => $featured_image_url
+                'featured_image_url' => $image_url
             );
         }
     }
