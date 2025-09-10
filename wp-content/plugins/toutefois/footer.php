@@ -22,6 +22,7 @@ add_action('admin_init', function () {
                 'email'     => isset($input['email']) ? sanitize_email($input['email']) : '',
                 'facebook'  => isset($input['facebook']) ? esc_url_raw($input['facebook']) : '',
                 'instagram' => isset($input['instagram']) ? esc_url_raw($input['instagram']) : '',
+                'slogan'    => isset($input['slogan']) ? sanitize_text_field($input['slogan']) : '',
             ];
         },
         'default' => [
@@ -29,6 +30,7 @@ add_action('admin_init', function () {
             'email'     => '',
             'facebook'  => '',
             'instagram' => '',
+            'slogan'    => '',
         ],
     ]);
 
@@ -65,6 +67,7 @@ add_action('admin_init', function () {
     $add_field('email',     'Courriel',  'email', 'info@toutefois.ca');
     $add_field('facebook',  'Facebook URL',  'url', 'https://www.facebook.com/toutefois');
     $add_field('instagram', 'Instagram URL', 'url', 'https://www.instagram.com/toutefois/');
+    $add_field('slogan', 'Slogan', 'text', 'Ensembles');
 });
 
 // ---- 2) Admin page ----
@@ -104,6 +107,7 @@ add_action('rest_api_init', function () {
                 'email'     => isset($opts['email']) ? $opts['email'] : '',
                 'facebook'  => isset($opts['facebook']) ? $opts['facebook'] : '',
                 'instagram' => isset($opts['instagram']) ? $opts['instagram'] : '',
+                'slogan'    => isset($opts['slogan']) ? $opts['slogan'] : '',
                 'site'      => [
                     'name'        => get_bloginfo('name'),
                     'description' => get_bloginfo('description'),
