@@ -5,7 +5,7 @@ import Socials from './socials';
 import { FooterContainer, FooterContent } from './styles';
 
 interface FooterProps {
-  currentPage: WordpressPage;
+  currentPage?: WordpressPage;
 }
 const Footer: React.FC<FooterProps> = async ({ currentPage }) => {
   const footer = await api.fetchFooter();
