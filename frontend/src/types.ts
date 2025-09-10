@@ -120,4 +120,5 @@ export interface WordpressFooter {
   email: string;
   instagram: string;
   facebook: string;
+  slogan: string;
 }

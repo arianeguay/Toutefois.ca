@@ -42,9 +42,22 @@ const Footer: React.FC<FooterProps> = async ({ currentPage }) => {
         ) : (
           <div></div>
         )}
-        <Typography variant="body" element="p" style={{ textAlign: 'center' }}>
-          Théâtre de Toutefois © 2025
-        </Typography>
+        <div>
+          <Typography
+            variant="body"
+            element="p"
+            style={{ textAlign: 'center' }}
+          >
+            {footer?.slogan}
+          </Typography>
+          <Typography
+            variant="body"
+            element="p"
+            style={{ textAlign: 'center' }}
+          >
+            Théâtre de Toutefois © 2025
+          </Typography>
+        </div>
         <div></div>
       </FooterContent>
     </FooterContainer>
