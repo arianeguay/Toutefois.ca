@@ -48,10 +48,11 @@ const ProjectsListCarousel: React.FC<ProjectsListCarouselProps> = ({
         </ProjectsListHeader>
         <Swiper
           spaceBetween={theme.spacing.lg}
-          slidesPerView={3}
+          slidesPerView={1}
           pagination={{ clickable: true }}
           navigation={true}
           modules={[Pagination, Navigation]}
+          breakpoints={{ [theme.breakpoints.lg]: { slidesPerView: 3 } }}
           onSlideChange={handleCurrentChange}
         >
           {projects.map((project) => (

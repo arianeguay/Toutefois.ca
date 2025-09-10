@@ -1,5 +1,6 @@
 // styles/wordpress.ts
 import { css } from 'styled-components';
+import { ContainerContentStyling } from './theme';
 
 export const WordpressStyling = css`
   /* Container-like blocks get the site width and spacing */
@@ -14,13 +15,7 @@ export const WordpressStyling = css`
   .wp-block-pullquote,
   .wp-block-separator,
   .wp-block-quote {
-    max-width: ${({ theme }) => theme.content.maxWidth}px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: ${({ theme }) => theme.spacing.md}px;
-
-    /* vertical padding only for “sectiony” blocks */
+    ${ContainerContentStyling}
   }
 
   .has-background {
@@ -68,16 +63,12 @@ export const WordpressStyling = css`
     }
 
     &:not(& > .wp-block-group__inner-container):not(&.has-background) {
-      max-width: ${({ theme }) => theme.content.maxWidth}px;
-      margin-left: auto;
-      margin-right: auto;
+      ${ContainerContentStyling}
       padding-block: ${({ theme }) => theme.spacing.md}px;
     }
 
     .wp-block-group__inner-container {
-      max-width: ${({ theme }) => theme.content.maxWidth}px;
-      margin-left: auto;
-      margin-right: auto;
+      ${ContainerContentStyling}
     }
   }
 
@@ -85,10 +76,7 @@ export const WordpressStyling = css`
   .wp-block-paragraph,
   .wp-block-list,
   .wp-block-heading {
-    max-width: ${({ theme }) => theme.content.maxWidth}px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    ${ContainerContentStyling}
   }
 
   /* Alignments (Gutenberg) */
@@ -137,10 +125,65 @@ export const WordpressStyling = css`
   & > h4,
   & > h5,
   & > h6 {
-    max-width: 1200px;
-    margin: 0 auto;
+    ${ContainerContentStyling}
   }
 
+  p {
+    &:not(:first-child) {
+      margin-block-start: ${({ theme }) => theme.spacing.sm}px;
+    }
+    &:not(:first-child) {
+      margin-block-end: ${({ theme }) => theme.spacing.sm}px;
+    }
+  }
+  h1 {
+    &:not(:first-child) {
+      margin-block-start: ${({ theme }) => theme.spacing.xl}px;
+    }
+    &:not(:first-child) {
+      margin-block-end: ${({ theme }) => theme.spacing.xl}px;
+    }
+  }
+  h2 {
+    &:not(:first-child) {
+      margin-block-start: ${({ theme }) => theme.spacing.xl}px;
+    }
+    &:not(:first-child) {
+      margin-block-end: ${({ theme }) => theme.spacing.xl}px;
+    }
+  }
+  h3 {
+    &:not(:first-child) {
+      margin-block-start: ${({ theme }) => theme.spacing.lg}px;
+    }
+    &:not(:first-child) {
+      margin-block-end: ${({ theme }) => theme.spacing.lg}px;
+    }
+  }
+  h4 {
+    &:not(:first-child) {
+      margin-block-start: ${({ theme }) => theme.spacing.lg}px;
+    }
+    &:not(:first-child) {
+      margin-block-end: ${({ theme }) => theme.spacing.lg}px;
+    }
+  }
+  h5 {
+    &:not(:first-child) {
+      margin-block-start: ${({ theme }) => theme.spacing.md}px;
+    }
+    &:not(:first-child) {
+      margin-block-end: ${({ theme }) => theme.spacing.md}px;
+    }
+  }
+  h6 {
+    &:not(:first-child) {
+      margin-block-start: ${({ theme }) => theme.spacing.md}px;
+    }
+    &:not(:first-child) {
+      margin-block-end: ${({ theme }) => theme.spacing.md}px;
+    }
+  }
   .is-content-justification-center {
     display: flex;
     flex-direction: column;
@@ -305,7 +348,7 @@ export const WordpressStyling = css`
     border: ${({ theme }) => theme.borders.subtle};
     border-radius: ${({ theme }) => theme.borderRadius.md}px;
     overflow: hidden;
-    max-width: ${({ theme }) => theme.content.maxWidth}px;
+    ${ContainerContentStyling}
   }
   .wp-block-table th,
   .wp-block-table td,

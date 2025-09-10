@@ -1,5 +1,6 @@
 'use client';
 
+import { ContainerContentStyling } from '@/theme';
 import styled from 'styled-components';
 
 export const FooterContainer = styled.footer<{ $mainColor?: string }>`
@@ -12,9 +13,7 @@ export const FooterContainer = styled.footer<{ $mainColor?: string }>`
 `;
 
 export const FooterContent = styled.div`
-  max-width: ${({ theme }) => theme.content.maxWidth}px;
-  margin-inline: auto;
-  width: 100%;
+  ${ContainerContentStyling}
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 
@@ -27,5 +26,10 @@ export const FooterContent = styled.div`
     &:hover {
       text-decoration: none;
     }
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    grid-template-columns: repeat(1, 1fr);
+    gap: ${({ theme }) => theme.spacing.md}px;
   }
 `;

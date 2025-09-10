@@ -81,4 +81,11 @@ export const ArticleListHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    flex-direction: column;
+    gap: ${({ theme }) => theme.spacing.sm}px;
+    text-align: center;
+    margin-bottom: ${({ theme }) => theme.spacing.lg}px;
+  }
 `;

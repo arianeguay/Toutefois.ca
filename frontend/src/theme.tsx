@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, css } from 'styled-components';
 import { createFontStyleCSS } from './components/common/typography/styles';
 
 export const theme = {
@@ -134,6 +134,16 @@ export const theme = {
     headerHeight: '70px',
   },
 };
+
+export const ContainerContentStyling = css`
+  max-width: ${({ theme }) => theme.content.maxWidth}px;
+  margin-inline: auto;
+  width: 100%;
+
+  @media (max-width: ${({ theme }) => theme.content.maxWidth}px) {
+    padding-inline: ${({ theme }) => theme.spacing.xl}px;
+  }
+`;
 
 export const DefaultStyling = createGlobalStyle`
 body {

@@ -1,3 +1,4 @@
+import { ContainerContentStyling } from '@/theme';
 import styled, { css } from 'styled-components';
 
 export const ContainerStyled = styled.div<{
@@ -10,9 +11,6 @@ export const ContainerStyled = styled.div<{
     css`
       padding-block: ${theme.spacing.xxl}px;
     `};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
   ${({ $background }) =>
     $background &&
@@ -22,6 +20,5 @@ export const ContainerStyled = styled.div<{
 `;
 
 export const ContainerContentStyled = styled.section`
-  max-width: 1200px;
-  width: 100%;
+  ${ContainerContentStyling}
 `;

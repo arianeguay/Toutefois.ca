@@ -36,7 +36,6 @@ const ArticleListCarousel: React.FC<ArticleListCarouselProps> = ({
   const [current, setCurrent] = useState<PostItem>(items[0]);
 
   const handleCurrentChange = (swiper: SwiperClass) => {
-    console.log(swiper.activeIndex);
     if (swiper) {
       setCurrent(items[swiper.activeIndex]);
     }
@@ -65,9 +64,10 @@ const ArticleListCarousel: React.FC<ArticleListCarouselProps> = ({
         <Swiper
           onSlideChange={handleCurrentChange}
           spaceBetween={theme.spacing.lg}
-          slidesPerView={3}
+          slidesPerView={1}
           pagination={{ clickable: true }}
           navigation={true}
+          breakpoints={{ [theme.breakpoints.lg]: { slidesPerView: 3 } }}
           modules={[Pagination, Navigation]}
         >
           {items.map((item) => (

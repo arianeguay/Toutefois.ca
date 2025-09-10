@@ -28,7 +28,9 @@ const FeaturedSlide: React.FC<{
           <Typography variant="h1" element="h2">
             {project.title}
           </Typography>
-          <Typography variant="body">{parse(project.excerpt)}</Typography>
+          <Typography variant="body" lineClamp={5}>
+            {parse(project.excerpt)}
+          </Typography>
           <Button
             size="lg"
             variant="primary"

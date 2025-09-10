@@ -1,3 +1,4 @@
+import { ContainerContentStyling } from '@/theme';
 import Link from 'next/link';
 import styled from 'styled-components';
 
@@ -5,9 +6,9 @@ export const GridContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.md}px;
-  margin: ${({ theme }) => theme.spacing.md}px auto;
-  max-width: 1200px;
+  ${ContainerContentStyling}
 
+  padding-block: ${({ theme }) => theme.spacing.md}px;
   .swiper {
     margin-left: -30px;
     margin-right: -30px;
