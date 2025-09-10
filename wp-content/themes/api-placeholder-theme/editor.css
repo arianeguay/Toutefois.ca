@@ -1,0 +1,370 @@
+/* ------------------------------------------------------------------
+   Toutefois – Gutenberg Editor Styles
+   Mirrors theme.ts for a faithful editor preview
+------------------------------------------------------------------- */
+
+/* Load your fonts inside the editor */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* Theme tokens (CSS custom properties) */
+:root {
+  /* Colors */
+  --tfx-primary-text: #2f2c58;
+  --tfx-secondary-text: #6b1e2c;
+  --tfx-light-text: #f5f3ee;
+
+  --tfx-header-bg: #2f2c58;
+  --tfx-main-bg: #fff4d8;
+
+  --tfx-section-1: #862331; /* red */
+  --tfx-section-2: #5a3d55; /* purple */
+  --tfx-section-3: #333333; /* dark */
+  --tfx-section-4: #588b8b; /* teal */
+
+  --tfx-btn-prim-bg: #e1a42b;
+  --tfx-btn-prim-fg: #2f2c58;
+  --tfx-btn-sec-bg: #6b1e2c;
+  --tfx-btn-sec-fg: #f5f3ee;
+  --tfx-btn-ter-bg: #2f2c58;
+  --tfx-btn-ter-fg: #f5f3ee;
+
+  --tfx-border-1: #b1b1b1;
+  --tfx-border-2: #e1a42b;
+
+  /* Typography */
+  --tfx-font-primary: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto,
+    Arial, sans-serif;
+  --tfx-font-secondary: "Poppins", system-ui, -apple-system, Segoe UI, Roboto,
+    Arial, sans-serif;
+
+  --tfx-fs-h1: 48px;
+  --tfx-lh-h1: 58px;
+  --tfx-ls-h1: -0.5px;
+  --tfx-fs-h2: 36px;
+  --tfx-lh-h2: 47px;
+  --tfx-ls-h2: -0.3px;
+  --tfx-fs-h3: 28px;
+  --tfx-lh-h3: 36px;
+  --tfx-ls-h3: 0px;
+  --tfx-fs-h4: 22px;
+  --tfx-lh-h4: 31px;
+  --tfx-fs-body: 16px;
+  --tfx-lh-body: 26px;
+  --tfx-fs-small: 14px;
+  --tfx-lh-small: 20px;
+
+  /* Spacing & layout */
+  --tfx-space-xs: 4px;
+  --tfx-space-sm: 8px;
+  --tfx-space-md: 16px;
+  --tfx-space-lg: 24px;
+  --tfx-space-xl: 32px;
+  --tfx-space-xxl: 54px;
+
+  --tfx-radius-xs: 2px;
+  --tfx-radius-sm: 4px;
+  --tfx-radius-md: 8px;
+  --tfx-radius-lg: 12px;
+  --tfx-radius-xl: 16px;
+
+  --tfx-shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --tfx-shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --tfx-shadow-md: 0 8px 16px rgba(0, 0, 0, 0.1);
+
+  --tfx-content-max: 1200px;
+  --tfx-content-pad-x: 24px;
+  --tfx-content-pad-y: 32px;
+  --tfx-content-narrow: 680px;
+
+  --tfx-border-subtle: 1px solid rgba(0, 0, 0, 0.08);
+  --tfx-border-strong: 1px solid rgba(0, 0, 0, 0.18);
+
+  --tfx-link: #862331;
+  --tfx-link-hover: #6b1e2c;
+  --tfx-code-bg: #0b1020;
+  --tfx-code-fg: #f5f3ee;
+  --tfx-quote-bar: #2f2c58;
+  --tfx-hr: rgba(0, 0, 0, 0.25);
+  --tfx-zebra: rgba(0, 0, 0, 0.03);
+  --tfx-softbg: rgba(0, 0, 0, 0.04);
+}
+
+/* Base editor canvas */
+.editor-styles-wrapper {
+  background: var(--tfx-main-bg);
+  color: var(--tfx-primary-text);
+  font-family: var(--tfx-font-primary);
+  line-height: var(--tfx-lh-body);
+}
+
+/* Content widths inside the editor */
+.editor-styles-wrapper .wp-block {
+  box-sizing: border-box;
+  max-width: var(--tfx-content-max);
+  padding-left: var(--tfx-content-pad-x);
+  padding-right: var(--tfx-content-pad-x);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* “Wide” and “Full” alignments in editor */
+.editor-styles-wrapper .wp-block[data-align="wide"],
+.editor-styles-wrapper .alignwide {
+  max-width: calc(var(--tfx-content-max) * 1.1); /* ~1320px */
+}
+
+.editor-styles-wrapper .wp-block[data-align="full"],
+.editor-styles-wrapper .alignfull {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Keep readable inner content inside full-bleed containers */
+.editor-styles-wrapper
+  .wp-block-group.alignfull
+  > .wp-block-group__inner-container,
+.editor-styles-wrapper
+  .wp-block-cover.alignfull
+  .wp-block-cover__inner-container {
+  max-width: var(--tfx-content-max);
+  padding-left: var(--tfx-content-pad-x);
+  padding-right: var(--tfx-content-pad-x);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Typography */
+.editor-styles-wrapper h1 {
+  font-family: var(--tfx-font-primary);
+  font-size: var(--tfx-fs-h1);
+  line-height: var(--tfx-lh-h1);
+  letter-spacing: var(--tfx-ls-h1);
+  margin: var(--tfx-space-xl) auto;
+}
+.editor-styles-wrapper h2 {
+  font-size: var(--tfx-fs-h2);
+  line-height: var(--tfx-lh-h2);
+  letter-spacing: var(--tfx-ls-h2);
+  margin: var(--tfx-space-xl) auto;
+}
+.editor-styles-wrapper h3 {
+  font-size: var(--tfx-fs-h3);
+  line-height: var(--tfx-lh-h3);
+  margin: var(--tfx-space-lg) auto;
+}
+.editor-styles-wrapper h4 {
+  font-size: var(--tfx-fs-h4);
+  line-height: var(--tfx-lh-h4);
+  margin: var(--tfx-space-lg) auto;
+}
+.editor-styles-wrapper p,
+.editor-styles-wrapper li {
+  font-size: var(--tfx-fs-body);
+  line-height: var(--tfx-lh-body);
+}
+.editor-styles-wrapper small,
+.editor-styles-wrapper .is-small-text {
+  font-size: var(--tfx-fs-small);
+  line-height: var(--tfx-lh-small);
+}
+
+/* Links */
+.editor-styles-wrapper a {
+  color: var(--tfx-link);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.editor-styles-wrapper a:hover {
+  color: var(--tfx-link-hover);
+}
+
+/* Palette classes (match your theme.json slugs) */
+.editor-styles-wrapper .has-toutefois-dark-background-color {
+  background-color: var(--tfx-section-3);
+}
+.editor-styles-wrapper .has-toutefois-red-background-color {
+  background-color: var(--tfx-section-1);
+}
+.editor-styles-wrapper .has-toutefois-teal-background-color {
+  background-color: var(--tfx-section-4);
+}
+.editor-styles-wrapper .has-toutefois-purple-background-color {
+  background-color: var(--tfx-section-2);
+}
+
+.editor-styles-wrapper .has-toutefois-light-text-color {
+  color: var(--tfx-light-text);
+}
+.editor-styles-wrapper .has-toutefois-primary-text-color {
+  color: var(--tfx-primary-text);
+}
+.editor-styles-wrapper .has-toutefois-secondary-text-color {
+  color: var(--tfx-secondary-text);
+}
+
+/* Groups, Columns, Media & Text – spacing that mirrors front-end */
+.editor-styles-wrapper .wp-block-group {
+  padding-top: var(--tfx-content-pad-y);
+  padding-bottom: var(--tfx-content-pad-y);
+}
+.editor-styles-wrapper .wp-block-columns {
+  gap: var(--tfx-space-md);
+  padding-top: var(--tfx-content-pad-y);
+  padding-bottom: var(--tfx-content-pad-y);
+}
+.editor-styles-wrapper .wp-block-media-text {
+  gap: var(--tfx-space-md);
+  align-items: center;
+  padding-top: var(--tfx-content-pad-y);
+  padding-bottom: var(--tfx-content-pad-y);
+}
+
+/* Cover */
+.editor-styles-wrapper .wp-block-cover {
+  border-radius: var(--tfx-radius-lg);
+  overflow: hidden;
+  padding-top: var(--tfx-content-pad-y);
+  padding-bottom: var(--tfx-content-pad-y);
+}
+.editor-styles-wrapper .wp-block-cover__inner-container {
+  padding: 24px;
+}
+
+/* Quotes */
+.editor-styles-wrapper blockquote,
+.editor-styles-wrapper .wp-block-quote {
+  border-left: 4px solid var(--tfx-quote-bar);
+  padding-left: var(--tfx-space-md);
+  margin: 20px auto;
+  color: var(--tfx-secondary-text);
+  font-style: italic;
+  background: var(--tfx-softbg);
+}
+.editor-styles-wrapper .wp-block-quote cite {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  color: var(--tfx-primary-text);
+}
+
+/* Pullquote */
+.editor-styles-wrapper .wp-block-pullquote {
+  border-top: 4px solid var(--tfx-quote-bar);
+  border-bottom: 4px solid var(--tfx-quote-bar);
+  text-align: center;
+  padding: var(--tfx-space-lg) 0;
+  margin: 28px auto;
+}
+
+/* Separator */
+.editor-styles-wrapper hr,
+.editor-styles-wrapper .wp-block-separator {
+  border: none;
+  height: 1px;
+  background: var(--tfx-hr);
+  margin: 32px auto;
+  max-width: 200px;
+}
+.editor-styles-wrapper .wp-block-separator.is-style-dots {
+  background: none;
+  text-align: center;
+}
+.editor-styles-wrapper .wp-block-separator.is-style-dots::before {
+  content: "···";
+  letter-spacing: 16px;
+  color: var(--tfx-secondary-text);
+}
+
+/* Tables */
+.editor-styles-wrapper .wp-block-table table,
+.editor-styles-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  border: var(--tfx-border-subtle);
+  border-radius: var(--tfx-radius-md);
+  overflow: hidden;
+}
+.editor-styles-wrapper th,
+.editor-styles-wrapper td {
+  padding: var(--tfx-space-sm) var(--tfx-space-md);
+  border-bottom: var(--tfx-border-subtle);
+  text-align: left;
+}
+.editor-styles-wrapper thead th {
+  background: var(--tfx-softbg);
+  font-weight: 700;
+}
+.editor-styles-wrapper tbody tr:nth-child(odd) {
+  background: var(--tfx-zebra);
+}
+
+/* Code / Pre */
+.editor-styles-wrapper code,
+.editor-styles-wrapper kbd,
+.editor-styles-wrapper samp {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.95em;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 6px;
+  border-radius: var(--tfx-radius-xs);
+}
+.editor-styles-wrapper pre,
+.editor-styles-wrapper .wp-block-code {
+  background: var(--tfx-code-bg);
+  color: var(--tfx-code-fg);
+  border-radius: var(--tfx-radius-md);
+  padding: 16px 20px;
+  overflow: auto;
+  line-height: var(--tfx-lh-body);
+  box-shadow: var(--tfx-shadow-xs);
+}
+.editor-styles-wrapper pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+/* Buttons */
+.editor-styles-wrapper .wp-block-button .wp-block-button__link {
+  display: inline-block;
+  border: 1px solid transparent;
+  border-radius: var(--tfx-radius-sm);
+  padding: var(--tfx-space-sm) var(--tfx-space-md);
+  font-weight: 600;
+  line-height: 1;
+  background: var(--tfx-btn-prim-bg);
+  color: var(--tfx-btn-prim-fg);
+  text-decoration: none;
+  transition: opacity 150ms ease, transform 60ms ease, background 150ms ease;
+  box-shadow: var(--tfx-shadow-xs);
+}
+.editor-styles-wrapper
+  .wp-block-button.is-style-outline
+  .wp-block-button__link {
+  background: transparent;
+  color: var(--tfx-btn-ter-bg);
+  border-color: var(--tfx-btn-ter-bg);
+}
+
+/* Images & captions */
+.editor-styles-wrapper figure {
+  margin: 16px auto;
+}
+.editor-styles-wrapper figcaption {
+  font-size: var(--tfx-fs-small);
+  line-height: var(--tfx-lh-small);
+  color: var(--tfx-secondary-text);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Forms inside content */
+.editor-styles-wrapper input[type="text"],
+.editor-styles-wrapper input[type="email"],
+.editor-styles-wrapper input[type="url"],
+.editor-styles-wrapper input[type="search"],
+.editor-styles-wrapper textarea,
+.editor-styl;

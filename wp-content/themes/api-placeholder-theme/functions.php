@@ -14,6 +14,15 @@ add_theme_support('menus');
 add_theme_support('post-thumbnails');
 
 
+add_action('after_setup_theme', function () {
+    add_theme_support('wp-block-styles');   // nicer default block CSS
+    add_theme_support('responsive-embeds');
+    add_theme_support('align-wide');        // <-- enables “Wide” + “Full width” controls
+    add_theme_support('editor-styles');     // allow custom editor CSS if you want
+    add_editor_style('editor.css');      // optional: load your own editor styles
+});
+
+
 function api_placeholder_theme_colors()
 {
     add_theme_support('editor-color-palette', array(
