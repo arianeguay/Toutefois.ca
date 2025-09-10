@@ -2,9 +2,10 @@
 
 import styled from 'styled-components';
 
-export const FooterContainer = styled.footer`
+export const FooterContainer = styled.footer<{ $mainColor?: string }>`
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.headerBackground};
+  background-color: ${({ theme, $mainColor }) =>
+    $mainColor || theme.colors.headerBackground};
   color: ${({ theme }) => theme.colors.lightText};
   padding-block: ${({ theme }) => theme.spacing.lg}px;
   padding-inline: ${({ theme }) => theme.spacing.xxl}px;
@@ -16,4 +17,15 @@ export const FooterContent = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    display: block;
+    margin-block: ${({ theme }) => theme.spacing.xs}px;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 `;

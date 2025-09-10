@@ -19,8 +19,7 @@ export const WordpressStyling = css`
     margin-left: auto;
     margin-right: auto;
     margin-bottom: ${({ theme }) => theme.spacing.md}px;
-    padding-left: ${({ theme }) => theme.content.padX}px;
-    padding-right: ${({ theme }) => theme.content.padX}px;
+
     /* vertical padding only for “sectiony” blocks */
   }
 
@@ -61,6 +60,11 @@ export const WordpressStyling = css`
     &.is-nowrap {
       display: flex;
       flex-wrap: nowrap;
+      gap: ${({ theme }) => theme.spacing.xl}px;
+
+      & > .wp-block-image {
+        flex-shrink: 0;
+      }
     }
 
     &:not(& > .wp-block-group__inner-container):not(&.has-background) {
@@ -85,8 +89,6 @@ export const WordpressStyling = css`
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: ${({ theme }) => theme.content.padX}px;
-    padding-right: ${({ theme }) => theme.content.padX}px;
   }
 
   /* Alignments (Gutenberg) */

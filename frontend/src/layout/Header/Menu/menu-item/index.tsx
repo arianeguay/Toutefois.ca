@@ -1,16 +1,29 @@
+'use client';
 import { WordpressMenuItem } from '@/types';
+import { usePathname } from 'next/navigation';
 import { MenuItemLink } from './styles';
 
 const MenuItem: React.FC<WordpressMenuItem> = ({ name, href }) => {
+  const currentPathname = usePathname();
   const getPathFromUrl = (url: string) => {
     try {
-      return new URL(url).pathname;
+      const path = new URL(url).pathname;
+      return path.endsWith('/') ? path.slice(0, -1) : path;
     } catch (e) {
       return url; // Fallback for relative paths or invalid URLs
     }
   };
 
-  return <MenuItemLink href={getPathFromUrl(href)}>{name}</MenuItemLink>;
+  console.log(getPathFromUrl(href), currentPathname);
+
+  return (
+    <MenuItemLink
+      href={getPathFromUrl(href)}
+      $isActive={currentPathname === getPathFromUrl(href)}
+    >
+      {name}
+    </MenuItemLink>
+  );
 };
 
 export default MenuItem;

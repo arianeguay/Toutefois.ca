@@ -196,10 +196,7 @@ class Api {
   async fetchFooter(): Promise<WordpressFooter | null> {
     const footer = await this.fetchFromApi('toutefois/v1/footer');
 
-    if (!footer?.length) {
-      return null;
-    }
-    return footer[0];
+    return footer;
   }
 }
 

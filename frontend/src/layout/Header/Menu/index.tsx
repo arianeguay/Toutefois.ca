@@ -1,16 +1,12 @@
 'use client';
-import { WordpressMenuItem, WordpressPage } from '@/types';
+import { WordpressMenuItem } from '@/types';
 import MenuItem from './menu-item';
 import { MenuContainer } from './styles';
 
-const Menu = ({
-  menuItems,
-  currentPage,
-}: {
+interface MenuProps {
   menuItems: WordpressMenuItem[];
-  currentPage?: WordpressPage;
-}) => {
-  console.log(currentPage);
+}
+const Menu: React.FC<MenuProps> = ({ menuItems }) => {
   return (
     <MenuContainer>
       {menuItems.map((item) => (

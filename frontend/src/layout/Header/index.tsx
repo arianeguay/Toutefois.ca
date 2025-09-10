@@ -17,7 +17,7 @@ const Header = async ({ currentPage }: HeaderProps) => {
   return (
     <HeaderContainer $mainColor={mainColor}>
       <Logo />
-      <Menu menuItems={menuItems} currentPage={currentPage} />
+      <Menu menuItems={menuItems} />
       {specialProject && <SpecialProjectMenuItem {...specialProject} />}
     </HeaderContainer>
   );

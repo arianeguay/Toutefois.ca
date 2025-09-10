@@ -58,14 +58,17 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
           <Typography
             variant="h2"
             element="h1"
-            style={{ marginBlockStart: 55 }}
+            style={{
+              marginBlockStart: 50,
+              marginBlockEnd: 16,
+            }}
           >
             {parse(page.title.rendered)}
           </Typography>
         )}
         {!!page.content?.rendered && parse(page.content.rendered, options)}
       </MainContent>
-      <Footer />
+      <Footer currentPage={page} />
     </PageWrapper>
   );
 };
