@@ -82,24 +82,33 @@ class Vercel_Deploy_Hooks
             'post_types'     => array_values(array_map('sanitize_key', $input['post_types'] ?? ['post', 'page'])),
         ];
     }
-
     public function render_settings()
     {
         echo '<div class="wrap"><h1>Vercel Deploy Hooks</h1><form method="post" action="options.php">';
-        settings_fields(self::OPT);
+        settings_fields(self::OPT); // This already outputs the correct nonce for the options form
         do_settings_sections(self::OPT);
         submit_button();
         echo '</form><hr>';
+
+        // Manual trigger form with its own nonce
         echo '<form method="post">';
+        wp_nonce_field('vdh_manual_deploy_action', 'vdh_manual_deploy_nonce');
         submit_button('Trigger Deploy Now', 'secondary', 'vdh_manual_deploy');
         echo '</form></div>';
 
+        // Handle manual trigger
         if (isset($_POST['vdh_manual_deploy'])) {
-            check_admin_referer('options-options');
+            if (
+                !isset($_POST['vdh_manual_deploy_nonce']) ||
+                !wp_verify_nonce($_POST['vdh_manual_deploy_nonce'], 'vdh_manual_deploy_action')
+            ) {
+                wp_die(__('Security check failed. Please try again.'));
+            }
             $this->schedule_deploy('manual');
             echo '<div class="updated"><p>Deploy scheduled.</p></div>';
         }
     }
+
 
     public function maybe_trigger_on_post($post_ID, $post, $update)
     {
