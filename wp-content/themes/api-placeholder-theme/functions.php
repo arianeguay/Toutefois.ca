@@ -2,124 +2,71 @@
 
 /**
  * API Placeholder Theme functions and definitions
- *
  * @package API_Placeholder_Theme
  */
 
-/**
- * Register custom theme colors for Gutenberg editor
- */
-
-add_theme_support('menus');
-add_theme_support('post-thumbnails');
-
-
+// Basic theme supports
 add_action('after_setup_theme', function () {
-    add_theme_support('wp-block-styles');   // nicer default block CSS
+    // Core niceties
+    add_theme_support('title-tag');
+    add_theme_support('post-thumbnails');
+    add_theme_support('menus');
+    add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script']);
+
+    // Block editor
+    add_theme_support('wp-block-styles');
     add_theme_support('responsive-embeds');
-    add_theme_support('align-wide');        // <-- enables “Wide” + “Full width” controls
-    add_theme_support('editor-styles');     // allow custom editor CSS if you want
-    add_editor_style('editor.css');      // optional: load your own editor styles
+    add_theme_support('align-wide');               // enables “Wide” + “Full width”
+    add_theme_support('editor-styles');            // allow editor styles
+    add_editor_style('editor.css');                // your editor stylesheet (already created)
+
+    // Optional: let WP manage duotone, spacing, etc. via theme.json
+    add_theme_support('custom-line-height');
+    add_theme_support('custom-units');             // e.g. clamp, %, etc.
+    add_theme_support('appearance-tools');         // border radius, spacing, etc. from theme.json
 });
 
-
-function api_placeholder_theme_colors()
-{
-    add_theme_support('editor-color-palette', array(
-        array(
-            'name'  => __('Toutefois Red', 'api-placeholder-theme'),
-            'slug'  => 'toutefois-red',
-            'color' => '#862331',
-        ),
-        array(
-            'name'  => __('Toutefois Purple', 'api-placeholder-theme'),
-            'slug'  => 'toutefois-purple',
-            'color' => '#5A3D55',
-        ),
-        array(
-            'name'  => __('Toutefois Dark', 'api-placeholder-theme'),
-            'slug'  => 'toutefois-dark',
-            'color' => '#333333',
-        ),
-        array(
-            'name'  => __('Toutefois Teal', 'api-placeholder-theme'),
-            'slug'  => 'toutefois-teal',
-            'color' => '#588B8B',
-        ),
-        array(
-            'name'  => __('Toutefois Primary Text', 'api-placeholder-theme'),
-            'slug'  => 'toutefois-primary-text',
-            'color' => '#2F2C58',
-        ),
-        array(
-            'name'  => __('Toutefois Secondary Text', 'api-placeholder-theme'),
-            'slug'  => 'toutefois-secondary-text',
-            'color' => '#6B1E2C',
-        ),
-        array(
-            'name'  => __('Toutefois Light Text', 'api-placeholder-theme'),
-            'slug'  => 'toutefois-light-text',
-            'color' => '#F5F3EE',
-        )
-    ));
-}
-add_action('after_setup_theme', 'api_placeholder_theme_colors');
-
 /**
- * Ensure proper REST API functionality
+ * Load editor-only assets (fonts) without leaking to front-end unnecessarily.
+ * editor.css already @imports the Google Fonts, but this is a safer alternative if you prefer.
  */
-function api_placeholder_theme_setup()
-{
-    // Make sure REST API is enabled
-    add_filter('rest_enabled', '__return_true');
-    add_filter('rest_jsonp_enabled', '__return_true');
-
-    // Ensure proper REST URL
-    add_filter('rest_url_prefix', function ($prefix) {
-        return 'wp-json';
-    });
-}
-add_action('after_setup_theme', 'api_placeholder_theme_setup');
+add_action('enqueue_block_editor_assets', function () {
+    // If you prefer: enqueue fonts here instead of @import in editor.css
+    wp_enqueue_style('tfx-editor-fonts', 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap', [], null);
+});
 
 /**
- * Register custom meta for Pages (MainColor and Preview Image)
+ * Keep your custom meta (Page: main_color, preview_image_id)
  */
 function api_placeholder_register_page_meta()
 {
-    // Main color as string, single value
-    register_post_meta('page', 'main_color', array(
-        'type' => 'string',
-        'single' => true,
-        'show_in_rest' => true,
+    register_post_meta('page', 'main_color', [
+        'type'              => 'string',
+        'single'            => true,
+        'show_in_rest'      => true,
         'sanitize_callback' => function ($value) {
-            // Accept hex like #RRGGBB or #RGB, fallback to empty string
-            if (is_string($value) && preg_match('/^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/', trim($value))) {
-                return strtoupper(trim($value));
-            }
-            return '';
+            $value = trim((string)$value);
+            return preg_match('/^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/', $value) ? strtoupper($value) : '';
         },
-        'auth_callback' => function () {
+        'auth_callback'     => function () {
             return current_user_can('edit_posts');
         }
-    ));
+    ]);
 
-    // Preview image as attachment ID (integer)
-    register_post_meta('page', 'preview_image_id', array(
-        'type' => 'integer',
-        'single' => true,
-        'show_in_rest' => true,
-        'sanitize_callback' => function ($value) {
-            return intval($value);
-        },
-        'auth_callback' => function () {
+    register_post_meta('page', 'preview_image_id', [
+        'type'              => 'integer',
+        'single'            => true,
+        'show_in_rest'      => true,
+        'sanitize_callback' => 'intval',
+        'auth_callback'     => function () {
             return current_user_can('edit_posts');
         }
-    ));
+    ]);
 }
 add_action('init', 'api_placeholder_register_page_meta');
 
 /**
- * Admin meta box to edit Page MainColor and Preview Image
+ * Admin meta box for Page Presentation
  */
 function api_placeholder_add_page_meta_box()
 {
@@ -137,8 +84,9 @@ add_action('add_meta_boxes', 'api_placeholder_add_page_meta_box');
 function api_placeholder_render_page_meta_box($post)
 {
     wp_nonce_field('api_placeholder_save_page_meta', 'api_placeholder_page_meta_nonce');
+
     $main_color = get_post_meta($post->ID, 'main_color', true);
-    $preview_id = intval(get_post_meta($post->ID, 'preview_image_id', true));
+    $preview_id = (int) get_post_meta($post->ID, 'preview_image_id', true);
     $preview_url = $preview_id ? wp_get_attachment_image_url($preview_id, 'medium') : '';
 ?>
     <p>
@@ -156,18 +104,15 @@ function api_placeholder_render_page_meta_box($post)
     <img id="api_placeholder_preview_image_preview" src="<?php echo esc_url($preview_url); ?>" alt="" style="max-width:100%;height:auto;margin-top:8px;border:1px solid #ddd; <?php echo $preview_url ? '' : 'display:none;'; ?>" />
     <small><?php _e('Use the button to choose an image from the Media Library, or enter an attachment ID. (Optional)', 'api-placeholder-theme'); ?></small>
     </p>
-    <script type="text/javascript">
+    <script>
         jQuery(function($) {
-            var frame;
-            var idInput = $('#api_placeholder_preview_image_id');
-            var img = $('#api_placeholder_preview_image_preview');
+            let frame;
+            const idInput = $('#api_placeholder_preview_image_id');
+            const img = $('#api_placeholder_preview_image_preview');
 
             $('#api_placeholder_select_image').on('click', function(e) {
                 e.preventDefault();
-                if (frame) {
-                    frame.open();
-                    return;
-                }
+                if (frame) return frame.open();
                 frame = wp.media({
                     title: '<?php echo esc_js(__('Select or Upload Preview Image', 'api-placeholder-theme')); ?>',
                     button: {
@@ -179,10 +124,10 @@ function api_placeholder_render_page_meta_box($post)
                     multiple: false
                 });
                 frame.on('select', function() {
-                    var attachment = frame.state().get('selection').first().toJSON();
+                    const attachment = frame.state().get('selection').first().toJSON();
                     idInput.val(attachment.id);
-                    var url = (attachment.sizes && (attachment.sizes.medium || attachment.sizes.full) ? (attachment.sizes.medium || attachment.sizes.full).url : attachment.url);
-                    img.attr('src', url).show();
+                    const size = attachment.sizes && (attachment.sizes.medium || attachment.sizes.full);
+                    img.attr('src', size ? size.url : attachment.url).show();
                 });
                 frame.open();
             });
@@ -199,15 +144,9 @@ function api_placeholder_render_page_meta_box($post)
 
 function api_placeholder_save_page_meta($post_id)
 {
-    if (!isset($_POST['api_placeholder_page_meta_nonce']) || !wp_verify_nonce($_POST['api_placeholder_page_meta_nonce'], 'api_placeholder_save_page_meta')) {
-        return;
-    }
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        return;
-    }
-    if (!current_user_can('edit_post', $post_id)) {
-        return;
-    }
+    if (!isset($_POST['api_placeholder_page_meta_nonce']) || !wp_verify_nonce($_POST['api_placeholder_page_meta_nonce'], 'api_placeholder_save_page_meta')) return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_post', $post_id)) return;
 
     if (isset($_POST['api_placeholder_main_color'])) {
         $val = sanitize_text_field($_POST['api_placeholder_main_color']);
@@ -219,28 +158,20 @@ function api_placeholder_save_page_meta($post_id)
     }
 
     if (isset($_POST['api_placeholder_preview_image_id'])) {
-        $id = intval($_POST['api_placeholder_preview_image_id']);
-        if ($id > 0) {
-            update_post_meta($post_id, 'preview_image_id', $id);
-        } else {
-            delete_post_meta($post_id, 'preview_image_id');
-        }
+        $id = (int) $_POST['api_placeholder_preview_image_id'];
+        if ($id > 0) update_post_meta($post_id, 'preview_image_id', $id);
+        else delete_post_meta($post_id, 'preview_image_id');
     }
 }
 add_action('save_post_page', 'api_placeholder_save_page_meta');
 
 /**
- * Enqueue media scripts on Page edit screens
+ * Enqueue media only on Page edit screens
  */
-function api_placeholder_admin_enqueue($hook)
-{
-    // Only load on post.php (edit) and post-new.php (add new)
-    if ($hook !== 'post.php' && $hook !== 'post-new.php') {
-        return;
-    }
+add_action('admin_enqueue_scripts', function ($hook) {
+    if ($hook !== 'post.php' && $hook !== 'post-new.php') return;
     $screen = get_current_screen();
     if ($screen && $screen->post_type === 'page') {
         wp_enqueue_media();
     }
-}
-add_action('admin_enqueue_scripts', 'api_placeholder_admin_enqueue');
+});

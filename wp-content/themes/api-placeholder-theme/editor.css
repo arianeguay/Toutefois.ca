@@ -367,4 +367,74 @@
 .editor-styles-wrapper input[type="url"],
 .editor-styles-wrapper input[type="search"],
 .editor-styles-wrapper textarea,
-.editor-styl;
+.editor-styles-wrapper select {
+  width: 100%;
+  max-width: var(--tfx-content-narrow);
+  background: rgba(245, 243, 238, 0.1); /* light overlay */
+  color: var(--tfx-primary-text);
+  border: var(--tfx-border-subtle);
+  border-radius: var(--tfx-radius-sm);
+  padding: 10px 12px;
+  outline: none;
+  box-sizing: border-box;
+}
+.editor-styles-wrapper input:focus,
+.editor-styles-wrapper textarea:focus,
+.editor-styles-wrapper select:focus {
+  border: var(--tfx-border-strong);
+  box-shadow: 0 0 0 3px rgba(226, 164, 43, 0.25); /* E1A42B glow */
+}
+
+/* Alignment helpers (text alignment) */
+.editor-styles-wrapper .has-text-align-center {
+  text-align: center;
+}
+.editor-styles-wrapper .has-text-align-left {
+  text-align: left;
+}
+.editor-styles-wrapper .has-text-align-right {
+  text-align: right;
+}
+
+/* Improve block list visuals */
+.editor-styles-wrapper ul,
+.editor-styles-wrapper ol {
+  padding-left: var(--tfx-space-lg);
+  margin: 12px auto;
+}
+.editor-styles-wrapper li {
+  margin: 6px 0;
+}
+.editor-styles-wrapper ul ul,
+.editor-styles-wrapper ol ol,
+.editor-styles-wrapper ul ol,
+.editor-styles-wrapper ol ul {
+  margin: 6px 0 6px 12px;
+}
+
+/* Screen-reader helper used by WP */
+.editor-styles-wrapper .screen-reader-text {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+/* Long words/URLs wrapping */
+.editor-styles-wrapper p,
+.editor-styles-wrapper li,
+.editor-styles-wrapper blockquote,
+.editor-styles-wrapper figcaption {
+  overflow-wrap: anywhere;
+}
+
+.editor-styles-wrapper {
+  overflow: visible;
+}
+
+.editor-styles-wrapper .wp-block-cover__inner-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}

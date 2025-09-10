@@ -1,0 +1,79 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "layout": {
+      "contentSize": "1200px",
+      "wideSize": "1320px"
+    },
+    "color": {
+      "palette": [
+        {
+          "name": "Toutefois Red",
+          "slug": "toutefois-red",
+          "color": "#862331"
+        },
+        {
+          "name": "Toutefois Purple",
+          "slug": "toutefois-purple",
+          "color": "#5A3D55"
+        },
+        {
+          "name": "Toutefois Dark",
+          "slug": "toutefois-dark",
+          "color": "#333333"
+        },
+        {
+          "name": "Toutefois Teal",
+          "slug": "toutefois-teal",
+          "color": "#588B8B"
+        },
+        {
+          "name": "Toutefois Primary Text",
+          "slug": "toutefois-primary-text",
+          "color": "#2F2C58"
+        },
+        {
+          "name": "Toutefois Secondary Text",
+          "slug": "toutefois-secondary-text",
+          "color": "#6B1E2C"
+        },
+        {
+          "name": "Toutefois Light Text",
+          "slug": "toutefois-light-text",
+          "color": "#F5F3EE"
+        }
+      ]
+    },
+    "spacing": {
+      "blockGap": "16px"
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "fontFamily": "Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+          "name": "Montserrat",
+          "slug": "montserrat"
+        },
+        {
+          "fontFamily": "Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+          "name": "Poppins",
+          "slug": "poppins"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "text": "#2F2C58",
+      "background": "#FFF4D8"
+    },
+    "elements": {
+      "link": {
+        "color": {
+          "text": "#862331"
+        }
+      }
+    }
+  }
+}
