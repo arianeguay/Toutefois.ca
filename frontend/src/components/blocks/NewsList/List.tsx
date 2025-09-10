@@ -64,7 +64,7 @@ const ArticleListCarousel: React.FC<ArticleListCarouselProps> = ({
         <Swiper
           onSlideChange={handleCurrentChange}
           spaceBetween={theme.spacing.lg}
-          slidesPerView={1}
+          slidesPerView={3}
           pagination={{ clickable: true }}
           navigation={true}
           breakpoints={{ [theme.breakpoints.lg]: { slidesPerView: 3 } }}

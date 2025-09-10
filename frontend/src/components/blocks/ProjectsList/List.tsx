@@ -48,7 +48,7 @@ const ProjectsListCarousel: React.FC<ProjectsListCarouselProps> = ({
         </ProjectsListHeader>
         <Swiper
           spaceBetween={theme.spacing.lg}
-          slidesPerView={1}
+          slidesPerView={3}
           pagination={{ clickable: true }}
           navigation={true}
           modules={[Pagination, Navigation]}
