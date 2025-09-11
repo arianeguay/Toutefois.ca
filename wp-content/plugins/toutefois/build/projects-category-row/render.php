@@ -2,17 +2,22 @@
 // Get current page from URL query, default to 1
 $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
 
-// Create a mock request to pass to our function
-$request = new WP_REST_Request('GET', '/toutefois/v1/projects-grid');
-$request->set_query_params(['page' => $current_page, 'per_page' => 9]);
+// Get category from attributes, which is required by the API.
+$category = isset($attributes['category']) ? $attributes['category'] : '';
 
-$response = get_projects_for_grid($request);
+// Create a mock request to pass to our function
+$request = new WP_REST_Request('GET', '/toutefois/v1/projects-category-row');
+$request->set_query_params([
+    'page'     => $current_page,
+    'per_page' => 9,
+    'category' => $category
+]);
+
+$response = toutefois_get_projects_by_category($request);
 $projects = $response->get_data();
 $total_pages = $response->get_headers()['X-WP-TotalPages'];
 
 if (!empty($projects)) :
-    // Get category from attributes
-    $category = isset($attributes['category']) ? $attributes['category'] : '';
 ?>
     <div <?php echo get_block_wrapper_attributes(); ?>
         data-category="<?php echo esc_attr($category); ?>">
