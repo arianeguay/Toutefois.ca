@@ -1,5 +1,6 @@
 'use client';
 
+import { ContainerContentStyling } from '@/theme';
 import styled from 'styled-components';
 
 export const ListContainer = styled.div`
@@ -37,6 +38,8 @@ export const ContentCardContainer = styled.div`
 export const ContentListContainer = styled.div`
   max-width: 100%;
   position: relative;
+  ${ContainerContentStyling}
+
   .swiper {
     width: 100%;
     .swiper-wrapper {

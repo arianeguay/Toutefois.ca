@@ -1,3 +1,4 @@
+import ContentCarousel from '@/components/blocks/ContentCarousel';
 import {
   Element,
   default as parse,
@@ -43,6 +44,49 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
           )
         ) {
           return <ProjectsPageGrid />;
+        }
+        if (
+          domNode.attribs.class?.includes('wp-block-toutefois-content-carousel')
+        ) {
+          // Find the inner div that contains all our data attributes
+          // Cast domNode.children to Element[] to handle proper typing
+          const children = domNode.children as Element[];
+          const contentCarouselDiv = children?.find(
+            (child) => 
+              child.type === 'tag' && 
+              child.name === 'div' && 
+              child.attribs?.class?.includes('content-carousel-block')
+          );
+          
+          if (contentCarouselDiv && 'attribs' in contentCarouselDiv) {
+            const { 
+              'data-content-type': contentType = 'mixed',
+              'data-title': title,
+              'data-view-all-url': viewAllUrl,
+              'data-view-all-text': viewAllText,
+              'data-limit': limitStr
+            } = contentCarouselDiv.attribs;
+            
+            const limit = limitStr ? parseInt(limitStr, 10) : 10;
+            
+            // Extract the unique ID from the carousel div's ID
+            const uniqueId = contentCarouselDiv.attribs?.id?.replace('content-carousel-', '') || Math.random().toString(36).substring(2, 9);
+            
+            return (
+              <ContentCarousel 
+                key={`content-carousel-${uniqueId}`}
+                contentType={contentType as 'project' | 'news' | 'mixed'}
+                title={title}
+                viewAllUrl={viewAllUrl}
+                viewAllText={viewAllText}
+                limit={limit}
+              />
+            );
+          }
+          
+          // Fallback if the inner div is not found
+          const fallbackId = Math.random().toString(36).substring(2, 9);
+          return <ContentCarousel key={`content-carousel-fallback-${fallbackId}`} />;
         }
       }
       return domNode;

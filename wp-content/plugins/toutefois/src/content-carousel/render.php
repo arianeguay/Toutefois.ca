@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Content Carousel Block Template.
  */
@@ -55,7 +56,7 @@ if ($content_type === 'news' || $content_type === 'mixed') {
 }
 
 // Sort by date
-usort($items, function($a, $b) {
+usort($items, function ($a, $b) {
     $date_a = isset($a['date']) ? strtotime($a['date']) : 0;
     $date_b = isset($b['date']) ? strtotime($b['date']) : 0;
     return $date_b - $date_a;
@@ -66,18 +67,19 @@ $items = array_slice($items, 0, $limit);
 
 // Output HTML
 if (!empty($items)) :
+    // Generate one unique ID to use for both elements
+    $unique_id = uniqid('cc-');
 ?>
     <div <?php echo get_block_wrapper_attributes(); ?>>
         <!-- This div will be used as a React mount point for the ContentCarousel component -->
-        <div 
-            id="content-carousel-<?php echo uniqid(); ?>" 
+        <div
+            id="content-carousel-<?php echo $unique_id; ?>"
             class="content-carousel-block"
             data-content-type="<?php echo esc_attr($content_type); ?>"
             data-title="<?php echo esc_attr($title); ?>"
             data-view-all-url="<?php echo esc_attr($view_all_url); ?>"
             data-view-all-text="<?php echo esc_attr($view_all_text); ?>"
-            data-limit="<?php echo esc_attr($limit); ?>"
-        >
+            data-limit="<?php echo esc_attr($limit); ?>">
             <!-- Fallback content for non-JS environments -->
             <h2><?php echo esc_html($title); ?></h2>
             <ul>
