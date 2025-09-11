@@ -55,14 +55,6 @@ const ContentCarousel = async ({
     }
   }
 
-  // Sort by date (assuming all items have a date field)
-  // This is a simple sort - you may need to adjust based on your data structure
-  items.sort((a, b) => {
-    const dateA = new Date(a?.date || 0);
-    const dateB = new Date(b?.date || 0);
-    return dateB.getTime() - dateA.getTime();
-  });
-
   // Apply limit
   items = items.slice(0, limit);
 
