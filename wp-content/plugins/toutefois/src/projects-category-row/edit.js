@@ -49,7 +49,7 @@ export default function Edit({ attributes, setAttributes }) {
 
   // Fetch CPT posts
   const posts = useSelect(
-    (select) => select("core").getEntityRecords("postType", CPT_SLUG, cptQuery),
+    (select) => select("core").getEntityRecords("projet", CPT_SLUG, cptQuery),
     [cptQuery]
   );
 
