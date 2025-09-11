@@ -164,7 +164,7 @@ class Api {
   async fetchAllProjects(): Promise<WordpressProject[]> {
     return this.fetchFromApi('toutefois/v1/projects');
   }
-  async fetchAllProjectsByCategory(
+  async fetchAllP]rojectsByCategory(
     categoryId: string,
   ): Promise<WordpressProject[]> {
     return this.fetchFromApi(

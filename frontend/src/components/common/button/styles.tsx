@@ -52,8 +52,13 @@ export const ButtonContainerStyled = styled.button<{
 
   ${({ $variant }) => getButtonColors($variant)}
   font-weight: ${({ $size }) => buttonSizeWeight[$size]};
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: ${({ theme }) => theme.boxShadow.md};
+  }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
   }
 `;

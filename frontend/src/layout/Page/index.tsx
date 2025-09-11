@@ -1,4 +1,5 @@
 import ContentCarousel from '@/components/blocks/ContentCarousel';
+import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
 import {
   Element,
@@ -6,9 +7,6 @@ import {
   type HTMLReactParserOptions,
 } from 'html-react-parser';
 import FeaturedCarousel from '../../components/blocks/FeaturedCarousel';
-import NewsList from '../../components/blocks/NewsList';
-import ProjectsList from '../../components/blocks/ProjectsList';
-import ProjectsPageGrid from '../../components/blocks/ProjectsPageGrid';
 import type { WordpressPage } from '../../types';
 import Footer from '../Footer';
 import Header from '../Header';
@@ -20,7 +18,6 @@ interface PageLayoutProps {
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
-  const isHome = page.slug === 'home';
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.attribs) {
@@ -31,20 +28,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
         ) {
           return <FeaturedCarousel />;
         }
-        if (
-          domNode.attribs.class?.includes('wp-block-toutefois-projects-list')
-        ) {
-          return <ProjectsList />;
-        }
-        if (domNode.attribs.class?.includes('wp-block-toutefois-news-list')) {
-          return <NewsList />;
-        }
-        if (
-          domNode.attribs.class?.includes(
-            'wp-block-toutefois-projects-page-grid',
-          )
-        ) {
-          return <ProjectsPageGrid />;
+        if (domNode.attribs.class?.includes('wp-block-latest-posts__list')) {
+          return <LatestPostsGrid />;
         }
         if (
           domNode.attribs.class?.includes(

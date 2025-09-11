@@ -11,6 +11,7 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
   href,
   style,
   onClick,
+  disabled,
 }) => {
   return (
     <ButtonLinkWrapper href={href}>
@@ -19,6 +20,7 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
         $size={size}
         style={style}
         onClick={onClick}
+        disabled={disabled}
       >
         {children}
       </ButtonContainerStyled>

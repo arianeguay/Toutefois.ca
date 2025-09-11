@@ -1,4 +1,3 @@
-import Typography from '@/components/common/typography';
 import Api from '../../../api';
 import ProjectsRowContent from './Row';
 import { ProjectsRowContainer } from './styles';
@@ -12,9 +11,6 @@ const ProjectsRow: React.FC<ProjectsRowProps> = async ({ categoryId = '' }) => {
 
   return (
     <ProjectsRowContainer>
-      <Typography variant="h3" element="h2">
-        {categoryId}
-      </Typography>
       <ProjectsRowContent projects={allProjects} />
     </ProjectsRowContainer>
   );

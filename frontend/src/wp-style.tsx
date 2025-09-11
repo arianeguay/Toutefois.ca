@@ -84,6 +84,10 @@ export const WordpressStyling = css`
   .wp-block[data-align='wide'] {
     max-width: ${({ theme }) => Math.round(theme.content.maxWidth * 1.1)}px;
   }
+
+  & ­ > *:not(.alignfull) {
+    ${ContainerContentStyling}
+  }
   .alignfull,
   .wp-block[data-align='full'] {
     max-width: none;
@@ -463,9 +467,9 @@ export const WordpressStyling = css`
   select {
     width: 100%;
     max-width: ${({ theme }) => theme.content.narrow}px;
-    background: ${({ theme }) => theme.colors.lightText}1A; /* light overlay */
+    background: white;
     color: ${({ theme }) => theme.colors.primaryText};
-    border: ${({ theme }) => theme.borders.subtle};
+    border: ${({ theme }) => theme.borders.strong};
     border-radius: ${({ theme }) => theme.borderRadius.sm}px;
     padding: 10px 12px;
     outline: none;

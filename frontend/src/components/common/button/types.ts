@@ -8,4 +8,5 @@ export interface ButtonProps {
   onClick?: () => void;
   href?: string; // Changed from 'to' to 'href' to match Next.js Link API
   style?: React.CSSProperties;
+  disabled?: boolean;
 }

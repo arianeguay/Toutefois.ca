@@ -6,7 +6,42 @@ import styled from 'styled-components';
 
 export const ProjectsRowContainer = styled.div`
   ${ContainerContentStyling}
-  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
+  .swiper {
+    --swiper-padding-horizontal: 30px;
+    margin-left: calc(-1 * var(--swiper-padding-horizontal));
+    margin-right: calc(-1 * var(--swiper-padding-horizontal));
+    padding-left: var(--swiper-padding-horizontal);
+    padding-right: var(--swiper-padding-horizontal);
+    width: calc(100% + var(--swiper-padding-horizontal) * 2);
+    padding-block: 4px;
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+
+      width: var(--swiper-padding-horizontal);
+      height: 100%;
+      z-index: 9;
+    }
+    &:after {
+      top: 0;
+      left: 0;
+      background: linear-gradient(
+        to left,
+        transparent,
+        ${({ theme }) => theme.colors.mainBackground}
+      );
+    }
+    &:before {
+      top: 0;
+      right: 0;
+      background: linear-gradient(
+        to left,
+        ${({ theme }) => theme.colors.mainBackground},
+        transparent
+      );
+    }
+  }
 `;
 
 export const ProjectsGrid = styled.div`
