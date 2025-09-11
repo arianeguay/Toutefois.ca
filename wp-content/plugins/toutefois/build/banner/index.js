@@ -47,6 +47,34 @@ function Edit({
     horizontalAlignment,
     fullWidth
   } = attributes;
+  const blockStyles = {
+    position: 'relative',
+    width: fullWidth ? '100%' : 'auto',
+    margin: fullWidth ? '0' : '0 2rem',
+    height: '300px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '1px dashed #ccc',
+    backgroundColor: '#f0f0f0'
+  };
+  const imageStyles = {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    position: 'absolute',
+    top: 0,
+    left: 0
+  };
+  const contentStyles = {
+    position: 'relative',
+    zIndex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: horizontalAlignment,
+    justifyContent: verticalAlignment,
+    textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center'
+  };
   const onSelectImage = media => {
     setAttributes({
       image: media
@@ -127,38 +155,19 @@ function Edit({
       fullWidth: !fullWidth
     })
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
-    style: {
-      position: "relative",
-      width: fullWidth ? "100%" : "auto",
-      margin: fullWidth ? "0" : "0 2rem"
-    }
-  }, image && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
+      style: blockStyles
+    })
+  }, image ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
     src: image.url,
     alt: title,
-    style: {
-      width: "100%",
-      height: 300,
-      objectFit: "cover"
-    }
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    style: {
-      display: "flex",
-      alignItems: verticalAlignment,
-      justifyContent: horizontalAlignment,
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)"
-    }
+    style: imageStyles
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please select an image', 'toutefois')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: contentStyles
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
-    style: {
-      color: "#E1A42B"
-    }
+    style: titleStyles
   }, title), !!description && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    style: {
-      color: "#E1A42B"
-    }
+    style: descriptionStyles
   }, description))));
 }
 

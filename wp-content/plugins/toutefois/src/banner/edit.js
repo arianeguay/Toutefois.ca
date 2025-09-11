@@ -24,6 +24,37 @@ export default function Edit({ attributes, setAttributes }) {
     fullWidth,
   } = attributes;
 
+  const blockStyles = {
+    position: 'relative',
+    width: fullWidth ? '100%' : 'auto',
+    margin: fullWidth ? '0' : '0 2rem',
+    height: '300px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '1px dashed #ccc',
+    backgroundColor: '#f0f0f0',
+  };
+
+  const imageStyles = {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  };
+
+  const contentStyles = {
+    position: 'relative',
+    zIndex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: horizontalAlignment,
+    justifyContent: verticalAlignment,
+    textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center',
+  };
+
   const onSelectImage = (media) => {
     setAttributes({ image: media });
   };
@@ -90,34 +121,15 @@ export default function Edit({ attributes, setAttributes }) {
           />
         </PanelBody>
       </InspectorControls>
-      <div
-        {...useBlockProps()}
-        style={{
-          position: "relative",
-          width: fullWidth ? "100%" : "auto",
-          margin: fullWidth ? "0" : "0 2rem",
-        }}
-      >
-        {image && (
-          <img
-            src={image.url}
-            alt={title}
-            style={{ width: "100%", height: 300, objectFit: "cover" }}
-          />
+      <div {...useBlockProps({ style: blockStyles })}>
+        {image ? (
+          <img src={image.url} alt={title} style={imageStyles} />
+        ) : (
+          <p>{__('Please select an image', 'toutefois')}</p>
         )}
-        <div
-          style={{
-            display: "flex",
-            alignItems: verticalAlignment,
-            justifyContent: horizontalAlignment,
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <h2 style={{ color: "#E1A42B" }}>{title}</h2>
-          {!!description && <p style={{ color: "#E1A42B" }}>{description}</p>}
+        <div style={contentStyles}>
+          <h2 style={titleStyles}>{title}</h2>
+          {!!description && <p style={descriptionStyles}>{description}</p>}
         </div>
       </div>
     </>
