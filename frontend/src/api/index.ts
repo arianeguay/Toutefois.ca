@@ -161,11 +161,16 @@ class Api {
     return this.fetchFromApi('toutefois/v1/featured-projects');
   }
 
-  async fetchProjectsByCategory(
+  async fetchAllProjects(): Promise<WordpressProject[]> {
+    return this.fetchFromApi('toutefois/v1/projects');
+  }
+  async fetchAllProjectsByCategory(
     categoryId: string,
+    page = 1,
+    perPage = 6,
   ): Promise<WordpressProject[]> {
     return this.fetchFromApi(
-      `toutefois/v1/projects-row?category=${categoryId}`,
+      `toutefois/v1/projects-category-row?category=${categoryId}&page=${page}&per_page=${perPage}`,
     );
   }
 

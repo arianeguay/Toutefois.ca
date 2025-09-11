@@ -10,28 +10,20 @@ interface ProjectsRowProps {
 
 const ProjectsRow: React.FC<ProjectsRowProps> = async ({
   categoryId = '',
-  limit = 6,
+  limit = -1,
 }) => {
-  const allProjects = await Api.fetchAllProjects();
-
-  let filteredProjects = allProjects;
-  // if (categoryId) {
-  //   filteredProjects = allProjects.filter((project) => {
-  //     // Check if the project has the category with the given ID
-  //     return project.categories?.some(
-  //       (cat) => cat.id.toString() === categoryId,
-  //     );
-  //   });
-  // }
-
-  const limitedProjects = filteredProjects.slice(0, limit);
+  const allProjects = await Api.fetchAllProjectsByCategory(
+    categoryId,
+    1,
+    limit,
+  );
 
   return (
     <ProjectsRowContainer>
       <Typography variant="h3" element="h2">
         {categoryId}
       </Typography>
-      <ProjectsRowContent projects={limitedProjects} />
+      <ProjectsRowContent projects={allProjects} />
     </ProjectsRowContainer>
   );
 };
