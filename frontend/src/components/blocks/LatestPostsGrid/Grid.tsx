@@ -11,7 +11,7 @@ interface GridProps {
 
 const ArticlesGrid: React.FC<GridProps> = ({ articles }) => {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(8);
 
   const handlePageChange = (newPage: number, newLimit?: number) => {
     setPage(newPage);

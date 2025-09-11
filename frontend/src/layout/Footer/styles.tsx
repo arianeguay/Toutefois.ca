@@ -33,3 +33,12 @@ export const FooterContent = styled.div`
     gap: ${({ theme }) => theme.spacing.md}px;
   }
 `;
+
+export const CenterSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.md}px;
+  align-items: center;
+  align-self: stretch;
+`;

@@ -2,7 +2,7 @@ import api from '@/api';
 import Typography from '@/components/common/typography';
 import type { WordpressPage } from '@/types';
 import Socials from './socials';
-import { FooterContainer, FooterContent } from './styles';
+import { CenterSection, FooterContainer, FooterContent } from './styles';
 
 interface FooterProps {
   currentPage?: WordpressPage;
@@ -42,7 +42,7 @@ const Footer: React.FC<FooterProps> = async ({ currentPage }) => {
         ) : (
           <div></div>
         )}
-        <div>
+        <CenterSection>
           <Typography
             variant="body"
             element="p"
@@ -57,7 +57,7 @@ const Footer: React.FC<FooterProps> = async ({ currentPage }) => {
           >
             Théâtre de Toutefois © 2025
           </Typography>
-        </div>
+        </CenterSection>
         <div></div>
       </FooterContent>
     </FooterContainer>
