@@ -29,11 +29,14 @@ export default function Edit({ attributes, setAttributes }) {
     width: fullWidth ? '100%' : 'auto',
     margin: fullWidth ? '0' : '0 2rem',
     height: '300px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     border: '1px dashed #ccc',
     backgroundColor: '#f0f0f0',
+    // Conditionally center the placeholder
+    ...(!image && {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }),
   };
 
   const imageStyles = {
@@ -46,7 +49,11 @@ export default function Edit({ attributes, setAttributes }) {
   };
 
   const contentStyles = {
-    position: 'relative',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     zIndex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -56,6 +63,7 @@ export default function Edit({ attributes, setAttributes }) {
     fontFamily: font || 'Poppins, sans-serif',
     color: 'white',
     textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
+    padding: '1rem',
   };
 
   const onSelectImage = (media) => {
@@ -125,11 +133,8 @@ export default function Edit({ attributes, setAttributes }) {
         </PanelBody>
       </InspectorControls>
       <div {...useBlockProps({ style: blockStyles })}>
-        {image ? (
-          <img src={image.url} alt={title} style={imageStyles} />
-        ) : (
-          <p>{__('Please select an image', 'toutefois')}</p>
-        )}
+        {image && <img src={image.url} alt={title} style={imageStyles} />}
+        {!image && <p>{__('Please select an image', 'toutefois')}</p>}
         <div style={contentStyles}>
           <h2>{title}</h2>
           <p>{description}</p>

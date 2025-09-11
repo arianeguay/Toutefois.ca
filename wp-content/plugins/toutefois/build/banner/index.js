@@ -52,11 +52,14 @@ function Edit({
     width: fullWidth ? '100%' : 'auto',
     margin: fullWidth ? '0' : '0 2rem',
     height: '300px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     border: '1px dashed #ccc',
-    backgroundColor: '#f0f0f0'
+    backgroundColor: '#f0f0f0',
+    // Conditionally center the placeholder
+    ...(!image && {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    })
   };
   const imageStyles = {
     width: '100%',
@@ -67,7 +70,11 @@ function Edit({
     left: 0
   };
   const contentStyles = {
-    position: 'relative',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     zIndex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -76,7 +83,8 @@ function Edit({
     textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center',
     fontFamily: font || 'Poppins, sans-serif',
     color: 'white',
-    textShadow: '1px 1px 3px rgba(0,0,0,0.5)'
+    textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
+    padding: '1rem'
   };
   const onSelectImage = media => {
     setAttributes({
@@ -161,11 +169,11 @@ function Edit({
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
       style: blockStyles
     })
-  }, image ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+  }, image && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
     src: image.url,
     alt: title,
     style: imageStyles
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please select an image', 'toutefois')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), !image && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please select an image', 'toutefois')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     style: contentStyles
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, description))));
 }
