@@ -161,8 +161,12 @@ class Api {
     return this.fetchFromApi('toutefois/v1/featured-projects');
   }
 
-  async fetchAllProjects(): Promise<WordpressProject[]> {
-    return this.fetchFromApi('toutefois/v1/projects');
+  async fetchProjectsByCategory(
+    categoryId: string,
+  ): Promise<WordpressProject[]> {
+    return this.fetchFromApi(
+      `toutefois/v1/projects-row?category=${categoryId}`,
+    );
   }
 
   async fetchAllNews(): Promise<WordpressPost[]> {
