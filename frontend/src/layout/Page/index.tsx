@@ -1,4 +1,3 @@
-import Typography from '@/components/common/typography';
 import {
   Element,
   default as parse,
@@ -54,18 +53,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
     <PageWrapper>
       <Header currentPage={page} />
       <MainContent>
-        {!isHome && !!page.title?.rendered && (
-          <Typography
-            variant="h2"
-            element="h1"
-            style={{
-              marginBlockStart: 50,
-              marginBlockEnd: 16,
-            }}
-          >
-            {parse(page.title.rendered)}
-          </Typography>
-        )}
         {!!page.content?.rendered && parse(page.content.rendered, options)}
       </MainContent>
       <Footer currentPage={page} />

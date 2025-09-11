@@ -8,6 +8,7 @@ export const PageContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  gap: 0;
 `;
 
 export const MainContent = styled.main`

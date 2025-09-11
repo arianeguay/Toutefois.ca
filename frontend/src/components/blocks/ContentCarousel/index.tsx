@@ -1,0 +1,84 @@
+import Api from '../../../api';
+import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
+import { getMockFacebookPosts } from '@/api/facebook';
+import ContentCarouselList from './List';
+
+interface ContentCarouselProps {
+  contentType?: 'project' | 'news' | 'mixed';
+  title?: string;
+  viewAllUrl?: string;
+  viewAllText?: string;
+  limit?: number;
+}
+
+const ContentCarousel = async ({
+  contentType = 'mixed',
+  title,
+  viewAllUrl,
+  viewAllText,
+  limit = 10
+}: ContentCarouselProps) => {
+  let items: (WordpressPost | WordpressProject | FacebookPost)[] = [];
+  
+  // Fetch projects if needed
+  if (contentType === 'project' || contentType === 'mixed') {
+    const projects = await Api.fetchAllProjects();
+    if (projects.length > 0) {
+      // Add projects with a type identifier to distinguish them
+      items = [
+        ...items,
+        ...projects.map(project => ({
+          ...project,
+          contentType: 'project' as const
+        }))
+      ];
+    }
+  }
+  
+  // Fetch news if needed
+  if (contentType === 'news' || contentType === 'mixed') {
+    const news = await Api.fetchAllNews();
+    if (news.length > 0) {
+      // Add news with a type identifier
+      const typedArticles = news.map(article => ({
+        ...article,
+        type: 'wordpress' as const,
+        contentType: 'news' as const
+      }));
+      items = [...items, ...typedArticles];
+    }
+    
+    // Add Facebook posts if in news or mixed mode
+    const facebookPosts = getMockFacebookPosts();
+    if (facebookPosts.length > 0) {
+      items = [...items, ...facebookPosts];
+    }
+  }
+  
+  // Sort by date (assuming all items have a date field)
+  // This is a simple sort - you may need to adjust based on your data structure
+  items.sort((a, b) => {
+    const dateA = new Date(a.date || 0);
+    const dateB = new Date(b.date || 0);
+    return dateB.getTime() - dateA.getTime();
+  });
+  
+  // Apply limit
+  items = items.slice(0, limit);
+  
+  if (!items.length) {
+    return <p>No content found.</p>;
+  }
+
+  return (
+    <ContentCarouselList 
+      items={items}
+      contentType={contentType}
+      title={title}
+      viewAllUrl={viewAllUrl}
+      viewAllText={viewAllText}
+    />
+  );
+};
+
+export default ContentCarousel;

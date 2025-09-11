@@ -160,6 +160,17 @@ export const WordpressStyling = css`
       margin-block-end: ${({ theme }) => theme.spacing.lg}px;
     }
   }
+
+  .alignfull,
+  .wp-block[data-align='full'] {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    &.wp-block-image {
+      width: 100%;
+    }
+  }
   h4 {
     &:not(:first-child) {
       margin-block-start: ${({ theme }) => theme.spacing.lg}px;
@@ -283,7 +294,7 @@ export const WordpressStyling = css`
   .wp-block-image {
     width: fit-content;
   }
-  figure {
+  figure:not(:first-child) {
     margin: 16px auto;
   }
   figcaption,
