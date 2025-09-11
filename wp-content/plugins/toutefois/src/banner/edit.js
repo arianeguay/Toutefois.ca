@@ -76,8 +76,9 @@ export default function Edit({ attributes, setAttributes }) {
     width: "fit-content",
     fontFamily: font || "Poppins, sans-serif",
     textShadow: bigTextShadow
-      ? `3px 3px 6px ${textShadowColor}`
+      ? `4px 3px 0px ${textShadowColor}`
       : `1px 1px 3px ${textShadowColor}`,
+    margin: 0,
   };
 
   const onSelectImage = (media) => {
