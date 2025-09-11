@@ -9,6 +9,7 @@ import {
   PanelBody,
   SelectControl,
   TextControl,
+  ColorPalette,
   ToggleControl,
 } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
@@ -21,17 +22,17 @@ export default function Edit({ attributes, setAttributes }) {
     font,
     verticalAlignment,
     horizontalAlignment,
-    fullWidth,
+    objectPosition,
+    textColor,
+    bigTextShadow,
   } = attributes;
 
   const blockStyles = {
     position: 'relative',
-    width: fullWidth ? '100%' : 'auto',
-    margin: fullWidth ? '0' : '0 2rem',
     height: '300px',
     border: '1px dashed #ccc',
     backgroundColor: '#f0f0f0',
-    // Conditionally center the placeholder
+    width: '100%',
     ...(!image && {
       display: 'flex',
       alignItems: 'center',
@@ -43,6 +44,7 @@ export default function Edit({ attributes, setAttributes }) {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+    objectPosition: objectPosition,
     position: 'absolute',
     top: 0,
     left: 0,
@@ -61,8 +63,8 @@ export default function Edit({ attributes, setAttributes }) {
     justifyContent: verticalAlignment,
     textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center',
     fontFamily: font || 'Poppins, sans-serif',
-    color: 'white',
-    textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
+    color: textColor,
+    textShadow: bigTextShadow ? '3px 3px 6px rgba(0,0,0,0.7)' : '1px 1px 3px rgba(0,0,0,0.5)',
     padding: '1rem',
   };
 
@@ -90,7 +92,8 @@ export default function Edit({ attributes, setAttributes }) {
             onChange={(value) => setAttributes({ font: value })}
             options={[
               { label: "Poppins", value: "Poppins" },
-              // Add other fonts here
+              { label: "Cerebri", value: "Cerebri" },
+              { label: "Gagalin", value: "Gagalin" },
             ]}
           />
           <SelectControl
@@ -125,10 +128,21 @@ export default function Edit({ attributes, setAttributes }) {
               )}
             />
           </MediaUploadCheck>
+          <TextControl
+            label={__('Image Position', 'toutefois')}
+            value={objectPosition}
+            onChange={(value) => setAttributes({ objectPosition: value })}
+            help={__('e.g., "center top", "25% 75%"', 'toutefois')}
+          />
+          <p><strong>{__('Text Color', 'toutefois')}</strong></p>
+          <ColorPalette
+            value={textColor}
+            onChange={(value) => setAttributes({ textColor: value })}
+          />
           <ToggleControl
-            label={__("Full Width", "toutefois")}
-            checked={fullWidth}
-            onChange={() => setAttributes({ fullWidth: !fullWidth })}
+            label={__('Big Text Shadow', 'toutefois')}
+            checked={bigTextShadow}
+            onChange={() => setAttributes({ bigTextShadow: !bigTextShadow })}
           />
         </PanelBody>
       </InspectorControls>

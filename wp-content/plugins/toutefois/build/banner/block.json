@@ -7,9 +7,19 @@
   "category": "widgets",
   "icon": "format-image",
   "description": "Displays a banner with a title, description, and image.",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
   "editorScript": "file:./index.js",
   "render": "file:./render.php",
   "attributes": {
+    "align": {
+      "type": "string",
+      "default": ""
+    },
     "title": {
       "type": "string",
       "default": ""
@@ -34,9 +44,17 @@
       "type": "string",
       "default": "center"
     },
-    "fullWidth": {
+    "objectPosition": {
+      "type": "string",
+      "default": "50% 50%"
+    },
+    "textColor": {
+      "type": "string",
+      "default": "#FFFFFF"
+    },
+    "bigTextShadow": {
       "type": "boolean",
-      "default": true
+      "default": false
     }
   }
 }

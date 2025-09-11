@@ -8,7 +8,7 @@
   \*******************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/banner","version":"0.1.0","title":"Banner","category":"widgets","icon":"format-image","description":"Displays a banner with a title, description, and image.","editorScript":"file:./index.js","render":"file:./render.php","attributes":{"title":{"type":"string","default":""},"description":{"type":"string","default":""},"image":{"type":"object","default":null},"font":{"type":"string","default":"Poppins"},"verticalAlignment":{"type":"string","default":"center"},"horizontalAlignment":{"type":"string","default":"center"},"fullWidth":{"type":"boolean","default":true}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/banner","version":"0.1.0","title":"Banner","category":"widgets","icon":"format-image","description":"Displays a banner with a title, description, and image.","supports":{"align":["wide","full"]},"editorScript":"file:./index.js","render":"file:./render.php","attributes":{"align":{"type":"string","default":""},"title":{"type":"string","default":""},"description":{"type":"string","default":""},"image":{"type":"object","default":null},"font":{"type":"string","default":"Poppins"},"verticalAlignment":{"type":"string","default":"center"},"horizontalAlignment":{"type":"string","default":"center"},"objectPosition":{"type":"string","default":"50% 50%"},"textColor":{"type":"string","default":"#FFFFFF"},"bigTextShadow":{"type":"boolean","default":false}}}');
 
 /***/ }),
 
@@ -45,16 +45,16 @@ function Edit({
     font,
     verticalAlignment,
     horizontalAlignment,
-    fullWidth
+    objectPosition,
+    textColor,
+    bigTextShadow
   } = attributes;
   const blockStyles = {
     position: 'relative',
-    width: fullWidth ? '100%' : 'auto',
-    margin: fullWidth ? '0' : '0 2rem',
     height: '300px',
     border: '1px dashed #ccc',
     backgroundColor: '#f0f0f0',
-    // Conditionally center the placeholder
+    width: '100%',
     ...(!image && {
       display: 'flex',
       alignItems: 'center',
@@ -65,6 +65,7 @@ function Edit({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+    objectPosition: objectPosition,
     position: 'absolute',
     top: 0,
     left: 0
@@ -82,8 +83,8 @@ function Edit({
     justifyContent: verticalAlignment,
     textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center',
     fontFamily: font || 'Poppins, sans-serif',
-    color: 'white',
-    textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
+    color: textColor,
+    textShadow: bigTextShadow ? '3px 3px 6px rgba(0,0,0,0.7)' : '1px 1px 3px rgba(0,0,0,0.5)',
     padding: '1rem'
   };
   const onSelectImage = media => {
@@ -114,9 +115,13 @@ function Edit({
     options: [{
       label: "Poppins",
       value: "Poppins"
-    }
-    // Add other fonts here
-    ]
+    }, {
+      label: "Cerebri",
+      value: "Cerebri"
+    }, {
+      label: "Gagalin",
+      value: "Gagalin"
+    }]
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Vertical Alignment", "toutefois"),
     value: verticalAlignment,
@@ -159,11 +164,23 @@ function Edit({
       onClick: open,
       isPrimary: true
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Choose Image", "toutefois"))
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Full Width", "toutefois"),
-    checked: fullWidth,
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Image Position', 'toutefois'),
+    value: objectPosition,
+    onChange: value => setAttributes({
+      objectPosition: value
+    }),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('e.g., "center top", "25% 75%"', 'toutefois')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Text Color', 'toutefois'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+    value: textColor,
+    onChange: value => setAttributes({
+      textColor: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Big Text Shadow', 'toutefois'),
+    checked: bigTextShadow,
     onChange: () => setAttributes({
-      fullWidth: !fullWidth
+      bigTextShadow: !bigTextShadow
     })
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({

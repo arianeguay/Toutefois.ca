@@ -12,19 +12,20 @@ $image = isset($attributes['image']) ? $attributes['image'] : null;
 $font = isset($attributes['font']) ? $attributes['font'] : 'Poppins';
 $vertical_alignment = isset($attributes['verticalAlignment']) ? $attributes['verticalAlignment'] : 'center';
 $horizontal_alignment = isset($attributes['horizontalAlignment']) ? $attributes['horizontalAlignment'] : 'center';
-$full_width = isset($attributes['fullWidth']) ? $attributes['fullWidth'] : true;
+$object_position = isset($attributes['objectPosition']) ? $attributes['objectPosition'] : '50% 50%';
+$text_color = isset($attributes['textColor']) ? $attributes['textColor'] : '#FFFFFF';
+$big_text_shadow = isset($attributes['bigTextShadow']) ? $attributes['bigTextShadow'] : false;
 
 // Build inline styles for the container
 $container_styles = [
     'position: relative',
     'height: 300px',
-    'width: ' . ($full_width ? '100%' : 'auto'),
-    'margin: ' . ($full_width ? '0' : '0 2rem'),
+    'width: 100%',
 ];
 if ($image && !empty($image['url'])) {
     $container_styles[] = 'background-image: url(' . esc_url($image['url']) . ')';
     $container_styles[] = 'background-size: cover';
-    $container_styles[] = 'background-position: center';
+    $container_styles[] = 'background-position: ' . esc_attr($object_position);
 } else {
     $container_styles[] = 'background-color: #f0f0f0';
     $container_styles[] = 'border: 1px dashed #ccc';
@@ -40,8 +41,8 @@ $content_styles = [
     'justify-content: ' . esc_attr($vertical_alignment),
     'text-align: ' . (esc_attr($horizontal_alignment) === 'flex-start' ? 'left' : (esc_attr($horizontal_alignment) === 'flex-end' ? 'right' : 'center')),
     'font-family: ' . esc_attr($font) . ', sans-serif',
-    'color: white',
-    'text-shadow: 1px 1px 3px rgba(0,0,0,0.5)',
+    'color: ' . esc_attr($text_color),
+    'text-shadow: ' . ($big_text_shadow ? '3px 3px 6px rgba(0,0,0,0.7)' : '1px 1px 3px rgba(0,0,0,0.5)'),
     'padding: 1rem',
 ];
 

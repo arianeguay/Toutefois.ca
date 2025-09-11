@@ -16,7 +16,9 @@ const Banner = () => {
         font: data.font || 'Poppins',
         verticalAlignment: data.verticalAlignment || 'center',
         horizontalAlignment: data.horizontalAlignment || 'center',
-        fullWidth: data.fullWidth === 'true',
+        objectPosition: data.objectPosition || '50% 50%',
+        textColor: data.textColor || '#FFFFFF',
+        bigTextShadow: data.bigTextShadow === 'true',
       });
     }
   }, []);
