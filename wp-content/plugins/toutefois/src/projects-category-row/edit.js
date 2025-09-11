@@ -12,7 +12,7 @@ import { __ } from "@wordpress/i18n";
 // --- CONFIG ---
 // If you use the default "Categories", keep TAXONOMY = 'category' and TAX_REST_BASE = 'categories'.
 // For a custom taxonomy (e.g. 'project_category'), set TAXONOMY = 'project_category' and TAX_REST_BASE = 'project_category'.
-const CPT_SLUG = "projets"; // your CPT slug (post_type)
+const CPT_SLUG = "projet"; // your CPT slug (post_type)
 const TAXONOMY = "category"; // or 'project_category'
 const TAX_REST_BASE =
   TAXONOMY === "category" ? "categories" : "project_category";
@@ -49,7 +49,7 @@ export default function Edit({ attributes, setAttributes }) {
 
   // Fetch CPT posts
   const posts = useSelect(
-    (select) => select("core").getEntityRecords("projet", CPT_SLUG, cptQuery),
+    (select) => select("core").getEntityRecords("postType", CPT_SLUG, cptQuery),
     [cptQuery]
   );
 
