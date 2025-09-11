@@ -53,6 +53,9 @@ export default function Edit({ attributes, setAttributes }) {
     alignItems: horizontalAlignment,
     justifyContent: verticalAlignment,
     textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center',
+    fontFamily: font || 'Poppins, sans-serif',
+    color: 'white',
+    textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
   };
 
   const onSelectImage = (media) => {
@@ -128,8 +131,8 @@ export default function Edit({ attributes, setAttributes }) {
           <p>{__('Please select an image', 'toutefois')}</p>
         )}
         <div style={contentStyles}>
-          <h2 style={titleStyles}>{title}</h2>
-          {!!description && <p style={descriptionStyles}>{description}</p>}
+          <h2>{title}</h2>
+          <p>{description}</p>
         </div>
       </div>
     </>

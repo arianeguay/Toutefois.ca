@@ -73,7 +73,10 @@ function Edit({
     flexDirection: 'column',
     alignItems: horizontalAlignment,
     justifyContent: verticalAlignment,
-    textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center'
+    textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center',
+    fontFamily: font || 'Poppins, sans-serif',
+    color: 'white',
+    textShadow: '1px 1px 3px rgba(0,0,0,0.5)'
   };
   const onSelectImage = media => {
     setAttributes({
@@ -164,11 +167,7 @@ function Edit({
     style: imageStyles
   }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please select an image', 'toutefois')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     style: contentStyles
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
-    style: titleStyles
-  }, title), !!description && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    style: descriptionStyles
-  }, description))));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, description))));
 }
 
 /***/ }),
