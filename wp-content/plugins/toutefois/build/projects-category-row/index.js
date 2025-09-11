@@ -44,7 +44,7 @@ __webpack_require__.r(__webpack_exports__);
 // --- CONFIG ---
 // If you use the default "Categories", keep TAXONOMY = 'category' and TAX_REST_BASE = 'categories'.
 // For a custom taxonomy (e.g. 'project_category'), set TAXONOMY = 'project_category' and TAX_REST_BASE = 'project_category'.
-const CPT_SLUG = "projets"; // your CPT slug (post_type)
+const CPT_SLUG = "projet"; // your CPT slug (post_type)
 const TAXONOMY = "category"; // or 'project_category'
 const TAX_REST_BASE = TAXONOMY === "category" ? "categories" : "project_category";
 const PREVIEW_LIMIT = 6;
@@ -126,7 +126,7 @@ function Edit({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Spinner, null)), terms && posts && posts.length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Notice, {
     status: "info",
     isDismissible: false
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("No projects found for this selection.", "toutefois")), posts && posts.map(p => {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("No projects found for this selection.", "toutefois")), !!posts ? posts.map(p => {
     const thumb = getThumb(p);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: p.id,
@@ -161,7 +161,7 @@ function Edit({
         marginBottom: 6
       }
     }, p.title?.rendered || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("(No title)", "toutefois"))));
-  })));
+  }) : "No projects found"));
 }
 
 /***/ }),
