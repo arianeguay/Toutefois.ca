@@ -42,91 +42,180 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // --- CONFIG ---
-// If you use the default "Categories", keep TAXONOMY = 'category' and TAX_REST_BASE = 'categories'.
-// For a custom taxonomy (e.g. 'project_category'), set TAXONOMY = 'project_category' and TAX_REST_BASE = 'project_category'.
-const CPT_SLUG = "projet"; // your CPT slug (post_type)
+const CPT_SLUG = "projet"; // your CPT slug
 const TAXONOMY = "category"; // or 'project_category'
 const TAX_REST_BASE = TAXONOMY === "category" ? "categories" : "project_category";
-const PREVIEW_LIMIT = 6;
+const PREVIEW_LIMIT = 6; // keep small to reduce load
+
+// helper for hierarchical labels
+const labelWithDepth = (name, depth) => `${"— ".repeat(depth)}${name}`;
 function Edit({
   attributes,
   setAttributes
 }) {
   const {
-    category /* storing ID is better; if you already store slug, see note below */
-  } = attributes;
-
-  // Load taxonomy terms
-  const terms = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select("core").getEntityRecords("taxonomy", TAXONOMY, {
-    per_page: -1
-  }), []);
-
-  // Coerce value to a number if you store IDs as strings
+    category: attrCategory
+  } = attributes; // store ID as string
+  const [includeChildren, setIncludeChildren] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(true);
   const categoryId = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
-    if (!category) return null;
-    const n = Number(category);
+    const n = Number(attrCategory);
     return Number.isFinite(n) && n > 0 ? n : null;
-  }, [category]);
+  }, [attrCategory]);
 
-  // Build query for CPT, filtered by taxonomy (IDs)
-  const cptQuery = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
-    const q = {
-      per_page: PREVIEW_LIMIT,
-      _embed: true
+  // -------- Load taxonomy terms (light payload) --------
+  const {
+    terms,
+    termsIsResolving,
+    termsError
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    var _core$getLastEntityRe;
+    const core = select("core");
+    const query = {
+      per_page: -1,
+      _fields: "id,name,parent,slug",
+      context: "view"
     };
-    if (categoryId) {
-      // Filter by taxonomy. For default categories use 'categories', for custom use its rest_base.
-      q[TAX_REST_BASE] = [categoryId];
+    const isResolving = select("core/data").isResolving("core", "getEntityRecords", ["taxonomy", TAXONOMY, query]);
+    return {
+      terms: core.getEntityRecords("taxonomy", TAXONOMY, query),
+      termsIsResolving: isResolving,
+      termsError: (_core$getLastEntityRe = core.getLastEntityRecordsError?.("taxonomy", TAXONOMY, query)) !== null && _core$getLastEntityRe !== void 0 ? _core$getLastEntityRe : null
+    };
+  }, [] // stable
+  );
+
+  // Build options + descendants map once terms are in
+  const {
+    options,
+    descendantsById
+  } = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    if (!Array.isArray(terms)) {
+      return {
+        options: [{
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("All", "toutefois"),
+          value: ""
+        }],
+        descendantsById: new Map()
+      };
     }
-    return q;
-  }, [categoryId]);
-
-  // Fetch CPT posts
-  const posts = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select("core").getEntityRecords("postType", CPT_SLUG, cptQuery), [cptQuery]);
-
-  // Build select options
-  const options = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
-    const base = [{
+    const byParent = new Map();
+    terms.forEach(t => {
+      const list = byParent.get(t.parent || 0) || [];
+      list.push(t);
+      byParent.set(t.parent || 0, list);
+    });
+    const out = [{
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("All", "toutefois"),
       value: ""
     }];
-    if (!terms) return base;
-    return base.concat(terms.map(t => ({
-      label: t.name,
-      value: String(t.id) // store ID as string in attributes
-    })));
+    const descendants = new Map();
+    const walk = (parentId = 0, depth = 0) => {
+      const kids = (byParent.get(parentId) || []).sort((a, b) => a.name.localeCompare(b.name, undefined, {
+        sensitivity: "base"
+      }));
+      kids.forEach(t => {
+        out.push({
+          label: labelWithDepth(t.name, depth),
+          value: String(t.id)
+        });
+        // precompute descendants (t + all its children)
+        const stack = [t.id];
+        const acc = new Set([t.id]);
+        while (stack.length) {
+          const cur = stack.pop();
+          const curKids = byParent.get(cur) || [];
+          curKids.forEach(k => {
+            if (!acc.has(k.id)) {
+              acc.add(k.id);
+              stack.push(k.id);
+            }
+          });
+        }
+        descendants.set(t.id, Array.from(acc));
+        walk(t.id, depth + 1);
+      });
+    };
+    walk(0, 0);
+    return {
+      options: out,
+      descendantsById: descendants
+    };
   }, [terms]);
 
-  // Helpers to read featured media from _embed
+  // -------- Build post query (very light) --------
+  const categoriesFilter = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    if (!categoryId) return undefined;
+    if (!includeChildren) return [categoryId];
+    return descendantsById.get(categoryId) || [categoryId];
+  }, [categoryId, includeChildren, descendantsById]);
+  const postsQuery = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
+    const q = {
+      per_page: PREVIEW_LIMIT,
+      // Keep _embed but restrict fields to minimize payload size
+      _embed: true,
+      _fields: "id,slug,title.rendered,featured_media,_embedded.wp:featuredmedia.media_details.sizes",
+      orderby: "date",
+      order: "desc",
+      status: "publish",
+      context: "view"
+    };
+    if (categoriesFilter) {
+      q[TAX_REST_BASE] = categoriesFilter;
+    }
+    return q;
+  }, [categoriesFilter]);
+
+  // -------- Fetch posts with error/loading handling --------
+  const {
+    posts,
+    postsIsResolving,
+    postsError
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    var _core$getLastEntityRe2;
+    const core = select("core");
+    const isResolving = select("core/data").isResolving("core", "getEntityRecords", ["postType", CPT_SLUG, postsQuery]);
+    return {
+      posts: core.getEntityRecords("postType", CPT_SLUG, postsQuery),
+      postsIsResolving: isResolving,
+      postsError: (_core$getLastEntityRe2 = core.getLastEntityRecordsError?.("postType", CPT_SLUG, postsQuery)) !== null && _core$getLastEntityRe2 !== void 0 ? _core$getLastEntityRe2 : null
+    };
+  }, [postsQuery]);
   const getThumb = post => {
-    const media = post?._embedded?.["wp:featuredmedia"]?.[0]?.media_details?.sizes?.medium || post?._embedded?.["wp:featuredmedia"]?.[0]?.media_details?.sizes?.thumbnail;
-    return media ? media.source_url : null;
+    const sizes = post?._embedded?.["wp:featuredmedia"]?.[0]?.media_details?.sizes || null;
+    return sizes?.medium_large?.source_url || sizes?.medium?.source_url || sizes?.thumbnail?.source_url || null;
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Projects Row Settings", "toutefois")
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Projects Row Settings", "toutefois"),
+    initialOpen: true
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Category", "toutefois"),
-    value: category || "",
+    value: attrCategory || "",
     options: options,
     onChange: val => setAttributes({
       category: val
     }),
     help: TAXONOMY === "category" ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Filters by WordPress “Categories”.", "toutefois") : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Filters by custom taxonomy.", "toutefois")
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Include child categories in preview", "toutefois"),
+    checked: includeChildren,
+    onChange: setIncludeChildren
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "toutefois-projects-row__preview",
     style: {
       display: "grid",
-      gap: "12px",
+      gap: 12,
       gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))"
     }
-  }, !terms && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Spinner, null), terms && posts === undefined && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    style: {
-      gridColumn: "1 / -1"
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Spinner, null)), terms && posts && posts.length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Notice, {
+  }, (termsIsResolving || postsIsResolving) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Spinner, null), termsError && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Notice, {
+    status: "error",
+    isDismissible: false
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Failed to load categories.", "toutefois")), postsError && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Notice, {
+    status: "error",
+    isDismissible: false
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Failed to load projects.", "toutefois")), !termsIsResolving && !postsIsResolving && Array.isArray(posts) && posts.length === 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Notice, {
     status: "info",
     isDismissible: false
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("No projects found for this selection.", "toutefois")), !!posts ? posts.map(p => {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("No projects found for this selection.", "toutefois")), !postsIsResolving && Array.isArray(posts) && posts.map(p => {
     const thumb = getThumb(p);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       key: p.id,
@@ -144,7 +233,9 @@ function Edit({
         display: "block",
         aspectRatio: "16 / 9",
         objectFit: "cover"
-      }
+      },
+      loading: "lazy",
+      decoding: "async"
     }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       style: {
         background: "#f2f2f2",
@@ -161,7 +252,7 @@ function Edit({
         marginBottom: 6
       }
     }, p.title?.rendered || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("(No title)", "toutefois"))));
-  }) : "No projects found"));
+  })));
 }
 
 /***/ }),
