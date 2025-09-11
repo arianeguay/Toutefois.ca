@@ -9,6 +9,7 @@ import {
   PanelBody,
   SelectControl,
   TextControl,
+  ToggleControl,
 } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 
@@ -20,6 +21,7 @@ export default function Edit({ attributes, setAttributes }) {
     font,
     verticalAlignment,
     horizontalAlignment,
+    fullWidth,
   } = attributes;
 
   const onSelectImage = (media) => {
@@ -81,12 +83,19 @@ export default function Edit({ attributes, setAttributes }) {
               )}
             />
           </MediaUploadCheck>
+          <ToggleControl
+            label={__("Full Width", "toutefois")}
+            checked={fullWidth}
+            onChange={() => setAttributes({ fullWidth: !fullWidth })}
+          />
         </PanelBody>
       </InspectorControls>
       <div
         {...useBlockProps()}
         style={{
           position: "relative",
+          width: fullWidth ? "100%" : "auto",
+          margin: fullWidth ? "0" : "0 2rem",
         }}
       >
         {image && (
@@ -107,8 +116,8 @@ export default function Edit({ attributes, setAttributes }) {
             transform: "translate(-50%, -50%)",
           }}
         >
-          <h2>{title}</h2>
-          <p>{description}</p>
+          <h2 style={{ color: "#E1A42B" }}>{title}</h2>
+          {!!description && <p style={{ color: "#E1A42B" }}>{description}</p>}
         </div>
       </div>
     </>

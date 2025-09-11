@@ -12,6 +12,7 @@ $image = isset($attributes['image']) ? $attributes['image'] : null;
 $font = isset($attributes['font']) ? $attributes['font'] : 'Poppins';
 $vertical_alignment = isset($attributes['verticalAlignment']) ? $attributes['verticalAlignment'] : 'center';
 $horizontal_alignment = isset($attributes['horizontalAlignment']) ? $attributes['horizontalAlignment'] : 'center';
+$full_width = isset($attributes['fullWidth']) ? $attributes['fullWidth'] : true;
 
 $wrapper_attributes = get_block_wrapper_attributes([
     'data-title' => esc_attr($title),
@@ -20,6 +21,7 @@ $wrapper_attributes = get_block_wrapper_attributes([
     'data-font' => esc_attr($font),
     'data-vertical-alignment' => esc_attr($vertical_alignment),
     'data-horizontal-alignment' => esc_attr($horizontal_alignment),
+    'data-full-width' => esc_attr($full_width ? 'true' : 'false'),
 ]);
 
 ?>

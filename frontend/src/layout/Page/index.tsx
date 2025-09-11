@@ -1,5 +1,6 @@
 import ContentCarousel from '@/components/blocks/ContentCarousel';
 import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
+import Banner from '@/components/blocks/Banner';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
 import {
   Element,
@@ -27,6 +28,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
           )
         ) {
           return <FeaturedCarousel />;
+        }
+        if (domNode.attribs.class?.includes('wp-block-toutefois-banner')) {
+          return <Banner />;
         }
         if (domNode.attribs.class?.includes('wp-block-latest-posts__list')) {
           return <LatestPostsGrid />;

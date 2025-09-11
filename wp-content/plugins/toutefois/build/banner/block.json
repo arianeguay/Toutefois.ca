@@ -33,6 +33,10 @@
     "horizontalAlignment": {
       "type": "string",
       "default": "center"
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "default": true
     }
   }
 }
