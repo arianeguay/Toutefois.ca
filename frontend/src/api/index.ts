@@ -166,11 +166,9 @@ class Api {
   }
   async fetchAllProjectsByCategory(
     categoryId: string,
-    page = 1,
-    perPage = 6,
   ): Promise<WordpressProject[]> {
     return this.fetchFromApi(
-      `toutefois/v1/projects-category-row?category=${categoryId}&page=${page}&per_page=${perPage}`,
+      `toutefois/v1/projects-category-row?category=${categoryId}`,
     );
   }
 

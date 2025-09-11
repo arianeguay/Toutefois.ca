@@ -5,18 +5,10 @@ import { ProjectsRowContainer } from './styles';
 
 interface ProjectsRowProps {
   categoryId?: string;
-  limit?: number;
 }
 
-const ProjectsRow: React.FC<ProjectsRowProps> = async ({
-  categoryId = '',
-  limit = -1,
-}) => {
-  const allProjects = await Api.fetchAllProjectsByCategory(
-    categoryId,
-    1,
-    limit,
-  );
+const ProjectsRow: React.FC<ProjectsRowProps> = async ({ categoryId = '' }) => {
+  const allProjects = await Api.fetchAllProjectsByCategory(categoryId);
 
   return (
     <ProjectsRowContainer>

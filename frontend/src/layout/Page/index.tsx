@@ -53,8 +53,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
         ) {
           // Extract category ID from data attribute if available
           const categoryId = domNode.attribs['data-category'] || '';
-          const limitStr = domNode.attribs['data-limit'];
-          const limit = limitStr ? parseInt(limitStr, 10) : 6;
 
           // Generate a unique ID for the row
           const rowId = Math.random().toString(36).substring(2, 9);
@@ -63,7 +61,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
             <ProjectsRow
               key={`projects-row-${rowId}`}
               categoryId={categoryId}
-              limit={limit}
             />
           );
         }
