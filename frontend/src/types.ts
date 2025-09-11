@@ -72,6 +72,12 @@ export interface WordpressProject {
   content: string;
   featured_image_url: string;
   slug: string;
+  date?: string;
+  categories?: {
+    id: number;
+    name: string;
+    slug: string;
+  }[];
   meta: {
     [key: string]: string[];
     _projet_image_id: string[];

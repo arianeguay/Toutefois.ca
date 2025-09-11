@@ -11,8 +11,15 @@ $projects = $response->get_data();
 $total_pages = $response->get_headers()['X-WP-TotalPages'];
 
 if (!empty($projects)) :
+    // Get category from attributes
+    $category = isset($attributes['category']) ? $attributes['category'] : '';
+    $title = 'Projects'; // Default title or could be from attributes
+    $limit = 9; // Same as per_page from request
 ?>
-    <div <?php echo get_block_wrapper_attributes(); ?>>
+    <div <?php echo get_block_wrapper_attributes(); ?>
+        data-category="<?php echo esc_attr($category); ?>"
+        data-title="<?php echo esc_attr($title); ?>"
+        data-limit="<?php echo esc_attr($limit); ?>">
         <ul class="projects-grid">
             <?php foreach ($projects as $project) : ?>
                 <li class="project-item">
