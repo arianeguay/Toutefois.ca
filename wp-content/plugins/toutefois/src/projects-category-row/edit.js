@@ -116,50 +116,51 @@ export default function Edit({ attributes, setAttributes }) {
           </Notice>
         )}
 
-        {posts &&
-          posts.map((p) => {
-            const thumb = getThumb(p);
-            return (
-              <div
-                key={p.id}
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: 8,
-                  overflow: "hidden",
-                  background: "#fff",
-                }}
-              >
-                {thumb ? (
-                  <img
-                    src={thumb}
-                    alt=""
-                    style={{
-                      width: "100%",
-                      display: "block",
-                      aspectRatio: "16 / 9",
-                      objectFit: "cover",
-                    }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      background: "#f2f2f2",
-                      width: "100%",
-                      aspectRatio: "16 / 9",
-                    }}
-                  />
-                )}
-                <div style={{ padding: 10 }}>
-                  <strong style={{ display: "block", marginBottom: 6 }}>
-                    {p.title?.rendered || __("(No title)", "toutefois")}
-                  </strong>
-                  {/* Optional: small taxonomy badges */}
-                  {/* <small style={{ opacity: 0.7 }}>{/* badges here */}
-                  {/*}</small> */}
+        {!!posts
+          ? posts.map((p) => {
+              const thumb = getThumb(p);
+              return (
+                <div
+                  key={p.id}
+                  style={{
+                    border: "1px solid #ddd",
+                    borderRadius: 8,
+                    overflow: "hidden",
+                    background: "#fff",
+                  }}
+                >
+                  {thumb ? (
+                    <img
+                      src={thumb}
+                      alt=""
+                      style={{
+                        width: "100%",
+                        display: "block",
+                        aspectRatio: "16 / 9",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        background: "#f2f2f2",
+                        width: "100%",
+                        aspectRatio: "16 / 9",
+                      }}
+                    />
+                  )}
+                  <div style={{ padding: 10 }}>
+                    <strong style={{ display: "block", marginBottom: 6 }}>
+                      {p.title?.rendered || __("(No title)", "toutefois")}
+                    </strong>
+                    {/* Optional: small taxonomy badges */}
+                    {/* <small style={{ opacity: 0.7 }}>{/* badges here */}
+                    {/*}</small> */}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          : "No projects found"}
       </div>
     </>
   );
