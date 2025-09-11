@@ -55,6 +55,10 @@
     "bigTextShadow": {
       "type": "boolean",
       "default": false
+    },
+    "textShadowColor": {
+      "type": "string",
+      "default": "rgba(0,0,0,0.5)"
     }
   }
 }

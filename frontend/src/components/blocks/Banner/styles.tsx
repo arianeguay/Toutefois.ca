@@ -8,6 +8,7 @@ interface BannerProps {
   objectPosition?: string;
   textColor?: string;
   bigTextShadow?: boolean;
+  textShadowColor?: string;
 }
 
 export const BannerContainer = styled.div<BannerProps>`
@@ -46,6 +47,6 @@ export const ContentWrapper = styled.div<BannerProps>`
   h1, p {
     margin: 0;
     padding: 0 1rem;
-    text-shadow: ${({ bigTextShadow }) => (bigTextShadow ? '3px 3px 6px rgba(0,0,0,0.7)' : '1px 1px 3px rgba(0,0,0,0.5)')};
+    text-shadow: ${({ bigTextShadow, textShadowColor }) => (bigTextShadow ? `3px 3px 6px ${textShadowColor}` : `1px 1px 3px ${textShadowColor}`)};
   }
 `;

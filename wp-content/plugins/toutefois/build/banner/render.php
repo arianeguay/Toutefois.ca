@@ -15,6 +15,7 @@ $horizontal_alignment = isset($attributes['horizontalAlignment']) ? $attributes[
 $object_position = isset($attributes['objectPosition']) ? $attributes['objectPosition'] : '50% 50%';
 $text_color = isset($attributes['textColor']) ? $attributes['textColor'] : '#FFFFFF';
 $big_text_shadow = isset($attributes['bigTextShadow']) ? $attributes['bigTextShadow'] : false;
+$text_shadow_color = isset($attributes['textShadowColor']) ? $attributes['textShadowColor'] : 'rgba(0,0,0,0.5)';
 
 // Build inline styles for the container
 $container_styles = [
@@ -42,7 +43,7 @@ $content_styles = [
     'text-align: ' . (esc_attr($horizontal_alignment) === 'flex-start' ? 'left' : (esc_attr($horizontal_alignment) === 'flex-end' ? 'right' : 'center')),
     'font-family: ' . esc_attr($font) . ', sans-serif',
     'color: ' . esc_attr($text_color),
-    'text-shadow: ' . ($big_text_shadow ? '3px 3px 6px rgba(0,0,0,0.7)' : '1px 1px 3px rgba(0,0,0,0.5)'),
+    'text-shadow: ' . ($big_text_shadow ? '3px 3px 6px ' . esc_attr($text_shadow_color) : '1px 1px 3px ' . esc_attr($text_shadow_color)),
     'padding: 1rem',
 ];
 

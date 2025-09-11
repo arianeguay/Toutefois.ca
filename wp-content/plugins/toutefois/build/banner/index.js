@@ -8,7 +8,7 @@
   \*******************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/banner","version":"0.1.0","title":"Banner","category":"widgets","icon":"format-image","description":"Displays a banner with a title, description, and image.","supports":{"align":["wide","full"]},"editorScript":"file:./index.js","render":"file:./render.php","attributes":{"align":{"type":"string","default":""},"title":{"type":"string","default":""},"description":{"type":"string","default":""},"image":{"type":"object","default":null},"font":{"type":"string","default":"Poppins"},"verticalAlignment":{"type":"string","default":"center"},"horizontalAlignment":{"type":"string","default":"center"},"objectPosition":{"type":"string","default":"50% 50%"},"textColor":{"type":"string","default":"#FFFFFF"},"bigTextShadow":{"type":"boolean","default":false}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/banner","version":"0.1.0","title":"Banner","category":"widgets","icon":"format-image","description":"Displays a banner with a title, description, and image.","supports":{"align":["wide","full"]},"editorScript":"file:./index.js","render":"file:./render.php","attributes":{"align":{"type":"string","default":""},"title":{"type":"string","default":""},"description":{"type":"string","default":""},"image":{"type":"object","default":null},"font":{"type":"string","default":"Poppins"},"verticalAlignment":{"type":"string","default":"center"},"horizontalAlignment":{"type":"string","default":"center"},"objectPosition":{"type":"string","default":"50% 50%"},"textColor":{"type":"string","default":"#FFFFFF"},"bigTextShadow":{"type":"boolean","default":false},"textShadowColor":{"type":"string","default":"rgba(0,0,0,0.5)"}}}');
 
 /***/ }),
 
@@ -47,45 +47,49 @@ function Edit({
     horizontalAlignment,
     objectPosition,
     textColor,
-    bigTextShadow
+    bigTextShadow,
+    textShadowColor
   } = attributes;
   const blockStyles = {
-    position: 'relative',
-    height: '300px',
-    border: '1px dashed #ccc',
-    backgroundColor: '#f0f0f0',
-    width: '100%',
+    position: "relative",
+    height: "300px",
+    border: "1px dashed #ccc",
+    backgroundColor: "#f0f0f0",
+    width: "100%",
     ...(!image && {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
     })
   };
   const imageStyles = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
     objectPosition: objectPosition,
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0
   };
   const contentStyles = {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
     zIndex: 1,
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     alignItems: horizontalAlignment,
     justifyContent: verticalAlignment,
-    textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center',
-    fontFamily: font || 'Poppins, sans-serif',
+    textAlign: horizontalAlignment === "flex-start" ? "left" : horizontalAlignment === "flex-end" ? "right" : "center",
     color: textColor,
-    textShadow: bigTextShadow ? '3px 3px 6px rgba(0,0,0,0.7)' : '1px 1px 3px rgba(0,0,0,0.5)',
-    padding: '1rem'
+    padding: "1rem"
+  };
+  const HeadingStyle = {
+    width: "fit-content",
+    fontFamily: font || "Poppins, sans-serif",
+    textShadow: bigTextShadow ? `3px 3px 6px ${textShadowColor}` : `1px 1px 3px ${textShadowColor}`
   };
   const onSelectImage = media => {
     setAttributes({
@@ -121,6 +125,9 @@ function Edit({
     }, {
       label: "Gagalin",
       value: "Gagalin"
+    }, {
+      label: "Montserrat",
+      value: "Montserrat"
     }]
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Vertical Alignment", "toutefois"),
@@ -165,22 +172,27 @@ function Edit({
       isPrimary: true
     }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Choose Image", "toutefois"))
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Image Position', 'toutefois'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Image Position", "toutefois"),
     value: objectPosition,
     onChange: value => setAttributes({
       objectPosition: value
     }),
-    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('e.g., "center top", "25% 75%"', 'toutefois')
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Text Color', 'toutefois'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('e.g., "center top", "25% 75%"', "toutefois")
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Text Color", "toutefois"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
     value: textColor,
     onChange: value => setAttributes({
       textColor: value
     })
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Big Text Shadow', 'toutefois'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Big Text Shadow", "toutefois"),
     checked: bigTextShadow,
     onChange: () => setAttributes({
       bigTextShadow: !bigTextShadow
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Text Shadow Color", "toutefois"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+    value: textShadowColor,
+    onChange: value => setAttributes({
+      textShadowColor: value
     })
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
@@ -190,9 +202,15 @@ function Edit({
     src: image.url,
     alt: title,
     style: imageStyles
-  }), !image && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Please select an image', 'toutefois')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), !image && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Please select an image", "toutefois")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     style: contentStyles
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, description))));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    style: HeadingStyle
+  }, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    style: {
+      width: "fit-content"
+    }
+  }, description))));
 }
 
 /***/ }),

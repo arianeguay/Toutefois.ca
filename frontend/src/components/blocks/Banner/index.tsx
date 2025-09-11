@@ -19,6 +19,7 @@ const Banner = () => {
         objectPosition: data.objectPosition || '50% 50%',
         textColor: data.textColor || '#FFFFFF',
         bigTextShadow: data.bigTextShadow === 'true',
+        textShadowColor: data.textShadowColor || 'rgba(0,0,0,0.5)',
       });
     }
   }, []);

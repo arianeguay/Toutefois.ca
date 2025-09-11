@@ -6,10 +6,10 @@ import {
 } from "@wordpress/block-editor";
 import {
   Button,
+  ColorPalette,
   PanelBody,
   SelectControl,
   TextControl,
-  ColorPalette,
   ToggleControl,
 } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
@@ -25,47 +25,59 @@ export default function Edit({ attributes, setAttributes }) {
     objectPosition,
     textColor,
     bigTextShadow,
+    textShadowColor,
   } = attributes;
 
   const blockStyles = {
-    position: 'relative',
-    height: '300px',
-    border: '1px dashed #ccc',
-    backgroundColor: '#f0f0f0',
-    width: '100%',
+    position: "relative",
+    height: "300px",
+    border: "1px dashed #ccc",
+    backgroundColor: "#f0f0f0",
+    width: "100%",
     ...(!image && {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
     }),
   };
 
   const imageStyles = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
     objectPosition: objectPosition,
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
   };
 
   const contentStyles = {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
     zIndex: 1,
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     alignItems: horizontalAlignment,
     justifyContent: verticalAlignment,
-    textAlign: horizontalAlignment === 'flex-start' ? 'left' : horizontalAlignment === 'flex-end' ? 'right' : 'center',
-    fontFamily: font || 'Poppins, sans-serif',
+    textAlign:
+      horizontalAlignment === "flex-start"
+        ? "left"
+        : horizontalAlignment === "flex-end"
+        ? "right"
+        : "center",
     color: textColor,
-    textShadow: bigTextShadow ? '3px 3px 6px rgba(0,0,0,0.7)' : '1px 1px 3px rgba(0,0,0,0.5)',
-    padding: '1rem',
+    padding: "1rem",
+  };
+
+  const HeadingStyle = {
+    width: "fit-content",
+    fontFamily: font || "Poppins, sans-serif",
+    textShadow: bigTextShadow
+      ? `3px 3px 6px ${textShadowColor}`
+      : `1px 1px 3px ${textShadowColor}`,
   };
 
   const onSelectImage = (media) => {
@@ -94,6 +106,7 @@ export default function Edit({ attributes, setAttributes }) {
               { label: "Poppins", value: "Poppins" },
               { label: "Cerebri", value: "Cerebri" },
               { label: "Gagalin", value: "Gagalin" },
+              { label: "Montserrat", value: "Montserrat" },
             ]}
           />
           <SelectControl
@@ -129,29 +142,38 @@ export default function Edit({ attributes, setAttributes }) {
             />
           </MediaUploadCheck>
           <TextControl
-            label={__('Image Position', 'toutefois')}
+            label={__("Image Position", "toutefois")}
             value={objectPosition}
             onChange={(value) => setAttributes({ objectPosition: value })}
-            help={__('e.g., "center top", "25% 75%"', 'toutefois')}
+            help={__('e.g., "center top", "25% 75%"', "toutefois")}
           />
-          <p><strong>{__('Text Color', 'toutefois')}</strong></p>
+          <p>
+            <strong>{__("Text Color", "toutefois")}</strong>
+          </p>
           <ColorPalette
             value={textColor}
             onChange={(value) => setAttributes({ textColor: value })}
           />
           <ToggleControl
-            label={__('Big Text Shadow', 'toutefois')}
+            label={__("Big Text Shadow", "toutefois")}
             checked={bigTextShadow}
             onChange={() => setAttributes({ bigTextShadow: !bigTextShadow })}
+          />
+          <p>
+            <strong>{__("Text Shadow Color", "toutefois")}</strong>
+          </p>
+          <ColorPalette
+            value={textShadowColor}
+            onChange={(value) => setAttributes({ textShadowColor: value })}
           />
         </PanelBody>
       </InspectorControls>
       <div {...useBlockProps({ style: blockStyles })}>
         {image && <img src={image.url} alt={title} style={imageStyles} />}
-        {!image && <p>{__('Please select an image', 'toutefois')}</p>}
+        {!image && <p>{__("Please select an image", "toutefois")}</p>}
         <div style={contentStyles}>
-          <h2>{title}</h2>
-          <p>{description}</p>
+          <h2 style={HeadingStyle}>{title}</h2>
+          <p style={{ width: "fit-content" }}>{description}</p>
         </div>
       </div>
     </>
