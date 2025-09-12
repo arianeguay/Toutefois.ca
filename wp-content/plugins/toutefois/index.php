@@ -36,6 +36,29 @@ require_once plugin_dir_path(__FILE__) . 'news.php';
 require_once plugin_dir_path(__FILE__) . 'collaborateurs.php';
 require_once plugin_dir_path(__FILE__) . 'footer.php';
 
+// Add custom page templates
+function toutefois_add_page_templates($templates) {
+    $templates['template-no-margin.php'] = __('No Margin', 'toutefois');
+    $templates['template-banner.php'] = __('With Banner', 'toutefois');
+    $templates['template-title.php'] = __('With Title', 'toutefois');
+    return $templates;
+}
+add_filter('theme_page_templates', 'toutefois_add_page_templates');
+
+
+// Expose page template to REST API
+function toutefois_register_template_meta() {
+    register_post_meta('page', '_wp_page_template', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+        'auth_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('rest_api_init', 'toutefois_register_template_meta');
+
 
 // 8. Expose menu to REST API
 function get_top_nav_menu()

@@ -32,6 +32,7 @@ export interface WordpressPage {
   };
   link: string;
   slug: string;
+  template?: string;
   parent?: number; // Parent page ID for hierarchical pages
   // Add additional WordPress fields that might be useful for debugging
   _links?: {

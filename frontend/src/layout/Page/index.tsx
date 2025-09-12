@@ -105,7 +105,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
   };
 
   return (
-    <PageWrapper>
+    <PageWrapper template={page.template}>
       <Header currentPage={page} />
       <MainContent>
         {!!page.content?.rendered && parse(page.content.rendered, options)}
