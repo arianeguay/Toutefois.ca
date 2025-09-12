@@ -26,7 +26,7 @@ if (empty($view_all_url)) {
     if ($content_type === 'project') {
         $view_all_url = '/projets';
     } elseif ($content_type === 'news') {
-        $view_all_url = '/actualites';
+        $view_all_url = '/archives';
     } else {
         $view_all_url = '/';
     }

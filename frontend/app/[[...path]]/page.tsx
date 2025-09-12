@@ -1,5 +1,6 @@
 import api from '@/api';
 import PageLayout from '@/layout/Page';
+import { WordpressPage } from '@/types';
 import { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
@@ -29,7 +30,7 @@ export async function generateMetadata({
     // Construct the slug from the path segments
     const slug = params.path.join('/');
     // Handle posts
-    if (params.path.length === 2 && params.path[0] === 'actualites') {
+    if (params.path.length === 2 && params.path[0] === 'archives') {
       const postData = await api.fetchPostBySlug(params.path[1]);
       const post = Array.isArray(postData) ? postData[0] : postData;
 
@@ -185,7 +186,18 @@ export default async function Page({
 
         if (collaborators?.length) {
           console.log('Found collaborators:', collaborators);
-          return <PageLayout page={collaborators[0] as any} />;
+
+          const formattedCollaboratorsPage: WordpressPage = {
+            ...collaborators[0],
+            link: collaborators[0].slug
+              ? `/collaborateurs/${collaborators[0].slug}`
+              : '',
+            meta: {
+              ...collaborators[0].meta,
+              main_color: collaborators[0].meta?.main_color,
+            },
+          };
+          return <PageLayout page={formattedCollaboratorsPage as any} />;
         } else {
           console.log('Collaborators not found:', params.path[1]);
           notFound();
@@ -195,8 +207,8 @@ export default async function Page({
         notFound();
       }
     }
-    // Special handling for post routes - matches /actualites/[slug] pattern
-    if (params.path.length === 2 && params.path[0] === 'actualites') {
+    // Special handling for post routes - matches /archives/[slug] pattern
+    if (params.path.length === 2 && params.path[0] === 'archives') {
       console.log('Detected post route. Fetching post:', params.path[1]);
       try {
         const postData = await api.fetchPostBySlug(params.path[1]);
@@ -211,7 +223,7 @@ export default async function Page({
             title: post.title,
             content: post.content,
             excerpt: post.excerpt,
-            link: post.link,
+            link: `/archives/${post.slug}`,
             slug: post.slug,
             isPost: true,
           };

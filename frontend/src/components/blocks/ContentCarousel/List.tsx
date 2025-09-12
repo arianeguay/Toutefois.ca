@@ -33,7 +33,7 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
   items,
   contentType,
   title = contentType === 'project' ? 'Nos projets' : 'Quoi de neuf?',
-  viewAllUrl = contentType === 'project' ? '/projets' : '/actualites',
+  viewAllUrl = contentType === 'project' ? '/projets' : '/archives',
   viewAllText = contentType === 'project'
     ? 'Voir tous les projets'
     : 'Voir tous les articles',

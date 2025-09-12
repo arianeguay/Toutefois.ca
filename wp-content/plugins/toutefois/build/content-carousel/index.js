@@ -24,12 +24,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
 
 
 
@@ -49,42 +49,42 @@ function Edit({
   // Default titles based on content type
   const getDefaultTitle = () => {
     switch (contentType) {
-      case 'project':
-        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nos projets', 'toutefois-blocks');
-      case 'news':
-        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Quoi de neuf?', 'toutefois-blocks');
-      case 'mixed':
-        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Contenu récent', 'toutefois-blocks');
+      case "project":
+        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Nos projets", "toutefois-blocks");
+      case "news":
+        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Quoi de neuf?", "toutefois-blocks");
+      case "mixed":
+        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Contenu récent", "toutefois-blocks");
       default:
-        return '';
+        return "";
     }
   };
 
   // Default view all URL based on content type
   const getDefaultViewAllUrl = () => {
     switch (contentType) {
-      case 'project':
-        return '/projets';
-      case 'news':
-        return '/actualites';
-      case 'mixed':
-        return '/';
+      case "project":
+        return "/projets";
+      case "news":
+        return "/archives";
+      case "mixed":
+        return "/";
       default:
-        return '';
+        return "";
     }
   };
 
   // Default view all text based on content type
   const getDefaultViewAllText = () => {
     switch (contentType) {
-      case 'project':
-        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Voir tous les projets', 'toutefois-blocks');
-      case 'news':
-        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Voir tous les articles', 'toutefois-blocks');
-      case 'mixed':
-        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Voir tout', 'toutefois-blocks');
+      case "project":
+        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Voir tous les projets", "toutefois-blocks");
+      case "news":
+        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Voir tous les articles", "toutefois-blocks");
+      case "mixed":
+        return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Voir tout", "toutefois-blocks");
       default:
-        return '';
+        return "";
     }
   };
 
@@ -97,45 +97,45 @@ function Edit({
       viewAllText: viewAllText || getDefaultViewAllText()
     });
   };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content Carousel Settings', 'toutefois-blocks')
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content Type', 'toutefois-blocks'),
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Content Carousel Settings", "toutefois-blocks")
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Content Type", "toutefois-blocks"),
     value: contentType,
     options: [{
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Projects', 'toutefois-blocks'),
-      value: 'project'
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Projects", "toutefois-blocks"),
+      value: "project"
     }, {
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('News', 'toutefois-blocks'),
-      value: 'news'
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("News", "toutefois-blocks"),
+      value: "news"
     }, {
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mixed (Projects & News)', 'toutefois-blocks'),
-      value: 'mixed'
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Mixed (Projects & News)", "toutefois-blocks"),
+      value: "mixed"
     }],
     onChange: handleContentTypeChange
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title', 'toutefois-blocks'),
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Title", "toutefois-blocks"),
     value: title,
     placeholder: getDefaultTitle(),
     onChange: value => setAttributes({
       title: value
     })
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('View All URL', 'toutefois-blocks'),
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("View All URL", "toutefois-blocks"),
     value: viewAllUrl,
     placeholder: getDefaultViewAllUrl(),
     onChange: value => setAttributes({
       viewAllUrl: value
     })
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('View All Text', 'toutefois-blocks'),
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("View All Text", "toutefois-blocks"),
     value: viewAllText,
     placeholder: getDefaultViewAllText(),
     onChange: value => setAttributes({
       viewAllText: value
     })
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Item Limit', 'toutefois-blocks'),
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Item Limit", "toutefois-blocks"),
     value: limit,
     onChange: value => setAttributes({
       limit: value
@@ -143,10 +143,10 @@ function Edit({
     min: 1,
     max: 20
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
+    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "wp-block-toutefois-content-carousel-placeholder"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content Carousel', 'toutefois-blocks')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, contentType === 'project' && (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Displaying recent projects', 'toutefois-blocks'), contentType === 'news' && (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Displaying recent news', 'toutefois-blocks'), contentType === 'mixed' && (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Displaying recent projects and news', 'toutefois-blocks')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Limit:', 'toutefois-blocks'), " ", limit), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title:', 'toutefois-blocks'), " ", title || getDefaultTitle()), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('This block will be rendered as a carousel in the frontend.', 'toutefois-blocks')))));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Content Carousel", "toutefois-blocks")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, contentType === "project" && (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Displaying recent projects", "toutefois-blocks"), contentType === "news" && (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Displaying recent news", "toutefois-blocks"), contentType === "mixed" && (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Displaying recent projects and news", "toutefois-blocks")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Limit:", "toutefois-blocks"), " ", limit), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Title:", "toutefois-blocks"), " ", title || getDefaultTitle()), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("This block will be rendered as a carousel in the frontend.", "toutefois-blocks")))));
 }
 
 /***/ }),

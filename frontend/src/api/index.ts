@@ -90,6 +90,10 @@ class Api {
     return this.fetchFromApi('wp/v2/pages');
   }
 
+  async fetchPageById(id: number): Promise<WordpressPage> {
+    return this.fetchFromApi(`wp/v2/pages/${id}`);
+  }
+
   async fetchImageById(id: string): Promise<WordpressImage> {
     return this.fetchFromApi(`wp/v2/media/${id}`);
   }

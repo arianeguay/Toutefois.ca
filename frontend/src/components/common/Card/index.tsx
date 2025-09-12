@@ -36,13 +36,17 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
   // For WordPress posts and projects
   const wpItem = item as WordpressPost | WordpressProject;
 
-  const title = typeof wpItem.title === 'string' ? wpItem.title : wpItem.title.rendered;
-  const excerpt = typeof wpItem.excerpt === 'string' ? wpItem.excerpt : wpItem.excerpt.rendered;
+  const title =
+    typeof wpItem.title === 'string' ? wpItem.title : wpItem.title.rendered;
+  const excerpt =
+    typeof wpItem.excerpt === 'string'
+      ? wpItem.excerpt
+      : wpItem.excerpt.rendered;
 
   const linkPath =
     contentType === 'project'
       ? `/projets/${wpItem.slug}`
-      : `/actualites/${wpItem.slug}`;
+      : `/archives/${wpItem.slug}`;
 
   return (
     <Link href={linkPath}>

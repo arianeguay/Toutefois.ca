@@ -38,7 +38,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
   const linkPath =
     contentType === 'project'
       ? `/projets/${wpItem.slug}`
-      : `/actualites/${wpItem.slug}`;
+      : `/archives/${wpItem.slug}`;
 
   return (
     <Link href={linkPath}>

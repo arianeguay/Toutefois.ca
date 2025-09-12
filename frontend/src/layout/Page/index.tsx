@@ -1,3 +1,4 @@
+import api from '@/api';
 import CollaboratorsBlock from '@/components/blocks/CollaboratorsBlock';
 import ContentCarousel from '@/components/blocks/ContentCarousel';
 import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
@@ -19,7 +20,43 @@ interface PageLayoutProps {
   page: WordpressPage;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
+const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
+  // Treat the link as a string to robustly get the path, avoiding errors if it's not a full URL.
+  const pathname = page.link.replace(/^(?:https?:\/\/)?[^/]+\/?/, '');
+  const pathSegments = pathname.split('/').filter((segment: string) => segment);
+
+  let parentColor: string | undefined;
+
+  if (pathSegments.length > 1) {
+    const parentSlug = pathSegments[0];
+
+    const parentPageSlug =
+      parentSlug === 'collaborateurs' ? 'notre-mission' : parentSlug;
+    try {
+      const parentPageData = await api.fetchPageBySlug(parentPageSlug);
+      const parentPage = Array.isArray(parentPageData)
+        ? parentPageData[0]
+        : parentPageData;
+
+      if (parentPage && parentPage.meta?.main_color) {
+        parentColor = parentPage.meta.main_color;
+      }
+    } catch (error) {
+      console.error(
+        `Failed to fetch parent page for slug: ${parentPageSlug}`,
+        error,
+      );
+    }
+  }
+
+  // Create a page object for the header, using the parent color if available
+  const headerPage = {
+    ...page,
+    meta: {
+      ...page.meta,
+      main_color: parentColor || page.meta?.main_color,
+    },
+  };
   const template = page.template?.length ? page.template : 'template-title.php';
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
@@ -117,7 +154,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
 
   return (
     <PageWrapper template={template}>
-      <Header currentPage={page} />
+      <Header currentPage={headerPage} />
       <MainContent>
         {template === 'template-title.php' && (
           <Typography
@@ -130,7 +167,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
         )}
         {!!page.content?.rendered && parse(page.content.rendered, options)}
       </MainContent>
-      <Footer currentPage={page} />
+      <Footer currentPage={headerPage} />
     </PageWrapper>
   );
 };

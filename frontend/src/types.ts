@@ -46,7 +46,7 @@ export interface WordpressPage {
     [key: string]: any;
   };
   meta?: {
-    main_color: string;
+    main_color?: string;
   };
 }
 
