@@ -211,7 +211,7 @@ class Api {
   }
 
   async fetchCollaboratorBySlug(slug: string): Promise<WordpressCollaborator> {
-    return this.fetchFromApi(`wp/v2/collaborateurs?slug=${slug}`);
+    return this.fetchFromApi(`wp/v2/collaborateur?slug=${slug}`);
   }
 }
 

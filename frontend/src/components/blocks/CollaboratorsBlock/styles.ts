@@ -22,18 +22,34 @@ export const PhotoContainer = styled.div`
   flex-shrink: 0;
   width: 350px;
   aspect-ratio: 11/16;
+  padding: 0;
+  margin: 0;
+  display: flex;
   background-color: ${({ theme }) => theme.colors.borderColor1};
 `;
 export const Photo = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  margin: 0;
 `;
 
 export const Info = styled.div``;
 const ContainerVerticalStyling = css`
   flex-direction: column;
+
   ${Card} {
+    margin-block: ${({ theme }) => theme.spacing.md}px;
+    position: relative;
+    ${ContainerContentStyling}
+    z-index: 1;
+
+    background-color: ${({ theme }) => theme.colors.sectionColor3}10;
+    box-shadow: ${({ theme }) => theme.boxShadow.sm};
+    border: 1px solid ${({ theme }) => theme.colors.borderColor1};
+    border-radius: ${({ theme }) => theme.borderRadius.sm}px;
+    overflow: hidden;
+    max-width: ${({ theme }) => 1200 + theme.spacing.xxl}px;
     flex-direction: row;
     align-items: center;
     &:nth-child(even) {
@@ -56,7 +72,29 @@ const ContainerVerticalStyling = css`
       ${createFontStyleCSS('body')}
     }
     ${Info} {
-      padding-inline: ${({ theme }) => theme.spacing.xlAdd}px;
+      padding-block: ${({ theme }) => theme.spacing.md}px;
+      padding-inline: ${({ theme }) => theme.spacing.xxl}px;
+    }
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      &:nth-child(even) {
+        flex-direction: column;
+      }
+      ${PhotoContainer} {
+        width: 100%;
+        max-width: 360px;
+        box-shadow: ${({ theme }) => theme.boxShadow.md};
+        margin-block-start: ${({ theme }) => theme.spacing.md}px;
+        border-radius: ${({ theme }) => theme.borderRadius.md}px;
+        overflow: hidden;
+        border: 1px solid ${({ theme }) => theme.colors.borderColor1};
+      }
+      ${Info} {
+        padding-inline: 0;
+        max-width: 460px;
+      }
     }
   }
 `;
@@ -64,10 +102,12 @@ const ContainerVerticalStyling = css`
 const ContainerHorizontalStyling = css`
   flex-direction: row;
   flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.xl}px;
+  ${ContainerContentStyling}
 
   ${Card} {
     flex-direction: column;
-    width: 380px;
+    width: 370px;
     ${PhotoContainer} {
       width: 250px;
     }
@@ -86,6 +126,17 @@ const ContainerHorizontalStyling = css`
       padding-block-start: ${({ theme }) => theme.spacing.md}px;
     }
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    align-items: center;
+    gap: ${({ theme }) => theme.spacing.xl}px;
+    ${Card} {
+      text-align: center;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+  }
 `;
 
 export const Container = styled.div<ContainerProps>`
@@ -93,7 +144,6 @@ export const Container = styled.div<ContainerProps>`
   gap: ${({ theme }) => theme.spacing.md}px;
   justify-content: center;
 
-  ${ContainerContentStyling}
   ${({ $layout }) =>
     $layout === 'vertical'
       ? ContainerVerticalStyling

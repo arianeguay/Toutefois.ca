@@ -20,7 +20,7 @@ interface PageLayoutProps {
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
-  const template = page.template ?? 'template-title.php';
+  const template = page.template?.length ? page.template : 'template-title.php';
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.attribs) {
