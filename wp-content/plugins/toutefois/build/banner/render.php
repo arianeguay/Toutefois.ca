@@ -50,6 +50,7 @@ $body_style = [
     'max-width: 1200px',
     'margin-inline: auto',
     'width: 100%',
+    'height: 100%',
     'display: flex',
     'flex-direction: column',
     'align-items: ' . esc_attr($horizontal_alignment),
