@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerContentStyling } from '@/theme';
+import { ContainerContentStyling } from '@/theme/global-styles';
 import styled from 'styled-components';
 
 export const SlideBody = styled.div`

@@ -3,6 +3,7 @@ import { ThemeProvider } from '@/providers/theme-provider';
 import { Metadata } from 'next';
 import { Montserrat, Poppins } from 'next/font/google';
 import './globals.css';
+import BlockMount from '@/components/wordpress/BlockMount';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -31,7 +32,10 @@ export default function RootLayout({
     <html lang="fr">
       <body className={`${montserrat.variable} ${poppins.variable}`}>
         <StyledComponentsRegistry>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            {children}
+            <BlockMount />
+          </ThemeProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

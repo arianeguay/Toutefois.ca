@@ -1,4 +1,4 @@
-import { ContainerContentStyling } from '@/theme';
+import { ContainerContentStyling } from '@/theme/global-styles';
 import styled, { css } from 'styled-components';
 
 export const ContainerStyled = styled.div<{
