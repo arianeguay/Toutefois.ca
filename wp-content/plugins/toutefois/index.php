@@ -202,9 +202,10 @@ add_action('rest_api_init', 'add_cors_headers', 1);
 // 11. Register Gutenberg Blocks
 function toutefois_register_blocks()
 {
-    $block_folders = glob(plugin_dir_path(__FILE__) . 'build/*', GLOB_ONLYDIR);
-    foreach ($block_folders as $block_folder) {
-        register_block_type($block_folder);
+    foreach (glob(plugin_dir_path(__FILE__) . 'src/*') as $dir) {
+        if (is_dir($dir)) {
+            register_block_type($dir);
+        }
     }
 }
 add_action('init', 'toutefois_register_blocks');

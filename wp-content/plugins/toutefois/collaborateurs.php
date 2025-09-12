@@ -70,15 +70,10 @@ function collaborateurs_cpt_and_meta_init()
     register_post_type('collaborateur', $args);
 
     // Register Meta Fields for REST API
-    register_post_meta('collaborateur', '_collaborateur_type', array(
+    register_post_meta('collaborateur', '_collaborateur_poste', array(
         'show_in_rest' => true,
         'single' => true,
         'type' => 'string',
-    ));
-    register_post_meta('collaborateur', '_collaborateur_image_id', array(
-        'show_in_rest' => true,
-        'single' => true,
-        'type' => 'integer',
     ));
     register_post_meta('collaborateur', '_collaborateur_bio', array(
         'show_in_rest' => true,
@@ -112,26 +107,17 @@ function collaborateurs_meta_box_callback($post)
 {
     wp_nonce_field('collaborateurs_save_meta_box_data', 'collaborateurs_meta_box_nonce');
 
-    $type = get_post_meta($post->ID, '_collaborateur_type', true);
+    $poste = get_post_meta($post->ID, '_collaborateur_poste', true);
     $bio = get_post_meta($post->ID, '_collaborateur_bio', true);
     $is_member = get_post_meta($post->ID, '_collaborateur_is_member', true);
-    $image_id = get_post_meta($post->ID, '_collaborateur_image_id', true);
+
     echo '<style> .projet-field { display: grid; grid-template-columns: 150px 1fr; gap: 10px; margin-bottom: 15px; align-items: center; } .projet-field label { font-weight: bold; } .projet-field input, .projet-field textarea { width: 100%; } </style>';
 
-    echo '<div class="projet-field"><label for="collaborateur_type">Type :</label><input type="text" id="collaborateur_type" name="collaborateur_type" value="' . esc_attr($type) . '" size="25" /></div>';
+    echo '<div class="projet-field"><label for="collaborateur_poste">Poste :</label><input type="text" id="collaborateur_poste" name="collaborateur_poste" value="' . esc_attr($poste) . '" size="25" /></div>';
     echo '<div class="projet-field"><label for="collaborateur_bio">Bio :</label><textarea id="collaborateur_bio" name="collaborateur_bio" rows="4">' . esc_textarea($bio) . '</textarea></div>';
     echo '<div class="projet-field"><label for="collaborateur_is_member">Membre :</label><input type="checkbox" id="collaborateur_is_member" name="collaborateur_is_member" value="1" ' . checked($is_member, 1, false) . ' /></div>';
 
-    echo '<div class="projet-field"><label for="collaborateur_image">Image :</label><div>';
-    echo '<input type="hidden" name="collaborateur_image_id" id="collaborateur_image_id" value="' . esc_attr($image_id) . '" />';
-    echo '<div id="collaborateur_image_preview">';
-    if ($image_id) {
-        echo wp_get_attachment_image($image_id, 'medium');
-    }
-    echo '</div>';
-    echo '<input type="button" id="upload_image_button" class="button" value="' . __('Choisir une image', 'text_domain') . '" />';
-    echo '<input type="button" id="remove_image_button" class="button" value="' . __('Supprimer l’image', 'text_domain') . '" />';
-    echo '</div></div>';
+    echo '<p>Pour l\'image du collaborateur, veuillez utiliser l\'option "Image à la une" sur le côté droit de l\'éditeur.</p>';
 }
 
 // 4. Save Meta Box Data
@@ -148,10 +134,9 @@ function collaborateurs_save_meta_box_data($post_id)
     }
 
     $fields = [
-        'collaborateur_type' => 'sanitize_text_field',
+        'collaborateur_poste' => 'sanitize_text_field',
         'collaborateur_bio' => 'sanitize_textarea_field',
         'collaborateur_is_member' => 'boolval',
-        'collaborateur_image_id' => 'intval',
     ];
 
     foreach ($fields as $key => $sanitize_callback) {
@@ -165,48 +150,4 @@ function collaborateurs_save_meta_box_data($post_id)
 }
 add_action('save_post_collaborateur', 'collaborateurs_save_meta_box_data');
 
-// 5. Enqueue WordPress media scripts
-function collaborateurs_enqueue_media_scripts()
-{
-    wp_enqueue_media();
-}
-add_action('admin_enqueue_scripts', 'collaborateurs_enqueue_media_scripts');
-
-// 6. Inline script for media uploader
-function collaborateurs_add_inline_media_script()
-{
-?>
-    <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            var mediaUploader;
-            $('body').on('click', '#upload_image_button', function(e) {
-                e.preventDefault();
-                if (mediaUploader) {
-                    mediaUploader.open();
-                    return;
-                }
-                mediaUploader = wp.media.frames.file_frame = wp.media({
-                    title: 'Choisir une image',
-                    button: {
-                        text: 'Choisir cette image'
-                    },
-                    multiple: false
-                });
-                mediaUploader.on('select', function() {
-                    var attachment = mediaUploader.state().get('selection').first().toJSON();
-                    $('#collaborateur_image_id').val(attachment.id);
-                    $('#collaborateur_image_preview').html('<img src="' + attachment.url + '" style="max-width:100%;height:auto;">');
-                });
-                mediaUploader.open();
-            });
-            $('body').on('click', '#remove_image_button', function(e) {
-                e.preventDefault();
-                $('#collaborateur_image_id').val('');
-                $('#collaborateur_image_preview').html('');
-            });
-        });
-    </script>
-<?php
-}
-add_action('admin_footer', 'collaborateurs_add_inline_media_script');
 add_post_type_support('collaborateur', 'thumbnail');
