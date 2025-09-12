@@ -37,23 +37,26 @@ require_once plugin_dir_path(__FILE__) . 'collaborateurs.php';
 require_once plugin_dir_path(__FILE__) . 'footer.php';
 
 // Add custom page templates
-function toutefois_add_page_templates($templates) {
-    $templates['template-no-margin.php'] = __('No Margin', 'toutefois');
-    $templates['template-banner.php'] = __('With Banner', 'toutefois');
-    $templates['template-title.php'] = __('With Title', 'toutefois');
+function toutefois_add_page_templates($templates, $theme, $post)
+{
+    if ($post && in_array($post->post_type, ['page', 'projet'])) {
+        $templates['template-no-margin.php'] = __('No Margin', 'toutefois');
+        $templates['template-banner.php'] = __('With Banner', 'toutefois');
+        $templates['template-title.php'] = __('With Title', 'toutefois');
+    }
     return $templates;
 }
-add_filter('theme_page_templates', 'toutefois_add_page_templates');
-add_filter('theme_projet_templates', 'toutefois_add_page_templates');
+add_filter('theme_templates', 'toutefois_add_page_templates', 10, 3);
 
 
 // Expose page template to REST API
-function toutefois_register_template_meta() {
+function toutefois_register_template_meta()
+{
     register_post_meta('page', '_wp_page_template', array(
         'show_in_rest' => true,
         'single' => true,
         'type' => 'string',
-        'auth_callback' => function() {
+        'auth_callback' => function () {
             return current_user_can('edit_posts');
         }
     ));
