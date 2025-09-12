@@ -21,17 +21,25 @@ $text_shadow_color = isset($attributes['textShadowColor']) ? $attributes['textSh
 // Build inline styles for the container
 $container_styles = [
     'position: relative',
-    'height: 300px',
+    'height: 350px',
     'width: 100%',
     'margin-bottom:24px',
 ];
+
+
+$image_style = [
+    'width: 100%',
+    'height: 100%',
+];
+
 if ($image && !empty($image['url'])) {
-    $container_styles[] = 'background-image: url(' . esc_url($image['url']) . ')';
-    $container_styles[] = 'background-size: cover';
-    $container_styles[] = 'background-position: ' . esc_attr($object_position);
+    $image_style[] = 'background-image: url(' . esc_url($image['url']) . ')';
+    $image_style[] = 'background-size: cover';
+    $image_style[] = 'background-position: ' . esc_attr($object_position);
+    $image_style[] = 'filter: blur(2px)';
 } else {
-    $container_styles[] = 'background-color: #f0f0f0';
-    $container_styles[] = 'border: 1px dashed #ccc';
+    $image_style[] = 'background-color: #f0f0f0';
+    $image_style[] = 'border: 1px dashed #ccc';
 }
 
 // Build inline styles for the content wrapper
@@ -77,6 +85,7 @@ $heading_style = [
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
+    <div style="<?php echo implode('; ', $image_style); ?>"></div>
     <div style="<?php echo implode('; ', $content_styles); ?>">
         <div style="<?php echo implode('; ', $body_style); ?>">
             <?php if ($title) : ?>
