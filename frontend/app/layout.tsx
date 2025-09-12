@@ -1,7 +1,6 @@
-import type { Metadata } from 'next';
+import StyledComponentsRegistry from '@/lib/registry';
+import { ThemeProvider } from '@/providers/theme-provider';
 import { Montserrat, Poppins } from 'next/font/google';
-import StyledComponentsRegistry from '../src/lib/registry';
-import { ThemeProvider } from '../src/providers/theme-provider';
 import './globals.css';
 
 const montserrat = Montserrat({
