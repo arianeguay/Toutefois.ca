@@ -48,8 +48,13 @@ $content_styles = [
     'text-align: ' . (esc_attr($horizontal_alignment) === 'flex-start' ? 'left' : (esc_attr($horizontal_alignment) === 'flex-end' ? 'right' : 'center')),
     'color: ' . esc_attr($text_color),
     'padding: 1rem',
+
 ];
 
+$body_style = [
+    'max-width: 1200px',
+    'margin-inline: auto',
+];
 
 
 $wrapper_attributes = get_block_wrapper_attributes([
@@ -61,6 +66,7 @@ $heading_style = [
     'font-family: ' . esc_attr($font) . ', sans-serif',
     'text-shadow: ' . ($big_text_shadow ? '4px 3px 0px ' . esc_attr($text_shadow_color) : '1px 1px 3px ' . esc_attr($text_shadow_color)),
     'margin: 0',
+    ''
 
 ];
 
@@ -68,11 +74,13 @@ $heading_style = [
 
 <div <?php echo $wrapper_attributes; ?>>
     <div style="<?php echo implode('; ', $content_styles); ?>">
-        <?php if ($title) : ?>
-            <h2 style="<?php echo implode('; ', $heading_style); ?>"><?php echo esc_html($title); ?></h2>
-        <?php endif; ?>
-        <?php if ($description) : ?>
-            <p style="width: fit-content"><?php echo esc_html($description); ?></p>
-        <?php endif; ?>
+        <div style="<?php echo implode('; ', $body_style); ?>">
+            <?php if ($title) : ?>
+                <h2 style="<?php echo implode('; ', $heading_style); ?>"><?php echo esc_html($title); ?></h2>
+            <?php endif; ?>
+            <?php if ($description) : ?>
+                <p style="width: fit-content"><?php echo esc_html($description); ?></p>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
