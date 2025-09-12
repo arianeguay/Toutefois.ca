@@ -1,5 +1,6 @@
 import Typography from '@/components/common/typography';
 import { WordpressProject } from '@/types';
+import parse from 'html-react-parser';
 import {
   ProjectCardBody,
   ProjectCardContainer,
@@ -22,7 +23,7 @@ const ProjectCard: React.FC<WordpressProject> = ({
           {featured_image_url && <img src={featured_image_url} alt={title} />}
         </ProjectCardCover>
         <ProjectCardBody>
-          <Typography variant="h4">{title}</Typography>
+          <Typography variant="h4">{parse(title)}</Typography>
           <Typography variant="body" lineClamp={4}>
             {excerpt}
           </Typography>
