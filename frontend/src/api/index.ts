@@ -209,6 +209,10 @@ class Api {
 
     return footer;
   }
+
+  async fetchCollaboratorBySlug(slug: string): Promise<WordpressCollaborator> {
+    return this.fetchFromApi(`wp/v2/collaborateurs?slug=${slug}`);
+  }
 }
 
 // Create a singleton instance

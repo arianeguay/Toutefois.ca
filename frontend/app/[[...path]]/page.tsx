@@ -170,6 +170,31 @@ export default async function Page({
       }
     }
 
+    if (params.path.length === 2 && params.path[0] === 'collaborateurs') {
+      console.log(
+        'Detected collaborators route. Fetching collaborators:',
+        params.path[1],
+      );
+      try {
+        const collaboratorsData = await api.fetchCollaboratorBySlug(
+          params.path[1],
+        );
+        const collaborators = Array.isArray(collaboratorsData)
+          ? collaboratorsData
+          : [collaboratorsData];
+
+        if (collaborators?.length) {
+          console.log('Found collaborators:', collaborators);
+          return <PageLayout page={collaborators[0] as any} />;
+        } else {
+          console.log('Collaborators not found:', params.path[1]);
+          notFound();
+        }
+      } catch (collaboratorsError) {
+        console.error('Error fetching collaborators:', collaboratorsError);
+        notFound();
+      }
+    }
     // Special handling for post routes - matches /actualites/[slug] pattern
     if (params.path.length === 2 && params.path[0] === 'actualites') {
       console.log('Detected post route. Fetching post:', params.path[1]);
