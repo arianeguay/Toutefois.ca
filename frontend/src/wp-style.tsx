@@ -596,16 +596,4 @@ export const WordpressStyling = css`
     display: table;
     clear: both;
   }
-
-  .wp-block-toutefois-banner {
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p {
-      font-family: inherit;
-    }
-  }
 `;
