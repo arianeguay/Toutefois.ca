@@ -132,6 +132,44 @@ export const theme = {
   },
 };
 
+// --- Mobile theme (typography et espacements réduits) ---
+export const mobileTheme: typeof theme = {
+  ...theme,
+  fontSizes: {
+    h1: 32,
+    h2: 24,
+    h3: 20,
+    h4: 18,
+    body: 14,
+    small: 12,
+    subtitle: 16,
+    big: 16,
+  },
+  lineHeights: {
+    h1: 40,
+    h2: 32,
+    h3: 28,
+    h4: 24,
+    h5: 20,
+    h6: 18,
+    body: 22,
+    small: 18,
+    subtitle: 24,
+    big: 24,
+  },
+  spacing: {
+    xs: 2,
+    sm: 6,
+    md: 12,
+    lg: 16,
+    xl: 24,
+    xxl: 32,
+  },
+  appearance: {
+    headerHeight: '56px',
+  },
+};
+
 export type ThemeType = typeof theme;
 
 export default theme;

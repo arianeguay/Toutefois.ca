@@ -66,16 +66,47 @@ export const WordpressStyling = css`
   .is-content-justification-right {
     justify-content: flex-end;
   }
+
+  & > p,
+  & > ul,
+  & > ol,
+  & > h1,
+  & > h2,
+  & > h3,
+  & > h4,
+  & > h5,
+  & > h6,
+  .wp-block-group > p,
+  .wp-block-group > ul,
+  .wp-block-group > ol,
+  .wp-block-group > h1,
+  .wp-block-group > h2,
+  .wp-block-group > h3,
+  .wp-block-group > h4,
+  .wp-block-group > h5,
+  .wp-block-group > h6 {
+    ${ContainerContentStyling}
+  }
+
   .wp-block-group {
-    padding-block: ${({ theme }) => theme.spacing.xxl}px;
+    &:not(.wp-block-group .wp-block-group) {
+      padding-block: ${({ theme }) => theme.spacing.xxl}px;
+      &:not(& > .wp-block-group__inner-container):not(&.has-background) {
+        ${ContainerContentStyling}
+        padding-block: ${({ theme }) => theme.spacing.md}px;
+      }
 
-    &:not(& > .wp-block-group__inner-container):not(&.has-background) {
-      ${ContainerContentStyling}
-      padding-block: ${({ theme }) => theme.spacing.md}px;
+      .wp-block-group__inner-container {
+        ${ContainerContentStyling}
+      }
     }
-
-    .wp-block-group__inner-container {
-      ${ContainerContentStyling}
+    @media (max-width: 1200px) {
+      .wp-block-paragraph,
+      .wp-block-list,
+      .wp-block-heading,
+      & > p {
+        padding-inline: 0;
+      }
     }
   }
 
@@ -125,27 +156,6 @@ export const WordpressStyling = css`
   }
   a:hover {
     color: ${({ theme }) => theme.prose.linkHover};
-  }
-
-  & > p,
-  & > ul,
-  & > ol,
-  & > h1,
-  & > h2,
-  & > h3,
-  & > h4,
-  & > h5,
-  & > h6,
-  .wp-block-group > p,
-  .wp-block-group > ul,
-  .wp-block-group > ol,
-  .wp-block-group > h1,
-  .wp-block-group > h2,
-  .wp-block-group > h3,
-  .wp-block-group > h4,
-  .wp-block-group > h5,
-  .wp-block-group > h6 {
-    ${ContainerContentStyling}
   }
 
   p {
@@ -243,6 +253,21 @@ export const WordpressStyling = css`
       }
       &.is-content-justification-right {
         justify-content: flex-end;
+      }
+      @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+        flex-direction: column;
+        &.is-content-justification-center {
+          justify-content: flex-start;
+          align-items: center;
+        }
+        &.is-content-justification-left {
+          justify-content: flex-start;
+          align-items: flex-start;
+        }
+        &.is-content-justification-right {
+          justify-content: flex-start;
+          align-items: flex-end;
+        }
       }
     }
     &.is-vertical {
