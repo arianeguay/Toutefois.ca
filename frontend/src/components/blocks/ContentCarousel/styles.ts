@@ -3,12 +3,6 @@
 import { ContainerContentStyling } from '@/theme/global-styles';
 import styled from 'styled-components';
 
-export const ListContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: ${({ theme }) => theme.spacing.md}px;
-`;
-
 export const BackgroundImage = styled.img`
   width: 100%;
   height: 100%;
@@ -39,9 +33,17 @@ export const ContentListContainer = styled.div`
   max-width: 100%;
   position: relative;
   ${ContainerContentStyling}
-
+  overflow:hidden;
+  padding-inline: 32px;
+  padding-block-end: ${({ theme }) => theme.spacing.lg}px;
   .swiper {
     width: 100%;
+    --swiper-navigation-size: 36px;
+    --swiper-pagination-bottom: -20px;
+    --swiper-navigation-sides-offset: -32px;
+    --swiper-navigation-color: ${({ theme }) => theme.colors.lightText};
+    --swiper-pagination-color: ${({ theme }) => theme.colors.lightText};
+    overflow: visible;
     .swiper-wrapper {
       padding-block: ${({ theme }) => theme.spacing.md}px;
       width: 100%;

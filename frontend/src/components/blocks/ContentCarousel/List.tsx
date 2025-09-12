@@ -94,18 +94,16 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
         </ContentListHeader>
         <Swiper
           onSlideChange={handleCurrentChange}
-          spaceBetween={theme.spacing.sm}
+          spaceBetween={32}
           slidesPerView={1}
           pagination={{ clickable: true }}
           navigation={true}
           breakpoints={{
             [pxToNumber(theme.breakpoints.md)]: {
               slidesPerView: 2,
-              spaceBetween: theme.spacing.md,
             },
             [pxToNumber(theme.breakpoints.lg)]: {
               slidesPerView: 3,
-              spaceBetween: theme.spacing.lg,
             },
           }}
           modules={[Pagination, Navigation]}
