@@ -23,6 +23,7 @@ $container_styles = [
     'position: relative',
     'height: 300px',
     'width: 100%',
+    'margin-bottom:16px',
 ];
 if ($image && !empty($image['url'])) {
     $container_styles[] = 'background-image: url(' . esc_url($image['url']) . ')';
@@ -49,30 +50,26 @@ $content_styles = [
     'padding: 1rem',
 ];
 
-$content_attributes = get_block_wrapper_attributes([
-    'style' => implode('; ', $content_styles),
-]);
+
 
 $wrapper_attributes = get_block_wrapper_attributes([
     'style' => implode('; ', $container_styles),
 ]);
 
 $heading_style = [
-    'width' => 'fit-content',
-    'font-family' => esc_attr($font) . ', sans-serif',
-    'text-shadow' => $big_text_shadow ? '4px 3px 0px ' . esc_attr($text_shadow_color) : '1px 1px 3px ' . esc_attr($text_shadow_color),
-    'margin' => 0,
+    'width: fit-content',
+    'font-family: ' . esc_attr($font) . ', sans-serif',
+    'text-shadow: ' . ($big_text_shadow ? '4px 3px 0px ' . esc_attr($text_shadow_color) : '1px 1px 3px ' . esc_attr($text_shadow_color)),
+    'margin: 0',
+
 ];
 
-$heading_attributes = get_block_wrapper_attributes([
-    'style' => implode('; ', $heading_style),
-]);
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <div <?php echo $content_attributes; ?>>
+    <div style="<?php echo implode('; ', $content_styles); ?>">
         <?php if ($title) : ?>
-            <h2 <?php echo $heading_attributes; ?>><?php echo esc_html($title); ?></h2>
+            <h2 style="<?php echo implode('; ', $heading_style); ?>"><?php echo esc_html($title); ?></h2>
         <?php endif; ?>
         <?php if ($description) : ?>
             <p style="width: fit-content"><?php echo esc_html($description); ?></p>
