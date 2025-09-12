@@ -1,56 +1,101 @@
-import styled from 'styled-components';
+import { ContainerContentStyling } from '@/theme/global-styles';
+import createFontStyleCSS from '@/theme/utils/createFontStyleCSS';
+import styled, { css } from 'styled-components';
 
 interface ContainerProps {
-    layout: 'vertical' | 'horizontal';
+  $layout: 'vertical' | 'horizontal';
 }
 
-export const Container = styled.div<ContainerProps>`
-    display: flex;
-    flex-direction: ${props => (props.layout === 'vertical' ? 'column' : 'row')};
-    flex-wrap: ${props => (props.layout === 'horizontal' ? 'wrap' : 'nowrap')};
-    gap: 2rem;
-    justify-content: center;
-`;
-
 export const Card = styled.a`
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: box-shadow 0.3s ease;
-    width: 300px; /* Adjust width as needed */
-
-    &:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
 `;
-
-export const Photo = styled.img`
-    width: 100%;
-    height: 200px; /* Adjust height as needed */
-    object-fit: cover;
-`;
-
-export const Info = styled.div`
-    padding: 1rem;
-`;
-
-export const Name = styled.h3`
-    margin: 0 0 0.5rem;
-    font-size: 1.25rem;
-`;
-
+export const Name = styled.h3``;
 export const Position = styled.p`
-    margin: 0 0 0.5rem;
-    font-style: italic;
-    color: #555;
+  color: ${({ theme }) => theme.colors.primaryText};
+`;
+export const Excerpt = styled.p``;
+
+export const PhotoContainer = styled.div`
+  flex-shrink: 0;
+  width: 350px;
+  aspect-ratio: 11/16;
+  background-color: ${({ theme }) => theme.colors.borderColor1};
+`;
+export const Photo = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
-export const Excerpt = styled.p`
-    margin: 0;
-    font-size: 0.9rem;
-    color: #333;
+export const Info = styled.div``;
+const ContainerVerticalStyling = css`
+  flex-direction: column;
+  ${Card} {
+    flex-direction: row;
+    align-items: center;
+    &:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    ${PhotoContainer} {
+      width: 350px;
+    }
+
+    ${Name} {
+      ${createFontStyleCSS('h3')}
+      margin:0;
+    }
+    ${Position} {
+      ${createFontStyleCSS('h4')}
+      margin:0;
+    }
+    ${Excerpt} {
+      ${createFontStyleCSS('body')}
+    }
+    ${Info} {
+      padding-inline: ${({ theme }) => theme.spacing.xlAdd}px;
+    }
+  }
+`;
+
+const ContainerHorizontalStyling = css`
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  ${Card} {
+    flex-direction: column;
+    width: 380px;
+    ${PhotoContainer} {
+      width: 250px;
+    }
+    ${Name} {
+      ${createFontStyleCSS('h4')}
+      margin:0;
+    }
+    ${Position} {
+      ${createFontStyleCSS('subtitle')}
+      margin:0;
+    }
+    ${Excerpt} {
+      ${createFontStyleCSS('small')}
+    }
+    ${Info} {
+      padding-block-start: ${({ theme }) => theme.spacing.md}px;
+    }
+  }
+`;
+
+export const Container = styled.div<ContainerProps>`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.md}px;
+  justify-content: center;
+
+  ${ContainerContentStyling}
+  ${({ $layout }) =>
+    $layout === 'vertical'
+      ? ContainerVerticalStyling
+      : ContainerHorizontalStyling}
 `;

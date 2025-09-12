@@ -12,7 +12,7 @@ const CollaboratorsBlock: React.FC<CollaboratorsBlockProps> = (props) => {
   }
 
   return (
-    <S.Container layout={layout}>
+    <S.Container $layout={layout}>
       {collaborators.map((collaborator) => (
         <CollaboratorCard key={collaborator.id} collaborator={collaborator} />
       ))}

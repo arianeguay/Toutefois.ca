@@ -10,8 +10,10 @@ $member_status = $attributes['memberStatus'] ?? 'all';
 $args = [
     'post_type' => 'collaborateur',
     'posts_per_page' => -1,
-    'orderby' => 'title',
-    'order' => 'ASC',
+    'orderby' => [
+        'menu_order' => 'ASC',
+        'title'      => 'ASC',
+    ],
 ];
 
 if ($member_status === 'members') {

@@ -17,7 +17,7 @@ function collaborateurs_cpt_and_meta_init()
         'label' => __('Collaborateur', 'text_domain'),
         'description' => __('Contenu de type Collaborateur', 'text_domain'),
         'labels' => $labels,
-        'supports' => ['title', 'editor', 'excerpt', 'thumbnail'],
+        'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
         'hierarchical' => false,
         'public' => true,
         'show_ui' => true,
