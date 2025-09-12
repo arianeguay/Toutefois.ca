@@ -14,10 +14,11 @@ interface CarouselProps {
 const Carousel: React.FC<React.PropsWithChildren<CarouselProps>> = ({
   children,
 }) => {
-  const { slideIndex, setCurrentSlide } = useCarouselTimer(children.length);
+  const { slideIndex, setCurrentSlide, startTimer, stopTimer } =
+    useCarouselTimer(children.length);
 
   return (
-    <CarouselContainer>
+    <CarouselContainer onMouseEnter={stopTimer} onMouseLeave={startTimer}>
       {children.map((child, index) => (
         <Slide key={index} isActive={index === slideIndex}>
           {child}
