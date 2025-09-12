@@ -36,7 +36,7 @@ if ($image && !empty($image['url'])) {
     $image_style[] = 'background-image: url(' . esc_url($image['url']) . ')';
     $image_style[] = 'background-size: cover';
     $image_style[] = 'background-position: ' . esc_attr($object_position);
-    $image_style[] = 'filter: blur(6px)';
+    $image_style[] = 'filter: blur(4px)';
 } else {
     $image_style[] = 'background-color: #f0f0f0';
     $image_style[] = 'border: 1px dashed #ccc';
