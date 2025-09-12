@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { PageContainer } from './styles';
 
 interface PageWrapperProps extends React.PropsWithChildren {
-  template?: string;
+  template: string;
 }
 
 const PageWrapper: React.FC<PageWrapperProps> = ({ children, template }) => {

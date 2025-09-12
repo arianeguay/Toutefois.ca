@@ -19,6 +19,7 @@ interface PageLayoutProps {
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
+  const template = page.template ?? 'template-title.php';
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.attribs) {
@@ -106,11 +107,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
   };
 
   return (
-    <PageWrapper template={page.template}>
+    <PageWrapper template={template}>
       <Header currentPage={page} />
       <MainContent>
-        {page.template === 'template-title.php' && (
-          <Typography variant="h1" element="h1" style={{ marginBlockEnd: 12 }}>
+        {template === 'template-title.php' && (
+          <Typography
+            variant={!!page.template ? 'h1' : 'h2'}
+            element="h1"
+            style={{ marginBlockEnd: 12 }}
+          >
             {page.title.rendered}
           </Typography>
         )}

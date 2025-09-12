@@ -1,7 +1,14 @@
 export interface WordpressPost {
   id: number;
-  title: string;
-  excerpt: string;
+  title: {
+    rendered: string;
+  };
+  content: {
+    rendered: string;
+  };
+  excerpt: {
+    rendered: string;
+  };
   link: string;
   featured_image_url: string;
   type?: 'wordpress';

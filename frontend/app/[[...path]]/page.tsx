@@ -28,6 +28,28 @@ export async function generateMetadata({
   try {
     // Construct the slug from the path segments
     const slug = params.path.join('/');
+    // Handle posts
+    if (params.path.length === 2 && params.path[0] === 'actualites') {
+      const postData = await api.fetchPostBySlug(params.path[1]);
+      const post = Array.isArray(postData) ? postData[0] : postData;
+
+      if (!post?.id) {
+        return {
+          title: 'Toutefois - Article non trouvé',
+          description: "L'article que vous cherchez n'existe pas",
+        };
+      }
+
+      const description = post.excerpt.rendered
+        ? post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160)
+        : 'Toutefois';
+
+      return {
+        title: `Toutefois - ${post.title.rendered}`,
+        description,
+      };
+    }
+
     const page = await api.fetchPageBySlug(slug);
     const pageData = Array.isArray(page) ? page[0] : page;
 
@@ -144,6 +166,38 @@ export default async function Page({
         }
       } catch (projectError) {
         console.error('Error fetching project:', projectError);
+        notFound();
+      }
+    }
+
+    // Special handling for post routes - matches /actualites/[slug] pattern
+    if (params.path.length === 2 && params.path[0] === 'actualites') {
+      console.log('Detected post route. Fetching post:', params.path[1]);
+      try {
+        const postData = await api.fetchPostBySlug(params.path[1]);
+        const post = Array.isArray(postData) ? postData[0] : postData;
+
+        if (post?.id) {
+          console.log('Found post:', post);
+
+          // Format the post data to match WordpressPage structure expected by PageLayout
+          const formattedPostPage = {
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            excerpt: post.excerpt,
+            link: post.link,
+            slug: post.slug,
+            isPost: true,
+          };
+
+          return <PageLayout page={formattedPostPage as any} />;
+        } else {
+          console.log('Post not found:', params.path[1]);
+          notFound();
+        }
+      } catch (postError) {
+        console.error('Error fetching post:', postError);
         notFound();
       }
     }
