@@ -23,7 +23,7 @@ $container_styles = [
     'position: relative',
     'height: 300px',
     'width: 100%',
-    'margin-bottom:16px',
+    'margin-bottom:24px',
 ];
 if ($image && !empty($image['url'])) {
     $container_styles[] = 'background-image: url(' . esc_url($image['url']) . ')';
@@ -41,19 +41,21 @@ $content_styles = [
     'left: 0',
     'right: 0',
     'bottom: 0',
-    'display: flex',
-    'flex-direction: column',
-    'align-items: ' . esc_attr($horizontal_alignment),
-    'justify-content: ' . esc_attr($vertical_alignment),
-    'text-align: ' . (esc_attr($horizontal_alignment) === 'flex-start' ? 'left' : (esc_attr($horizontal_alignment) === 'flex-end' ? 'right' : 'center')),
-    'color: ' . esc_attr($text_color),
-    'padding: 1rem',
+
+    'padding: 16px',
 
 ];
 
 $body_style = [
     'max-width: 1200px',
     'margin-inline: auto',
+    'width: 100%',
+    'display: flex',
+    'flex-direction: column',
+    'align-items: ' . esc_attr($horizontal_alignment),
+    'justify-content: ' . esc_attr($vertical_alignment),
+    'text-align: ' . (esc_attr($horizontal_alignment) === 'flex-start' ? 'left' : (esc_attr($horizontal_alignment) === 'flex-end' ? 'right' : 'center')),
+    'color: ' . esc_attr($text_color),
 ];
 
 
