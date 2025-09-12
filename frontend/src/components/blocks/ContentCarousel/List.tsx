@@ -3,6 +3,7 @@ import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 
 import Button from '@/components/common/Button';
 import Typography from '@/components/common/Typography';
+import { pxToNumber } from '@/theme';
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import { useState } from 'react';
 import { useTheme } from 'styled-components';
@@ -93,11 +94,20 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
         </ContentListHeader>
         <Swiper
           onSlideChange={handleCurrentChange}
-          spaceBetween={theme.spacing.lg}
-          slidesPerView={3}
+          spaceBetween={theme.spacing.sm}
+          slidesPerView={1}
           pagination={{ clickable: true }}
           navigation={true}
-          breakpoints={{ [theme.breakpoints.lg]: { slidesPerView: 3 } }}
+          breakpoints={{
+            [pxToNumber(theme.breakpoints.md)]: {
+              slidesPerView: 2,
+              spaceBetween: theme.spacing.md,
+            },
+            [pxToNumber(theme.breakpoints.lg)]: {
+              slidesPerView: 3,
+              spaceBetween: theme.spacing.lg,
+            },
+          }}
           modules={[Pagination, Navigation]}
         >
           {items.map((item) => (

@@ -132,6 +132,7 @@ export const theme = {
   },
 };
 
+export const pxToNumber = (px: string) => parseInt(px.replace('px', ''), 10);
 // --- Mobile theme (typography et espacements réduits) ---
 export const mobileTheme: typeof theme = {
   ...theme,
