@@ -207,4 +207,4 @@ function toutefois_register_blocks()
         register_block_type($block_folder);
     }
 }
-add_action('init', 'toutefois_register_blocks');
+add_action('init', 'toutefois_register_blocks', 20);
