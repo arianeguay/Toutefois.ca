@@ -1,8 +1,8 @@
 import apiFetch from "@wordpress/api-fetch";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useEffect, useState } from "@wordpress/element";
-import ProjectCard from "./projectCard";
 import Carousel from "./Carousel";
+import ProjectCard from "./projectCard";
 
 export default function Edit() {
   const blockProps = useBlockProps({

@@ -2,7 +2,7 @@
 
 import parse from 'html-react-parser';
 import { useTheme } from 'styled-components';
-import type { WordpressImage, WordpressProject } from '../../../../types';
+import type { WordpressProject } from '../../../../types';
 import Button from '../../../common/button';
 import Typography from '../../../common/typography';
 import {
@@ -16,13 +16,12 @@ import {
 
 const FeaturedSlide: React.FC<{
   project: WordpressProject;
-  image: WordpressImage;
-}> = ({ project, image }) => {
+}> = ({ project }) => {
   const theme = useTheme();
 
   return (
     <FeaturedSlideContainer>
-      <FeaturedSlideOverlay $backgroundUrl={image?.source_url} />
+      <FeaturedSlideOverlay $backgroundUrl={project.featured_image_url} />
       <FeaturedSlideContent>
         <SlideBody>
           <Typography variant="h1" element="h2">
@@ -41,7 +40,12 @@ const FeaturedSlide: React.FC<{
           </Button>
         </SlideBody>
         <SlideCover>
-          {image && <ProjectImage src={image.source_url} alt={project.title} />}
+          {project.featured_image_url && (
+            <ProjectImage
+              src={project.featured_image_url}
+              alt={project.title}
+            />
+          )}
         </SlideCover>
       </FeaturedSlideContent>
     </FeaturedSlideContainer>
