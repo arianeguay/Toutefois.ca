@@ -7,11 +7,6 @@
  * Author: Ariane Guay
  */
 
-// Force error logging
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-ini_set('error_log', plugin_dir_path(__FILE__) . 'debug.log');
-
 if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -28,7 +23,6 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
     $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
 }
 
-define('FORCE_SSL_ADMIN', true);
 
 // Include Components
 require_once plugin_dir_path(__FILE__) . 'components/featured-carousel.php';

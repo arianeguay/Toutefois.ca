@@ -67,8 +67,8 @@ function collaborateurs_meta_box_callback($post)
     $is_member = get_post_meta($post->ID, '_collaborateur_is_member', true);
 
     echo '<p><label for="collaborateur_poste"><strong>Poste :</strong></label><br/><input type="text" id="collaborateur_poste" name="collaborateur_poste" value="' . esc_attr($poste) . '" size="25" /></p>';
-    echo '<p><label for="collaborateur_is_member"><input type="checkbox" id="collaborateur_is_member" name="collaborateur_is_member" value="1" ' . checked($is_member, 1, false) . ' /> Membre de l\\'équipe</label></p>';
-    echo '<p><em>Pour l\\'image du collaborateur, veuillez utiliser l\\'option "Image à la une" sur le côté droit de l\\'éditeur.</em></p>';
+    echo '<p><label for="collaborateur_is_member"><input type="checkbox" id="collaborateur_is_member" name="collaborateur_is_member" value="1" ' . checked($is_member, 1, false) . ' /> Membre de l\'équipe</label></p>';
+    echo '<p><em>Pour l\'image du collaborateur, veuillez utiliser l\'option "Image à la une" sur le côté droit de l\'éditeur.</em></p>';
 }
 
 // 4. Save Meta Box Data
