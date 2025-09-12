@@ -33,6 +33,7 @@ require_once plugin_dir_path(__FILE__) . 'components/projects-page-grid.php';
 require_once plugin_dir_path(__FILE__) . 'components/projects-category-row.php';
 require_once plugin_dir_path(__FILE__) . 'projects.php';
 require_once plugin_dir_path(__FILE__) . 'news.php';
+require_once plugin_dir_path(__FILE__) . 'cpt-collaborateurs.php';
 require_once plugin_dir_path(__FILE__) . 'footer.php';
 
 // Add custom page templates

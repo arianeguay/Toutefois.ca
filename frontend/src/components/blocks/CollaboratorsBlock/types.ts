@@ -10,4 +10,5 @@ export interface Collaborator {
 export interface CollaboratorsBlockProps {
     layout: 'vertical' | 'horizontal';
     collaborators: Collaborator[];
+    memberStatus: 'all' | 'members' | 'non-members';
 }

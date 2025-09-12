@@ -3,7 +3,8 @@
  * Collaborators Block Template.
  */
 
-$layout = isset($attributes['layout']) ? $attributes['layout'] : 'vertical';
+$layout = $attributes['layout'] ?? 'vertical';
+$member_status = $attributes['memberStatus'] ?? 'all';
 
 $args = [
     'post_type' => 'collaborateur',
@@ -11,6 +12,29 @@ $args = [
     'orderby' => 'title',
     'order' => 'ASC',
 ];
+
+if ($member_status === 'members') {
+    $args['meta_query'] = [
+        [
+            'key' => '_collaborateur_is_member',
+            'value' => true,
+            'compare' => '=',
+        ],
+    ];
+} elseif ($member_status === 'non-members') {
+    $args['meta_query'] = [
+        'relation' => 'OR',
+        [
+            'key' => '_collaborateur_is_member',
+            'value' => false,
+            'compare' => '=',
+        ],
+        [
+            'key' => '_collaborateur_is_member',
+            'compare' => 'NOT EXISTS',
+        ],
+    ];
+}
 
 $query = new WP_Query($args);
 
@@ -37,6 +61,7 @@ wp_reset_postdata();
 $data_attributes = [
     'layout' => $layout,
     'collaborators' => $collaborators_data,
+    'memberStatus' => $member_status,
 ];
 
 $wrapper_attributes = get_block_wrapper_attributes();

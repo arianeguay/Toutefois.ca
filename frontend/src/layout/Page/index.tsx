@@ -1,3 +1,4 @@
+import CollaboratorsBlock from '@/components/blocks/CollaboratorsBlock';
 import ContentCarousel from '@/components/blocks/ContentCarousel';
 import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
@@ -51,6 +52,14 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
               categoryId={categoryId}
             />
           );
+        }
+        if (
+          domNode.attribs.class?.includes(
+            'toutefois-collaborators-block-react-root',
+          )
+        ) {
+          const data = domNode.attribs['data-props'];
+          return <CollaboratorsBlock {...JSON.parse(data)} />;
         }
         if (
           domNode.attribs.class?.includes('wp-block-toutefois-content-carousel')

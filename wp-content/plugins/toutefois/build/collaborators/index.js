@@ -8,7 +8,7 @@
   \**************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/collaborators","version":"0.1.0","title":"Collaborators","category":"toutefois-blocks","icon":"groups","description":"Displays a list of collaborators.","editorScript":"file:./index.js","render":"file:./render.php","attributes":{"layout":{"type":"string","default":"vertical"}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/collaborators","version":"0.1.0","title":"Collaborators","category":"toutefois-blocks","icon":"groups","description":"Displays a list of collaborators.","editorScript":"file:./index.js","render":"file:./render.php","attributes":{"layout":{"type":"string","default":"vertical"},"memberStatus":{"type":"string","default":"all"}}}');
 
 /***/ }),
 
@@ -39,7 +39,8 @@ function Edit({
   setAttributes
 }) {
   const {
-    layout
+    layout,
+    memberStatus
   } = attributes;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Layout Settings', 'toutefois-blocks')
@@ -56,11 +57,27 @@ function Edit({
     onChange: value => setAttributes({
       layout: value
     })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Filter by Member Status', 'toutefois-blocks'),
+    value: memberStatus,
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('All', 'toutefois-blocks'),
+      value: 'all'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Members Only', 'toutefois-blocks'),
+      value: 'members'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Non-Members Only', 'toutefois-blocks'),
+      value: 'non-members'
+    }],
+    onChange: value => setAttributes({
+      memberStatus: value
+    })
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "wp-block-toutefois-collaborators-placeholder"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Collaborators', 'toutefois-blocks')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Layout:', 'toutefois-blocks'), " ", layout), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('This block will be rendered in the frontend.', 'toutefois-blocks')))));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Collaborators', 'toutefois-blocks')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Layout:', 'toutefois-blocks'), " ", layout), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Filter:', 'toutefois-blocks'), " ", memberStatus), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('This block will be rendered in the frontend.', 'toutefois-blocks')))));
 }
 
 /***/ }),

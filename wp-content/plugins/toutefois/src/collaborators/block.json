@@ -13,6 +13,10 @@
         "layout": {
             "type": "string",
             "default": "vertical"
+        },
+        "memberStatus": {
+            "type": "string",
+            "default": "all"
         }
     }
 }
