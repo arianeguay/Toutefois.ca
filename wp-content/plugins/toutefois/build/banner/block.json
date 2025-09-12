@@ -32,6 +32,10 @@
       "type": "object",
       "default": null
     },
+    "template": {
+      "type": "string",
+      "default": "default"
+    },
     "font": {
       "type": "string",
       "default": "Poppins"
