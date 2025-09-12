@@ -53,7 +53,7 @@ function projets_cpt_and_meta_init()
         'label'                 => __('Projet', 'text_domain'),
         'description'           => __('Contenu de type Projet', 'text_domain'),
         'labels'                => $labels,
-        'supports'              => array('title', 'editor', 'excerpt', 'thumbnail'),
+        'supports'              => array('title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'),
         'taxonomies'            => array('category', 'post_tag'),
         'hierarchical'          => false,
         'public'                => true,
@@ -98,6 +98,12 @@ function projets_cpt_and_meta_init()
         'show_in_rest' => true,
         'single' => true,
         'type' => 'boolean',
+    ));
+
+    register_post_meta('projet', '_wp_page_template', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
     ));
 }
 add_action('init', 'projets_cpt_and_meta_init', 0);

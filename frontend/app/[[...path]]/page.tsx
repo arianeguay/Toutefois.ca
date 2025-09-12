@@ -129,6 +129,7 @@ export default async function Page({
             excerpt: project.excerpt,
             link: project.slug ? `/projets/${project.slug}` : '',
             slug: project.slug || '',
+            template: project.template,
             // Include all original project data for custom components to use
             meta: project.meta || {},
             featured_image_url: project.featured_image_url || '',

@@ -73,6 +73,7 @@ export interface WordpressProject {
   content: string;
   featured_image_url: string;
   slug: string;
+  template?: string;
   date?: string;
   categories?: {
     id: number;
@@ -113,6 +114,7 @@ export interface WordpressProjectFull {
     rendered: string;
   };
   featured_image_url: string;
+  template?: string;
 }
 
 export interface WordpressMenuItem {
