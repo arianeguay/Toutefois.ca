@@ -55,7 +55,7 @@ function projets_cpt_and_meta_init()
         'labels'                => $labels,
         'supports'              => array('title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'),
         'taxonomies'            => array('category', 'post_tag'),
-        'hierarchical'          => false,
+        'hierarchical'          => true,
         'public'                => true,
         'show_ui'               => true,
         'show_in_menu'          => true,

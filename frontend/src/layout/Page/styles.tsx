@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import { WordpressStyling } from '../../wp-style';
 
 interface PageContainerProps {
-  template?: string;
+  $template?: string;
 }
 
 export const PageContainer = styled.div<PageContainerProps>`
@@ -14,8 +14,8 @@ export const PageContainer = styled.div<PageContainerProps>`
   flex-direction: column;
   gap: 0;
 
-  ${({ template }) => {
-    switch (template) {
+  ${({ $template }) => {
+    switch ($template) {
       case 'template-banner.php':
         return css`
           > main {
@@ -26,7 +26,8 @@ export const PageContainer = styled.div<PageContainerProps>`
       case 'template-title.php':
         return css`
           > main {
-            margin-block: 32px;
+            margin-block-start: 54px;
+            margin-block-end: 32px;
           }
         `;
       default:

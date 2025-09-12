@@ -13,8 +13,9 @@ const PageWrapper: React.FC<PageWrapperProps> = ({ children, template }) => {
     setMounted(true);
   }, []);
   const opacity = useMemo(() => (mounted ? 1 : 0), [mounted]);
+  console.log(template);
   return (
-    <PageContainer template={template} style={{ opacity }}>
+    <PageContainer $template={template} style={{ opacity }}>
       {children}
     </PageContainer>
   );

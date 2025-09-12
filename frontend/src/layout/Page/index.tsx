@@ -1,6 +1,7 @@
 import ContentCarousel from '@/components/blocks/ContentCarousel';
 import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
+import Typography from '@/components/common/typography';
 import {
   Element,
   default as parse,
@@ -108,6 +109,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({ page }) => {
     <PageWrapper template={page.template}>
       <Header currentPage={page} />
       <MainContent>
+        {page.template === 'template-title.php' && (
+          <Typography variant="h1" element="h1" style={{ marginBlockEnd: 12 }}>
+            {page.title.rendered}
+          </Typography>
+        )}
         {!!page.content?.rendered && parse(page.content.rendered, options)}
       </MainContent>
       <Footer currentPage={page} />
