@@ -1,8 +1,10 @@
 'use client';
 
+import theme from '@/theme';
+import { Fonts } from '@/theme/fonts';
+import { DefaultStyling } from '@/theme/global-styles';
 import { ReactNode } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import theme, { DefaultStyling, Fonts } from '../theme';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   return (

@@ -1,5 +1,5 @@
+import theme from '@/theme';
 import styled, { css } from 'styled-components';
-import theme from '../../../theme';
 import type { ButtonSize, ButtonVariant } from './types';
 
 interface ButtonTheme {

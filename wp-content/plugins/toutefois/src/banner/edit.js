@@ -26,6 +26,7 @@ export default function Edit({ attributes, setAttributes }) {
     textColor,
     bigTextShadow,
     textShadowColor,
+    template,
   } = attributes;
 
   const blockStyles = {
@@ -98,6 +99,17 @@ export default function Edit({ attributes, setAttributes }) {
             label={__("Description", "toutefois")}
             value={description}
             onChange={(value) => setAttributes({ description: value })}
+          />
+          <SelectControl
+            label={__("Template", "toutefois")}
+            value={template}
+            onChange={(value) => setAttributes({ template: value })}
+            options={[
+              { label: "Default", value: "default" },
+              { label: "No Margin", value: "no-margin" },
+              { label: "With Banner", value: "with-banner" },
+              { label: "With Title", value: "with-title" },
+            ]}
           />
           <SelectControl
             label={__("Font", "toutefois")}

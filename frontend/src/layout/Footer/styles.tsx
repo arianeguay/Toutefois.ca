@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerContentStyling } from '@/theme';
+import { ContainerContentStyling } from '@/theme/global-styles';
 import styled from 'styled-components';
 
 export const FooterContainer = styled.footer<{ $mainColor?: string }>`

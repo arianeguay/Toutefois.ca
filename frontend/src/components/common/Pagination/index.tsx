@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Button from '../button';
+import Button from '../Button';
 import { LimitSelect, PageNumber, PaginationContainer } from './styles';
 
 type LimitSelection = {

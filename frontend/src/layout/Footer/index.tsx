@@ -1,5 +1,5 @@
 import api from '@/api';
-import Typography from '@/components/common/typography';
+import Typography from '@/components/common/Typography';
 import type { WordpressPage } from '@/types';
 import Socials from './socials';
 import { CenterSection, FooterContainer, FooterContent } from './styles';

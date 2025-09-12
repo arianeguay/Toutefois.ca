@@ -1,5 +1,6 @@
 import StyledComponentsRegistry from '@/lib/registry';
 import { ThemeProvider } from '@/providers/theme-provider';
+import { Metadata } from 'next';
 import { Montserrat, Poppins } from 'next/font/google';
 import './globals.css';
 

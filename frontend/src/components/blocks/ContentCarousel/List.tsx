@@ -1,9 +1,9 @@
 'use client';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 
-import Button from '@/components/common/button';
-import Typography from '@/components/common/typography';
-import { WordpressPost, WordpressProject, FacebookPost } from '@/types';
+import Button from '@/components/common/Button';
+import Typography from '@/components/common/Typography';
+import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import { useState } from 'react';
 import { useTheme } from 'styled-components';
 import 'swiper/css';
@@ -13,9 +13,9 @@ import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import ContentCard from './Card';
 import {
+  BackgroundImage,
   ContentListContainer,
   ContentListHeader,
-  BackgroundImage,
 } from './styles';
 
 type ContentItem = WordpressPost | WordpressProject | FacebookPost;
@@ -33,7 +33,9 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
   contentType,
   title = contentType === 'project' ? 'Nos projets' : 'Quoi de neuf?',
   viewAllUrl = contentType === 'project' ? '/projets' : '/actualites',
-  viewAllText = contentType === 'project' ? 'Voir tous les projets' : 'Voir tous les articles',
+  viewAllText = contentType === 'project'
+    ? 'Voir tous les projets'
+    : 'Voir tous les articles',
 }) => {
   const theme = useTheme();
   const [current, setCurrent] = useState<ContentItem>(items[0]);
@@ -49,18 +51,18 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
     if ('type' in item && item.type === 'facebook') {
       return 'facebook';
     }
-    
+
     // If we're in a specific content type (not mixed), use that
     if (contentType === 'project' || contentType === 'news') {
       return contentType;
     }
-    
+
     // For mixed content, we need to determine the type
     // This is a simple implementation - you might need to enhance this based on your data structure
     if ('type' in item && item.type === 'wordpress') {
       return 'news';
     }
-    
+
     // Default to project if we can't determine
     return 'project';
   };
@@ -70,14 +72,14 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
     if ('type' in current && current.type === 'facebook') {
       return (current as FacebookPost).picture || '';
     }
-    return (current as (WordpressPost | WordpressProject)).featured_image_url || '';
+    return (
+      (current as WordpressPost | WordpressProject).featured_image_url || ''
+    );
   };
 
   return (
     <>
-      {current && (
-        <BackgroundImage src={getBackgroundImage()} alt="" />
-      )}
+      {current && <BackgroundImage src={getBackgroundImage()} alt="" />}
       <ContentListContainer>
         <ContentListHeader>
           <Typography variant="h2" element="h2">
@@ -102,10 +104,7 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
             <SwiperSlide
               key={typeof item.id === 'number' ? `item-${item.id}` : item.id}
             >
-              <ContentCard 
-                item={item}
-                contentType={getItemType(item)}
-              />
+              <ContentCard item={item} contentType={getItemType(item)} />
             </SwiperSlide>
           ))}
         </Swiper>

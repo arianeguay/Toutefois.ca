@@ -44,6 +44,7 @@ function toutefois_add_page_templates($templates) {
     return $templates;
 }
 add_filter('theme_page_templates', 'toutefois_add_page_templates');
+add_filter('theme_projet_templates', 'toutefois_add_page_templates');
 
 
 // Expose page template to REST API

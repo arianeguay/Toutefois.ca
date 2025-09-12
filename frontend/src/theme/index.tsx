@@ -1,6 +1,3 @@
-import { createGlobalStyle, css } from 'styled-components';
-import { createFontStyleCSS } from './components/common/typography/styles';
-
 export const theme = {
   colors: {
     primaryText: '#2F2C58',
@@ -133,55 +130,6 @@ export const theme = {
   appearance: {
     headerHeight: '70px',
   },
-};
-
-export const ContainerContentStyling = css`
-  max-width: ${({ theme }) => theme.content.maxWidth}px;
-  margin-inline: auto;
-  width: 100%;
-
-  @media (max-width: ${({ theme }) => theme.content.maxWidth}px) {
-    padding-inline: ${({ theme }) => theme.spacing.xl}px;
-  }
-`;
-
-export const DefaultStyling = createGlobalStyle`
-body {
-    background-color: ${({ theme }) => theme.colors.mainBackground};
-    color: ${({ theme }) => theme.colors.primaryText};
-    font-family: ${({ theme }) => theme.fonts.primary};
-
-    .app {
-      width: 100%;
-      
-    }
-
-    h1 {${createFontStyleCSS('h1')}}
-    h2 {${createFontStyleCSS('h2')}}
-    h3 {${createFontStyleCSS('h3')}}
-    h4 {${createFontStyleCSS('h4')}}
-    p {${createFontStyleCSS('body')}}
-    
-    
- 
-}`;
-
-export const Fonts = () => {
-  return (
-    <>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin="anonymous"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet"
-      />
-      <link href="https://fonts.cdnfonts.com/css/gagalin" rel="stylesheet" />
-    </>
-  );
 };
 
 export type ThemeType = typeof theme;

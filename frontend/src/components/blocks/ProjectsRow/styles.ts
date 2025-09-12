@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerContentStyling } from '@/theme';
+import { ContainerContentStyling } from '@/theme/global-styles';
 import Link from 'next/link';
 import styled from 'styled-components';
 

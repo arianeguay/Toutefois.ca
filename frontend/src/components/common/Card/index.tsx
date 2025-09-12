@@ -1,4 +1,4 @@
-import Typography from '@/components/common/typography';
+import Typography from '@/components/common/Typography';
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import Link from 'next/link';
 import {

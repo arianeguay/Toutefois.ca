@@ -15,7 +15,9 @@
 Thumbs.db
 debug.log
 
+
 # Node
+.yarn/ 
 node_modules/
 npm-debug.log
 yarn-error.log

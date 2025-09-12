@@ -1,7 +1,7 @@
 import ContentCarousel from '@/components/blocks/ContentCarousel';
 import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
-import Typography from '@/components/common/typography';
+import Typography from '@/components/common/Typography';
 import {
   Element,
   default as parse,

@@ -59,8 +59,9 @@ $body_style = [
     'color: ' . esc_attr($text_color),
 ];
 
-
+$template = $attributes['template'] ?? 'default';
 $wrapper_attributes = get_block_wrapper_attributes([
+    'data-template' => $template,
     'style' => implode('; ', $container_styles),
 ]);
 

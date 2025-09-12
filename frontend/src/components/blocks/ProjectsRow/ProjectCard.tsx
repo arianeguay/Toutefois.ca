@@ -1,4 +1,4 @@
-import Typography from '@/components/common/typography';
+import Typography from '@/components/common/Typography';
 import { WordpressProject } from '@/types';
 import parse from 'html-react-parser';
 import {

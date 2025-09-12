@@ -1,7 +1,7 @@
 'use client';
 
 import styled, { css } from 'styled-components';
-import { WordpressStyling } from '../../wp-style';
+import { WordpressStyling } from '../../theme/wp-style';
 
 interface PageContainerProps {
   $template?: string;

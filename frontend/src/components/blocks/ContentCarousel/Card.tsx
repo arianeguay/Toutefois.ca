@@ -1,5 +1,5 @@
-import Typography from '@/components/common/typography';
-import { WordpressPost, WordpressProject, FacebookPost } from '@/types';
+import Typography from '@/components/common/Typography';
+import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import Link from 'next/link';
 import {
   ContentCardContainer,
@@ -20,9 +20,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
     const fbPost = item as FacebookPost;
     return (
       <ContentCardContainer>
-        {fbPost.picture && (
-          <ContentImage src={fbPost.picture} alt="" />
-        )}
+        {fbPost.picture && <ContentImage src={fbPost.picture} alt="" />}
         <ContentCardContent>
           <Typography variant="h4" element="h3">
             Facebook Post
@@ -36,8 +34,11 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
   }
 
   // For WordPress posts and projects
-  const wpItem = item as (WordpressPost | WordpressProject);
-  const linkPath = contentType === 'project' ? `/projets/${wpItem.slug}` : `/actualites/${wpItem.slug}`;
+  const wpItem = item as WordpressPost | WordpressProject;
+  const linkPath =
+    contentType === 'project'
+      ? `/projets/${wpItem.slug}`
+      : `/actualites/${wpItem.slug}`;
 
   return (
     <Link href={linkPath}>
