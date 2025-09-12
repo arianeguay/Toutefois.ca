@@ -173,7 +173,7 @@ export default function Edit({ attributes, setAttributes }) {
         {image && <img src={image.url} alt={title} style={imageStyles} />}
         {!image && <p>{__("Please select an image", "toutefois")}</p>}
         <div style={contentStyles}>
-          <h2 style={HeadingStyle}>{title}</h2>
+          <h1 style={HeadingStyle}>{title}</h1>
           <p style={{ width: "fit-content" }}>{description}</p>
         </div>
       </div>

@@ -79,7 +79,7 @@ $heading_style = [
     <div style="<?php echo implode('; ', $content_styles); ?>">
         <div style="<?php echo implode('; ', $body_style); ?>">
             <?php if ($title) : ?>
-                <h2 style="<?php echo implode('; ', $heading_style); ?>"><?php echo esc_html($title); ?></h2>
+                <h1 style="<?php echo implode('; ', $heading_style); ?>"><?php echo esc_html($title); ?></h1>
             <?php endif; ?>
             <?php if ($description) : ?>
                 <p style="width: fit-content"><?php echo esc_html($description); ?></p>

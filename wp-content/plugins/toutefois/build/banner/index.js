@@ -205,7 +205,7 @@ function Edit({
     style: imageStyles
   }), !image && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Please select an image", "toutefois")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     style: contentStyles
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", {
     style: HeadingStyle
   }, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     style: {

@@ -14,6 +14,5 @@ export const PageContainer = styled.div`
 export const MainContent = styled.main`
   width: 100%;
   flex: 1;
-
   ${WordpressStyling}
 `;
