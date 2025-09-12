@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Collaborators Block Template.
  */
@@ -67,7 +68,7 @@ $data_attributes = [
 $wrapper_attributes = get_block_wrapper_attributes();
 
 echo sprintf(
-    '<div %1$s>\n    <div class="toutefois-collaborators-block-react-root" data-props=\'%2$s\'></div>\n</div>',
+    '<div %1$s><div class="toutefois-collaborators-block-react-root" data-props=\'%2$s\'></div></div>',
     $wrapper_attributes,
     esc_attr(wp_json_encode($data_attributes))
 );
