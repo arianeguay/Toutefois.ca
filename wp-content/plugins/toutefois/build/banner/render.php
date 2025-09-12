@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Banner Block
  *
@@ -35,15 +36,16 @@ if ($image && !empty($image['url'])) {
 // Build inline styles for the content wrapper
 $content_styles = [
     'position: absolute',
-    'top: 0', 'left: 0', 'right: 0', 'bottom: 0',
+    'top: 0',
+    'left: 0',
+    'right: 0',
+    'bottom: 0',
     'display: flex',
     'flex-direction: column',
     'align-items: ' . esc_attr($horizontal_alignment),
     'justify-content: ' . esc_attr($vertical_alignment),
     'text-align: ' . (esc_attr($horizontal_alignment) === 'flex-start' ? 'left' : (esc_attr($horizontal_alignment) === 'flex-end' ? 'right' : 'center')),
-    'font-family: ' . esc_attr($font) . ', sans-serif',
     'color: ' . esc_attr($text_color),
-    'text-shadow: ' . ($big_text_shadow ? '3px 3px 6px ' . esc_attr($text_shadow_color) : '1px 1px 3px ' . esc_attr($text_shadow_color)),
     'padding: 1rem',
 ];
 
@@ -51,15 +53,21 @@ $wrapper_attributes = get_block_wrapper_attributes([
     'style' => implode('; ', $container_styles),
 ]);
 
+$heading_style = [
+    'width' => 'fit-content',
+    'font-family' => esc_attr($font) . ', sans-serif',
+    'text-shadow' => $big_text_shadow ? '4px 3px 0px ' . esc_attr($text_shadow_color) : '1px 1px 3px ' . esc_attr($text_shadow_color),
+    'margin' => 0,
+];
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
     <div style="<?php echo implode('; ', $content_styles); ?>">
         <?php if ($title) : ?>
-            <h2><?php echo esc_html($title); ?></h2>
+            <h2 style="<?php echo implode('; ', $heading_style); ?>"><?php echo esc_html($title); ?></h2>
         <?php endif; ?>
         <?php if ($description) : ?>
-            <p><?php echo esc_html($description); ?></p>
+            <p style="width: fit-content"><?php echo esc_html($description); ?></p>
         <?php endif; ?>
     </div>
 </div>
