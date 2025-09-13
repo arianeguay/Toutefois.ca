@@ -41,6 +41,17 @@ export const ProjectsRowContainer = styled.div`
         transparent
       );
     }
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+      &:before,
+      &:after {
+        display: none;
+      }
+      margin-left: -24px;
+      margin-right: -24px;
+      padding-left: 24px;
+      padding-right: 24px;
+      width: calc(100% + 48px) !important;
+    }
   }
 `;
 

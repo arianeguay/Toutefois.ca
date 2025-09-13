@@ -1,5 +1,6 @@
 import Typography from '@/components/common/Typography';
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
+import parse from 'html-react-parser';
 import Link from 'next/link';
 import {
   ContentCardContainer,
@@ -53,14 +54,18 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
         />
         <ContentCardContent>
           <Typography variant="h4" element="h3">
-            {typeof wpItem.title === 'string'
-              ? wpItem.title
-              : wpItem.title.rendered}
+            {parse(
+              typeof wpItem.title === 'string'
+                ? wpItem.title
+                : wpItem.title.rendered,
+            )}
           </Typography>
           <Typography variant="body" lineClamp={3}>
-            {typeof wpItem.excerpt === 'string'
-              ? wpItem.excerpt
-              : wpItem.excerpt.rendered}
+            {parse(
+              typeof wpItem.excerpt === 'string'
+                ? wpItem.excerpt
+                : wpItem.excerpt.rendered,
+            )}
           </Typography>
         </ContentCardContent>
       </ContentCardContainer>

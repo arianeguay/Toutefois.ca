@@ -31,6 +31,7 @@ export const FooterContent = styled.div`
   @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     grid-template-columns: repeat(1, 1fr);
     gap: ${({ theme }) => theme.spacing.md}px;
+    text-align: center;
   }
 `;
 
@@ -41,4 +42,13 @@ export const CenterSection = styled.div`
   gap: ${({ theme }) => theme.spacing.md}px;
   align-items: center;
   align-self: stretch;
+
+  &:before {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 100%;
+    background-color: ${({ theme }) => theme.colors.lightText};
+    margin-top: ${({ theme }) => theme.spacing.xs}px;
+  }
 `;
