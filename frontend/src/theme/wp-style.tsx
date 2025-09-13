@@ -364,9 +364,6 @@ export const WordpressStyling = css`
     display: block;
   }
 
-  .wp-block-image {
-    width: fit-content;
-  }
   figure:not(:first-child) {
     margin: 16px auto;
   }
