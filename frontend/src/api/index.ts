@@ -1,4 +1,5 @@
 import type {
+  WordpressCollaborator,
   WordpressFooter,
   WordpressImage,
   WordpressMenuItem,

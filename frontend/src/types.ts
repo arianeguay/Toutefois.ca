@@ -138,3 +138,13 @@ export interface WordpressFooter {
   facebook: string;
   slogan: string;
 }
+
+export interface WordpressCollaborator {
+  id: number;
+  title: string;
+  excerpt: string;
+  content: string;
+  featured_image_url: string;
+  slug: string;
+  template?: string;
+}

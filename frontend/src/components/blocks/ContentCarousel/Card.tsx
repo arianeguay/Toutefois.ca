@@ -43,13 +43,24 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
   return (
     <Link href={linkPath}>
       <ContentCardContainer>
-        <ContentImage src={wpItem.featured_image_url} alt={wpItem.title} />
+        <ContentImage
+          src={wpItem.featured_image_url}
+          alt={
+            typeof wpItem.title === 'string'
+              ? wpItem.title
+              : wpItem.title.rendered
+          }
+        />
         <ContentCardContent>
           <Typography variant="h4" element="h3">
-            {wpItem.title}
+            {typeof wpItem.title === 'string'
+              ? wpItem.title
+              : wpItem.title.rendered}
           </Typography>
           <Typography variant="body" lineClamp={3}>
-            {wpItem.excerpt}
+            {typeof wpItem.excerpt === 'string'
+              ? wpItem.excerpt
+              : wpItem.excerpt.rendered}
           </Typography>
         </ContentCardContent>
       </ContentCardContainer>
