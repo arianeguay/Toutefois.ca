@@ -28,9 +28,9 @@ img {
 /* Swiper styles */
 .swiper-button-next,
 .swiper-button-prev {
-  color: #2f2c58;
+  color: #fff;
 }
 
 .swiper-pagination-bullet-active {
-  background: #2f2c58;
+  background: #fff;
 }

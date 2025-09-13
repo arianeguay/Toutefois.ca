@@ -7,45 +7,20 @@ import styled from 'styled-components';
 export const ProjectsRowContainer = styled.div`
   ${ContainerContentStyling}
   .swiper {
+    position: relative;
+    width: 100%;
+    --swiper-navigation-size: 36px;
+    --swiper-pagination-bottom: -20px;
+    --swiper-navigation-sides-offset: -32px;
+    --swiper-navigation-color: ${({ theme }) =>
+      theme.colors.buttonPrimaryBackground};
+    --swiper-pagination-color: ${({ theme }) => theme.colors.primaryText};
+    overflow: visible;
     --swiper-padding-horizontal: 30px;
-    margin-left: calc(-1 * var(--swiper-padding-horizontal));
-    margin-right: calc(-1 * var(--swiper-padding-horizontal));
-    padding-left: var(--swiper-padding-horizontal);
-    padding-right: var(--swiper-padding-horizontal);
-    width: calc(100% + var(--swiper-padding-horizontal) * 2);
-    padding-block: 4px;
-    &:before,
-    &:after {
-      content: '';
-      position: absolute;
 
-      width: var(--swiper-padding-horizontal);
-      height: 100%;
-      z-index: 9;
-    }
-    &:after {
-      top: 0;
-      left: 0;
-      background: linear-gradient(
-        to left,
-        transparent,
-        ${({ theme }) => theme.colors.mainBackground}
-      );
-    }
-    &:before {
-      top: 0;
-      right: 0;
-      background: linear-gradient(
-        to left,
-        ${({ theme }) => theme.colors.mainBackground},
-        transparent
-      );
-    }
+    padding-block: 4px;
+
     @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-      &:before,
-      &:after {
-        display: none;
-      }
       margin-left: -24px;
       margin-right: -24px;
       padding-left: 24px;

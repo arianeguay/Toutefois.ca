@@ -19,9 +19,10 @@ export const GridContainer = styled.div`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     grid-template-columns: repeat(1, 1fr);
-
+    gap: ${({ theme }) => theme.spacing.lg}px;
     & > *:first-child {
-      grid-column-span: 1;
+      grid-column-start: 1;
+      grid-column-end: 1;
     }
   }
 `;
