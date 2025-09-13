@@ -22,4 +22,19 @@ export const MenuItemLink = styled(Link)<{ $isActive?: boolean }>`
             text-shadow: 0 0 10px ${theme.colors.buttonPrimaryBackground};
           }
         `}
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    ${({ $isActive, theme }) =>
+      $isActive
+        ? css`
+            color: ${theme.colors.buttonPrimaryBackground};
+          `
+        : css`
+            color: ${theme.colors.primaryText};
+            &:hover {
+              color: ${theme.colors.buttonPrimaryBackground};
+              text-shadow: 0 0 10px ${theme.colors.buttonPrimaryBackground};
+            }
+          `}
+  }
 `;

@@ -3,6 +3,7 @@ import { WordpressMenuItem } from '@/types';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { useTheme } from 'styled-components';
 import { SpecialProjectContainer } from './styles';
 
@@ -14,6 +15,7 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
 }) => {
   const currentPathname = usePathname();
   const theme = useTheme();
+  const isMobile = useMediaQuery({ maxWidth: theme.breakpoints.md });
   const pathName = useMemo(() => {
     let path = new URL(href).pathname;
 
@@ -25,6 +27,8 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
     }
     return path;
   }, [href, currentPathname]);
+
+  if (isMobile) return null;
 
   return (
     <Link href={pathName}>

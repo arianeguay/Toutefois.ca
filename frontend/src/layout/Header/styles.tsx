@@ -16,4 +16,24 @@ export const HeaderContainer = styled.header<{ $mainColor?: string }>`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl}px;
   box-shadow: ${({ theme }) => theme.boxShadow.lg};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex-direction: row;
+    gap: ${({ theme }) => theme.spacing.xl}px;
+    justify-content: space-between;
+  }
+`;
+
+export const LogoImage = styled.img`
+  width: 100px;
+  height: auto;
+  object-fit: contain;
+  aspect-ratio: 1;
+  position: relative;
+  z-index: 100;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    width: 70px;
+    height: auto;
+  }
 `;

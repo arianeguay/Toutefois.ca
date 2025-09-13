@@ -1,16 +1,13 @@
 import Link from 'next/link';
+import { LogoImage } from './styles';
 
 const Logo = () => {
   return (
     <Link href="/" style={{ flexShrink: 0 }}>
-      <img
+      <LogoImage
         src="/Logo.png"
         alt="Logo du Théâtre de Toutefois"
         width={100}
-        style={{
-          width: '100px',
-          height: '100px',
-        }}
         height={100}
       />
     </Link>
