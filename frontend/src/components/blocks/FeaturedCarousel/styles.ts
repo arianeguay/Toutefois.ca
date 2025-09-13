@@ -12,4 +12,8 @@ export const CarouselContainer = styled.div`
   overflow: hidden;
   min-height: 540px;
   width: 100%;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    height: calc(90vh - ${({ theme }) => theme.appearance.headerHeight});
+  }
 `;

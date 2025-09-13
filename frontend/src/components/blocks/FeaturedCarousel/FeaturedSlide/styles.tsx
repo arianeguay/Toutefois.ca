@@ -44,6 +44,7 @@ export const SlideCover = styled.div`
     padding-block: 0;
     height: auto;
     max-height: 100%;
+    overflow: hidden;
   }
 `;
 
