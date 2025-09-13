@@ -10,7 +10,7 @@ interface MenuProps {
 }
 const Menu: React.FC<MenuProps> = ({ menuItems }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery({ maxWidth: theme.breakpoints.md });
+  const isMobile = useMediaQuery({ maxWidth: theme.breakpoints.lg });
   return (
     <>
       {isMobile ? (

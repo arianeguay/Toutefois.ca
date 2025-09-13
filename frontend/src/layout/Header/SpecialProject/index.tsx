@@ -15,7 +15,7 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
 }) => {
   const currentPathname = usePathname();
   const theme = useTheme();
-  const isMobile = useMediaQuery({ maxWidth: theme.breakpoints.md });
+  const isMobile = useMediaQuery({ maxWidth: theme.breakpoints.lg });
   const pathName = useMemo(() => {
     let path = new URL(href).pathname;
 
