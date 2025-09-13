@@ -14,8 +14,6 @@ const MenuItem: React.FC<WordpressMenuItem> = ({ name, href }) => {
     }
   };
 
-  console.log(getPathFromUrl(href), currentPathname);
-
   return (
     <MenuItemLink
       href={getPathFromUrl(href)}

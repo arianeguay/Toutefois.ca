@@ -104,14 +104,12 @@ export default async function Page({
 }: {
   params: { path?: string[] };
 }) {
-  console.log('Fetching page with params:', params);
   // Handle root path (home)
   if (!params.path || params.path.length === 0) {
     // This is the root route - render your homepage
     // Fetch homepage data or use default
     try {
       const homePage = await api.fetchPageBySlug('home');
-      console.log(homePage);
       const homePageData = Array.isArray(homePage) ? homePage[0] : homePage;
 
       return <PageLayout page={homePageData} />;
@@ -129,11 +127,9 @@ export default async function Page({
   try {
     // Construct the slug from the path segments
     const slug = params.path.join('/');
-    console.log('Fetching page with slug:', slug);
 
     // Special handling for project routes - matches /projets/[slug] pattern
     if (params.path.length === 2 && params.path[0] === 'projets') {
-      console.log('Detected project route. Fetching project:', params.path[1]);
       try {
         const projectData = await api.fetchProjectBySlug(params.path[1]);
         const project = Array.isArray(projectData)
@@ -141,9 +137,6 @@ export default async function Page({
           : projectData;
 
         if (project?.id) {
-          console.log('Found project:', project);
-
-          console.log(project);
           // Format the project data to match WordpressPage structure expected by PageLayout
           const formattedProjectPage = {
             id: project.id,
@@ -162,7 +155,7 @@ export default async function Page({
 
           return <PageLayout page={formattedProjectPage as any} />;
         } else {
-          console.log('Project not found:', params.path[1]);
+          console.warn('Project not found:', params.path[1]);
           notFound();
         }
       } catch (projectError) {
@@ -172,10 +165,6 @@ export default async function Page({
     }
 
     if (params.path.length === 2 && params.path[0] === 'collaborateurs') {
-      console.log(
-        'Detected collaborators route. Fetching collaborators:',
-        params.path[1],
-      );
       try {
         const collaboratorsData = await api.fetchCollaboratorBySlug(
           params.path[1],
@@ -185,8 +174,6 @@ export default async function Page({
           : [collaboratorsData];
 
         if (collaborators?.length) {
-          console.log('Found collaborators:', collaborators);
-
           const formattedCollaboratorsPage: WordpressPage = {
             ...collaborators[0],
             link: collaborators[0].slug
@@ -199,7 +186,7 @@ export default async function Page({
           };
           return <PageLayout page={formattedCollaboratorsPage as any} />;
         } else {
-          console.log('Collaborators not found:', params.path[1]);
+          console.warn('Collaborators not found:', params.path[1]);
           notFound();
         }
       } catch (collaboratorsError) {
@@ -215,8 +202,6 @@ export default async function Page({
         const post = Array.isArray(postData) ? postData[0] : postData;
 
         if (post?.id) {
-          console.log('Found post:', post);
-
           // Format the post data to match WordpressPage structure expected by PageLayout
           const formattedPostPage = {
             id: post.id,
@@ -230,7 +215,7 @@ export default async function Page({
 
           return <PageLayout page={formattedPostPage as any} />;
         } else {
-          console.log('Post not found:', params.path[1]);
+          console.warn('Post not found:', params.path[1]);
           notFound();
         }
       } catch (postError) {
@@ -244,29 +229,18 @@ export default async function Page({
     let pageData;
 
     // Strategy 1: Direct full path slug
-    console.log('Strategy 1: Trying direct full slug:', slug);
     page = await api.fetchPageBySlug(slug);
     pageData = Array.isArray(page) ? page[0] : page;
 
-    if (pageData?.id) {
-      console.log('Found page with direct full slug match');
-    }
-
     // Strategy 2: Try various path combinations recursively if we have multiple segments
     if (!pageData?.id && params.path.length > 1) {
-      console.log('Strategy 2: Trying recursive path combinations');
-
       // Try the last segment which is often the actual page slug in WordPress
       const lastSegment = params.path[params.path.length - 1];
-      console.log('Trying last segment only:', lastSegment);
       page = await api.fetchPageBySlug(lastSegment);
 
       const possibleMatches = Array.isArray(page)
         ? page
         : [page].filter(Boolean);
-      console.log(
-        `Found ${possibleMatches.length} potential pages with slug '${lastSegment}'`,
-      );
 
       // If multiple pages have the same last segment, we need to find the one with matching ancestors
       if (possibleMatches.length > 0) {
@@ -287,7 +261,6 @@ export default async function Page({
             return p.slug || '';
           }
         });
-        console.log('Possible page paths:', paths);
 
         // Find the best match comparing full hierarchical paths
         const normalizedRequestPath = slug.replace(/^\/|\/$/g, '');
@@ -316,7 +289,6 @@ export default async function Page({
         });
 
         if (bestMatch) {
-          console.log('Found best matching page:', bestMatch.slug);
           pageData = bestMatch;
         }
       }
@@ -324,11 +296,8 @@ export default async function Page({
 
     // Strategy 3: If still no match and we have at least 3 segments, try looking by parent-child relationship
     if (!pageData?.id && params.path.length >= 3) {
-      console.log('Strategy 3: Trying parent-child relationship lookup');
-
       // Fetch all pages to analyze parent-child relationships
       const allPages = await api.fetchPages();
-      console.log(`Analyzing ${allPages.length} pages for hierarchy matches`);
 
       // Try to find a match by iterating through possible parent-child combinations
       for (let i = params.path.length - 1; i >= 0; i--) {
@@ -336,10 +305,6 @@ export default async function Page({
         const potentialPage = allPages.find((p) => p.slug === currentSegment);
 
         if (potentialPage) {
-          console.log(
-            `Found potential match at segment ${i}: ${currentSegment}`,
-          );
-
           // If this is the deepest child segment, we found our page
           if (i === params.path.length - 1) {
             pageData = potentialPage;
@@ -366,17 +331,13 @@ export default async function Page({
           }
 
           if (hierarchyMatches) {
-            console.log('Found match through parent-child hierarchy');
             pageData = potentialPage;
             break;
           }
         }
       }
     }
-
-    console.log('Final page data:', pageData);
     if (!pageData?.id) {
-      console.log('Page not found for slug:', slug);
       notFound();
     }
 

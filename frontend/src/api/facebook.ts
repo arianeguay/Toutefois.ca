@@ -53,7 +53,7 @@ export async function fetchFacebookPosts(
   } else {
     // For client-side rendering, we can't use the token directly due to security
     // Consider using a server endpoint that proxies the request instead
-    console.log('Client-side Facebook posts fetching not implemented');
+    console.warn('Client-side Facebook posts fetching not implemented');
     return [];
   }
 }

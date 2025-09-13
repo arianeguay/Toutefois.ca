@@ -26,7 +26,6 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
     return path;
   }, [href, currentPathname]);
 
-  console.log(pathName, currentPathname);
   return (
     <Link href={pathName}>
       <SpecialProjectContainer

@@ -11,7 +11,6 @@ interface ProjectsRowContentProps {
 const ProjectsRowContent: React.FC<ProjectsRowContentProps> = ({
   projects,
 }) => {
-  console.log(projects);
   const theme = useTheme();
   return (
     <div>

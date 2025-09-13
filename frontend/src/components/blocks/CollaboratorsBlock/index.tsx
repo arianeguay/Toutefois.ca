@@ -5,8 +5,8 @@ import * as S from './styles';
 import { CollaboratorsBlockProps } from './types';
 
 const CollaboratorsBlock: React.FC<CollaboratorsBlockProps> = (props) => {
-  const { layout, collaborators, memberStatus } = props;
-  console.log(props);
+  const { layout, collaborators } = props;
+
   if (!collaborators || collaborators.length === 0) {
     return <p>No collaborators to display.</p>;
   }

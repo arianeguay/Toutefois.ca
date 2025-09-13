@@ -21,11 +21,9 @@ class Api {
 
   async fetchFromApi(url: string) {
     const apiUrl = `${this.baseUrl}/${url}`;
-    console.log('Fetching from API:', apiUrl);
 
     try {
       // First try with no Content-Type header
-      console.log('Attempting fetch without Content-Type header');
       let response = await fetch(apiUrl, {
         method: 'GET',
         mode: 'cors',
@@ -37,12 +35,6 @@ class Api {
         next: { revalidate: 60 }, // Enable ISR with a 60-second revalidation period
       });
 
-      // Log response details for debugging
-      console.log('Response status:', response.status);
-      console.log('Response headers:', [
-        ...new Array(response.headers.entries()),
-      ]);
-
       if (!response.ok) {
         const errorText = await response.text();
         console.error('API Error Response:', errorText);
@@ -53,7 +45,6 @@ class Api {
 
       // Check if the response is actually JSON
       const contentType = response.headers.get('content-type');
-      console.log('Content-Type:', contentType);
 
       if (!contentType || !contentType.includes('application/json')) {
         const text = await response.text();
@@ -102,12 +93,10 @@ class Api {
   async fetchPageBySlug(
     slug: string,
   ): Promise<WordpressPage | WordpressPage[]> {
-    console.log(slug);
     // First try direct slug match (which works for top-level pages)
     const directMatch = await this.fetchFromApi(
       `wp/v2/pages?slug=${encodeURIComponent(slug)}`,
     );
-    console.log(directMatch);
 
     // If we found a direct match, return it
     if (Array.isArray(directMatch) && directMatch.length > 0) {
@@ -158,7 +147,6 @@ class Api {
   }
 
   async fetchProjectBySlug(slug: string): Promise<WordpressProjectFull> {
-    console.log(`Fetching project with slug: ${slug}`);
     return this.fetchFromApi(`wp/v2/projet?slug=${slug}`);
   }
 
