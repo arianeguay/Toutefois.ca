@@ -2,9 +2,9 @@
 
 import parse from 'html-react-parser';
 import { useTheme } from 'styled-components';
-import type { WordpressProject } from '../../../../types';
-import Button from '../../../common/Button';
-import Typography from '../../../common/Typography';
+import type { WordpressProject } from '@/types';
+import Button from '@/components/common/Button';
+import Typography from '@/components/common/Typography';
 import {
   FeaturedSlideContainer,
   FeaturedSlideContent,

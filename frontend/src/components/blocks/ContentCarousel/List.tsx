@@ -1,8 +1,8 @@
 'use client';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 
-import Button from '@/components/common/Button';
-import Typography from '@/components/common/Typography';
+import Button from '../../common/Button';
+import Typography from '../../common/Typography';
 import { pxToNumber } from '@/theme';
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import { useState } from 'react';
