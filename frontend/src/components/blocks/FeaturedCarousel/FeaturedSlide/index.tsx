@@ -1,10 +1,10 @@
 'use client';
 
-import parse from 'html-react-parser';
-import { useTheme } from 'styled-components';
-import type { WordpressProject } from '@/types';
 import Button from '@/components/common/Button';
 import Typography from '@/components/common/Typography';
+import type { WordpressProject } from '@/types';
+import parse from 'html-react-parser';
+import { useTheme } from 'styled-components';
 import {
   FeaturedSlideContainer,
   FeaturedSlideContent,

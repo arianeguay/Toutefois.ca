@@ -1,6 +1,6 @@
-import Typography from '@/components/common/Typography';
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import Link from 'next/link';
+import Typography from '../../common/Typography';
 import {
   ContentCardContainer,
   ContentCardContent,
