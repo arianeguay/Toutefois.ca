@@ -36,6 +36,9 @@ export const ContentCardContainer = styled.div`
 export const ContentListContainer = styled.div`
   max-width: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   ${ContainerContentStyling}
   overflow:hidden;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
@@ -94,7 +97,7 @@ export const ContentImage = styled.img`
 export const ContentListHeader = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.xs}px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
 
   h2 {

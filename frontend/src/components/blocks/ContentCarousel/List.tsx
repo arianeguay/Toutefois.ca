@@ -25,6 +25,7 @@ interface ContentCarouselProps {
   items: ContentItem[];
   contentType: 'project' | 'news' | 'mixed';
   title?: string;
+  description?: string;
   viewAllUrl?: string;
   viewAllText?: string;
 }
@@ -33,6 +34,7 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
   items,
   contentType,
   title = contentType === 'project' ? 'Nos projets' : 'Quoi de neuf?',
+  description,
   viewAllUrl = contentType === 'project' ? '/projets' : '/archives',
   viewAllText = contentType === 'project'
     ? 'Voir tous les projets'
@@ -86,10 +88,10 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
           <Typography variant="h2" element="h2">
             {title}
           </Typography>
-          {viewAllUrl && (
-            <Button variant="primary" href={viewAllUrl}>
-              {viewAllText}
-            </Button>
+          {!!description && (
+            <Typography variant="big" element="p">
+              {description}
+            </Typography>
           )}
         </ContentListHeader>
         <Swiper
@@ -116,6 +118,15 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
             </SwiperSlide>
           ))}
         </Swiper>
+        {viewAllUrl && (
+          <Button
+            variant="primary"
+            href={viewAllUrl}
+            style={{ marginBlockStart: theme.spacing.xl }}
+          >
+            {viewAllText}
+          </Button>
+        )}
       </ContentListContainer>
     </>
   );

@@ -6,6 +6,7 @@ import ContentCarouselList from './List';
 interface ContentCarouselProps {
   contentType?: 'project' | 'news' | 'mixed';
   title?: string;
+  description?: string;
   viewAllUrl?: string;
   viewAllText?: string;
   limit?: number;
@@ -14,6 +15,7 @@ interface ContentCarouselProps {
 const ContentCarousel = async ({
   contentType = 'mixed',
   title,
+  description,
   viewAllUrl,
   viewAllText,
   limit = 10,
@@ -67,6 +69,7 @@ const ContentCarousel = async ({
       items={items}
       contentType={contentType}
       title={title}
+      description={description}
       viewAllUrl={viewAllUrl}
       viewAllText={viewAllText}
     />

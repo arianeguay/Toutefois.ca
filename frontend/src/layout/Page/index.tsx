@@ -134,6 +134,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
             const {
               'data-content-type': contentType = 'mixed',
               'data-title': title,
+              'data-description': description,
               'data-view-all-url': viewAllUrl,
               'data-view-all-text': viewAllText,
               'data-limit': limitStr,
@@ -153,6 +154,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
                 key={`content-carousel-${uniqueId}`}
                 contentType={contentType as 'project' | 'news' | 'mixed'}
                 title={title}
+                description={description}
                 viewAllUrl={viewAllUrl}
                 viewAllText={viewAllText}
                 limit={limit}

@@ -7,6 +7,7 @@
 // Get attributes
 $content_type = isset($attributes['contentType']) ? $attributes['contentType'] : 'mixed';
 $title = isset($attributes['title']) ? $attributes['title'] : '';
+$description = isset($attributes['description']) ? $attributes['description'] : '';
 $view_all_url = isset($attributes['viewAllUrl']) ? $attributes['viewAllUrl'] : '';
 $view_all_text = isset($attributes['viewAllText']) ? $attributes['viewAllText'] : '';
 $limit = isset($attributes['limit']) ? intval($attributes['limit']) : 10;
@@ -77,6 +78,7 @@ if (!empty($items)) :
             class="content-carousel-block"
             data-content-type="<?php echo esc_attr($content_type); ?>"
             data-title="<?php echo esc_attr($title); ?>"
+            data-description="<?php echo esc_attr($description); ?>"
             data-view-all-url="<?php echo esc_attr($view_all_url); ?>"
             data-view-all-text="<?php echo esc_attr($view_all_text); ?>"
             data-limit="<?php echo esc_attr($limit); ?>">

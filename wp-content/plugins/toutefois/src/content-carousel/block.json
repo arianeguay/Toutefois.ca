@@ -19,6 +19,10 @@
       "type": "string",
       "default": ""
     },
+    "description": {
+      "type": "string",
+      "default": ""
+    },
     "viewAllUrl": {
       "type": "string",
       "default": ""
