@@ -49,6 +49,8 @@ function get_all_projects()
                 'slug' => $slug,
                 'date' => get_the_date(),
                 'type' => $type,
+                'projet_date_debut' => $post_meta['_projet_date_debut'][0],
+                'projet_date_fin' => $post_meta['_projet_date_fin'][0],
             );
         }
         wp_reset_postdata();
