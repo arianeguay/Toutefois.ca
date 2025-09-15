@@ -83,6 +83,9 @@ export interface WordpressProject {
   slug: string;
   template?: string;
   date?: string;
+  projet_date_debut?: string;
+  projet_date_fin?: string;
+  type?: string;
   categories?: {
     id: number;
     name: string;

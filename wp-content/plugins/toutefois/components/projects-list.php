@@ -38,7 +38,24 @@ function get_all_projects()
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
             $slug = get_post_field('post_name', $post_id);
 
-            $type = get_the_category($post_id)[0]->name;
+            $categories = get_the_category($post_id);
+            $child = null;
+
+            if (! empty($categories)) {
+                foreach ($categories as $cat) {
+                    // If this category has a parent, it’s a child
+                    if ($cat->parent != 0) {
+                        $child = $cat;
+                        break; // stop at the first child found
+                    }
+                }
+            }
+
+            if ($child) {
+                $type = $child->name; // Child category name
+            } else {
+                $type = $categories[0]->name; // fallback if no child
+            }
             $posts[] = array(
                 'id' => $post_id,
                 'title' => get_the_title(),

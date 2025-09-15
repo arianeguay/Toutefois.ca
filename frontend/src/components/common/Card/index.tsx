@@ -1,9 +1,10 @@
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
+import dayjs from 'dayjs';
+import 'dayjs/locale/fr';
 import Link from 'next/link';
 import CardBody from './Body';
 import CardCover from './Cover';
 import { ContentCardContainer } from './styles';
-
 export type ContentItem = WordpressPost | WordpressProject | FacebookPost;
 
 interface ContentCardProps {
@@ -24,7 +25,13 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
       >
         <ContentCardContainer>
           <CardCover src={fbPost.picture} alt={fbPost.message} />
-          <CardBody title={fbPost.message} description={fbPost.message} />
+          <CardBody
+            title={fbPost.message}
+            description={fbPost.message}
+            date={dayjs(new Date(fbPost.created_time))
+              .locale('fr')
+              .format('D MMMM YYYY')}
+          />
         </ContentCardContainer>
       </a>
     );
@@ -45,8 +52,8 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
       ? `/projets/${wpItem.slug}`
       : `/archives/${wpItem.slug}`;
 
-  const date = contentType === 'news' ? wpItem.date : wpItem.date;
-
+  const date =
+    contentType === 'news' ? wpItem.date : (wpItem as WordpressProject).type;
   return (
     <Link href={linkPath} style={{ textDecoration: 'none' }}>
       <ContentCardContainer>
