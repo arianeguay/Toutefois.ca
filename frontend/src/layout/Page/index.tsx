@@ -106,6 +106,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
             <ProjectsRow
               key={`projects-row-${rowId}`}
               categoryId={categoryId}
+              title={domNode.attribs['data-title']}
             />
           );
         }

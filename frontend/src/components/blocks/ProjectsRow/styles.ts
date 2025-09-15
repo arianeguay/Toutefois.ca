@@ -6,6 +6,9 @@ import styled from 'styled-components';
 
 export const ProjectsRowContainer = styled.div`
   ${ContainerContentStyling}
+  &:not(:first-child) {
+    margin-block-start: ${({ theme }) => theme.spacing.lg}px;
+  }
   .swiper {
     position: relative;
     width: 100%;

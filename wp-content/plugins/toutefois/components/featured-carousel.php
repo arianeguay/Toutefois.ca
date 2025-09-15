@@ -70,6 +70,7 @@ function get_featured_projects()
                 'projet_date_debut' => $post_meta['_projet_date_debut'][0],
                 'projet_date_fin' => $post_meta['_projet_date_fin'][0],
                 'type' => $type,
+                'slug' => get_post_field('post_name', $post_id),
                 'lien_de_reservation' => $post_meta['_projet_lien'][0],
             );
         }

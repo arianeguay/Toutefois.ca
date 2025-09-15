@@ -46,7 +46,7 @@ const FeaturedSlide: React.FC<{
             <Button
               size="lg"
               variant="primary"
-              href={`/projects/${project.slug}`}
+              href={`/projets/${project.slug}`}
               style={{ marginBlockStart: theme.spacing.md }}
             >
               En savoir plus
