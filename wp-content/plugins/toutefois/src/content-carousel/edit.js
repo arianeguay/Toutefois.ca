@@ -96,7 +96,6 @@ export default function Edit({ attributes, setAttributes }) {
           <TextControl
             label={__("Description", "toutefois-blocks")}
             value={description}
-            placeholder={getDefaultDescription()}
             onChange={(value) => setAttributes({ description: value })}
           />
           <TextControl

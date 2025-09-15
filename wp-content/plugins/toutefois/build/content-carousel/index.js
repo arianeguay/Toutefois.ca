@@ -125,7 +125,6 @@ function Edit({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Description", "toutefois-blocks"),
     value: description,
-    placeholder: getDefaultDescription(),
     onChange: value => setAttributes({
       description: value
     })
