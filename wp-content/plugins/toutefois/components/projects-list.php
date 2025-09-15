@@ -68,6 +68,8 @@ function get_all_projects()
                 'type' => $type,
                 'projet_date_debut' => $post_meta['_projet_date_debut'][0],
                 'projet_date_fin' => $post_meta['_projet_date_fin'][0],
+                'lien_de_reservation' => $post_meta['projet_lien'][0],
+
             );
         }
         wp_reset_postdata();

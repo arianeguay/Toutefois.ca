@@ -27,6 +27,11 @@ const FeaturedSlide: React.FC<{
           <Typography variant="h1" element="h2">
             {project.title}
           </Typography>
+          {project.projet_date_debut && project.projet_date_fin && (
+            <Typography variant="big" lineClamp={5}>
+              {[project.projet_date_debut, project.projet_date_fin].join(' - ')}
+            </Typography>
+          )}
           <Typography variant="body" lineClamp={5}>
             {parse(project.excerpt)}
           </Typography>

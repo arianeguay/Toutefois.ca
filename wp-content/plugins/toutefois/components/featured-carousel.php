@@ -42,13 +42,35 @@ function get_featured_projects()
             $post_meta = get_post_meta($post_id);
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
 
+            $categories = get_the_category($post_id);
+            $child = null;
+
+            if (! empty($categories)) {
+                foreach ($categories as $cat) {
+                    // If this category has a parent, it’s a child
+                    if ($cat->parent != 0) {
+                        $child = $cat;
+                        break; // stop at the first child found
+                    }
+                }
+            }
+
+            if ($child) {
+                $type = $child->name; // Child category name
+            } else {
+                $type = $categories[0]->name; // fallback if no child
+            }
             $posts[] = array(
                 'id' => $post_id,
                 'title' => get_the_title(),
                 'excerpt' => get_the_excerpt(),
                 'content' => get_the_content(),
                 'meta' => $post_meta,
-                'featured_image_url' => $featured_image_url
+                'featured_image_url' => $featured_image_url,
+                'projet_date_debut' => $post_meta['_projet_date_debut'][0],
+                'projet_date_fin' => $post_meta['_projet_date_fin'][0],
+                'type' => $type,
+                'lien_de_reservation' => $post_meta['projet_lien'][0],
             );
         }
         wp_reset_postdata();
