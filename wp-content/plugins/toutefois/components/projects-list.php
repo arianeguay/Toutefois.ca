@@ -37,6 +37,8 @@ function get_all_projects()
             $post_meta = get_post_meta($post_id);
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
             $slug = get_post_field('post_name', $post_id);
+
+            $type = get_the_category($post_id);
             $posts[] = array(
                 'id' => $post_id,
                 'title' => get_the_title(),
@@ -45,6 +47,8 @@ function get_all_projects()
                 'meta' => $post_meta,
                 'featured_image_url' => $featured_image_url,
                 'slug' => $slug,
+                'date' => get_the_date(),
+                'type' => $type,
             );
         }
         wp_reset_postdata();
