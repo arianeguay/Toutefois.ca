@@ -4,20 +4,20 @@ import type { ButtonSize, ButtonVariant } from './types';
 
 interface ButtonTheme {
   backgroundColor: string;
-  borderColor: string;
+  textColor: string;
 }
 const buttonThemes: Record<ButtonVariant, ButtonTheme> = {
   primary: {
     backgroundColor: theme.colors.buttonPrimaryBackground,
-    borderColor: theme.colors.buttonPrimaryBackground,
+    textColor: theme.colors.buttonPrimaryColor,
   },
   secondary: {
     backgroundColor: theme.colors.buttonSecondaryBackground,
-    borderColor: theme.colors.buttonSecondaryBackground,
+    textColor: theme.colors.buttonSecondaryColor,
   },
   tertiary: {
     backgroundColor: theme.colors.buttonTertiaryBackground,
-    borderColor: theme.colors.buttonTertiaryBackground,
+    textColor: theme.colors.buttonTertiaryColor,
   },
 };
 
@@ -31,7 +31,8 @@ const getButtonColors = (variant: ButtonVariant) => {
   const buttonTheme = buttonThemes[variant];
   return css`
     background-color: ${buttonTheme.backgroundColor};
-    border: 1px solid ${buttonTheme.borderColor};
+    color: ${buttonTheme.textColor};
+    border: 1px solid ${buttonTheme.backgroundColor};
   `;
 };
 

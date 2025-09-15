@@ -41,6 +41,7 @@ export const ContentListContainer = styled.div`
   align-items: center;
   ${ContainerContentStyling}
   overflow:hidden;
+  padding-inline: ${({ theme }) => theme.spacing.xl}px;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding-inline: ${({ theme }) => theme.spacing.xxl}px;
   }

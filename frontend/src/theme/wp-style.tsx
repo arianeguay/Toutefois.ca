@@ -492,7 +492,6 @@ export const WordpressStyling = css`
   /* Buttons (map to your theme buttons) */
   .wp-block-button .wp-block-button__link,
   .button,
-  button,
   input[type='submit'],
   input[type='button'] {
     display: inline-block;

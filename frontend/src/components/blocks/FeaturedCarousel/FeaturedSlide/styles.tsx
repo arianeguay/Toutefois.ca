@@ -97,3 +97,8 @@ export const FeaturedSlideContent = styled.div`
     text-align: center;
   }
 `;
+
+export const FeaturedSlideActions = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.md}px;
+`;

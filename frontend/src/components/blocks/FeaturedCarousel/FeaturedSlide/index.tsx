@@ -6,6 +6,7 @@ import type { WordpressProject } from '@/types';
 import parse from 'html-react-parser';
 import { useTheme } from 'styled-components';
 import {
+  FeaturedSlideActions,
   FeaturedSlideContainer,
   FeaturedSlideContent,
   FeaturedSlideOverlay,
@@ -33,6 +34,7 @@ const FeaturedSlide: React.FC<{
               variant="big"
               lineClamp={5}
               color="buttonPrimaryBackground"
+              style={{ fontFamily: theme.fonts.tertiary }}
             >
               {[project.projet_date_debut, project.projet_date_fin].join(' - ')}
             </Typography>
@@ -40,24 +42,29 @@ const FeaturedSlide: React.FC<{
           <Typography variant="body" lineClamp={5}>
             {parse(project.excerpt)}
           </Typography>
-          <Button
-            size="lg"
-            variant="primary"
-            href={`/projects/${project.slug}`}
-            style={{ marginBlockStart: theme.spacing.md }}
-          >
-            En savoir plus
-          </Button>
-          {!!project.lien_de_reservation && (
+          <FeaturedSlideActions>
             <Button
               size="lg"
               variant="primary"
-              href={project.lien_de_reservation}
+              href={`/projects/${project.slug}`}
               style={{ marginBlockStart: theme.spacing.md }}
             >
-              Réservez maintenant
+              En savoir plus
             </Button>
-          )}
+            {!!project.lien_de_reservation &&
+              (!project.projet_date_fin ||
+                new Date(project?.projet_date_fin).getTime() >=
+                  new Date().getTime()) && (
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  href={project.lien_de_reservation}
+                  style={{ marginBlockStart: theme.spacing.md }}
+                >
+                  Réservez maintenant
+                </Button>
+              )}
+          </FeaturedSlideActions>
         </SlideBody>
         <SlideCover>
           {project.featured_image_url && (
