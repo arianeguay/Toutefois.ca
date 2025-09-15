@@ -3,6 +3,7 @@ import Typography from '@/components/common/Typography';
 import { WordpressFooter } from '@/types';
 import { useTheme } from 'styled-components';
 import Socials from '../socials';
+import EmailIcon from '../socials/Email';
 import PhoneIcon from '../socials/Phone';
 import JoinInfoRow from './JoinInfoRow';
 import { JoinSectionContainer } from './styles';
@@ -33,7 +34,7 @@ const JoinSection: React.FC<JoinSectionProps> = ({ footer }) => {
         href={`tel:${footer?.phone}`}
       />
       <JoinInfoRow
-        Icon={PhoneIcon}
+        Icon={EmailIcon}
         text={footer?.email}
         href={`mailto:${footer?.email}`}
       />
