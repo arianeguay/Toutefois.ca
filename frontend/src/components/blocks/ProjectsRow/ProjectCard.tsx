@@ -17,7 +17,10 @@ const ProjectCard: React.FC<WordpressProject> = ({
   slug,
 }) => {
   return (
-    <ProjectCardLink href={`/projets/${slug}`}>
+    <ProjectCardLink
+      href={`/projets/${slug}`}
+      style={{ textDecoration: 'none' }}
+    >
       <ProjectCardContainer>
         <ProjectCardCover>
           {featured_image_url && <img src={featured_image_url} alt={title} />}

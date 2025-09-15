@@ -10,7 +10,7 @@ const CollaboratorCard: React.FC<CollaboratorCardProps> = ({
   collaborator,
 }) => {
   return (
-    <S.Card href={collaborator.link}>
+    <S.Card href={collaborator.link} style={{ textDecoration: 'none' }}>
       <S.PhotoContainer>
         {collaborator.photoUrl && (
           <S.Photo src={collaborator.photoUrl} alt={collaborator.name} />

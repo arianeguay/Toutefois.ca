@@ -49,7 +49,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
       : `/archives/${wpItem.slug}`;
 
   return (
-    <Link href={linkPath}>
+    <Link href={linkPath} style={{ textDecoration: 'none' }}>
       <ContentCardContainer>
         <ContentImage src={wpItem.featured_image_url} alt={title} />
         <ContentCardContent>

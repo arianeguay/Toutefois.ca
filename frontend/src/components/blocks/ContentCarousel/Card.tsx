@@ -51,7 +51,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
 
   console.log(wpItem);
   return (
-    <Link href={linkPath}>
+    <Link href={linkPath} style={{ textDecoration: 'none' }}>
       <ContentCardContainer>
         <ContentImage
           src={wpItem.featured_image_url}

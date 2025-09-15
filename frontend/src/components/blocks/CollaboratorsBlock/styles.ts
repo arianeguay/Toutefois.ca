@@ -11,6 +11,7 @@ export const Card = styled.a`
   flex-direction: column;
   text-decoration: none;
   color: inherit;
+  cursor: default;
 `;
 export const Name = styled.h3``;
 export const Position = styled.p`
