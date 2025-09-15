@@ -38,7 +38,7 @@ function get_all_projects()
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
             $slug = get_post_field('post_name', $post_id);
 
-            $type = get_the_category($post_id);
+            $type = get_the_category($post_id)[0]->name;
             $posts[] = array(
                 'id' => $post_id,
                 'title' => get_the_title(),
