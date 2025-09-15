@@ -7,6 +7,8 @@ export const ContentCardContent = styled.article`
   position: relative;
   text-align: center;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const ContentBodyContent = styled.div`
@@ -27,7 +29,6 @@ export const ContentBodyContent = styled.div`
 export const ContentBodyActions = styled.div`
   display: flex;
   flex-direction: row;
-  height: 100%;
   align-items: flex-end;
   justify-content: flex-end;
 `;

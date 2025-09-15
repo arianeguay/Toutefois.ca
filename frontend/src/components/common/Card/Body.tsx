@@ -39,7 +39,7 @@ const CardBody: React.FC<CardBodyProps> = ({ title, description, date }) => {
       </ContentBodyContent>
       <ContentBodyActions>
         <Button
-          variant="primary"
+          variant="tertiary"
           size="sm"
           style={{ marginTop: theme.spacing.md, alignSelf: 'flex-end' }}
         >

@@ -200,7 +200,7 @@ function Edit({
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Include child categories in preview", "toutefois"),
     checked: includeChildren,
     onChange: setIncludeChildren
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextControl, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Title", "toutefois"),
     value: attrTitle || "",
     onChange: val => setAttributes({

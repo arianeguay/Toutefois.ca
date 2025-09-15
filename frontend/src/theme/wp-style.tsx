@@ -45,6 +45,9 @@ export const WordpressStyling = css`
     }
     a {
       color: inherit;
+      &:hover {
+        color: inherit;
+      }
     }
   }
   .is-nowrap {

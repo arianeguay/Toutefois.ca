@@ -11427,11 +11427,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var swiper_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! swiper/react */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/swiper-react.mjs");
-/* harmony import */ var swiper_modules__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! swiper/modules */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/modules/index.mjs");
-/* harmony import */ var swiper_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! swiper/css */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/swiper.css");
-/* harmony import */ var swiper_css_navigation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! swiper/css/navigation */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/modules/navigation.css");
-/* harmony import */ var swiper_css_pagination__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! swiper/css/pagination */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/modules/pagination.css");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var swiper_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! swiper/react */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/swiper-react.mjs");
+/* harmony import */ var swiper_modules__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! swiper/modules */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/modules/index.mjs");
+/* harmony import */ var swiper_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! swiper/css */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/swiper.css");
+/* harmony import */ var swiper_css_navigation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! swiper/css/navigation */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/modules/navigation.css");
+/* harmony import */ var swiper_css_pagination__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! swiper/css/pagination */ "../../../../../../AppData/Local/Yarn/Berry/cache/swiper-npm-11.2.10-2bf88a66cf-10c0.zip/node_modules/swiper/modules/pagination.css");
+
 
 
 
@@ -11441,15 +11444,15 @@ __webpack_require__.r(__webpack_exports__);
 function Carousel({
   children
 }) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(swiper_react__WEBPACK_IMPORTED_MODULE_1__.Swiper, {
-    modules: [swiper_modules__WEBPACK_IMPORTED_MODULE_2__.Navigation, swiper_modules__WEBPACK_IMPORTED_MODULE_2__.Pagination],
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(swiper_react__WEBPACK_IMPORTED_MODULE_2__.Swiper, {
+    modules: [swiper_modules__WEBPACK_IMPORTED_MODULE_3__.Navigation, swiper_modules__WEBPACK_IMPORTED_MODULE_3__.Pagination],
     spaceBetween: 30,
     slidesPerView: 1,
     navigation: true,
     pagination: {
       clickable: true
     }
-  }, React.Children.map(children, (child, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(swiper_react__WEBPACK_IMPORTED_MODULE_1__.SwiperSlide, {
+  }, _wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Children.map(children, (child, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(swiper_react__WEBPACK_IMPORTED_MODULE_2__.SwiperSlide, {
     key: index
   }, child)));
 }
@@ -11544,7 +11547,7 @@ const ProjectCard = ({
 }) => {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "project-card"
-  }, image && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+  }, project.featured_image_url && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
     src: project.featured_image_url,
     alt: project.title
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

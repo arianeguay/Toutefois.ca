@@ -1,3 +1,4 @@
+import { Children } from '@wordpress/element';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -13,7 +14,7 @@ export default function Carousel({ children }) {
       navigation
       pagination={{ clickable: true }}
     >
-      {React.Children.map(children, (child, index) => (
+            {Children.map(children, (child, index) => (
         <SwiperSlide key={index}>{child}</SwiperSlide>
       ))}
     </Swiper>

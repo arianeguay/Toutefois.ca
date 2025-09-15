@@ -4,6 +4,7 @@ import {
   PanelBody,
   SelectControl,
   Spinner,
+  TextControl,
   ToggleControl,
 } from "@wordpress/components";
 import { useSelect } from "@wordpress/data";
