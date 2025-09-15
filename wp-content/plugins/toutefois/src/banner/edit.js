@@ -27,6 +27,7 @@ export default function Edit({ attributes, setAttributes }) {
     bigTextShadow,
     textShadowColor,
     template,
+    blurredBackground,
   } = attributes;
 
   const blockStyles = {
@@ -110,6 +111,11 @@ export default function Edit({ attributes, setAttributes }) {
               { label: "With Banner", value: "with-banner" },
               { label: "With Title", value: "with-title" },
             ]}
+          />
+          <ToggleControl
+            label={__("Blurred Background", "toutefois")}
+            checked={blurredBackground}
+            onChange={(value) => setAttributes({ blurredBackground: value })}
           />
           <SelectControl
             label={__("Font", "toutefois")}

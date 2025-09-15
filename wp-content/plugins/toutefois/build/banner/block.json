@@ -40,6 +40,10 @@
       "type": "string",
       "default": "Poppins"
     },
+    "blurredBackground": {
+      "type": "boolean",
+      "default": true
+    },
     "verticalAlignment": {
       "type": "string",
       "default": "center"

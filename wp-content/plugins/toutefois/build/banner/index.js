@@ -8,7 +8,7 @@
   \*******************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/banner","version":"0.1.0","title":"Banner","category":"widgets","icon":"format-image","description":"Displays a banner with a title, description, and image.","supports":{"align":["wide","full"]},"editorScript":"file:./index.js","render":"file:./render.php","attributes":{"align":{"type":"string","default":""},"title":{"type":"string","default":""},"description":{"type":"string","default":""},"image":{"type":"object","default":null},"template":{"type":"string","default":"default"},"font":{"type":"string","default":"Poppins"},"verticalAlignment":{"type":"string","default":"center"},"horizontalAlignment":{"type":"string","default":"center"},"objectPosition":{"type":"string","default":"50% 50%"},"textColor":{"type":"string","default":"#FFFFFF"},"bigTextShadow":{"type":"boolean","default":false},"textShadowColor":{"type":"string","default":"rgba(0,0,0,0.5)"}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/banner","version":"0.1.0","title":"Banner","category":"widgets","icon":"format-image","description":"Displays a banner with a title, description, and image.","supports":{"align":["wide","full"]},"editorScript":"file:./index.js","render":"file:./render.php","attributes":{"align":{"type":"string","default":""},"title":{"type":"string","default":""},"description":{"type":"string","default":""},"image":{"type":"object","default":null},"template":{"type":"string","default":"default"},"font":{"type":"string","default":"Poppins"},"blurredBackground":{"type":"boolean","default":true},"verticalAlignment":{"type":"string","default":"center"},"horizontalAlignment":{"type":"string","default":"center"},"objectPosition":{"type":"string","default":"50% 50%"},"textColor":{"type":"string","default":"#FFFFFF"},"bigTextShadow":{"type":"boolean","default":false},"textShadowColor":{"type":"string","default":"rgba(0,0,0,0.5)"}}}');
 
 /***/ }),
 
@@ -49,7 +49,8 @@ function Edit({
     textColor,
     bigTextShadow,
     textShadowColor,
-    template
+    template,
+    blurredBackground
   } = attributes;
   const blockStyles = {
     position: "relative",
@@ -131,6 +132,12 @@ function Edit({
       label: "With Title",
       value: "with-title"
     }]
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Blurred Background", "toutefois"),
+    checked: blurredBackground,
+    onChange: value => setAttributes({
+      blurredBackground: value
+    })
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Font", "toutefois"),
     value: font,

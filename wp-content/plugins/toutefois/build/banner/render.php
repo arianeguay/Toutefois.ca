@@ -17,6 +17,7 @@ $object_position = isset($attributes['objectPosition']) ? $attributes['objectPos
 $text_color = isset($attributes['textColor']) ? $attributes['textColor'] : '#FFFFFF';
 $big_text_shadow = isset($attributes['bigTextShadow']) ? $attributes['bigTextShadow'] : false;
 $text_shadow_color = isset($attributes['textShadowColor']) ? $attributes['textShadowColor'] : 'rgba(0,0,0,0.5)';
+$blurred_background = isset($attributes['blurredBackground']) ? $attributes['blurredBackground'] : true;
 
 // Build inline styles for the container
 $container_styles = [
@@ -36,7 +37,9 @@ if ($image && !empty($image['url'])) {
     $image_style[] = 'background-image: url(' . esc_url($image['url']) . ')';
     $image_style[] = 'background-size: cover';
     $image_style[] = 'background-position: ' . esc_attr($object_position);
-    $image_style[] = 'filter: blur(4px)';
+    if ($blurred_background) {
+        $image_style[] = 'filter: blur(4px)';
+    }
 } else {
     $image_style[] = 'background-color: #f0f0f0';
     $image_style[] = 'border: 1px dashed #ccc';
