@@ -21,7 +21,7 @@ const PREVIEW_LIMIT = 6; // keep small to reduce load
 const labelWithDepth = (name, depth) => `${"— ".repeat(depth)}${name}`;
 
 export default function Edit({ attributes, setAttributes }) {
-  const { category: attrCategory } = attributes; // store ID as string
+  const { category: attrCategory, title: attrTitle } = attributes; // store ID as string
   const [includeChildren, setIncludeChildren] = useState(true);
 
   const categoryId = useMemo(() => {
@@ -175,6 +175,11 @@ export default function Edit({ attributes, setAttributes }) {
             label={__("Include child categories in preview", "toutefois")}
             checked={includeChildren}
             onChange={setIncludeChildren}
+          />
+          <TextControl
+            label={__("Title", "toutefois")}
+            value={attrTitle || ""}
+            onChange={(val) => setAttributes({ title: val })}
           />
         </PanelBody>
       </InspectorControls>

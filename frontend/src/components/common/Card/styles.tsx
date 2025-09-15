@@ -7,18 +7,29 @@ export const ContentCardContent = styled.article`
   position: relative;
   text-align: center;
   flex: 1;
+`;
+
+export const ContentBodyContent = styled.div`
+  height: 100%;
   & > h3:not(:last-child),
   & > p:not(:last-child) {
     margin-block-end: 0 !important;
   }
   & > p:not(:first-child),
   & > h3:not(:first-child):not(h2 + & h3) {
-    margin-block-start: 0 !important;
+    margin-block-start: ${({ theme }) => theme.spacing.xs}px !important;
   }
 
   h3 {
     color: ${({ theme }) => theme.prose.link};
   }
+`;
+export const ContentBodyActions = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: flex-end;
+  justify-content: flex-end;
 `;
 
 export const ContentCover = styled.div`

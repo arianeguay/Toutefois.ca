@@ -8,7 +8,7 @@
   \**********************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/projects-category-row","version":"0.1.0","title":"Projects Category Row","category":"widgets","icon":"grid-view","description":"Displays a row of projects by category.","editorScript":"file:./index.js","render":"file:./render.php","attributes":{"category":{"type":"string","default":""}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/projects-category-row","version":"0.1.0","title":"Projects Category Row","category":"widgets","icon":"grid-view","description":"Displays a row of projects by category.","editorScript":"file:./index.js","render":"file:./render.php","attributes":{"category":{"type":"string","default":""},"title":{"type":"string","default":""}}}');
 
 /***/ }),
 
@@ -54,7 +54,8 @@ function Edit({
   setAttributes
 }) {
   const {
-    category: attrCategory
+    category: attrCategory,
+    title: attrTitle
   } = attributes; // store ID as string
   const [includeChildren, setIncludeChildren] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(true);
   const categoryId = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useMemo)(() => {
@@ -199,6 +200,12 @@ function Edit({
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Include child categories in preview", "toutefois"),
     checked: includeChildren,
     onChange: setIncludeChildren
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Title", "toutefois"),
+    value: attrTitle || "",
+    onChange: val => setAttributes({
+      title: val
+    })
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "toutefois-projects-row__preview",
     style: {

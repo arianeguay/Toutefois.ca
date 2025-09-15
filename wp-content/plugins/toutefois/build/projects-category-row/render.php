@@ -5,6 +5,7 @@ $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
 // Get category from attributes, which is required by the API.
 $category = isset($attributes['category']) ? $attributes['category'] : '';
 
+$title = isset($attributes['title']) ? $attributes['title'] : '';
 // Create a mock request to pass to our function
 $request = new WP_REST_Request('GET', '/toutefois/v1/projects-category-row');
 $request->set_query_params([
@@ -20,6 +21,7 @@ $total_pages = $response->get_headers()['X-WP-TotalPages'];
 if (!empty($projects)) :
 ?>
     <div <?php echo get_block_wrapper_attributes(); ?>
+        data-title="<?php echo esc_attr($title); ?>"
         data-category="<?php echo esc_attr($category); ?>">
         <ul class="projects-grid">
             <?php foreach ($projects as $project) : ?>
