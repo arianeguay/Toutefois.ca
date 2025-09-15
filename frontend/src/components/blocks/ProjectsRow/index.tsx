@@ -16,7 +16,7 @@ const ProjectsRow: React.FC<ProjectsRowProps> = async ({
 
   return (
     <ProjectsRowContainer>
-      <Typography variant="h3" element="h2">
+      <Typography variant="h3" element="h2" style={{ marginBottom: 4 }}>
         {title}
       </Typography>
       <ProjectsRowContent projects={allProjects} />

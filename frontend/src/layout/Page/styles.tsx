@@ -2,7 +2,7 @@
 
 import { ContainerContentStyling } from '@/theme/global-styles';
 import Link from 'next/link';
-import styled, { css } from 'styled-components';
+import styled, { css, DefaultTheme } from 'styled-components';
 import { WordpressStyling } from '../../theme/wp-style';
 
 interface PageContainerProps {
@@ -54,20 +54,25 @@ export const MainContent = styled.main`
   ${WordpressStyling}
 `;
 
-const LightLink = css`
-  color: ${({ theme }) => theme.colors.lightText};
+const LightLink = (theme: DefaultTheme) => css`
+  color: ${theme.colors.lightText};
   position: absolute;
-  top: 0;
-  left: 0;
+  top: ${theme.spacing.xxl}px;
+  left: ${theme.spacing.xxl}px;
+  z-index: 1;
   &:hover {
-    color: ${({ theme }) => theme.colors.buttonPrimaryBackground};
+    color: ${theme.colors.buttonPrimaryBackground};
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+    display: none;
   }
 `;
 
-const DarkLink = css`
-  color: ${({ theme }) => theme.colors.primaryText};
+const DarkLink = (theme: DefaultTheme) => css`
+  color: ${theme.colors.primaryText};
   &:hover {
-    color: ${({ theme }) => theme.colors.buttonPrimaryBackground};
+    color: ${theme.colors.buttonPrimaryBackground};
   }
 `;
 
@@ -78,10 +83,9 @@ export const BackToLink = styled(Link)<{ $template?: string }>`
     width: fit-content;
     ${ContainerContentStyling}
 
-    ${({ $template }) =>
-      $template === 'template-banner.php' ? LightLink : DarkLink}
-    z-index: 100;
-
+    ${({ theme, $template }) =>
+      $template === 'template-banner.php' ? LightLink(theme) : DarkLink(theme)}
+ 
     @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
       display: none;
     }

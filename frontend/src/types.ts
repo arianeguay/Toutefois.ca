@@ -38,6 +38,7 @@ export interface WordpressPage {
   excerpt?: {
     rendered: string;
   };
+  thumbnail?: string;
   link: string;
   slug: string;
   template?: string;
@@ -146,12 +147,21 @@ export interface WordpressFooter {
 
 export interface WordpressCollaborator {
   id: number;
-  title: string;
-  excerpt: string;
-  content: string;
+  title: {
+    rendered: string;
+  };
+  excerpt: {
+    rendered: string;
+  };
+  content: {
+    rendered: string;
+  };
   featured_image_url: string;
   slug: string;
   template?: string;
+  meta: {
+    main_color?: string;
+  };
 }
 
 export interface WordpressOptions {

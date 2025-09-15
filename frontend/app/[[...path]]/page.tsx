@@ -1,6 +1,6 @@
 import api from '@/api';
 import PageLayout from '@/layout/Page';
-import { WordpressPage } from '@/types';
+import { WordpressCollaborator, WordpressPage } from '@/types';
 import { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
@@ -138,7 +138,7 @@ export default async function Page({
 
         if (project?.id) {
           // Format the project data to match WordpressPage structure expected by PageLayout
-          const formattedProjectPage = {
+          const formattedProjectPage: WordpressPage = {
             id: project.id,
             title: project.title,
             content: project.content,
@@ -148,9 +148,7 @@ export default async function Page({
             template: project.template,
             // Include all original project data for custom components to use
             meta: project.meta || {},
-            featured_image_url: project.featured_image_url || '',
-            // Add a flag to indicate this is a project
-            isProject: true,
+            thumbnail: project.featured_image_url || '',
           };
 
           return (
@@ -171,7 +169,9 @@ export default async function Page({
         const collaboratorsData = await api.fetchCollaboratorBySlug(
           params.path[1],
         );
-        const collaborators = Array.isArray(collaboratorsData)
+        const collaborators: WordpressCollaborator[] = Array.isArray(
+          collaboratorsData,
+        )
           ? collaboratorsData
           : [collaboratorsData];
 
@@ -181,6 +181,10 @@ export default async function Page({
             link: collaborators[0].slug
               ? `/collaborateurs/${collaborators[0].slug}`
               : '',
+            title: collaborators[0].title,
+            content: collaborators[0].content,
+            excerpt: collaborators[0].excerpt,
+            thumbnail: collaborators[0].featured_image_url || '',
             meta: {
               ...collaborators[0].meta,
               main_color: collaborators[0].meta?.main_color,

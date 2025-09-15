@@ -3,12 +3,12 @@ import type {
   WordpressFooter,
   WordpressImage,
   WordpressMenuItem,
+  WordpressOptions,
   WordpressPage,
   WordpressPost,
   WordpressProject,
   WordpressProjectFull,
   WordpressProjectGridData,
-  WordpressOptions,
 } from '../types';
 
 class Api {
@@ -205,7 +205,7 @@ class Api {
   }
 
   async fetchCollaboratorBySlug(slug: string): Promise<WordpressCollaborator> {
-    return this.fetchFromApi(`wp/v2/collaborateur?slug=${slug}`);
+    return this.fetchFromApi(`toutefois/v1/collaborators/${slug}`);
   }
 
   async fetchOptions(): Promise<WordpressOptions> {

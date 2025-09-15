@@ -31,11 +31,12 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
   const pathSegments = pathname.split('/').filter((segment: string) => segment);
 
   let parentColor: string | undefined;
+  let parentPageSlug: string | undefined;
 
   if (pathSegments.length > 1) {
     const parentSlug = pathSegments[0];
 
-    const parentPageSlug =
+    parentPageSlug =
       parentSlug === 'collaborateurs' ? 'notre-mission' : parentSlug;
     try {
       const parentPageData = await api.fetchPageBySlug(parentPageSlug);
@@ -194,6 +195,11 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
             {page.title.rendered}
           </Typography>
         )}
+
+        {parentPageSlug === 'notre-mission' && !!page.thumbnail && (
+          <img src={page.thumbnail} alt={page.title.rendered} />
+        )}
+
         {!!page.content?.rendered && parse(page.content.rendered, options)}
       </MainContent>
       <Footer currentPage={headerPage} />
