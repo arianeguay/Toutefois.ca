@@ -1,5 +1,7 @@
 'use client';
 
+import { ContainerContentStyling } from '@/theme/global-styles';
+import Link from 'next/link';
 import styled, { css } from 'styled-components';
 import { WordpressStyling } from '../../theme/wp-style';
 
@@ -16,6 +18,7 @@ export const PageContainer = styled.div<PageContainerProps>`
   flex-direction: column;
   gap: 0;
 
+  overflow-x: hidden;
   ${({ $template }) => {
     switch ($template) {
       case 'template-banner.php':
@@ -46,4 +49,15 @@ export const MainContent = styled.main`
   width: 100%;
   flex: 1;
   ${WordpressStyling}
+`;
+
+export const BackToLink = styled(Link)`
+  display: block;
+  margin-block-start: 12px;
+  width: fit-content;
+  ${ContainerContentStyling}
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+    display: none;
+  }
 `;

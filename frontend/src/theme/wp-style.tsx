@@ -100,14 +100,6 @@ export const WordpressStyling = css`
         ${ContainerContentStyling}
       }
     }
-    @media (max-width: 1200px) {
-      .wp-block-paragraph,
-      .wp-block-list,
-      .wp-block-heading,
-      & > p {
-        padding-inline: 0;
-      }
-    }
   }
 
   /* Tighter defaults for pure text blocks */

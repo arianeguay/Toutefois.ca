@@ -38,7 +38,9 @@ export const ContentListContainer = styled.div`
   position: relative;
   ${ContainerContentStyling}
   overflow:hidden;
-  padding-inline: 32px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding-inline: ${({ theme }) => theme.spacing.xxl}px;
+  }
   padding-block-end: ${({ theme }) => theme.spacing.xs}px;
   .swiper {
     width: 100%;

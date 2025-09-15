@@ -17,14 +17,15 @@ import FeaturedCarousel from '../../components/blocks/FeaturedCarousel';
 import type { WordpressPage } from '../../types';
 import Footer from '../Footer';
 import Header from '../Header';
-import { MainContent } from './styles';
+import { BackToLink, MainContent } from './styles';
 import PageWrapper from './wrapper';
 
 interface PageLayoutProps {
   page: WordpressPage;
+  backTo?: string;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
+const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
   // Treat the link as a string to robustly get the path, avoiding errors if it's not a full URL.
   const pathname = page.link.replace(/^(?:https?:\/\/)?[^/]+\/?/, '');
   const pathSegments = pathname.split('/').filter((segment: string) => segment);
@@ -174,6 +175,13 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
     <PageWrapper template={template}>
       <Header currentPage={headerPage} />
       <MainContent>
+        {backTo && (
+          <BackToLink href={backTo}>
+            <Typography variant="body" element="p">
+              Retour
+            </Typography>
+          </BackToLink>
+        )}
         {template === 'template-title.php' && (
           <Typography
             variant={!!page.template ? 'h1' : 'h2'}

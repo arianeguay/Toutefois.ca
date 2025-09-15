@@ -153,7 +153,9 @@ export default async function Page({
             isProject: true,
           };
 
-          return <PageLayout page={formattedProjectPage as any} />;
+          return (
+            <PageLayout page={formattedProjectPage as any} backTo="/projets" />
+          );
         } else {
           console.warn('Project not found:', params.path[1]);
           notFound();
@@ -244,29 +246,9 @@ export default async function Page({
 
       // If multiple pages have the same last segment, we need to find the one with matching ancestors
       if (possibleMatches.length > 0) {
-        // Extract all page paths for comparison - handle URLs safely
-        const paths = possibleMatches.map((p) => {
-          try {
-            // Handle both full URLs and relative paths
-            let pathName;
-            if (p.link.startsWith('http')) {
-              const url = new URL(p.link);
-              pathName = url.pathname;
-            } else {
-              pathName = p.link;
-            }
-            return pathName.replace(/^\/|\/$/g, ''); // Remove leading/trailing slashes
-          } catch (e) {
-            console.error('Error parsing URL:', e);
-            return p.slug || '';
-          }
-        });
-
-        // Find the best match comparing full hierarchical paths
         const normalizedRequestPath = slug.replace(/^\/|\/$/g, '');
         const bestMatch = possibleMatches.find((p) => {
           try {
-            // Handle both full URLs and relative paths safely
             let pagePath;
             if (p.link.startsWith('http')) {
               const url = new URL(p.link);
