@@ -121,6 +121,7 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
           <Button
             variant="primary"
             href={viewAllUrl}
+            size="large"
             style={{ marginBlockStart: theme.spacing.xl }}
           >
             {viewAllText}

@@ -23,6 +23,10 @@
       "type": "string",
       "default": ""
     },
+    "description": {
+      "type": "string",
+      "default": ""
+    },
     "viewAllUrl": {
       "type": "string",
       "default": ""
@@ -34,6 +38,10 @@
     "limit": {
       "type": "number",
       "default": 10
+    },
+    "noContentText": {
+      "type": "string",
+      "default": "No content found."
     }
   }
 }

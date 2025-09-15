@@ -17,6 +17,10 @@
     "memberStatus": {
       "type": "string",
       "default": "all"
+    },
+    "noCollaboratorsText": {
+      "type": "string",
+      "default": "No collaborators to display."
     }
   }
 }

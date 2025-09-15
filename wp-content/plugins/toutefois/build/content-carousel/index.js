@@ -8,7 +8,7 @@
   \*****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/content-carousel","version":"0.1.0","title":"Content Carousel","category":"widgets","icon":"slides","description":"Displays a carousel of recent projects, news, or both.","editorScript":"file:./index.js","render":"file:./render.php","attributes":{"contentType":{"type":"string","default":"mixed","enum":["project","news","mixed"]},"title":{"type":"string","default":""},"viewAllUrl":{"type":"string","default":""},"viewAllText":{"type":"string","default":""},"limit":{"type":"number","default":10}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"toutefois/content-carousel","version":"0.1.0","title":"Content Carousel","category":"widgets","icon":"slides","description":"Displays a carousel of recent projects, news, or both.","editorScript":"file:./index.js","render":"file:./render.php","attributes":{"contentType":{"type":"string","default":"mixed","enum":["project","news","mixed"]},"title":{"type":"string","default":""},"description":{"type":"string","default":""},"viewAllUrl":{"type":"string","default":""},"viewAllText":{"type":"string","default":""},"limit":{"type":"number","default":10},"noContentText":{"type":"string","default":"No content found."}}}');
 
 /***/ }),
 
@@ -121,6 +121,13 @@ function Edit({
       title: value
     })
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Description", "toutefois-blocks"),
+    value: description,
+    placeholder: getDefaultDescription(),
+    onChange: value => setAttributes({
+      description: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("View All URL", "toutefois-blocks"),
     value: viewAllUrl,
     placeholder: getDefaultViewAllUrl(),
@@ -133,6 +140,18 @@ function Edit({
     placeholder: getDefaultViewAllText(),
     onChange: value => setAttributes({
       viewAllText: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Limit", "toutefois-blocks"),
+    value: limit,
+    onChange: value => setAttributes({
+      limit: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("No Content Text", "toutefois-blocks"),
+    value: noContentText,
+    onChange: value => setAttributes({
+      noContentText: value
     })
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)("Item Limit", "toutefois-blocks"),

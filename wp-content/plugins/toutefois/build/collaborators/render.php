@@ -6,6 +6,7 @@
 
 $layout = $attributes['layout'] ?? 'vertical';
 $member_status = $attributes['memberStatus'] ?? 'all';
+$no_collaborators_text = $attributes['noCollaboratorsText'] ?? 'No collaborators to display.';
 
 $args = [
     'post_type' => 'collaborateur',
@@ -65,6 +66,7 @@ $data_attributes = [
     'layout' => $layout,
     'collaborators' => $collaborators_data,
     'memberStatus' => $member_status,
+    'noCollaboratorsText' => $no_collaborators_text,
 ];
 
 $wrapper_attributes = get_block_wrapper_attributes();
