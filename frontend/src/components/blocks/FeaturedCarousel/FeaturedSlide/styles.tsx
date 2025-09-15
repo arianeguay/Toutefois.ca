@@ -89,7 +89,10 @@ export const FeaturedSlideContent = styled.div`
   z-index: 2;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
-    flex-direction: column-reverse;
+    flex-direction: column;
+    & > *:first-child {
+      order: 2;
+    }
     gap: ${({ theme }) => theme.spacing.md}px;
     text-align: center;
   }

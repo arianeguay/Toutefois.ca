@@ -176,7 +176,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
       <Header currentPage={headerPage} />
       <MainContent>
         {backTo && (
-          <BackToLink href={backTo}>
+          <BackToLink href={backTo} $template={template} className="back-to">
             <Typography variant="body" element="p">
               Retour
             </Typography>
