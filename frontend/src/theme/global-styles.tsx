@@ -1,5 +1,6 @@
 'use client';
 import { createGlobalStyle, css } from 'styled-components';
+import { FontFaces } from './fonts';
 import createFontStyleCSS from './utils/createFontStyleCSS';
 
 export const ContainerContentStyling = css`
@@ -13,14 +14,17 @@ export const ContainerContentStyling = css`
 `;
 
 export const DefaultStyling = createGlobalStyle`
+${FontFaces}
 body {
     background-color: ${({ theme }) => theme.colors.mainBackground};
     color: ${({ theme }) => theme.colors.primaryText};
     font-family: ${({ theme }) => theme.fonts.primary};
-
+    max-width:100vw;
+    width: 100%;
+    overflow-x: hidden;
+    
     .app {
       width: 100%;
-      
     }
 
     h1 {${createFontStyleCSS('h1')}}

@@ -1,8 +1,8 @@
 import api from '@/api';
-import Typography from '@/components/common/Typography';
 import type { WordpressPage } from '@/types';
-import Socials from './socials';
-import { CenterSection, FooterContainer, FooterContent } from './styles';
+import JoinSection from './JoinSection';
+import { FooterContainer, FooterContent } from './styles';
+import WebsiteInfo from './WebInfo';
 
 interface FooterProps {
   currentPage?: WordpressPage;
@@ -15,49 +15,8 @@ const Footer: React.FC<FooterProps> = async ({ currentPage }) => {
   return (
     <FooterContainer $mainColor={mainColor}>
       <FooterContent>
-        {!!footer ? (
-          <div>
-            <Typography
-              variant="body"
-              element="p"
-              style={{ fontWeight: 'medium', marginBottom: 8 }}
-            >
-              Nous joindre
-            </Typography>
-            <a href={`tel:${footer?.phone}`}>
-              <Typography variant="small" element="p">
-                {footer?.phone}
-              </Typography>
-            </a>
-            <a href={`mailto:${footer?.email}`}>
-              <Typography variant="small" element="p">
-                {footer?.email}
-              </Typography>
-            </a>
-            <Socials
-              instagram={footer?.instagram}
-              facebook={footer?.facebook}
-            />
-          </div>
-        ) : (
-          <div></div>
-        )}
-        <CenterSection>
-          <Typography
-            variant="body"
-            element="p"
-            style={{ textAlign: 'center' }}
-          >
-            {footer?.slogan}
-          </Typography>
-          <Typography
-            variant="body"
-            element="p"
-            style={{ textAlign: 'center' }}
-          >
-            Théâtre de Toutefois © 2025
-          </Typography>
-        </CenterSection>
+        <JoinSection footer={footer} />
+        <WebsiteInfo footer={footer} />
         <div></div>
       </FooterContent>
     </FooterContainer>

@@ -69,7 +69,7 @@ export const DrawerContainer = styled.div<{ $isOpen?: boolean }>`
     opacity 0.3s ease;
 
   padding-block: ${({ theme }) => theme.spacing.xxl}px;
-  padding-inline: ${({ theme }) => theme.spacing.xl}px;
+  padding-inline: ${({ theme }) => theme.spacing.xxl}px;
   ${({ $isOpen }) =>
     $isOpen &&
     css`

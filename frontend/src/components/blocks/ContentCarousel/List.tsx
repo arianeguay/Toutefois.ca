@@ -80,7 +80,7 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
 
   return (
     <>
-      {current && <BackgroundImage src={getBackgroundImage()} alt="" />}
+      {current && <BackgroundImage $src={getBackgroundImage()} />}
       <ContentListContainer>
         <ContentListHeader>
           <Typography variant="h2" element="h2">

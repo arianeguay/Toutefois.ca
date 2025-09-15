@@ -153,11 +153,32 @@ export const WordpressStyling = css`
     color: ${({ theme }) => theme.prose.link};
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
   a:hover {
     color: ${({ theme }) => theme.prose.linkHover};
   }
 
+  & > .wp-block-image {
+    &.size-large {
+      ${ContainerContentStyling}
+      height: auto;
+      margin-block: ${({ theme }) => theme.spacing.xl}px;
+
+      img {
+        border: ${({ theme }) => theme.borders.subtle};
+        width: 80%;
+        margin-inline: auto;
+        max-height: 650px;
+        height: auto;
+        object-fit: cover;
+      }
+    }
+  }
   p {
     &:not(:first-child) {
       margin-block-start: ${({ theme }) => theme.spacing.sm}px;

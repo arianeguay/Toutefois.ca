@@ -10,6 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "dayjs": "^1.11.18",
     "html-react-parser": "^5.2.6",
     "next": "^14.1.0",
     "react": "^18.2.0",

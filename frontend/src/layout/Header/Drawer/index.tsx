@@ -1,5 +1,6 @@
 'use client';
 
+import Typography from '@/components/common/Typography';
 import { WordpressMenuItem } from '@/types';
 import { useState } from 'react';
 import MenuItem from '../Menu/menu-item';
@@ -17,6 +18,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ menuItems }) => {
       <Hamburger onClick={toggleDrawer} isOpen={isOpen} />
       <DrawerContainer $isOpen={isOpen}>
         <DrawerMenuContent>
+          <Typography variant="h3">Menu</Typography>
           {menuItems.map((item) => (
             <MenuItem key={item.href} {...item} />
           ))}

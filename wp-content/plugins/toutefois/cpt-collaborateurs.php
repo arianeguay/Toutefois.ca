@@ -26,6 +26,10 @@ function collaborateurs_cpt_and_meta_init()
         'menu_icon' => 'dashicons-groups',
         'show_in_rest' => true,
         'has_archive' => true,
+        'rewrite'               => array(
+            'slug'       => 'collaborateurs',                   // single posts at /projets/%postname%
+            'with_front' => false,
+        ),
     ];
     register_post_type('collaborateur', $args);
 

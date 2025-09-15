@@ -4,11 +4,15 @@ import ContentCarousel from '@/components/blocks/ContentCarousel';
 import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
 import Typography from '@/components/common/Typography';
+import console from 'console';
 import {
+  DOMNode,
+  domToReact,
   Element,
   default as parse,
   type HTMLReactParserOptions,
 } from 'html-react-parser';
+import Link from 'next/link';
 import FeaturedCarousel from '../../components/blocks/FeaturedCarousel';
 import type { WordpressPage } from '../../types';
 import Footer from '../Footer';
@@ -61,6 +65,20 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page }) => {
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.attribs) {
+        if (domNode.name === 'a') {
+          const adminUrl =
+            process.env.NEXT_PUBLIC_ADMIN_URL ?? 'http://admin.toutefois.ca';
+          if (domNode.attribs.href.startsWith(adminUrl)) {
+            const parsedUrl = new URL(domNode.attribs.href);
+            console.log(parsedUrl);
+            return (
+              <Link href={parsedUrl.pathname}>
+                {domToReact(domNode.childNodes as DOMNode[])}
+              </Link>
+            );
+          }
+        }
+
         if (
           domNode.attribs.class?.includes(
             'wp-block-toutefois-featured-carousel',

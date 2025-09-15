@@ -21,6 +21,14 @@ export const HeaderContainer = styled.header<{ $mainColor?: string }>`
     flex-direction: row;
     gap: ${({ theme }) => theme.spacing.xl}px;
     justify-content: space-between;
+    padding-inline: ${({ theme }) => theme.spacing.md}px;
+
+    &:before {
+      content: '';
+      display: block;
+      height: 1px;
+      width: auto;
+    }
   }
 `;
 

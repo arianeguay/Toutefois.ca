@@ -16,7 +16,9 @@ export const Name = styled.h3``;
 export const Position = styled.p`
   color: ${({ theme }) => theme.colors.primaryText};
 `;
-export const Excerpt = styled.p``;
+export const Excerpt = styled.p`
+  color: ${({ theme }) => theme.colors.tertiaryText};
+`;
 
 export const PhotoContainer = styled.div`
   flex-shrink: 0;
@@ -26,6 +28,7 @@ export const PhotoContainer = styled.div`
   margin: 0;
   display: flex;
   background-color: ${({ theme }) => theme.colors.borderColor1};
+  box-shadow: ${({ theme }) => theme.boxShadow.sm};
 `;
 export const Photo = styled.img`
   width: 100%;
@@ -54,6 +57,15 @@ const ContainerVerticalStyling = css`
     align-items: center;
     &:nth-child(even) {
       flex-direction: row-reverse;
+      ${PhotoContainer} {
+        border-left: 1px solid ${({ theme }) => theme.borders.strong};
+      }
+    }
+
+    &:not(:nth-child(even)) {
+      ${PhotoContainer} {
+        border-right: 1px solid ${({ theme }) => theme.borders.strong};
+      }
     }
 
     ${PhotoContainer} {
@@ -108,6 +120,13 @@ const ContainerHorizontalStyling = css`
   ${Card} {
     flex-direction: column;
     width: 370px;
+
+    &:not(:last-child) {
+      padding-inline-end: ${({ theme }) => theme.spacing.md}px;
+    }
+    &:not(:first-child) {
+      padding-inline-start: ${({ theme }) => theme.spacing.md}px;
+    }
     ${PhotoContainer} {
       width: 250px;
     }
@@ -135,6 +154,7 @@ const ContainerHorizontalStyling = css`
       flex-direction: column;
       align-items: center;
       width: 100%;
+      max-width: 460px;
     }
   }
 `;

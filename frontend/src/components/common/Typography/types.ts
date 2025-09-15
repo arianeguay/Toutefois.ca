@@ -1,3 +1,5 @@
+import theme from '@/theme';
+
 export type TypographyElementType =
   | 'h1'
   | 'h2'
@@ -11,8 +13,11 @@ export type TypographyVariant =
   | 'h2'
   | 'h3'
   | 'h4'
+  | 'h5'
+  | 'h6'
   | 'body'
   | 'small'
+  | 'overline'
   | 'subtitle'
   | 'big';
 export interface TypographyProps {
@@ -22,4 +27,5 @@ export interface TypographyProps {
   className?: string;
   onClick?: React.MouseEventHandler;
   lineClamp?: number;
+  color?: keyof typeof theme.colors;
 }

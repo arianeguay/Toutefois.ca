@@ -9,6 +9,7 @@ export interface WordpressPost {
   excerpt: {
     rendered: string;
   };
+  date: string;
   link: string;
   featured_image_url: string;
   type?: 'wordpress';

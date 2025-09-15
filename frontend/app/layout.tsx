@@ -1,7 +1,7 @@
 import StyledComponentsRegistry from '@/lib/registry';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { Metadata } from 'next';
-import { Montserrat, Poppins } from 'next/font/google';
+import { Montserrat, Permanent_Marker, Poppins } from 'next/font/google';
 import './globals.css';
 
 const montserrat = Montserrat({
@@ -17,6 +17,13 @@ const poppins = Poppins({
   display: 'swap',
 });
 
+const permanentMarker = Permanent_Marker({
+  weight: ['400'],
+  subsets: ['latin'],
+  variable: '--font-permanent-marker',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   title: 'Toutefois',
   description: 'Toutefois.ca website',
@@ -29,7 +36,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={`${montserrat.variable} ${poppins.variable}`}>
+      <body
+        className={`${montserrat.variable} ${poppins.variable} ${permanentMarker.variable}`}
+      >
         <StyledComponentsRegistry>
           <ThemeProvider>{children}</ThemeProvider>
         </StyledComponentsRegistry>

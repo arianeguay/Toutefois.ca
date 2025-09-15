@@ -3,7 +3,7 @@
 import { ContainerContentStyling } from '@/theme/global-styles';
 import styled from 'styled-components';
 
-export const BackgroundImage = styled.img`
+export const BackgroundImage = styled.div<{ $src: string }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -12,6 +12,11 @@ export const BackgroundImage = styled.img`
   left: 0;
   user-select: none;
   opacity: 0.2;
+  background-image: url(${({ $src }) => $src});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 0.2s ease-in-out;
 `;
 
 export const ContentCardContainer = styled.div`
@@ -19,8 +24,7 @@ export const ContentCardContainer = styled.div`
   flex-direction: column;
   color: ${({ theme }) => theme.colors.primaryText};
   height: 100%;
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
-  box-shadow: ${({ theme }) => theme.boxShadow.md};
+  background-color: white;
   transition: all 0.2s ease-in-out;
   &:hover {
     cursor: pointer;
@@ -35,7 +39,7 @@ export const ContentListContainer = styled.div`
   ${ContainerContentStyling}
   overflow:hidden;
   padding-inline: 32px;
-  padding-block-end: ${({ theme }) => theme.spacing.lg}px;
+  padding-block-end: ${({ theme }) => theme.spacing.xs}px;
   .swiper {
     width: 100%;
     --swiper-navigation-size: 36px;
@@ -57,17 +61,21 @@ export const ContentListContainer = styled.div`
 `;
 
 export const ContentCardContent = styled.div`
-  padding-inline: ${({ theme }) => theme.spacing.lg}px;
-  padding-block: ${({ theme }) => theme.spacing.md}px;
-  background-color: white;
-
-  margin-top: -${({ theme }) => theme.spacing.md * 2}px;
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
-  border: 1px solid ${({ theme }) => theme.colors.borderColor1};
-
+  padding-inline: ${({ theme }) => theme.spacing.md}px;
+  padding-block-end: ${({ theme }) => theme.spacing.lg}px;
+  text-align: center;
   flex: 1;
-  p {
-    margin: 0;
+  & > h3:not(:last-child),
+  & > p:not(:last-child) {
+    margin-block-end: 0 !important;
+  }
+  & > p:not(:first-child),
+  & > h3:not(:first-child):not(h2 + & h3) {
+    margin-block-start: 0 !important;
+  }
+
+  h3 {
+    color: ${({ theme }) => theme.prose.link};
   }
 `;
 
@@ -75,19 +83,21 @@ export const ContentImage = styled.img`
   max-width: 100%;
   height: auto;
   aspect-ratio: 16/9;
-  background-color: ${({ theme }) => theme.colors.headerBackground};
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
-  border: 1px solid ${({ theme }) => theme.colors.borderColor1};
+  background-color: ${({ theme }) => theme.colors.lightText};
+  border-bottom: ${({ theme }) => theme.borders.strong};
   object-fit: cover;
-  margin-bottom: 1rem;
+  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
 export const ContentListHeader = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+  margin-bottom: ${({ theme }) => theme.spacing.xs}px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
+  h2 {
+    text-shadow: ${({ theme }) => theme.colors.primaryText}70 2px 3px 3px;
+  }
   @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     flex-direction: column;
     gap: ${({ theme }) => theme.spacing.sm}px;

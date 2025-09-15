@@ -1,7 +1,6 @@
 'use client';
 
 import theme, { mobileTheme } from '@/theme';
-import { Fonts } from '@/theme/fonts';
 import { DefaultStyling } from '@/theme/global-styles';
 import { ReactNode, useEffect, useState } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
@@ -20,7 +19,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   return (
     <StyledThemeProvider theme={isMobile ? mobileTheme : theme}>
       <DefaultStyling />
-      <Fonts />
       {children}
     </StyledThemeProvider>
   );

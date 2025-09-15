@@ -2,6 +2,7 @@ export const theme = {
   colors: {
     primaryText: '#2F2C58',
     secondaryText: '#6B1E2C',
+    tertiaryText: '#2e2e2e',
     lightText: '#F5F3EE',
 
     headerBackground: '#2F2C58',
@@ -23,18 +24,22 @@ export const theme = {
     borderColor2: '#E1A42B',
   },
   fonts: {
-    secondary: 'Poppins',
-    primary: 'Montserrat',
+    secondary: 'Cerebri Sans',
+    primary: '"Special Elite", system-ui',
+    tertiary: '"Montserrat", system-ui',
   },
   fontSizes: {
-    h1: 48,
+    h1: 42,
     h2: 36,
     h3: 28,
     h4: 22,
+    h5: 20,
+    h6: 18,
     body: 16,
     small: 14,
     subtitle: 18,
     big: 18,
+    overline: 12,
   },
   breakpoints: {
     xs: '480px',
@@ -51,7 +56,7 @@ export const theme = {
     bold: '700',
   },
   lineHeights: {
-    h1: 58,
+    h1: 50,
     h2: 47,
     h3: 36,
     h4: 31,
@@ -61,6 +66,7 @@ export const theme = {
     small: 20,
     subtitle: 29,
     big: 29,
+    overline: 13,
   },
   letterSpacings: {
     h1: -0.5,
@@ -73,6 +79,7 @@ export const theme = {
     small: 0.25,
     subtitle: 0,
     big: 0,
+    overline: 0.35,
   },
   spacing: {
     xs: 4,
@@ -116,6 +123,7 @@ export const theme = {
   borders: {
     subtle: '1px solid rgba(0,0,0,0.08)',
     strong: '1px solid rgba(0,0,0,0.18)',
+    dark: '1px solid #2F2C58',
   },
   prose: {
     link: '#862331', // could also be colors.projects
@@ -141,10 +149,13 @@ export const mobileTheme: typeof theme = {
     h2: 24,
     h3: 20,
     h4: 18,
+    h5: 16,
+    h6: 14,
     body: 14,
     small: 12,
     subtitle: 16,
     big: 16,
+    overline: 12,
   },
   lineHeights: {
     h1: 40,
@@ -157,6 +168,7 @@ export const mobileTheme: typeof theme = {
     small: 18,
     subtitle: 24,
     big: 24,
+    overline: 13,
   },
   spacing: {
     xs: 2,

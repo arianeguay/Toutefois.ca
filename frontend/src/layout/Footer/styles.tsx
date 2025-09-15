@@ -42,13 +42,15 @@ export const CenterSection = styled.div`
   gap: ${({ theme }) => theme.spacing.md}px;
   align-items: center;
   align-self: stretch;
-
-  &:before {
-    content: '';
-    display: block;
-    height: 1px;
-    width: 100%;
-    background-color: ${({ theme }) => theme.colors.lightText};
-    margin-top: ${({ theme }) => theme.spacing.xs}px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    align-items: stretch;
+    &:before {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 100%;
+      background-color: ${({ theme }) => theme.colors.lightText};
+      margin-top: ${({ theme }) => theme.spacing.xs}px;
+    }
   }
 `;

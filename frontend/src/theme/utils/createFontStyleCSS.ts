@@ -1,7 +1,14 @@
 import { TypographyVariant } from '@/components/common/Typography/types';
 import { css } from 'styled-components';
 
-const HeadingVariant: TypographyVariant[] = ['h1', 'h2', 'h3', 'h4'];
+const HeadingVariant: TypographyVariant[] = [
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+];
 
 const createFontStyleCSS = (variant: TypographyVariant, lineClamp?: number) => {
   return css`
@@ -14,6 +21,13 @@ const createFontStyleCSS = (variant: TypographyVariant, lineClamp?: number) => {
     css`
       font-weight: ${({ theme }) => theme.fontWeights.bold};
       font-family: ${({ theme }) => theme.fonts.secondary};
+    `}
+
+    ${variant === 'overline' &&
+    css`
+      text-transform: uppercase;
+      font-weight: ${({ theme }) => theme.fontWeights.medium};
+      font-family: ${({ theme }) => theme.fonts.tertiary};
     `}
 
     ${lineClamp &&
