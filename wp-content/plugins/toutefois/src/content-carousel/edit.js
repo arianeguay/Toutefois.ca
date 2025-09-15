@@ -8,7 +8,15 @@ import {
 import { __ } from "@wordpress/i18n";
 
 export default function Edit({ attributes, setAttributes }) {
-  const { contentType, title, viewAllUrl, viewAllText, limit } = attributes;
+  const {
+    contentType,
+    title,
+    viewAllUrl,
+    viewAllText,
+    limit,
+    noContentText,
+    description,
+  } = attributes;
 
   // Default titles based on content type
   const getDefaultTitle = () => {

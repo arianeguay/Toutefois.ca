@@ -43,7 +43,9 @@ function Edit({
     title,
     viewAllUrl,
     viewAllText,
-    limit
+    limit,
+    noContentText,
+    description
   } = attributes;
 
   // Default titles based on content type
