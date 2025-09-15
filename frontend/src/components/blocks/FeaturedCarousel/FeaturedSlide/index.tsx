@@ -19,6 +19,7 @@ const FeaturedSlide: React.FC<{
 }> = ({ project }) => {
   const theme = useTheme();
 
+  console.log(project);
   return (
     <FeaturedSlideContainer>
       <FeaturedSlideOverlay $backgroundUrl={project.featured_image_url} />
@@ -28,7 +29,11 @@ const FeaturedSlide: React.FC<{
             {project.title}
           </Typography>
           {project.projet_date_debut && project.projet_date_fin && (
-            <Typography variant="big" lineClamp={5}>
+            <Typography
+              variant="big"
+              lineClamp={5}
+              color="buttonPrimaryBackground"
+            >
               {[project.projet_date_debut, project.projet_date_fin].join(' - ')}
             </Typography>
           )}
@@ -43,6 +48,16 @@ const FeaturedSlide: React.FC<{
           >
             En savoir plus
           </Button>
+          {!!project.lien_de_reservation && (
+            <Button
+              size="lg"
+              variant="primary"
+              href={project.lien_de_reservation}
+              style={{ marginBlockStart: theme.spacing.md }}
+            >
+              Réservez maintenant
+            </Button>
+          )}
         </SlideBody>
         <SlideCover>
           {project.featured_image_url && (

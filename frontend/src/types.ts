@@ -86,6 +86,7 @@ export interface WordpressProject {
   projet_date_debut?: string;
   projet_date_fin?: string;
   type?: string;
+  lien_de_reservation?: string;
   categories?: {
     id: number;
     name: string;

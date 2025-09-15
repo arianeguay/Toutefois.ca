@@ -70,7 +70,7 @@ function get_featured_projects()
                 'projet_date_debut' => $post_meta['_projet_date_debut'][0],
                 'projet_date_fin' => $post_meta['_projet_date_fin'][0],
                 'type' => $type,
-                'lien_de_reservation' => $post_meta['projet_lien'][0],
+                'lien_de_reservation' => $post_meta['_projet_lien'][0],
             );
         }
         wp_reset_postdata();
