@@ -149,3 +149,8 @@ export interface WordpressCollaborator {
   slug: string;
   template?: string;
 }
+
+export interface WordpressOptions {
+  error_title: string;
+  error_message: string;
+}

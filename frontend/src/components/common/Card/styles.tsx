@@ -1,37 +1,47 @@
 import styled from 'styled-components';
 
-export const ContentCardContent = styled.div`
+export const ContentCardContent = styled.article`
   padding-inline: ${({ theme }) => theme.spacing.lg}px;
-  padding-block: ${({ theme }) => theme.spacing.md}px;
+  padding-block-end: ${({ theme }) => theme.spacing.md}px;
   background-color: white;
-
-  margin-top: -${({ theme }) => theme.spacing.md * 2}px;
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
-  border: 1px solid ${({ theme }) => theme.colors.borderColor1};
-
+  position: relative;
+  text-align: center;
   flex: 1;
-  p {
-    margin: 0;
+  & > h3:not(:last-child),
+  & > p:not(:last-child) {
+    margin-block-end: 0 !important;
+  }
+  & > p:not(:first-child),
+  & > h3:not(:first-child):not(h2 + & h3) {
+    margin-block-start: 0 !important;
+  }
+
+  h3 {
+    color: ${({ theme }) => theme.prose.link};
   }
 `;
 
-export const ContentImage = styled.img`
-  max-width: 100%;
-  height: 300px;
-
+export const ContentCover = styled.div`
+  position: relative;
   background-color: ${({ theme }) => theme.colors.headerBackground};
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
-  border: 1px solid ${({ theme }) => theme.colors.borderColor1};
+  aspect-ratio: 16/9;
+  width: 100%;
+  overflow: hidden;
+`;
+
+export const ContentImage = styled.img`
   object-fit: cover;
-  margin-bottom: 1rem;
+  width: 100%;
+  height: 100%;
 `;
 
 export const ContentCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   color: ${({ theme }) => theme.colors.primaryText};
+  border: 1px solid ${({ theme }) => theme.colors.borderColor1};
+
   height: 100%;
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
   box-shadow: ${({ theme }) => theme.boxShadow.md};
   transition: all 0.2s ease-in-out;
   &:hover {
@@ -39,4 +49,25 @@ export const ContentCardContainer = styled.div`
     transform: translateY(-2px);
     box-shadow: ${({ theme }) => theme.boxShadow.lg};
   }
+`;
+
+export const TicketBorderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  position: absolute;
+  top: -20px;
+  left: 0;
+  overflow: hidden;
+`;
+
+export const TicketShape = styled.span`
+  flex: 0 0 26px; /* keep consistent width */
+  height: 20px;
+  background-image: radial-gradient(
+    circle at 13px 0,
+    transparent 0.4em,
+    #fff 0.5em
+  );
+  background-repeat: no-repeat;
 `;

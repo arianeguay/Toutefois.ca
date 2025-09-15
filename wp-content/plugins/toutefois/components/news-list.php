@@ -35,8 +35,9 @@ function get_all_news()
             $query->the_post();
             $post_id = get_the_ID();
             $post_meta = get_post_meta($post_id);
-            $featured_image_id = get_post_thumbnail_id($post_id);
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
+
+            $date = get_the_date();
 
             $posts[] = array(
                 'id' => $post_id,
@@ -44,7 +45,7 @@ function get_all_news()
                 'excerpt' => get_the_excerpt(),
                 'content' => get_the_content(),
                 'slug' => get_post_field('post_name', $post_id),
-
+                'date' => $date,
                 'meta' => $post_meta,
                 'featured_image_url' => $featured_image_url
             );

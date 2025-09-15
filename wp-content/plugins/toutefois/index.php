@@ -34,6 +34,7 @@ require_once plugin_dir_path(__FILE__) . 'projects.php';
 require_once plugin_dir_path(__FILE__) . 'news.php';
 require_once plugin_dir_path(__FILE__) . 'cpt-collaborateurs.php';
 require_once plugin_dir_path(__FILE__) . 'footer.php';
+require_once plugin_dir_path(__FILE__) . 'inc/theme-options.php';
 
 // Add custom page templates
 function toutefois_add_page_templates($templates, $theme, $post)

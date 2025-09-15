@@ -10,6 +10,7 @@ interface ContentCarouselProps {
   viewAllUrl?: string;
   viewAllText?: string;
   limit?: number;
+  noContentText?: string;
 }
 
 const ContentCarousel = async ({
@@ -19,6 +20,7 @@ const ContentCarousel = async ({
   viewAllUrl,
   viewAllText,
   limit = 10,
+  noContentText = 'No content found.',
 }: ContentCarouselProps) => {
   let items: (WordpressPost | WordpressProject | FacebookPost)[] = [];
 
@@ -61,7 +63,7 @@ const ContentCarousel = async ({
   items = items.slice(0, limit);
 
   if (!items.length) {
-    return <p>No content found.</p>;
+    return <p>{noContentText}</p>;
   }
 
   return (

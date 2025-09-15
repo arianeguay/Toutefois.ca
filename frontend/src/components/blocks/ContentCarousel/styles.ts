@@ -19,7 +19,7 @@ export const BackgroundImage = styled.div<{ $src: string }>`
   transition: background-image 0.2s ease-in-out;
 `;
 
-export const ContentCardContainer = styled.div`
+export const ContentCardContainer = styled.article`
   display: flex;
   flex-direction: column;
   color: ${({ theme }) => theme.colors.primaryText};

@@ -8,6 +8,7 @@ import type {
   WordpressProject,
   WordpressProjectFull,
   WordpressProjectGridData,
+  WordpressOptions,
 } from '../types';
 
 class Api {
@@ -205,6 +206,10 @@ class Api {
 
   async fetchCollaboratorBySlug(slug: string): Promise<WordpressCollaborator> {
     return this.fetchFromApi(`wp/v2/collaborateur?slug=${slug}`);
+  }
+
+  async fetchOptions(): Promise<WordpressOptions> {
+    return this.fetchFromApi('toutefois/v1/options');
   }
 }
 

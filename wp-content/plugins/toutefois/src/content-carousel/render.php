@@ -11,37 +11,8 @@ $description = isset($attributes['description']) ? $attributes['description'] : 
 $view_all_url = isset($attributes['viewAllUrl']) ? $attributes['viewAllUrl'] : '';
 $view_all_text = isset($attributes['viewAllText']) ? $attributes['viewAllText'] : '';
 $limit = isset($attributes['limit']) ? intval($attributes['limit']) : 10;
+$no_content_text = isset($attributes['noContentText']) ? $attributes['noContentText'] : 'No content found.';
 
-// Set default values if empty
-if (empty($title)) {
-    if ($content_type === 'project') {
-        $title = 'Nos projets';
-    } elseif ($content_type === 'news') {
-        $title = 'Quoi de neuf?';
-    } else {
-        $title = 'Contenu récent';
-    }
-}
-
-if (empty($view_all_url)) {
-    if ($content_type === 'project') {
-        $view_all_url = '/projets';
-    } elseif ($content_type === 'news') {
-        $view_all_url = '/archives';
-    } else {
-        $view_all_url = '/';
-    }
-}
-
-if (empty($view_all_text)) {
-    if ($content_type === 'project') {
-        $view_all_text = 'Voir tous les projets';
-    } elseif ($content_type === 'news') {
-        $view_all_text = 'Voir tous les articles';
-    } else {
-        $view_all_text = 'Voir tout';
-    }
-}
 
 // Fetch content based on type
 $items = array();
@@ -81,7 +52,8 @@ if (!empty($items)) :
             data-description="<?php echo esc_attr($description); ?>"
             data-view-all-url="<?php echo esc_attr($view_all_url); ?>"
             data-view-all-text="<?php echo esc_attr($view_all_text); ?>"
-            data-limit="<?php echo esc_attr($limit); ?>">
+            data-limit="<?php echo esc_attr($limit); ?>"
+            data-no-content-text="<?php echo esc_attr($no_content_text); ?>">
             <!-- Fallback content for non-JS environments -->
             <h2><?php echo esc_html($title); ?></h2>
             <ul>
@@ -102,7 +74,7 @@ if (!empty($items)) :
 else :
 ?>
     <div <?php echo get_block_wrapper_attributes(); ?>>
-        <p>No content found.</p>
+        <p><?php echo esc_html($no_content_text); ?></p>
     </div>
 <?php
 endif;

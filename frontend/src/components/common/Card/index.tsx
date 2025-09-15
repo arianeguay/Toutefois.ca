@@ -1,13 +1,10 @@
-import Typography from '@/components/common/Typography';
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import Link from 'next/link';
-import {
-  ContentCardContainer,
-  ContentCardContent,
-  ContentImage,
-} from './styles';
+import CardBody from './Body';
+import CardCover from './Cover';
+import { ContentCardContainer } from './styles';
 
-type ContentItem = WordpressPost | WordpressProject | FacebookPost;
+export type ContentItem = WordpressPost | WordpressProject | FacebookPost;
 
 interface ContentCardProps {
   item: ContentItem;
@@ -19,17 +16,17 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
   if (contentType === 'facebook') {
     const fbPost = item as FacebookPost;
     return (
-      <ContentCardContainer>
-        {fbPost.picture && <ContentImage src={fbPost.picture} alt="" />}
-        <ContentCardContent>
-          <Typography variant="h4" element="h3">
-            Facebook Post
-          </Typography>
-          <Typography variant="body" lineClamp={3}>
-            {fbPost.message || ''}
-          </Typography>
-        </ContentCardContent>
-      </ContentCardContainer>
+      <a
+        href={fbPost.permalink_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ textDecoration: 'none' }}
+      >
+        <ContentCardContainer>
+          <CardCover src={fbPost.picture} alt={fbPost.message} />
+          <CardBody title={fbPost.message} description={fbPost.message} />
+        </ContentCardContainer>
+      </a>
     );
   }
 
@@ -48,18 +45,13 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
       ? `/projets/${wpItem.slug}`
       : `/archives/${wpItem.slug}`;
 
+  const date = contentType === 'news' ? wpItem.date : wpItem.date;
+
   return (
     <Link href={linkPath} style={{ textDecoration: 'none' }}>
       <ContentCardContainer>
-        <ContentImage src={wpItem.featured_image_url} alt={title} />
-        <ContentCardContent>
-          <Typography variant="h4" element="h3">
-            {title}
-          </Typography>
-          <Typography variant="body" lineClamp={3}>
-            {excerpt}
-          </Typography>
-        </ContentCardContent>
+        <CardCover src={wpItem.featured_image_url} alt={title} />
+        <CardBody title={title} description={excerpt} date={date} />
       </ContentCardContainer>
     </Link>
   );

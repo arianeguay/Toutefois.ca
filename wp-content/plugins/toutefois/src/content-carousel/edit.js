@@ -86,6 +86,12 @@ export default function Edit({ attributes, setAttributes }) {
             onChange={(value) => setAttributes({ title: value })}
           />
           <TextControl
+            label={__("Description", "toutefois-blocks")}
+            value={description}
+            placeholder={getDefaultDescription()}
+            onChange={(value) => setAttributes({ description: value })}
+          />
+          <TextControl
             label={__("View All URL", "toutefois-blocks")}
             value={viewAllUrl}
             placeholder={getDefaultViewAllUrl()}
@@ -96,6 +102,16 @@ export default function Edit({ attributes, setAttributes }) {
             value={viewAllText}
             placeholder={getDefaultViewAllText()}
             onChange={(value) => setAttributes({ viewAllText: value })}
+          />
+          <TextControl
+            label={__("Limit", "toutefois-blocks")}
+            value={limit}
+            onChange={(value) => setAttributes({ limit: value })}
+          />
+          <TextControl
+            label={__("No Content Text", "toutefois-blocks")}
+            value={noContentText}
+            onChange={(value) => setAttributes({ noContentText: value })}
           />
           <RangeControl
             label={__("Item Limit", "toutefois-blocks")}

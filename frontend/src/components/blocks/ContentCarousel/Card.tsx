@@ -19,6 +19,7 @@ interface ContentCardProps {
 
 const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
   // For Facebook posts
+
   if (contentType === 'facebook') {
     const fbPost = item as FacebookPost;
     return (
@@ -49,7 +50,6 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
       ? `/projets/${wpItem.slug}`
       : `/archives/${wpItem.slug}`;
 
-  console.log(wpItem);
   return (
     <Link href={linkPath} style={{ textDecoration: 'none' }}>
       <ContentCardContainer>

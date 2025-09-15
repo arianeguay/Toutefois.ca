@@ -3,8 +3,7 @@ import styled, { css, DefaultTheme } from 'styled-components';
 const DividerHorizontal = (theme: DefaultTheme) => css`
   height: 1px;
   background-color: ${theme.colors.borderColor1};
-  margin-block-start: ${({ theme }) => theme.spacing.sm}px;
-  margin-block-end: ${({ theme }) => theme.spacing.md}px;
+  margin-block: ${({ theme }) => theme.spacing.md}px;
   width: 100%;
   max-width: 40%;
 `;

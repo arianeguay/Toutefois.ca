@@ -2,6 +2,7 @@
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 
 import Button from '@/components/common/Button';
+import ContentCard, { ContentItem } from '@/components/common/Card';
 import Typography from '@/components/common/Typography';
 import { pxToNumber } from '@/theme';
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
@@ -12,14 +13,11 @@ import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
-import ContentCard from './Card';
 import {
   BackgroundImage,
   ContentListContainer,
   ContentListHeader,
 } from './styles';
-
-type ContentItem = WordpressPost | WordpressProject | FacebookPost;
 
 interface ContentCarouselProps {
   items: ContentItem[];
@@ -33,12 +31,10 @@ interface ContentCarouselProps {
 const ContentCarousel: React.FC<ContentCarouselProps> = ({
   items,
   contentType,
-  title = contentType === 'project' ? 'Nos projets' : 'Quoi de neuf?',
+  title,
   description,
-  viewAllUrl = contentType === 'project' ? '/projets' : '/archives',
-  viewAllText = contentType === 'project'
-    ? 'Voir tous les projets'
-    : 'Voir tous les articles',
+  viewAllUrl,
+  viewAllText,
 }) => {
   const theme = useTheme();
   const [current, setCurrent] = useState<ContentItem>(items[0]);
@@ -100,12 +96,15 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
           slidesPerView={1}
           pagination={{ clickable: true }}
           navigation={true}
+          slidesPerGroup={1}
           breakpoints={{
             [pxToNumber(theme.breakpoints.md)]: {
               slidesPerView: 2,
+              slidesPerGroup: 2,
             },
             [pxToNumber(theme.breakpoints.lg)]: {
               slidesPerView: 3,
+              slidesPerGroup: 3,
             },
           }}
           modules={[Pagination, Navigation]}

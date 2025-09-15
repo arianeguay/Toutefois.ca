@@ -1,3 +1,4 @@
+import { ContentCover } from '@/components/common/Card/styles';
 import { ContainerContentStyling } from '@/theme/global-styles';
 import styled from 'styled-components';
 
@@ -11,6 +12,9 @@ export const GridContainer = styled.div`
   & > *:first-child {
     grid-column-start: 1;
     grid-column-end: 3;
+    ${ContentCover} {
+      aspect-ratio: 32/9;
+    }
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
