@@ -1,16 +1,16 @@
+import { WordpressCollaborator } from '@/types';
 import React from 'react';
 import * as S from './styles';
-import { Collaborator } from './types';
 
 interface CollaboratorCardProps {
-  collaborator: Collaborator;
+  collaborator: WordpressCollaborator;
 }
 
 const CollaboratorCard: React.FC<CollaboratorCardProps> = ({
   collaborator,
 }) => {
   return (
-    <S.Card href={collaborator.link} style={{ textDecoration: 'none' }}>
+    <S.Card style={{ textDecoration: 'none' }} id={collaborator.slug}>
       <S.PhotoContainer>
         {collaborator.photoUrl && (
           <S.Photo src={collaborator.photoUrl} alt={collaborator.name} />

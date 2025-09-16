@@ -1,12 +1,13 @@
-'use client';
+import api from '@/api';
 import React from 'react';
 import CollaboratorCard from './CollaboratorCard';
 import * as S from './styles';
 import { CollaboratorsBlockProps } from './types';
 
-const CollaboratorsBlock: React.FC<CollaboratorsBlockProps> = (props) => {
-  const { layout, collaborators, noCollaboratorsText } = props;
+const CollaboratorsBlock: React.FC<CollaboratorsBlockProps> = async (props) => {
+  const { layout, noCollaboratorsText } = props;
 
+  const collaborators = await api.fetchCollaborators();
   if (!collaborators || collaborators.length === 0) {
     return <p>{noCollaboratorsText || 'No collaborators to display.'}</p>;
   }

@@ -147,16 +147,15 @@ export interface WordpressFooter {
 
 export interface WordpressCollaborator {
   id: number;
-  title: {
-    rendered: string;
-  };
+  name: string;
   excerpt: {
     rendered: string;
   };
   content: {
     rendered: string;
   };
-  featured_image_url: string;
+  position: string;
+  photoUrl: string;
   slug: string;
   template?: string;
   meta: {

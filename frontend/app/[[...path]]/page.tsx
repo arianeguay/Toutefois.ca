@@ -1,6 +1,7 @@
 import api from '@/api';
 import PageLayout from '@/layout/Page';
 import { WordpressCollaborator, WordpressPage } from '@/types';
+import console from 'console';
 import { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
@@ -169,6 +170,7 @@ export default async function Page({
         const collaboratorsData = await api.fetchCollaboratorBySlug(
           params.path[1],
         );
+        console.log(collaboratorsData);
         const collaborators: WordpressCollaborator[] = Array.isArray(
           collaboratorsData,
         )

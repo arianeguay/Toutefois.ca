@@ -28,6 +28,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 require_once plugin_dir_path(__FILE__) . 'components/featured-carousel.php';
 require_once plugin_dir_path(__FILE__) . 'components/projects-list.php';
 require_once plugin_dir_path(__FILE__) . 'components/news-list.php';
+require_once plugin_dir_path(__FILE__) . 'components/collaborators.php';
 require_once plugin_dir_path(__FILE__) . 'components/projects-page-grid.php';
 require_once plugin_dir_path(__FILE__) . 'components/projects-category-row.php';
 require_once plugin_dir_path(__FILE__) . 'projects.php';

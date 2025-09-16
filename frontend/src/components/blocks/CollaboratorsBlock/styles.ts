@@ -1,3 +1,4 @@
+'use client';
 import { ContainerContentStyling } from '@/theme/global-styles';
 import createFontStyleCSS from '@/theme/utils/createFontStyleCSS';
 import styled, { css } from 'styled-components';
@@ -6,7 +7,7 @@ interface ContainerProps {
   $layout: 'vertical' | 'horizontal';
 }
 
-export const Card = styled.a`
+export const Card = styled.div`
   display: flex;
   flex-direction: column;
   text-decoration: none;
