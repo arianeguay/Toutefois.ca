@@ -1,7 +1,6 @@
 'use client';
 import { WordpressCollaborator } from '@/types';
 import parse from 'html-react-parser';
-import Link from 'next/link';
 import React from 'react';
 import * as S from './styles';
 
@@ -12,14 +11,8 @@ interface CollaboratorCardProps {
 const CollaboratorCard: React.FC<CollaboratorCardProps> = ({
   collaborator,
 }) => {
-  console.log(collaborator);
   return (
-    <S.Card
-      id={collaborator.slug}
-      as={Link}
-      href={`/collaborateurs/${collaborator.slug}`}
-      style={{ textDecoration: 'none' }}
-    >
+    <S.Card id={collaborator.slug}>
       <S.PhotoContainer>
         {collaborator.photoUrl && (
           <S.Photo src={collaborator.photoUrl} alt={collaborator.name} />
