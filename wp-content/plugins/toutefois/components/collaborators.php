@@ -52,11 +52,12 @@ function prepare_collaborator()
 
     return array(
         'id'                 => $post_id,
-        'title'              => get_the_title(),
+        'name'              => get_the_title(),
         'excerpt'            => get_the_excerpt(),
         'content'            => apply_filters('the_content', get_the_content()),
         'meta'               => $post_meta,
-        'featured_image_url' => $featured_image_url,
+        'photoUrl' => $featured_image_url,
+        'position'           => get_post_meta($post_id, '_collaborateur_position', true),
         'slug'               => get_post_field('post_name', $post_id),
     );
 }

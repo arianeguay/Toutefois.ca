@@ -147,7 +147,9 @@ export interface WordpressFooter {
 
 export interface WordpressCollaborator {
   id: number;
-  name: string;
+  name: {
+    rendered: string;
+  };
   excerpt: {
     rendered: string;
   };
