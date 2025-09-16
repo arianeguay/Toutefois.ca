@@ -13,6 +13,10 @@ export const Card = styled.div`
   text-decoration: none;
   color: inherit;
   cursor: default;
+  scroll-margin-top: calc(
+    ${({ theme }) => theme.appearance.headerHeight} +
+      ${({ theme }) => theme.spacing.md}px
+  );
 `;
 export const Name = styled.h3``;
 export const Position = styled.p`
@@ -39,7 +43,9 @@ export const Photo = styled.img`
   margin: 0;
 `;
 
-export const Info = styled.div``;
+export const Info = styled.div`
+  width: 100%;
+`;
 const ContainerVerticalStyling = css`
   flex-direction: column;
 

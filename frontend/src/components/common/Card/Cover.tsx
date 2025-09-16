@@ -6,7 +6,6 @@ interface CardCoverProps {
 }
 const CardCover: React.FC<CardCoverProps> = ({ src, alt }) => {
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    console.log('Image failed to load');
     e.currentTarget.src = '/Logo.png';
     e.currentTarget.style.objectFit = 'contain';
   };

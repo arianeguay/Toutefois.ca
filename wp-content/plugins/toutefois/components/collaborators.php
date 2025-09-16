@@ -51,7 +51,7 @@ function prepare_collaborator()
     $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
     $is_member = get_post_meta($post_id, '_collaborateur_is_member', true);
     $slug = get_post_field('post_name', $post_id);
-    $position = get_post_meta($post_id, '_collaborateur_position', true);
+    $position = get_post_meta($post_id, '_collaborateur_poste', true);
     $content = apply_filters('the_content', get_the_content());
     $excerpt = get_the_excerpt();
     $name = get_the_title();

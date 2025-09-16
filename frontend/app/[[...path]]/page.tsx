@@ -1,6 +1,6 @@
 import api from '@/api';
 import PageLayout from '@/layout/Page';
-import { WordpressCollaborator, WordpressPage } from '@/types';
+import { WordpressPage } from '@/types';
 import console from 'console';
 import { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
@@ -165,46 +165,8 @@ export default async function Page({
       }
     }
 
-    if (params.path.length === 2 && params.path[0] === 'collaborateurs') {
-      try {
-        const collaboratorsData = await api.fetchCollaboratorBySlug(
-          params.path[1],
-        );
-        console.log(collaboratorsData);
-        const collaborators: WordpressCollaborator[] = Array.isArray(
-          collaboratorsData,
-        )
-          ? collaboratorsData
-          : [collaboratorsData];
-
-        if (collaborators?.length) {
-          const formattedCollaboratorsPage: WordpressPage = {
-            ...collaborators[0],
-            link: collaborators[0].slug
-              ? `/collaborateurs/${collaborators[0].slug}`
-              : '',
-            title: collaborators[0].title,
-            content: collaborators[0].content,
-            excerpt: collaborators[0].excerpt,
-            thumbnail: collaborators[0].featured_image_url || '',
-            meta: {
-              ...collaborators[0].meta,
-              main_color: collaborators[0].meta?.main_color,
-            },
-          };
-          return <PageLayout page={formattedCollaboratorsPage as any} />;
-        } else {
-          console.warn('Collaborators not found:', params.path[1]);
-          notFound();
-        }
-      } catch (collaboratorsError) {
-        console.error('Error fetching collaborators:', collaboratorsError);
-        notFound();
-      }
-    }
     // Special handling for post routes - matches /archives/[slug] pattern
     if (params.path.length === 2 && params.path[0] === 'archives') {
-      console.log('Detected post route. Fetching post:', params.path[1]);
       try {
         const postData = await api.fetchPostBySlug(params.path[1]);
         const post = Array.isArray(postData) ? postData[0] : postData;

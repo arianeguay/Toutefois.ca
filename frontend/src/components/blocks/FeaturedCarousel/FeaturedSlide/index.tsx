@@ -20,7 +20,6 @@ const FeaturedSlide: React.FC<{
 }> = ({ project }) => {
   const theme = useTheme();
 
-  console.log(project);
   return (
     <FeaturedSlideContainer>
       <FeaturedSlideOverlay $backgroundUrl={project.featured_image_url} />

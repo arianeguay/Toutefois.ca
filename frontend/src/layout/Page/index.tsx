@@ -72,9 +72,20 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
             process.env.NEXT_PUBLIC_ADMIN_URL ?? 'http://admin.toutefois.ca';
           if (domNode.attribs.href.startsWith(adminUrl)) {
             const parsedUrl = new URL(domNode.attribs.href);
-            console.log(parsedUrl);
+            const pathName = parsedUrl.pathname.endsWith('/')
+              ? parsedUrl.pathname.slice(0, -1)
+              : parsedUrl.pathname;
+
+            if (pathName.includes('/collaborateurs')) {
+              const collaboratorSlug = pathName.split('/').pop();
+              return (
+                <Link href={`/notre-mission#${collaboratorSlug}`}>
+                  {domToReact(domNode.childNodes as DOMNode[])}
+                </Link>
+              );
+            }
             return (
-              <Link href={parsedUrl.pathname}>
+              <Link href={pathName}>
                 {domToReact(domNode.childNodes as DOMNode[])}
               </Link>
             );

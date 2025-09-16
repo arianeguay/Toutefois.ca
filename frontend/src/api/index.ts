@@ -210,7 +210,7 @@ class Api {
     memberStatus: string;
   }): Promise<WordpressCollaborator[]> {
     return this.fetchFromApi(
-      `toutefois/v1/collaborators?memberStatus=${memberStatus}`,
+      `toutefois/v1/collaborators?member_status=${memberStatus}`,
     );
   }
 
