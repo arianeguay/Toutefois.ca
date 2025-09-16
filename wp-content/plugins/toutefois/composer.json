@@ -1,0 +1,13 @@
+{
+    "name": "toutefois/toutefois-plugin",
+    "description": "Custom plugin for Toutefois.ca",
+    "type": "wordpress-plugin",
+    "require-dev": {
+        "php-stubs/wordpress-stubs": "^6.4"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

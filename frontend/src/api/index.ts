@@ -204,8 +204,14 @@ class Api {
     return footer;
   }
 
-  async fetchCollaborators(): Promise<WordpressCollaborator[]> {
-    return this.fetchFromApi('toutefois/v1/collaborators');
+  async fetchCollaborators({
+    memberStatus,
+  }: {
+    memberStatus: string;
+  }): Promise<WordpressCollaborator[]> {
+    return this.fetchFromApi(
+      `toutefois/v1/collaborators?memberStatus=${memberStatus}`,
+    );
   }
 
   async fetchCollaboratorBySlug(slug: string): Promise<WordpressCollaborator> {

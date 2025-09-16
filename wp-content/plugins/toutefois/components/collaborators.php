@@ -73,11 +73,39 @@ function prepare_collaborator()
  */
 function get_collaborators(WP_REST_Request $request)
 {
+    $member_status = $request->get_param('member_status')   ?? 'all';
+
     $args = array(
         'post_type'      => 'collaborateur',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
+        'order'          => 'ASC',
     );
+
+
+    if ($member_status === 'members') {
+        $args['meta_query'] = [
+            [
+                'key' => '_collaborateur_is_member',
+                'value' => true,
+                'compare' => '=',
+            ],
+        ];
+    } elseif ($member_status === 'non-members') {
+        $args['meta_query'] = [
+            'relation' => 'OR',
+            [
+                'key' => '_collaborateur_is_member',
+                'value' => false,
+                'compare' => '=',
+            ],
+            [
+                'key' => '_collaborateur_is_member',
+                'compare' => 'NOT EXISTS',
+            ],
+        ];
+    }
+
 
     // Optional boolean filter on _collaborateur_is_member
     $is_member_param = $request->get_param('is_member');

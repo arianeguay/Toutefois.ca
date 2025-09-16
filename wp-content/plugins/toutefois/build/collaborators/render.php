@@ -17,48 +17,8 @@ $args = [
     ],
 ];
 
-if ($member_status === 'members') {
-    $args['meta_query'] = [
-        [
-            'key' => '_collaborateur_is_member',
-            'value' => true,
-            'compare' => '=',
-        ],
-    ];
-} elseif ($member_status === 'non-members') {
-    $args['meta_query'] = [
-        'relation' => 'OR',
-        [
-            'key' => '_collaborateur_is_member',
-            'value' => false,
-            'compare' => '=',
-        ],
-        [
-            'key' => '_collaborateur_is_member',
-            'compare' => 'NOT EXISTS',
-        ],
-    ];
-}
 
-$query = new WP_Query($args);
 
-$collaborators_data = [];
-if ($query->have_posts()) {
-    while ($query->have_posts()) {
-        $query->the_post();
-        $post_id = get_the_ID();
-        $featured_image_url = get_the_post_thumbnail_url($post_id, 'medium_large');
-        $slug = get_post_field('post_name', $post_id);
-        $collaborators_data[] = [
-            'id' => $post_id,
-            'name' => get_the_title(),
-            'position' => get_post_meta($post_id, '_collaborateur_poste', true),
-            'excerpt' => get_the_content(),
-            'photoUrl' => $featured_image_url ? $featured_image_url : '',
-            'link' => "/collaborateurs/" . $slug,
-        ];
-    }
-}
 
 wp_reset_postdata();
 
