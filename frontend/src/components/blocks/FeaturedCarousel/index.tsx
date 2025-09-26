@@ -14,8 +14,8 @@ const FeaturedCarousel = async () => {
   return (
     <CarouselContainer>
       <Carousel>
-        {projects.map((project) => (
-          <FeaturedSlide key={project.id} project={project} />
+        {projects.map((project, idx) => (
+          <FeaturedSlide key={project.id} project={project} isFirst={idx === 0} />
         ))}
       </Carousel>
     </CarouselContainer>

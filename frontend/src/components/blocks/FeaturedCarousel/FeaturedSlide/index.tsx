@@ -5,19 +5,20 @@ import Typography from '@/components/common/Typography';
 import type { WordpressProject } from '@/types';
 import parse from 'html-react-parser';
 import { useTheme } from 'styled-components';
+import Image from 'next/image';
 import {
   FeaturedSlideActions,
   FeaturedSlideContainer,
   FeaturedSlideContent,
   FeaturedSlideOverlay,
-  ProjectImage,
   SlideBody,
   SlideCover,
 } from './styles';
 
 const FeaturedSlide: React.FC<{
   project: WordpressProject;
-}> = ({ project }) => {
+  isFirst?: boolean;
+}> = ({ project, isFirst = false }) => {
   const theme = useTheme();
 
   return (
@@ -67,10 +68,17 @@ const FeaturedSlide: React.FC<{
         </SlideBody>
         <SlideCover>
           {project.featured_image_url && (
-            <ProjectImage
-              src={project.featured_image_url}
-              alt={project.title}
-            />
+            <div style={{ position: 'relative', width: '100%', maxWidth: '720px', aspectRatio: '16 / 9' }}>
+              <Image
+                src={project.featured_image_url}
+                alt={project.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 720px"
+                priority={isFirst}
+                fetchPriority={isFirst ? 'high' : 'auto'}
+                style={{ objectFit: 'contain' }}
+              />
+            </div>
           )}
         </SlideCover>
       </FeaturedSlideContent>
@@ -79,3 +87,4 @@ const FeaturedSlide: React.FC<{
 };
 
 export default FeaturedSlide;
+
