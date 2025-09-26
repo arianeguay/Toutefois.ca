@@ -11,34 +11,94 @@ export async function generateMetadata({
 }: {
   params: { path?: string[] };
 }): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   // Handle root path (home)
   if (!params.path || params.path.length === 0) {
+    const url = `${baseUrl}/`;
+    const title = 'Toutefois - Accueil';
+    const description = "Page d'accueil de Toutefois";
     return {
-      title: 'Toutefois - Accueil',
-      description: "Page d'accueil de Toutefois",
+      title,
+      description,
+      alternates: { canonical: url },
+      openGraph: {
+        url,
+        title,
+        description,
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+      },
     };
   }
 
   // Handle direct 'home' path case
   if (params.path.length === 1 && params.path[0] === 'home') {
+    const url = `${baseUrl}/`;
+    const title = 'Toutefois - Accueil';
+    const description = "Page d'accueil de Toutefois";
     return {
-      title: 'Toutefois - Accueil',
-      description: "Page d'accueil de Toutefois",
+      title,
+      description,
+      alternates: { canonical: url },
+      openGraph: { url, title, description, type: 'website' },
+      twitter: { card: 'summary_large_image', title, description },
     };
   }
 
   try {
     // Construct the slug from the path segments
     const slug = params.path.join('/');
+    // Handle projects (projets/[slug])
+    if (params.path.length === 2 && params.path[0] === 'projets') {
+      const projectData = await api.fetchProjectBySlug(params.path[1]);
+      const project: any = Array.isArray(projectData) ? projectData[0] : projectData;
+
+      if (!project?.id) {
+        const url = `${baseUrl}/projets/${params.path[1]}`;
+        const title = 'Toutefois - Projet non trouvé';
+        const description = 'Le projet que vous cherchez n\'existe pas';
+        return {
+          title,
+          description,
+          alternates: { canonical: url },
+          openGraph: { url, title, description, type: 'website' },
+          twitter: { card: 'summary_large_image', title, description },
+        };
+      }
+
+      const description = project?.content?.rendered
+        ? project.content.rendered.replace(/<[^>]*>/g, '').slice(0, 160)
+        : 'Toutefois';
+      const url = `${baseUrl}/projets/${project.slug}`;
+      const title = `Toutefois - ${project.title?.rendered || project.title}`;
+      return {
+        title,
+        description,
+        alternates: { canonical: url },
+        openGraph: { url, title, description, type: 'website' },
+        twitter: { card: 'summary_large_image', title, description },
+      };
+    }
+
     // Handle posts
     if (params.path.length === 2 && params.path[0] === 'archives') {
       const postData = await api.fetchPostBySlug(params.path[1]);
       const post = Array.isArray(postData) ? postData[0] : postData;
 
       if (!post?.id) {
+        const url = `${baseUrl}/archives/${params.path[1]}`;
+        const title = 'Toutefois - Article non trouvé';
+        const description = "L'article que vous cherchez n'existe pas";
         return {
-          title: 'Toutefois - Article non trouvé',
-          description: "L'article que vous cherchez n'existe pas",
+          title,
+          description,
+          alternates: { canonical: url },
+          openGraph: { url, title, description, type: 'article' },
+          twitter: { card: 'summary_large_image', title, description },
         };
       }
 
@@ -46,9 +106,14 @@ export async function generateMetadata({
         ? post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160)
         : 'Toutefois';
 
+      const url = `${baseUrl}/archives/${post.slug}`;
+      const title = `Toutefois - ${post.title.rendered}`;
       return {
-        title: `Toutefois - ${post.title.rendered}`,
+        title,
         description,
+        alternates: { canonical: url },
+        openGraph: { url, title, description, type: 'article' },
+        twitter: { card: 'summary_large_image', title, description },
       };
     }
 
@@ -56,9 +121,15 @@ export async function generateMetadata({
     const pageData = Array.isArray(page) ? page[0] : page;
 
     if (!pageData?.id) {
+      const url = `${baseUrl}/${params.path.join('/')}`;
+      const title = 'Toutefois - Page non trouvée';
+      const description = "La page que vous cherchez n'existe pas";
       return {
-        title: 'Toutefois - Page non trouvée',
-        description: "La page que vous cherchez n'existe pas",
+        title,
+        description,
+        alternates: { canonical: url },
+        openGraph: { url, title, description, type: 'website' },
+        twitter: { card: 'summary_large_image', title, description },
       };
     }
 
@@ -69,14 +140,27 @@ export async function generateMetadata({
         ? pageData.content.rendered.replace(/<[^>]*>/g, '').slice(0, 160)
         : 'Toutefois';
 
+    const url = pageData.link?.startsWith('http')
+      ? pageData.link
+      : `${baseUrl}/${params.path.join('/')}`;
+    const title = `Toutefois - ${pageData.title.rendered}`;
     return {
-      title: `Toutefois - ${pageData.title.rendered}`,
+      title,
       description,
+      alternates: { canonical: url },
+      openGraph: { url, title, description, type: 'website' },
+      twitter: { card: 'summary_large_image', title, description },
     };
   } catch (error) {
+    const url = params?.path?.length ? `${(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')}/${params.path.join('/')}` : (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000');
+    const title = 'Toutefois - Page non trouvée';
+    const description = "La page que vous cherchez n'existe pas";
     return {
-      title: 'Toutefois - Page non trouvée',
-      description: "La page que vous cherchez n'existe pas",
+      title,
+      description,
+      alternates: { canonical: url },
+      openGraph: { url, title, description, type: 'website' },
+      twitter: { card: 'summary_large_image', title, description },
     };
   }
 }

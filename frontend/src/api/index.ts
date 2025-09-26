@@ -16,7 +16,7 @@ class Api {
 
   constructor() {
     this.baseUrl =
-      process.env.NEXT_PUBLIC_API_URL ||
+      process.env.NEXT_PUBLIC_ADMIN_URL ||
       'https://admin.toutefois.arianeguay.ca/wp-json';
   }
 

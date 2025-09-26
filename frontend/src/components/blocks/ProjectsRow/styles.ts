@@ -164,6 +164,7 @@ export const ProjectCardCover = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadow.md};
   width: 100%;
   height: 100%;
+  position: relative;
   img {
     width: 100%;
     height: 100%;
