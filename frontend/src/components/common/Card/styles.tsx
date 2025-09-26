@@ -3,16 +3,32 @@ import styled from 'styled-components';
 export const ContentCardContent = styled.article`
   padding-inline: ${({ theme }) => theme.spacing.lg}px;
   padding-block-end: ${({ theme }) => theme.spacing.md}px;
+  padding-block-start: ${({ theme }) => theme.spacing.sm}px;
   background-color: white;
   position: relative;
   text-align: center;
-  flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
+  flex: 1;
+  &:before {
+    content: '';
+    position: absolute;
+    top: -${({ theme }) => theme.spacing.sm}px;
+    left: 0;
+    width: 100%;
+    height: ${({ theme }) => theme.spacing.sm}px;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 1)
+    );
+  }
 `;
 
 export const ContentBodyContent = styled.div`
   height: 100%;
+
   & > h3:not(:last-child),
   & > p:not(:last-child) {
     margin-block-end: 0 !important;
@@ -31,12 +47,13 @@ export const ContentBodyActions = styled.div`
   flex-direction: row;
   align-items: flex-end;
   justify-content: flex-end;
+  height: fit-content;
 `;
 
 export const ContentCover = styled.div`
   position: relative;
   background-color: ${({ theme }) => theme.colors.headerBackground};
-  aspect-ratio: 16/9;
+  aspect-ratio: 2/1;
   width: 100%;
   overflow: hidden;
 `;

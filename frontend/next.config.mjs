@@ -8,11 +8,13 @@ const nextConfig = {
     NEXT_PUBLIC_ADMIN_URL:
       process.env.NEXT_PUBLIC_ADMIN_URL ||
       'https://admin.toutefois.arianeguay.ca/wp-json',
+    NEXT_PUBLIC_SITE_URL:
+      process.env.NEXT_PUBLIC_SITE_URL || 'https://toutefois.ca',
   },
   i18n: {
     locales: ['fr'],
     defaultLocale: 'fr',
-    localeDetection: true,
+    localeDetection: false,
   },
   images: {
     remotePatterns: [

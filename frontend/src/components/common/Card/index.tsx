@@ -55,7 +55,15 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
   const date =
     contentType === 'news' ? wpItem.date : (wpItem as WordpressProject).type;
   return (
-    <Link href={linkPath} style={{ textDecoration: 'none' }}>
+    <Link
+      href={linkPath}
+      style={{
+        textDecoration: 'none',
+        display: 'block',
+        height: '100%',
+        width: '100%',
+      }}
+    >
       <ContentCardContainer>
         <CardCover src={wpItem.featured_image_url} alt={title} />
         <CardBody title={title} description={excerpt} date={date} />

@@ -1,11 +1,11 @@
 export const theme = {
   colors: {
-    primaryText: '#2F2C58',
+    primaryText: '#282651',
     secondaryText: '#6B1E2C',
     tertiaryText: '#2e2e2e',
     lightText: '#F5F3EE',
 
-    headerBackground: '#2F2C58',
+    headerBackground: '#282651',
     mainBackground: '#FFF4D8',
 
     sectionColor1: '#862331',
@@ -14,10 +14,10 @@ export const theme = {
     sectionColor4: '#588B8B',
 
     buttonPrimaryBackground: '#E1A42B',
-    buttonPrimaryColor: '#2F2C58',
+    buttonPrimaryColor: '#282651',
     buttonSecondaryBackground: '#6B1E2C',
     buttonSecondaryColor: '#F5F3EE',
-    buttonTertiaryBackground: '#2F2C58',
+    buttonTertiaryBackground: '#282651',
     buttonTertiaryColor: '#F5F3EE',
 
     borderColor1: '#B1B1B1',
@@ -123,14 +123,15 @@ export const theme = {
   borders: {
     subtle: '1px solid rgba(0,0,0,0.08)',
     strong: '1px solid rgba(0,0,0,0.18)',
-    dark: '1px solid #2F2C58',
+    dark: '1px solid #282651',
+    section: '3px solid rgba(0,0,0,0.6)',
   },
   prose: {
     link: '#862331', // could also be colors.projects
     linkHover: '#6B1E2C',
     codeBg: '#0b1020',
     codeFg: '#F5F3EE',
-    quoteBar: '#2F2C58', // primaryText
+    quoteBar: '#282651', // primaryText
     hr: 'rgba(0,0,0,0.25)',
     zebra: 'rgba(0,0,0,0.03)',
     softBg: 'rgba(0,0,0,0.04)',

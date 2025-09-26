@@ -3,7 +3,7 @@
 import styled from 'styled-components';
 
 export const CarouselContainer = styled.div`
-  border-bottom: 3px solid ${({ theme }) => theme.colors.mainBackground};
+  border-bottom: ${({ theme }) => theme.borders.section};
   background-color: #000;
   height: calc(
     60vh - ${({ theme }) => theme.appearance.headerHeight} -

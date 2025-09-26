@@ -3,6 +3,7 @@ import PageLayout from '@/layout/Page';
 import { WordpressPage } from '@/types';
 import console from 'console';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
 // Generate metadata for the page
@@ -55,12 +56,14 @@ export async function generateMetadata({
     // Handle projects (projets/[slug])
     if (params.path.length === 2 && params.path[0] === 'projets') {
       const projectData = await api.fetchProjectBySlug(params.path[1]);
-      const project: any = Array.isArray(projectData) ? projectData[0] : projectData;
+      const project: any = Array.isArray(projectData)
+        ? projectData[0]
+        : projectData;
 
       if (!project?.id) {
         const url = `${baseUrl}/projets/${params.path[1]}`;
         const title = 'Toutefois - Projet non trouvé';
-        const description = 'Le projet que vous cherchez n\'existe pas';
+        const description = "Le projet que vous cherchez n'existe pas";
         return {
           title,
           description,
@@ -152,7 +155,9 @@ export async function generateMetadata({
       twitter: { card: 'summary_large_image', title, description },
     };
   } catch (error) {
-    const url = params?.path?.length ? `${(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')}/${params.path.join('/')}` : (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000');
+    const url = params?.path?.length
+      ? `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${params.path.join('/')}`
+      : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
     const title = 'Toutefois - Page non trouvée';
     const description = "La page que vous cherchez n'existe pas";
     return {
@@ -200,7 +205,15 @@ export default async function Page({
       return <PageLayout page={homePageData} />;
     } catch (error) {
       console.error('Error fetching home page:', error);
-      return <div>Welcome to Toutefois</div>;
+      return (
+        <div>
+          Une erreur est survenue lors du chargement de la page d'accueil.
+          Veuillez
+          <br />
+          <br />
+          <Link href="/">revenir à la page d'accueil</Link>
+        </div>
+      );
     }
   }
 

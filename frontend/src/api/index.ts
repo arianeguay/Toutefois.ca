@@ -15,13 +15,33 @@ class Api {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl =
+    const raw =
       process.env.NEXT_PUBLIC_ADMIN_URL ||
       'https://admin.toutefois.arianeguay.ca/wp-json';
+    // Ensure baseUrl ends with /wp-json and has no trailing slash beyond it
+    let normalized = raw.trim();
+    try {
+      // If the provided URL does not include /wp-json, append it
+      const u = new URL(normalized);
+      if (!u.pathname.includes('/wp-json')) {
+        normalized = `${u.origin.replace(/\/$/, '')}/wp-json`;
+      } else {
+        // Strip trailing slash for consistent joining
+        normalized = `${u.origin}${u.pathname.replace(/\/$/, '')}`;
+      }
+    } catch {
+      // Fallback: naive normalization
+      if (!normalized.includes('/wp-json')) {
+        normalized = normalized.replace(/\/$/, '') + '/wp-json';
+      } else {
+        normalized = normalized.replace(/\/$/, '');
+      }
+    }
+    this.baseUrl = normalized;
   }
 
   async fetchFromApi(url: string) {
-    const apiUrl = `${this.baseUrl}/${url}`;
+    const apiUrl = `${this.baseUrl.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
 
     try {
       // First try with no Content-Type header

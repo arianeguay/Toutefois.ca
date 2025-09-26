@@ -25,40 +25,6 @@ const permanentMarker = Permanent_Marker({
   display: 'swap',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: 'Toutefois',
-    template: '%s | Toutefois',
-  },
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    type: 'website',
-    url: siteUrl + '/',
-    siteName: 'Toutefois',
-    title: 'Toutefois',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Toutefois',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-image-preview': 'large',
-      'max-video-preview': -1,
-      'max-snippet': -1,
-    },
-  },
-};
-
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -71,8 +37,13 @@ export async function generateMetadata(): Promise<Metadata> {
         : 'Toutefois';
 
     return {
+      metadataBase: new URL(siteUrl),
+      title: {
+        default: 'Toutefois',
+        template: '%s | Toutefois',
+      },
       description,
-      alternates: { canonical: siteUrl + '/' },
+      alternates: { canonical: '/' },
       openGraph: {
         url: siteUrl + '/',
         title: 'Toutefois',
@@ -84,10 +55,50 @@ export async function generateMetadata(): Promise<Metadata> {
         title: 'Toutefois',
         description,
       },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-image-preview': 'large',
+          'max-video-preview': -1,
+          'max-snippet': -1,
+        },
+      },
     };
   } catch (e) {
     // Fallback to existing defaults if WP fails
-    return {};
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    return {
+      metadataBase: new URL(siteUrl),
+      title: {
+        default: 'Toutefois',
+        template: '%s | Toutefois',
+      },
+      alternates: { canonical: '/' },
+      openGraph: {
+        type: 'website',
+        url: siteUrl + '/',
+        siteName: 'Toutefois',
+        title: 'Toutefois',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: 'Toutefois',
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-image-preview': 'large',
+          'max-video-preview': -1,
+          'max-snippet': -1,
+        },
+      },
+    };
   }
 }
 
