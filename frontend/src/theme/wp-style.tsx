@@ -17,7 +17,7 @@ export const WordpressStyling = css`
   }
 
   .has-background {
-    border-bottom: 3px solid ${({ theme }) => theme.colors.mainBackground};
+    border-bottom: ${({ theme }) => theme.borders.section};
     box-shadow: ${({ theme }) => theme.boxShadow.md};
     position: relative;
     &.has-toutefois-dark-background-color {

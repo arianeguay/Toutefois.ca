@@ -124,7 +124,7 @@ export const theme = {
     subtle: '1px solid rgba(0,0,0,0.08)',
     strong: '1px solid rgba(0,0,0,0.18)',
     dark: '1px solid #282651',
-    section: '3px solid rgba(0,0,0,0.6)',
+    section: '3px solid rgba(0,0,0,0.3)',
   },
   prose: {
     link: '#862331', // could also be colors.projects
