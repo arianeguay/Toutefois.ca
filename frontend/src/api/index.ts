@@ -168,7 +168,23 @@ class Api {
   }
 
   async fetchProjectBySlug(slug: string): Promise<WordpressProjectFull> {
-    return this.fetchFromApi(`wp/v2/projet?slug=${slug}`);
+    // Ensure meta is included (e.g., _projet_is_main exposed via REST)
+    const params = new URLSearchParams({ slug });
+    // Request only needed fields including meta to keep payload small
+    params.append(
+      '_fields',
+      [
+        'id',
+        'title',
+        'content',
+        'excerpt',
+        'slug',
+        'date',
+        'featured_media',
+        'meta',
+      ].join(',')
+    );
+    return this.fetchFromApi(`wp/v2/projet?${params.toString()}`);
   }
 
   async fetchMenu(): Promise<WordpressMenuItem[]> {
@@ -179,28 +195,47 @@ class Api {
     return this.fetchFromApi('toutefois/v1/featured-projects');
   }
 
-  async fetchAllProjects(): Promise<WordpressProject[]> {
-    return this.fetchFromApi('toutefois/v1/projects');
+  async fetchAllProjects(
+    mainProject?: string | number,
+  ): Promise<WordpressProject[]> {
+    const qp = mainProject
+      ? `?main_project=${encodeURIComponent(String(mainProject))}`
+      : '';
+    return this.fetchFromApi(`toutefois/v1/projects${qp}`);
   }
   async fetchAllProjectsByCategory(
     categoryId: string,
+    mainProject?: string | number,
   ): Promise<WordpressProject[]> {
+    const params = new URLSearchParams({ category: String(categoryId) });
+    if (mainProject !== undefined) {
+      params.set('main_project', String(mainProject));
+    }
     return this.fetchFromApi(
-      `toutefois/v1/projects-category-row?category=${categoryId}`,
+      `toutefois/v1/projects-category-row?${params.toString()}`,
     );
   }
 
-  async fetchAllNews(): Promise<WordpressPost[]> {
-    return this.fetchFromApi('toutefois/v1/news');
+  async fetchAllNews(mainProject?: string | number): Promise<WordpressPost[]> {
+    const qp = mainProject
+      ? `?main_project=${encodeURIComponent(String(mainProject))}`
+      : '';
+    return this.fetchFromApi(`toutefois/v1/news${qp}`);
   }
 
   async fetchProjectsGrid(
     page = 1,
     perPage = 9,
+    mainProject?: string | number,
   ): Promise<WordpressProjectGridData> {
-    return this.fetchFromApi(
-      `toutefois/v1/projects-grid?page=${page}&per_page=${perPage}`,
-    );
+    const params = new URLSearchParams({
+      page: String(page),
+      per_page: String(perPage),
+    });
+    if (mainProject !== undefined) {
+      params.set('main_project', String(mainProject));
+    }
+    return this.fetchFromApi(`toutefois/v1/projects-grid?${params.toString()}`);
   }
 
   async fetchMenuItems(): Promise<WordpressMenuItem[]> {
@@ -226,12 +261,16 @@ class Api {
 
   async fetchCollaborators({
     memberStatus,
+    mainProject,
   }: {
     memberStatus: string;
+    mainProject?: string | number;
   }): Promise<WordpressCollaborator[]> {
-    return this.fetchFromApi(
-      `toutefois/v1/collaborators?member_status=${memberStatus}`,
-    );
+    const params = new URLSearchParams({ member_status: memberStatus });
+    if (mainProject !== undefined) {
+      params.set('main_project', String(mainProject));
+    }
+    return this.fetchFromApi(`toutefois/v1/collaborators?${params.toString()}`);
   }
 
   async fetchCollaboratorBySlug(slug: string): Promise<WordpressCollaborator> {

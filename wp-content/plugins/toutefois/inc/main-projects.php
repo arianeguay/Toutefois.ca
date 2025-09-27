@@ -14,7 +14,7 @@ function toutefois_register_main_project_meta() {
         'show_in_rest' => true,
         'single'       => true,
         'type'         => 'boolean',
-        'auth_callback'=> function() { return current_user_can('edit_posts'); },
+        'auth_callback'=> '__return_true', // expose publicly for frontend
     ]);
 
     // Association to a main project (for posts, collaborators, and sub-projects)
@@ -22,7 +22,7 @@ function toutefois_register_main_project_meta() {
         'show_in_rest' => true,
         'single'       => true,
         'type'         => 'integer',
-        'auth_callback'=> function() { return current_user_can('edit_posts'); },
+        'auth_callback'=> '__return_true', // expose publicly for frontend filters
     ];
     register_post_meta('post', '_main_project_id', $assoc_meta_args);
     register_post_meta('collaborateur', '_main_project_id', $assoc_meta_args);

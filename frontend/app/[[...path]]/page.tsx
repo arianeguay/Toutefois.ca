@@ -235,6 +235,7 @@ export default async function Page({
           : projectData;
 
         if (project?.id) {
+          console.log(project);
           // Format the project data to match WordpressPage structure expected by PageLayout
           const formattedProjectPage: WordpressPage = {
             id: project.id,
