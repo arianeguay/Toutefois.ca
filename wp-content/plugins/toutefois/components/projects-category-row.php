@@ -145,6 +145,7 @@ function toutefois_get_projects_by_category(WP_REST_Request $request)
 
     $items = [];
     if ($q->have_posts()) {
+        while ($q->have_posts()) {
             $q->the_post();
             $post_id = get_the_ID();
 

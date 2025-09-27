@@ -37,7 +37,8 @@ services:
       WORDPRESS_CONFIG_EXTRA: |
         define('WP_DEBUG', true);
         define('WP_DEBUG_LOG', true);
-        define('WP_DEBUG_DISPLAY', false);
+        define('WP_DEBUG_DISPLAY', true);
+
     ports:
       - 80:80
       - 443:443
