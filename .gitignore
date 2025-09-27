@@ -46,5 +46,8 @@ wp-content/themes/twentytwentyfive/
 wp-content/themes/twentytwentyfour/
 wp-content/themes/twentytwentythree/
 
+wp-content/plugins/wordpress-importer/
+wp-content/plugins/akismet/
+
 # Docker
 .docker/apache/000-default.conf
