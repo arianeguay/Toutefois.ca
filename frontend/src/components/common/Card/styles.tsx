@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 
 export const ContentCardContent = styled.article`
-  padding-inline: ${({ theme }) => theme.spacing.lg}px;
-  padding-block-end: ${({ theme }) => theme.spacing.md}px;
-  padding-block-start: ${({ theme }) => theme.spacing.sm}px;
   background-color: white;
   position: relative;
   text-align: center;
@@ -11,34 +8,58 @@ export const ContentCardContent = styled.article`
   flex-direction: column;
   position: relative;
   flex: 1;
+  justify-content: space-between;
   &:before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -79px;
+    left: 1px;
     width: 100%;
-    height: ${({ theme }) => theme.spacing.md}px;
+    height: 80px;
     background-color: inherit; /* match card color */
-    clip-path: polygon(0 0, 100% 0, 50% 100%); /* triangle shape */
+    clip-path: polygon(100% 0, 100% 100%, 15% 99%);
+    pointer-events: none;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    top: -79px;
+    left: -1px;
+    width: 100%;
+    height: 80px;
+    background-color: inherit; /* match card color */
+    clip-path: polygon(59% 100%, 0 34%, 0 100%);
     pointer-events: none;
   }
 `;
 
 export const ContentBodyContent = styled.div`
   height: 100%;
-
-  & > h3:not(:last-child),
-  & > p:not(:last-child) {
-    margin-block-end: 0 !important;
-  }
-  & > p:not(:first-child),
-  & > h3:not(:first-child):not(h2 + & h3) {
-    margin-block-start: ${({ theme }) => theme.spacing.xs}px !important;
-  }
+  margin-block-start: -30px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  height: fit-content;
+`;
+export const ContentBodyContentHeading = styled.div`
+  text-align: right;
 
   h3 {
     color: ${({ theme }) => theme.prose.link};
   }
+  & > h3 {
+    margin-block: 0 !important;
+  }
+  padding-inline-end: ${({ theme }) => theme.spacing.md}px;
+  padding-inline-start: ${({ theme }) => theme.spacing.md}px;
+  padding-block-end: ${({ theme }) => theme.spacing.md}px;
+  padding-block-start: ${({ theme }) => theme.spacing.sm}px;
+`;
+export const ContentBodyContentDescription = styled.div`
+  padding-inline: ${({ theme }) => theme.spacing.lg}px;
+  padding-block-start: ${({ theme }) => theme.spacing.sm}px;
+  padding-block-end: ${({ theme }) => theme.spacing.md}px;
+  border-top: 1px solid ${({ theme }) => theme.colors.borderColor1};
 `;
 export const ContentBodyActions = styled.div`
   display: flex;
@@ -46,6 +67,8 @@ export const ContentBodyActions = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   height: fit-content;
+  padding-inline: ${({ theme }) => theme.spacing.lg}px;
+  padding-block-end: ${({ theme }) => theme.spacing.md}px;
 `;
 
 export const ContentCover = styled.div`
@@ -67,7 +90,7 @@ export const ContentCardContainer = styled.div`
   flex-direction: column;
   color: ${({ theme }) => theme.colors.primaryText};
   border: 1px solid ${({ theme }) => theme.colors.borderColor1};
-
+  overflow: hidden;
   height: 100%;
   box-shadow: ${({ theme }) => theme.boxShadow.md};
   transition: all 0.2s ease-in-out;

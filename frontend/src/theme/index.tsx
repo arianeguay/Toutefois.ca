@@ -11,7 +11,7 @@ export const theme = {
     sectionColor1: '#862331',
     sectionColor2: '#5A3D55',
     sectionColor3: '#333333',
-    sectionColor4: '#588B8B',
+    sectionColor4: '#437C90',
 
     buttonPrimaryBackground: '#E1A42B',
     buttonPrimaryColor: '#282651',

@@ -19,20 +19,6 @@ export const BackgroundImage = styled.div<{ $src: string }>`
   transition: background-image 0.2s ease-in-out;
 `;
 
-export const ContentCardContainer = styled.article`
-  display: flex;
-  flex-direction: column;
-  color: ${({ theme }) => theme.colors.primaryText};
-  height: 100%;
-  background-color: white;
-  transition: all 0.2s ease-in-out;
-  &:hover {
-    cursor: pointer;
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.boxShadow.lg};
-  }
-`;
-
 export const ContentListContainer = styled.div`
   max-width: 100%;
   position: relative;
@@ -64,35 +50,6 @@ export const ContentListContainer = styled.div`
       }
     }
   }
-`;
-
-export const ContentCardContent = styled.div`
-  padding-inline: ${({ theme }) => theme.spacing.md}px;
-  padding-block-end: ${({ theme }) => theme.spacing.lg}px;
-  text-align: center;
-  flex: 1;
-  & > h3:not(:last-child),
-  & > p:not(:last-child) {
-    margin-block-end: 0 !important;
-  }
-  & > p:not(:first-child),
-  & > h3:not(:first-child):not(h2 + & h3) {
-    margin-block-start: 0 !important;
-  }
-
-  h3 {
-    color: ${({ theme }) => theme.prose.link};
-  }
-`;
-
-export const ContentImage = styled.img`
-  max-width: 100%;
-  height: auto;
-  aspect-ratio: 16/9;
-  background-color: ${({ theme }) => theme.colors.lightText};
-  border-bottom: ${({ theme }) => theme.borders.strong};
-  object-fit: cover;
-  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
 export const ContentListHeader = styled.div`

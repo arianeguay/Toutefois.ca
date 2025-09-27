@@ -1,10 +1,11 @@
 import parse from 'html-react-parser';
+import { useTheme } from 'styled-components';
 import Button from '../Button';
-import Divider from '../Divider';
 import Typography from '../Typography';
 import {
-  ContentBodyActions,
   ContentBodyContent,
+  ContentBodyContentDescription,
+  ContentBodyContentHeading,
   ContentCardContent,
 } from './styles';
 interface CardBodyProps {
@@ -13,31 +14,35 @@ interface CardBodyProps {
   date?: string;
 }
 const CardBody: React.FC<CardBodyProps> = ({ title, description, date }) => {
+  const theme = useTheme();
   return (
     <ContentCardContent>
       <ContentBodyContent>
-        {date && (
-          <Typography variant="overline" color="tertiaryText" element="p">
-            {date}
+        <ContentBodyContentHeading>
+          {date && (
+            <Typography variant="overline" color="tertiaryText" element="p">
+              {date}
+            </Typography>
+          )}
+          <Typography variant="h5" element="h3" lineClamp={1}>
+            {parse(title)}
           </Typography>
-        )}
-        <Typography variant="h5" element="h3" lineClamp={2}>
-          {parse(title)}
-        </Typography>
+        </ContentBodyContentHeading>
         {description && (
-          <>
-            <Divider direction="horizontal" />
+          <ContentBodyContentDescription>
             <Typography variant="body" lineClamp={3}>
               {parse(description)}
             </Typography>
-          </>
+          </ContentBodyContentDescription>
         )}
       </ContentBodyContent>
-      <ContentBodyActions>
-        <Button variant="tertiary" size="sm" style={{ alignSelf: 'flex-end' }}>
-          En savoir plus
-        </Button>
-      </ContentBodyActions>
+      <Button
+        variant="tertiary"
+        size="sm"
+        style={{ alignSelf: 'center', marginBlockEnd: theme.spacing.md }}
+      >
+        En savoir plus
+      </Button>
     </ContentCardContent>
   );
 };

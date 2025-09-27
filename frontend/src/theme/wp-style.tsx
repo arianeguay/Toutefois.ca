@@ -22,15 +22,19 @@ export const WordpressStyling = css`
     position: relative;
     &.has-toutefois-dark-background-color {
       background-color: ${({ theme }) => theme.colors.sectionColor3};
+      color: ${({ theme }) => theme.colors.lightText};
     }
     &.has-toutefois-red-background-color {
       background-color: ${({ theme }) => theme.colors.sectionColor1};
+      color: ${({ theme }) => theme.colors.lightText};
     }
     &.has-toutefois-teal-background-color {
       background-color: ${({ theme }) => theme.colors.sectionColor4};
+      color: ${({ theme }) => theme.colors.lightText};
     }
     &.has-toutefois-purple-background-color {
       background-color: ${({ theme }) => theme.colors.sectionColor2};
+      color: ${({ theme }) => theme.colors.lightText};
     }
   }
   .has-text-color {
@@ -78,29 +82,35 @@ export const WordpressStyling = css`
   & > h3,
   & > h4,
   & > h5,
-  & > h6,
-  .wp-block-group > p,
-  .wp-block-group > ul,
-  .wp-block-group > ol,
-  .wp-block-group > h1,
-  .wp-block-group > h2,
-  .wp-block-group > h3,
-  .wp-block-group > h4,
-  .wp-block-group > h5,
-  .wp-block-group > h6 {
+  & > h6 {
     ${ContainerContentStyling}
   }
 
   .wp-block-group {
     &:not(.wp-block-group .wp-block-group) {
       padding-block: ${({ theme }) => theme.spacing.xxl}px;
-      &:not(& > .wp-block-group__inner-container):not(&.has-background) {
+      &:not(.alignfull) {
         ${ContainerContentStyling}
         padding-block: ${({ theme }) => theme.spacing.md}px;
       }
 
-      .wp-block-group__inner-container {
-        ${ContainerContentStyling}
+      &.alignfull {
+        max-width: none;
+        padding-left: 0;
+        padding-right: 0;
+        & > .wp-block-group__inner-container,
+        & > .wp-block-columns,
+        & > p,
+        & > ul,
+        & > ol,
+        & > h1,
+        & > h2,
+        & > h3,
+        & > h4,
+        & > h5,
+        & > h6 {
+          ${ContainerContentStyling}
+        }
       }
     }
   }
@@ -128,17 +138,6 @@ export const WordpressStyling = css`
     padding-right: 0;
   }
 
-  /* Default content width for blocks that are NOT wide/full */
-  .wp-block-group.alignfull
-    > *:not(.alignfull):not([data-align='full']):not(.alignwide):not(
-      [data-align='wide']
-    ) {
-    max-width: ${({ theme }) => theme.content.maxWidth}px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: ${({ theme }) => theme.content.padX}px;
-    padding-right: ${({ theme }) => theme.content.padX}px;
-  }
   .alignleft {
     float: left;
     margin: 4px 16px 8px 0;
