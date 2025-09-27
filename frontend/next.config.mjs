@@ -5,6 +5,8 @@ const nextConfig = {
     styledComponents: true,
   },
   env: {
+    NEXT_PUBLIC_FACEBOOK_ACCESS_TOKEN:
+      process.env.NEXT_PUBLIC_FACEBOOK_ACCESS_TOKEN,
     NEXT_PUBLIC_ADMIN_URL:
       process.env.NEXT_PUBLIC_ADMIN_URL ||
       'https://admin.toutefois.arianeguay.ca/wp-json',

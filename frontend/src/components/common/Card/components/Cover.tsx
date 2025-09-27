@@ -1,4 +1,4 @@
-import { ContentCover, ContentImage } from './styles';
+import { ContentCover, ContentImage } from '../styles';
 
 interface CardCoverProps {
   src: string | undefined;

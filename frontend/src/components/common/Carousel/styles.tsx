@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 export const SlideContainer = styled.div<{
   $isCurrent: boolean;
@@ -7,7 +7,7 @@ export const SlideContainer = styled.div<{
   height: 100%;
   position: relative;
 
-  transition: opacity 1s ease-in-out;
+  transition: opacity 500ms ease-in-out;
 
   ${({ $isCurrent }) =>
     $isCurrent
@@ -52,4 +52,32 @@ export const CarouselPaginationButton = styled.div<{ $isActive: boolean }>`
   background-color: ${({ theme, $isActive }) =>
     $isActive ? theme.colors.buttonPrimaryBackground : 'white'};
   opacity: ${({ $isActive }) => ($isActive ? 1 : 0.5)};
+`;
+
+const progressAnim = keyframes`
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+`;
+
+export const ProgressBar = styled.div<{ $durationMs: number }>`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1; /* keep below pagination (which is z-index: 2) */
+
+  &:after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: ${({ theme }) => theme.colors.buttonPrimaryBackground};
+    transform-origin: left center;
+    transform: scaleX(0);
+    animation: ${progressAnim} ${({ $durationMs }) => $durationMs}ms linear
+      forwards;
+  }
 `;

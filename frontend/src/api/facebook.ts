@@ -7,7 +7,7 @@ import { FacebookPost } from '@/types';
  * @returns Array of FacebookPost objects
  */
 export async function fetchFacebookPosts(
-  pageId: string = '100094501037202', // Default page ID, replace with your actual page ID
+  pageId: string = '104368542729089', // Default page ID, replace with your actual page ID
   limit: number = 5,
 ): Promise<FacebookPost[]> {
   // Check if we're on server side
@@ -15,7 +15,7 @@ export async function fetchFacebookPosts(
     try {
       // For server-side rendering, use Facebook Graph API with an access token
       // This requires a Facebook App with appropriate permissions
-      const accessToken = process.env.FACEBOOK_ACCESS_TOKEN;
+      const accessToken = process.env.NEXT_PUBLIC_FACEBOOK_ACCESS_TOKEN;
 
       if (!accessToken) {
         console.error(
@@ -25,7 +25,7 @@ export async function fetchFacebookPosts(
       }
 
       const response = await fetch(
-        `https://graph.facebook.com/v18.0/${pageId}/posts?fields=id,message,picture,created_time,permalink_url&limit=${limit}&access_token=${accessToken}`,
+        `https://graph.facebook.com/v23.0/${pageId}/feed?fields=permalink_url,created_time,full_picture,message${!!limit ? `&limit=${limit}` : ''}&access_token=${accessToken}`,
         { next: { revalidate: 3600 } }, // Revalidate every hour
       );
 
@@ -41,7 +41,7 @@ export async function fetchFacebookPosts(
       return data.data.map((post: any) => ({
         id: post.id,
         message: post.message || '',
-        picture: post.picture || '',
+        picture: post.full_picture || '',
         created_time: post.created_time,
         permalink_url: post.permalink_url,
         type: 'facebook' as const,

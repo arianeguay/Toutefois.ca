@@ -1,75 +1,73 @@
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import dayjs from 'dayjs';
 import 'dayjs/locale/fr';
-import Link from 'next/link';
-import CardBody from './Body';
-import CardCover from './Cover';
-import { ContentCardContainer } from './styles';
-export type ContentItem = WordpressPost | WordpressProject | FacebookPost;
+import CardPostLayout from './layouts/Post';
+import CardProjectLayout from './layouts/Project';
+import { CardEventHandlers, CardLayoutProps } from './layouts/types';
 
-interface ContentCardProps {
+export type ContentItem = WordpressPost | WordpressProject | FacebookPost;
+export type ContentType = 'project' | 'news' | 'facebook';
+interface ContentCardProps extends CardEventHandlers {
   item: ContentItem;
-  contentType: 'project' | 'news' | 'facebook';
+  contentType: ContentType;
 }
 
-const ContentCard: React.FC<ContentCardProps> = ({ item, contentType }) => {
+const ContentCard: React.FC<ContentCardProps> = ({
+  item,
+  contentType,
+  ...eventHandlers
+}) => {
   // For Facebook posts
-  if (contentType === 'facebook') {
-    const fbPost = item as FacebookPost;
-    return (
-      <a
-        href={fbPost.permalink_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ textDecoration: 'none' }}
-      >
-        <ContentCardContainer>
-          <CardCover src={fbPost.picture} alt={fbPost.message} />
-          <CardBody
-            title={fbPost.message}
-            description={fbPost.message}
-            date={dayjs(new Date(fbPost.created_time))
-              .locale('fr')
-              .format('D MMMM YYYY')}
-          />
-        </ContentCardContainer>
-      </a>
-    );
+
+  switch (contentType) {
+    case 'facebook': {
+      const fbPost = item as FacebookPost;
+
+      const cardProps: CardLayoutProps = {
+        type: 'facebook',
+        title: fbPost.message,
+        description: fbPost.message,
+        date: dayjs(new Date(fbPost.created_time))
+          .locale('fr')
+          .format('D MMMM YYYY'),
+        cover: fbPost.picture,
+        alt: fbPost.message,
+        permalink: fbPost.permalink_url,
+        permalinkType: 'external',
+      };
+      return <CardPostLayout {...cardProps} {...eventHandlers} />;
+    }
+    case 'project': {
+      const wpItem = item as WordpressProject;
+      const cardProps: CardLayoutProps = {
+        type: 'project',
+        title: wpItem.title,
+        description: wpItem.excerpt,
+        date: !!wpItem.date
+          ? dayjs(new Date(wpItem.date)).locale('fr').format('D MMMM YYYY')
+          : '',
+        cover: wpItem.featured_image_url,
+        alt: wpItem.title,
+        permalink: `/projets/${wpItem.slug}`,
+        permalinkType: 'internal',
+      };
+      return <CardProjectLayout {...cardProps} {...eventHandlers} />;
+    }
+    case 'news': {
+      const wpItem = item as WordpressPost;
+      const cardProps: CardLayoutProps = {
+        type: 'news',
+        title: wpItem.title.rendered,
+        description: wpItem.excerpt.rendered,
+        date: dayjs(new Date(wpItem.date)).locale('fr').format('D MMMM YYYY'),
+        cover: wpItem.featured_image_url,
+        alt: wpItem.title.rendered,
+        permalink: `/archives/${wpItem.slug}`,
+        permalinkType: 'internal',
+      };
+      return <CardPostLayout {...cardProps} {...eventHandlers} />;
+    }
   }
-
-  // For WordPress posts and projects
-  const wpItem = item as WordpressPost | WordpressProject;
-
-  const title =
-    typeof wpItem.title === 'string' ? wpItem.title : wpItem.title.rendered;
-  const excerpt =
-    typeof wpItem.excerpt === 'string'
-      ? wpItem.excerpt
-      : wpItem.excerpt.rendered;
-
-  const linkPath =
-    contentType === 'project'
-      ? `/projets/${wpItem.slug}`
-      : `/archives/${wpItem.slug}`;
-
-  const date =
-    contentType === 'news' ? wpItem.date : (wpItem as WordpressProject).type;
-  return (
-    <Link
-      href={linkPath}
-      style={{
-        textDecoration: 'none',
-        display: 'block',
-        height: '100%',
-        width: '100%',
-      }}
-    >
-      <ContentCardContainer>
-        <CardCover src={wpItem.featured_image_url} alt={title} />
-        <CardBody title={title} description={excerpt} date={date} />
-      </ContentCardContainer>
-    </Link>
-  );
 };
 
 export default ContentCard;

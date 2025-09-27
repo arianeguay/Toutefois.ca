@@ -2,26 +2,23 @@
 
 import { useEffect, useState } from 'react';
 
-const useCarouselTimer = (slides: number) => {
+const useCarouselTimer = (slides: number, durationMs: number) => {
   const [slideIndex, setSlideIndex] = useState(0);
-  const [isRunning, setIsRunning] = useState(true);
+  const [timerSeed, setTimerSeed] = useState(0);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isRunning) {
-      interval = setInterval(() => {
-        setSlideIndex((prev) => (prev + 1) % slides);
-      }, 5000);
-    }
+    const interval = setInterval(() => {
+      setSlideIndex((prev) => (prev + 1) % slides);
+    }, durationMs);
+
     return () => clearInterval(interval);
-  }, [slides, isRunning]);
+    // Restart interval whenever duration, slides, or seed changes
+  }, [slides, durationMs, timerSeed]);
 
   const setCurrentSlide = (index: number) => setSlideIndex(index);
+  const resetTimer = () => setTimerSeed((s) => s + 1);
 
-  const startTimer = () => setIsRunning(true);
-  const stopTimer = () => setIsRunning(false);
-
-  return { slideIndex, setCurrentSlide, startTimer, stopTimer };
+  return { slideIndex, setCurrentSlide, resetTimer, timerSeed };
 };
 
 export default useCarouselTimer;

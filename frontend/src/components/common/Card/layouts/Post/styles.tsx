@@ -1,0 +1,30 @@
+import styled from 'styled-components';
+import { ContentType } from '../..';
+import { ContentBodyContent, ContentCardContainerStyling } from '../../styles';
+
+export const PostContentCardContent = styled.article<{ type: ContentType }>`
+  background-color: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+  justify-content: space-between;
+  padding-block: ${({ theme }) => theme.spacing.md}px;
+
+  padding-inline: ${({ theme }) => theme.spacing.lg}px;
+  ${ContentBodyContent} {
+    text-align: left;
+    gap: ${({ theme }) => theme.spacing.md}px;
+
+    p:not(:first-child) {
+      margin-block-start: 0;
+      margin-block-end: 0;
+    }
+  }
+`;
+
+export const PostContentCardContainer = styled.div`
+  ${ContentCardContainerStyling}
+  border-radius: ${({ theme }) => theme.borderRadius.md}px;
+`;

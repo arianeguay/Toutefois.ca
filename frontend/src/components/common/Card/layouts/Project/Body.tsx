@@ -1,22 +1,24 @@
+import Button from '@/components/common/Button';
+import Typography from '@/components/common/Typography';
 import parse from 'html-react-parser';
 import { useTheme } from 'styled-components';
-import Button from '../Button';
-import Typography from '../Typography';
+import { ContentBodyContent } from '../../styles';
+import { CardBodyProps } from '../types';
 import {
-  ContentBodyContent,
   ContentBodyContentDescription,
   ContentBodyContentHeading,
-  ContentCardContent,
+  ProjectContentCardContent,
 } from './styles';
-interface CardBodyProps {
-  title: string;
-  description?: string;
-  date?: string;
-}
-const CardBody: React.FC<CardBodyProps> = ({ title, description, date }) => {
+
+const ProjectCardBody: React.FC<CardBodyProps> = ({
+  title,
+  description,
+  date,
+  type = 'project',
+}) => {
   const theme = useTheme();
   return (
-    <ContentCardContent>
+    <ProjectContentCardContent type={type}>
       <ContentBodyContent>
         <ContentBodyContentHeading>
           {date && (
@@ -43,7 +45,8 @@ const CardBody: React.FC<CardBodyProps> = ({ title, description, date }) => {
       >
         En savoir plus
       </Button>
-    </ContentCardContent>
+    </ProjectContentCardContent>
   );
 };
-export default CardBody;
+
+export default ProjectCardBody;

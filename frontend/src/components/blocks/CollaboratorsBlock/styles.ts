@@ -28,7 +28,7 @@ export const Excerpt = styled.p`
 
 export const PhotoContainer = styled.div`
   flex-shrink: 0;
-  width: 350px;
+  width: 300px;
   aspect-ratio: 11/16;
   padding: 0;
   margin: 0;
@@ -63,21 +63,25 @@ const ContainerVerticalStyling = css`
     max-width: ${({ theme }) => 1200 + theme.spacing.xxl}px;
     flex-direction: row;
     align-items: center;
+
+    @media (max-width: ${({ theme }) => theme.content.maxWidth}px) {
+      padding-inline: 0;
+    }
     &:nth-child(even) {
       flex-direction: row-reverse;
       ${PhotoContainer} {
-        border-left: 1px solid ${({ theme }) => theme.borders.strong};
+        border-left: ${({ theme }) => theme.borders.strong};
       }
     }
 
     &:not(:nth-child(even)) {
       ${PhotoContainer} {
-        border-right: 1px solid ${({ theme }) => theme.borders.strong};
+        border-right: ${({ theme }) => theme.borders.strong};
       }
     }
 
     ${PhotoContainer} {
-      width: 350px;
+      width: 280px;
     }
 
     ${Name} {

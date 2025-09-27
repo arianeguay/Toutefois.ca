@@ -45,6 +45,10 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
     }
   };
 
+  const handleHoverChange = (itemId: number) => {
+    setCurrent(items[itemId]);
+  };
+
   // Determine the content type for each item
   const getItemType = (item: ContentItem): 'project' | 'news' | 'facebook' => {
     if ('type' in item && item.type === 'facebook') {
@@ -109,11 +113,15 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
           }}
           modules={[Pagination, Navigation]}
         >
-          {items.map((item) => (
+          {items.map((item, index) => (
             <SwiperSlide
               key={typeof item.id === 'number' ? `item-${item.id}` : item.id}
             >
-              <ContentCard item={item} contentType={getItemType(item)} />
+              <ContentCard
+                onMouseEnter={() => handleHoverChange(index)}
+                item={item}
+                contentType={getItemType(item)}
+              />
             </SwiperSlide>
           ))}
         </Swiper>
