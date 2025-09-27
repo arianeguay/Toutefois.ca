@@ -17,16 +17,25 @@ function toutefois_register_main_project_meta() {
         'auth_callback'=> '__return_true', // expose publicly for frontend
     ]);
 
-    // Association to a main project (for posts, collaborators, and sub-projects)
-    $assoc_meta_args = [
+    // Association to a main project
+    // posts and projets: single association
+    $assoc_single = [
         'show_in_rest' => true,
         'single'       => true,
         'type'         => 'integer',
-        'auth_callback'=> '__return_true', // expose publicly for frontend filters
+        'auth_callback'=> '__return_true',
     ];
-    register_post_meta('post', '_main_project_id', $assoc_meta_args);
-    register_post_meta('collaborateur', '_main_project_id', $assoc_meta_args);
-    register_post_meta('projet', '_main_project_id', $assoc_meta_args); // sub-projects
+    register_post_meta('post', '_main_project_id', $assoc_single);
+    register_post_meta('projet', '_main_project_id', $assoc_single); // sub-projects
+
+    // collaborateurs: multiple associations (store multiple meta rows)
+    $assoc_multi = [
+        'show_in_rest' => true,
+        'single'       => false, // multiple values allowed
+        'type'         => 'integer',
+        'auth_callback'=> '__return_true',
+    ];
+    register_post_meta('collaborateur', '_main_project_id', $assoc_multi);
 }
 add_action('init', 'toutefois_register_main_project_meta');
 
@@ -62,16 +71,31 @@ function toutefois_main_project_meta_box_render($post) {
         echo '<p><label><input type="checkbox" name="_projet_is_main" value="1" ' . checked($is_main, '1', false) . ' /> ' . esc_html__('Main Project', 'toutefois') . '</label></p>';
     }
 
-    // Association dropdown (for all: post, collaborateur, projet)
+    // Association UI
     $options = toutefois_get_main_projects_dropdown();
-    echo '<p><label for="_main_project_id">' . esc_html__('Associated Main Project', 'toutefois') . '</label><br />';
-    echo '<select name="_main_project_id" id="_main_project_id">';
-    echo '<option value="">' . esc_html__('— None —', 'toutefois') . '</option>';
-    foreach ($options as $proj_id) {
-        $title = get_the_title($proj_id);
-        echo '<option value="' . esc_attr($proj_id) . '" ' . selected($assoc, $proj_id, false) . '>' . esc_html($title) . '</option>';
+    if ($post->post_type === 'collaborateur') {
+        // Multi-select for collaborators
+        $assoc_values = get_post_meta($post->ID, '_main_project_id', false); // all values
+        echo '<p><label for="_main_project_id[]">' . esc_html__('Associated Main Projects', 'toutefois') . '</label><br />';
+        echo '<select multiple size="6" name="_main_project_id[]" id="_main_project_id" style="width:100%">';
+        foreach ($options as $proj_id) {
+            $title = get_the_title($proj_id);
+            $selected_attr = in_array((string)$proj_id, array_map('strval', (array)$assoc_values), true) ? ' selected' : '';
+            echo '<option value="' . esc_attr($proj_id) . '"' . $selected_attr . '>' . esc_html($title) . '</option>';
+        }
+        echo '</select></p>';
+        echo '<p class="description">' . esc_html__('Hold Ctrl/Cmd to select multiple projects.', 'toutefois') . '</p>';
+    } else {
+        // Single select for posts and projets
+        echo '<p><label for="_main_project_id">' . esc_html__('Associated Main Project', 'toutefois') . '</label><br />';
+        echo '<select name="_main_project_id" id="_main_project_id">';
+        echo '<option value="">' . esc_html__('— None —', 'toutefois') . '</option>';
+        foreach ($options as $proj_id) {
+            $title = get_the_title($proj_id);
+            echo '<option value="' . esc_attr($proj_id) . '" ' . selected($assoc, $proj_id, false) . '>' . esc_html($title) . '</option>';
+        }
+        echo '</select></p>';
     }
-    echo '</select></p>';
 
     if ($post->post_type === 'projet') {
         echo '<p class="description">' . esc_html__('If this Projet is a sub-project, selecting a Main Project here will also set its post_parent.', 'toutefois') . '</p>';
@@ -108,9 +132,22 @@ function toutefois_save_main_project_meta($post_id, $post, $update) {
     if (!in_array($post->post_type, ['post','collaborateur','projet'], true)) return;
 
     // Save association meta across all screens
-    if (isset($_POST['_main_project_id']) && $_POST['_main_project_id'] !== '') {
-        $main_id = absint($_POST['_main_project_id']);
-        update_post_meta($post_id, '_main_project_id', $main_id);
+    if (isset($_POST['_main_project_id'])) {
+        if ($post->post_type === 'collaborateur') {
+            // Expect an array of IDs
+            $ids = (array) $_POST['_main_project_id'];
+            $ids = array_values(array_unique(array_map('absint', $ids)));
+            // Reset existing and add new
+            delete_post_meta($post_id, '_main_project_id');
+            foreach ($ids as $mid) {
+                if ($mid > 0) add_post_meta($post_id, '_main_project_id', $mid, false);
+            }
+        } elseif ($_POST['_main_project_id'] !== '') {
+            $main_id = absint($_POST['_main_project_id']);
+            update_post_meta($post_id, '_main_project_id', $main_id);
+        } else {
+            delete_post_meta($post_id, '_main_project_id');
+        }
         // If saving a projet that is not the main itself, sync post_parent
         if ($post->post_type === 'projet' && (int)$post_id !== (int)$main_id) {
             // Ensure main_id is a projet and marked as main
@@ -128,7 +165,12 @@ function toutefois_save_main_project_meta($post_id, $post, $update) {
             }
         }
     } else {
-        delete_post_meta($post_id, '_main_project_id');
+        // No field sent
+        if ($post->post_type === 'collaborateur') {
+            delete_post_meta($post_id, '_main_project_id');
+        } else {
+            delete_post_meta($post_id, '_main_project_id');
+        }
         // If projet and not marked as main, clear parent
         if ($post->post_type === 'projet') {
             $current_parent = (int) get_post_field('post_parent', $post_id);
