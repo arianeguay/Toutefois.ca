@@ -105,8 +105,8 @@ export async function generateMetadata({
         };
       }
 
-      const description = post.excerpt.rendered
-        ? post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160)
+      const description = post.excerpt
+        ? post.excerpt.replace(/<[^>]*>/g, '').slice(0, 160)
         : 'Toutefois';
 
       const url = `${baseUrl}/archives/${post.slug}`;
