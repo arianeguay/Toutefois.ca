@@ -6,9 +6,7 @@ export interface WordpressPost {
   content: {
     rendered: string;
   };
-  excerpt: {
-    rendered: string;
-  };
+  excerpt: string;
   date: string;
   link: string;
   featured_image_url: string;

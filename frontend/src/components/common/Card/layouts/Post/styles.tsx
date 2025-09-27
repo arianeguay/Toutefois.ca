@@ -8,15 +8,14 @@ export const PostContentCardContent = styled.article<{ type: ContentType }>`
   display: flex;
   flex-direction: column;
   position: relative;
-  flex: 1;
   justify-content: space-between;
   padding-block: ${({ theme }) => theme.spacing.md}px;
-
+  height: 130px;
   padding-inline: ${({ theme }) => theme.spacing.lg}px;
+  flex-shrink: 0;
   ${ContentBodyContent} {
     text-align: left;
     gap: ${({ theme }) => theme.spacing.md}px;
-
     p:not(:first-child) {
       margin-block-start: 0;
       margin-block-end: 0;

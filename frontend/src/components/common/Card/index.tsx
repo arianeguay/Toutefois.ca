@@ -58,7 +58,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
       const cardProps: CardLayoutProps = {
         type: 'news',
         title: wpItem.title.rendered,
-        description: wpItem.excerpt.rendered,
+        description: wpItem.excerpt,
         date: dayjs(new Date(wpItem.date)).locale('fr').format('D MMMM YYYY'),
         cover: wpItem.featured_image_url,
         alt: wpItem.title.rendered,

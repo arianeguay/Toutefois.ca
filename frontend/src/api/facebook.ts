@@ -6,10 +6,16 @@ import { FacebookPost } from '@/types';
  * @param limit Number of posts to fetch
  * @returns Array of FacebookPost objects
  */
-export async function fetchFacebookPosts(
-  pageId: string = '104368542729089', // Default page ID, replace with your actual page ID
-  limit: number = 5,
-): Promise<FacebookPost[]> {
+
+interface FetchFacebookPostsParams {
+  pageId?: string;
+  limit?: number;
+}
+
+export async function fetchFacebookPosts({
+  pageId = '104368542729089', // Default page ID, replace with your actual page ID
+  limit,
+}: FetchFacebookPostsParams = {}): Promise<FacebookPost[]> {
   // Check if we're on server side
   if (typeof window === 'undefined') {
     try {
@@ -25,7 +31,7 @@ export async function fetchFacebookPosts(
       }
 
       const response = await fetch(
-        `https://graph.facebook.com/v23.0/${pageId}/feed?fields=permalink_url,created_time,full_picture,message${!!limit ? `&limit=${limit}` : ''}&access_token=${accessToken}`,
+        `https://graph.facebook.com/v23.0/${pageId}/feed?fields=permalink_url,full_picture,height,message,created_time,attachments{title,url}${!!limit ? `&limit=${limit}` : ''}&access_token=${accessToken}`,
         { next: { revalidate: 3600 } }, // Revalidate every hour
       );
 

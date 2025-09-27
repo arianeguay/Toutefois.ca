@@ -21,7 +21,8 @@ export const ContentBodyActions = styled.div`
 export const ContentCover = styled.div`
   position: relative;
   background-color: ${({ theme }) => theme.colors.headerBackground};
-  aspect-ratio: 2/1;
+  aspect-ratio: 310/221;
+  flex-shrink: 0;
   width: 100%;
   overflow: hidden;
 `;

@@ -13,6 +13,7 @@ interface ContentCarouselProps {
   noContentText?: string;
 }
 
+const LIMIT_FB_POSTS = 5;
 const ContentCarousel = async ({
   contentType = 'mixed',
   title,
@@ -53,7 +54,9 @@ const ContentCarousel = async ({
     }
 
     // Add Facebook posts if in news or mixed mode
-    const facebookPosts = await fetchFacebookPosts();
+    const facebookPosts = await fetchFacebookPosts({
+      limit: LIMIT_FB_POSTS,
+    });
     if (facebookPosts.length > 0) {
       items = [...items, ...facebookPosts];
     }

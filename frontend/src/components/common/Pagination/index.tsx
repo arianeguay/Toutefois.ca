@@ -116,13 +116,13 @@ const Pagination: React.FC<PaginationProps> = ({
 
       {pagesToRender.map((p, i) =>
         p === '…' ? (
-          <span
+          <PageNumber
             key={`ellipsis-${i}`}
             aria-hidden="true"
             style={{ padding: '0 0.25rem' }}
           >
             …
-          </span>
+          </PageNumber>
         ) : (
           <PageNumber
             as="button"
