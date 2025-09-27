@@ -97,11 +97,15 @@ add_action('add_meta_boxes', 'toutefois_add_main_project_meta_box');
  * Save handler
  */
 function toutefois_save_main_project_meta($post_id, $post, $update) {
+    // Prevent recursion and irrelevant saves
+    static $toutefois_saving = false;
+    if ($toutefois_saving) return;
     if (!isset($_POST['toutefois_main_project_meta_nonce']) || !wp_verify_nonce($_POST['toutefois_main_project_meta_nonce'], 'toutefois_main_project_meta')) {
         return;
     }
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
+    if (!in_array($post->post_type, ['post','collaborateur','projet'], true)) return;
 
     // Save association meta across all screens
     if (isset($_POST['_main_project_id']) && $_POST['_main_project_id'] !== '') {
@@ -111,21 +115,33 @@ function toutefois_save_main_project_meta($post_id, $post, $update) {
         if ($post->post_type === 'projet' && (int)$post_id !== (int)$main_id) {
             // Ensure main_id is a projet and marked as main
             $is_main = get_post_meta($main_id, '_projet_is_main', true);
-            if ($is_main) {
+            $current_parent = (int) get_post_field('post_parent', $post_id);
+            if ($is_main && $current_parent !== (int)$main_id) {
+                $toutefois_saving = true;
+                remove_action('save_post', 'toutefois_save_main_project_meta', 10);
                 wp_update_post([
                     'ID' => $post_id,
                     'post_parent' => $main_id,
                 ]);
+                add_action('save_post', 'toutefois_save_main_project_meta', 10, 3);
+                $toutefois_saving = false;
             }
         }
     } else {
         delete_post_meta($post_id, '_main_project_id');
         // If projet and not marked as main, clear parent
         if ($post->post_type === 'projet') {
-            wp_update_post([
-                'ID' => $post_id,
-                'post_parent' => 0,
-            ]);
+            $current_parent = (int) get_post_field('post_parent', $post_id);
+            if ($current_parent !== 0) {
+                $toutefois_saving = true;
+                remove_action('save_post', 'toutefois_save_main_project_meta', 10);
+                wp_update_post([
+                    'ID' => $post_id,
+                    'post_parent' => 0,
+                ]);
+                add_action('save_post', 'toutefois_save_main_project_meta', 10, 3);
+                $toutefois_saving = false;
+            }
         }
     }
 
@@ -135,11 +151,16 @@ function toutefois_save_main_project_meta($post_id, $post, $update) {
         if ($is_main_val === '1') {
             update_post_meta($post_id, '_projet_is_main', '1');
             // Main projects must not have a parent
-            if ((int)$post->post_parent !== 0) {
+            $current_parent = (int) get_post_field('post_parent', $post_id);
+            if ($current_parent !== 0) {
+                $toutefois_saving = true;
+                remove_action('save_post', 'toutefois_save_main_project_meta', 10);
                 wp_update_post([
                     'ID' => $post_id,
                     'post_parent' => 0,
                 ]);
+                add_action('save_post', 'toutefois_save_main_project_meta', 10, 3);
+                $toutefois_saving = false;
             }
         } else {
             delete_post_meta($post_id, '_projet_is_main');
