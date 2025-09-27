@@ -127,6 +127,18 @@ export const WordpressStyling = css`
     padding-left: 0;
     padding-right: 0;
   }
+
+  /* Default content width for blocks that are NOT wide/full */
+  .wp-block-group.alignfull
+    > *:not(.alignfull):not([data-align='full']):not(.alignwide):not(
+      [data-align='wide']
+    ) {
+    max-width: ${({ theme }) => theme.content.maxWidth}px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: ${({ theme }) => theme.content.padX}px;
+    padding-right: ${({ theme }) => theme.content.padX}px;
+  }
   .alignleft {
     float: left;
     margin: 4px 16px 8px 0;
@@ -582,19 +594,48 @@ export const WordpressStyling = css`
 
   /* Columns */
   .wp-block-columns {
-    display: grid;
+    display: flex;
+    flex-wrap: nowrap;
     gap: ${({ theme }) => theme.spacing.md}px;
-    align-items: start;
+    align-items: stretch;
     padding-top: ${({ theme }) => theme.content.padY}px;
     padding-bottom: ${({ theme }) => theme.content.padY}px;
+
+    /* Vertical alignment helpers from Gutenberg */
+    &.are-vertically-aligned-top {
+      align-items: flex-start;
+    }
+    &.are-vertically-aligned-center {
+      align-items: center;
+    }
+    &.are-vertically-aligned-bottom {
+      align-items: flex-end;
+    }
   }
-  /* Gutenberg sets inline styles for number of columns; we just gap/stack on mobile */
+
+  .wp-block-column {
+    flex: 1 1 0;
+    min-width: 0; /* prevent overflow with long words/media */
+  }
+
+  /* Background within a single column */
+  .wp-block-column.has-background {
+    padding: ${({ theme }) => theme.spacing.md}px;
+    border-radius: ${({ theme }) => theme.borderRadius.sm}px;
+  }
+
+  /* Stack on mobile, unless explicitly disabled by the block */
   @media (max-width: 781px) {
-    .wp-block-columns {
+    .wp-block-columns:not(.is-not-stacked-on-mobile) {
       display: block;
     }
-    .wp-block-column {
+    .wp-block-columns:not(.is-not-stacked-on-mobile) > .wp-block-column {
+      width: 100% !important;
       margin-bottom: ${({ theme }) => theme.spacing.md}px;
+    }
+    .wp-block-columns:not(.is-not-stacked-on-mobile)
+      > .wp-block-column:last-child {
+      margin-bottom: 0;
     }
   }
 

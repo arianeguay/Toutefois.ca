@@ -1,4 +1,4 @@
-import { getMockFacebookPosts } from '@/api/facebook';
+import { fetchFacebookPosts } from '@/api/facebook';
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import Api from '../../../api';
 import ContentCarouselList from './List';
@@ -53,7 +53,7 @@ const ContentCarousel = async ({
     }
 
     // Add Facebook posts if in news or mixed mode
-    const facebookPosts = getMockFacebookPosts();
+    const facebookPosts = await fetchFacebookPosts();
     if (facebookPosts.length > 0) {
       items = [...items, ...facebookPosts];
     }

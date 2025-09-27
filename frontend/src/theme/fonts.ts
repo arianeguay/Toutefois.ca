@@ -40,17 +40,10 @@ const createFontFacesFromUrl = (
   `;
 };
 export const FontFaces = css`
-  ${createFontFaces('Cerebri Sans', '400')}
   ${createFontFacesFromUrl(
     'Cerebri Sans',
-    'https://db.onlinewebfonts.com/t/ad775834db281065fc17e86ad857bf63.woff2',
+    '/fonts/Cerebri Sans Bold.ttf',
     '700',
-    'woff2',
-  )}
-  ${createFontFacesFromUrl(
-    'Special Elite',
-    '/fonts/SpecialElite.ttf',
-    '400',
     'truetype',
   )}
 `;

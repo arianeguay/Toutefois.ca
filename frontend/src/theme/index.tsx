@@ -25,7 +25,7 @@ export const theme = {
   },
   fonts: {
     secondary: 'Cerebri Sans',
-    primary: '"Special Elite", system-ui',
+    primary: 'var(--font-bree-serif), system-ui',
     tertiary: '"Montserrat", system-ui',
   },
   fontSizes: {

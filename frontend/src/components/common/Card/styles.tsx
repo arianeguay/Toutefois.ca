@@ -14,15 +14,13 @@ export const ContentCardContent = styled.article`
   &:before {
     content: '';
     position: absolute;
-    top: -${({ theme }) => theme.spacing.sm}px;
+    top: 0;
     left: 0;
     width: 100%;
-    height: ${({ theme }) => theme.spacing.sm}px;
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 1)
-    );
+    height: ${({ theme }) => theme.spacing.md}px;
+    background-color: inherit; /* match card color */
+    clip-path: polygon(0 0, 100% 0, 50% 100%); /* triangle shape */
+    pointer-events: none;
   }
 `;
 

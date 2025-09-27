@@ -1,5 +1,5 @@
 import Api from '@/api';
-import { getMockFacebookPosts } from '@/api/facebook';
+import { fetchFacebookPosts } from '@/api/facebook';
 import { FacebookPost, WordpressPost } from '@/types';
 import ArticlesGrid from './Grid';
 
@@ -18,7 +18,7 @@ const LatestPostsGrid = async () => {
   }
 
   // Add Facebook posts if in news or mixed mode
-  const facebookPosts = getMockFacebookPosts();
+  const facebookPosts = await fetchFacebookPosts();
   if (facebookPosts.length > 0) {
     items = [...items, ...facebookPosts];
   }

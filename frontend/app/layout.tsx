@@ -1,9 +1,14 @@
+import api from '@/api';
 import StyledComponentsRegistry from '@/lib/registry';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { Metadata } from 'next';
-import { Montserrat, Permanent_Marker, Poppins } from 'next/font/google';
+import {
+  Bree_Serif,
+  Montserrat,
+  Permanent_Marker,
+  Poppins,
+} from 'next/font/google';
 import './globals.css';
-import api from '@/api';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -15,6 +20,13 @@ const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-poppins',
+  display: 'swap',
+});
+
+const breeSerif = Bree_Serif({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-bree-serif',
   display: 'swap',
 });
 
@@ -110,7 +122,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body
-        className={`${montserrat.variable} ${poppins.variable} ${permanentMarker.variable}`}
+        className={`${montserrat.variable} ${breeSerif.variable} ${poppins.variable} ${permanentMarker.variable}`}
       >
         <StyledComponentsRegistry>
           <ThemeProvider>{children}</ThemeProvider>
@@ -119,4 +131,3 @@ export default function RootLayout({
     </html>
   );
 }
-
