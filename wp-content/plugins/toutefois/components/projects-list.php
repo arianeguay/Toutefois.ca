@@ -13,12 +13,19 @@ add_action('rest_api_init', function () {
     register_rest_route('toutefois/v1', '/projects', array(
         'methods' => 'GET',
         'callback' => 'get_all_projects',
-        'permission_callback' => '__return_true' // Make public
+        'permission_callback' => '__return_true', // Make public
+        'args' => array(
+            'main_project' => array(
+                'description' => 'Filter by main project (ID or slug). Returns sub-projects where post_parent = main project ID.',
+                'type'        => 'string',
+                'required'    => false,
+            ),
+        )
     ));
 });
 
 // 2. Callback Function
-function get_all_projects()
+function get_all_projects(WP_REST_Request $request)
 {
     $args = array(
         'post_type' => 'projet',
@@ -26,6 +33,19 @@ function get_all_projects()
         'order' => 'DESC',
         'orderby' => 'date',
     );
+
+    $main_param = $request->get_param('main_project');
+    if ($main_param) {
+        if (function_exists('toutefois_resolve_main_project_id')) {
+            $main_id = toutefois_resolve_main_project_id($main_param);
+        } else {
+            // Fallback: accept numeric only
+            $main_id = ctype_digit((string)$main_param) ? (int)$main_param : 0;
+        }
+        if ($main_id > 0) {
+            $args['post_parent'] = $main_id; // only sub-projects of the main
+        }
+    }
 
     $query = new WP_Query($args);
     $posts = array();

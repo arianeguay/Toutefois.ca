@@ -13,12 +13,19 @@ add_action('rest_api_init', function () {
     register_rest_route('toutefois/v1', '/featured-projects', array(
         'methods' => 'GET',
         'callback' => 'get_featured_projects',
-        'permission_callback' => '__return_true' // Make public
+        'permission_callback' => '__return_true', // Make public
+        'args' => array(
+            'main_project' => array(
+                'description' => 'Filter featured sub-projects under a given main project (ID or slug).',
+                'type'        => 'string',
+                'required'    => false,
+            ),
+        ),
     ));
 });
 
 // 2. Callback Function
-function get_featured_projects()
+function get_featured_projects(WP_REST_Request $request)
 {
     $args = array(
         'post_type' => 'projet',
@@ -31,6 +38,18 @@ function get_featured_projects()
             )
         )
     );
+
+    $main_param = $request->get_param('main_project');
+    if ($main_param) {
+        if (function_exists('toutefois_resolve_main_project_id')) {
+            $main_id = toutefois_resolve_main_project_id($main_param);
+        } else {
+            $main_id = ctype_digit((string)$main_param) ? (int)$main_param : 0;
+        }
+        if ($main_id > 0) {
+            $args['post_parent'] = $main_id;
+        }
+    }
 
     $query = new WP_Query($args);
     $posts = array();

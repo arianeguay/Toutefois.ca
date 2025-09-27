@@ -23,6 +23,11 @@ add_action('rest_api_init', function () {
                 'type'        => 'boolean',
                 'required'    => false,
             ),
+            'main_project' => array(
+                'description' => 'Filter collaborators associated to a main project (ID or slug). Uses _main_project_id meta.',
+                'type'        => 'string',
+                'required'    => false,
+            ),
         ),
     ));
 
@@ -119,6 +124,26 @@ function get_collaborators(WP_REST_Request $request)
                     'value'   => $is_member_bool ? '1' : '0',
                     'compare' => '=',
                 ),
+            );
+        }
+    }
+
+    // Optional filter by main project association via _main_project_id meta
+    $main_param = $request->get_param('main_project');
+    if ($main_param) {
+        if (function_exists('toutefois_resolve_main_project_id')) {
+            $main_id = toutefois_resolve_main_project_id($main_param);
+        } else {
+            $main_id = ctype_digit((string)$main_param) ? (int)$main_param : 0;
+        }
+        if ($main_id > 0) {
+            if (!isset($args['meta_query'])) {
+                $args['meta_query'] = array();
+            }
+            $args['meta_query'][] = array(
+                'key'     => '_main_project_id',
+                'value'   => (string)$main_id,
+                'compare' => '=',
             );
         }
     }

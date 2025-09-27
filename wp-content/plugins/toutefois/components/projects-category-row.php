@@ -43,6 +43,12 @@ add_action('rest_api_init', function () {
                 },
                 'description'       => 'Parent category (slug, ID, or name).',
             ],
+            'main_project' => [
+                'type'              => 'string',
+                'required'          => false,
+                'sanitize_callback' => 'sanitize_text_field',
+                'description'       => 'Filter by Main Project (ID or slug). Limits results to sub-projects with post_parent = main project.',
+            ],
         ],
     ]);
 });
@@ -69,9 +75,19 @@ function toutefois_resolve_parent_category($raw)
 /** Main callback */
 function toutefois_get_projects_by_category(WP_REST_Request $request)
 {
-    $page     = (int) $request->get_param('page');
-    $per_page = (int) $request->get_param('per_page');
-    $cat_arg  = $request->get_param('category');
+    $page         = (int) $request->get_param('page');
+    $per_page     = (int) $request->get_param('per_page');
+    $cat_arg      = $request->get_param('category');
+    $main_param   = $request->get_param('main_project');
+
+    $main_parent_id = 0;
+    if ($main_param) {
+        if (function_exists('toutefois_resolve_main_project_id')) {
+            $main_parent_id = toutefois_resolve_main_project_id($main_param);
+        } elseif (ctype_digit((string)$main_param)) {
+            $main_parent_id = (int) $main_param;
+        }
+    }
 
     $parent_cat = toutefois_resolve_parent_category($cat_arg);
     if (!$parent_cat) {
@@ -101,7 +117,6 @@ function toutefois_get_projects_by_category(WP_REST_Request $request)
         $response = new WP_REST_Response($cached['items'], 200);
         $response->header('X-WP-Total', (int) $cached['total']);
         $response->header('X-WP-TotalPages', (int) $cached['total_pages']);
-        return $response;
     }
 
     // Optimize query: when not paginating (per_page = -1), disable SQL_CALC_FOUND_ROWS
@@ -122,12 +137,14 @@ function toutefois_get_projects_by_category(WP_REST_Request $request)
             'include_children' => false, // we already expanded children
         ]],
     ];
+    if ($main_parent_id > 0) {
+        $args['post_parent'] = $main_parent_id;
+    }
 
     $q = new WP_Query($args);
 
     $items = [];
     if ($q->have_posts()) {
-        while ($q->have_posts()) {
             $q->the_post();
             $post_id = get_the_ID();
 
