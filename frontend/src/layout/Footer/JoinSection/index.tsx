@@ -2,9 +2,9 @@
 import Typography from '@/components/common/Typography';
 import { WordpressFooter } from '@/types';
 import { useTheme } from 'styled-components';
+import EmailIcon from '../../../icons/Email';
+import PhoneIcon from '../../../icons/Phone';
 import Socials from '../socials';
-import EmailIcon from '../socials/Email';
-import PhoneIcon from '../socials/Phone';
 import JoinInfoRow from './JoinInfoRow';
 import { JoinSectionContainer } from './styles';
 

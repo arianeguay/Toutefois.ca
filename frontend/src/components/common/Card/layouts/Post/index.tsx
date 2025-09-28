@@ -18,13 +18,13 @@ const CardPostLayout: React.FC<CardLayoutProps> = ({
   return (
     <LinkWrapper linkPath={permalink} linkType={permalinkType}>
       <PostContentCardContainer {...eventHandlers}>
+        <CardCover src={cover} alt={alt ?? title} />
         <PostCardBody
           type={type}
           title={title}
           description={description}
           date={date}
         />
-        <CardCover src={cover} alt={alt ?? title} />
       </PostContentCardContainer>
     </LinkWrapper>
   );

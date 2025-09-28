@@ -1,5 +1,5 @@
-import FacebookIcon from './Facebook';
-import InstagramIcon from './Instagram';
+import FacebookIcon from '../../../icons/Facebook';
+import InstagramIcon from '../../../icons/Instagram';
 import { SocialsContainer } from './styles';
 
 interface SocialsProps {

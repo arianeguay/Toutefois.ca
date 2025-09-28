@@ -1,11 +1,21 @@
-const InstagramIcon = () => {
+import { IconProps } from './types';
+const InstagramIcon: React.FC<IconProps> = ({
+  size = 20,
+  color,
+  className,
+  style,
+  id,
+}) => {
   return (
     <svg
-      width="20"
-      height="20"
+      width={size}
+      height={size}
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      style={{ ...style, color: color }}
+      id={id}
     >
       <path
         d="M14.1665 1.66675H5.83317C3.53198 1.66675 1.6665 3.53223 1.6665 5.83341V14.1667C1.6665 16.4679 3.53198 18.3334 5.83317 18.3334H14.1665C16.4677 18.3334 18.3332 16.4679 18.3332 14.1667V5.83341C18.3332 3.53223 16.4677 1.66675 14.1665 1.66675Z"

@@ -41,7 +41,6 @@ export const ContentCardContainerStyling = css`
   height: 100%;
   box-shadow: ${({ theme }) => theme.boxShadow.md};
   transition: all 0.2s ease-in-out;
-  max-height: 390px;
 
   &:hover {
     cursor: pointer;
