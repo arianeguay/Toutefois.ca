@@ -13,11 +13,7 @@
     "contentType": {
       "type": "string",
       "default": "mixed",
-      "enum": [
-        "project",
-        "news",
-        "mixed"
-      ]
+      "enum": ["project", "news", "mixed"]
     },
     "title": {
       "type": "string",

@@ -8,10 +8,7 @@
   "icon": "format-image",
   "description": "Displays a banner with a title, description, and image.",
   "supports": {
-    "align": [
-      "wide",
-      "full"
-    ]
+    "align": ["wide", "full"]
   },
   "editorScript": "file:./index.js",
   "render": "file:./render.php",

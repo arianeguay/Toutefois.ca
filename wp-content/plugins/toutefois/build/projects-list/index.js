@@ -1,1 +1,9 @@
-(()=>{"use strict";const e=window.wp.blocks,o=window.React,t=window.wp.i18n,s=window.wp.blockEditor,i=JSON.parse('{"UU":"toutefois/projects-list"}');(0,e.registerBlockType)(i.UU,{edit:function(){return(0,o.createElement)("p",{...(0,s.useBlockProps)()},(0,t.__)("Projects List Placeholder","toutefois-blocks"))},save:function(){return null}})})();
+import { registerBlockType } from '@wordpress/blocks';
+import Edit from './edit';
+import save from './save';
+import metadata from './block.json';
+
+registerBlockType(metadata.name, {
+    edit: Edit,
+    save,
+});
