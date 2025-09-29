@@ -117,6 +117,21 @@ function projets_cpt_and_meta_init()
         'single' => true,
         'type' => 'string',
     ));
+
+    register_rest_field('projet', 'toutefois_meta', [
+        'get_callback'    => function ($obj) {
+            $post_id = (int) $obj['id'];
+            return [
+                '_projet_is_main'     => (bool) get_post_meta($post_id, '_projet_is_main', true),
+                '_projet_date_debut'  => (string) get_post_meta($post_id, '_projet_date_debut', true),
+                '_projet_date_fin'    => (string) get_post_meta($post_id, '_projet_date_fin', true),
+                '_projet_lien'        => (string) get_post_meta($post_id, '_projet_lien', true),
+                '_projet_is_featured' => (bool) get_post_meta($post_id, '_projet_is_featured', true),
+                '_main_project_id'    => (int)  get_post_meta($post_id, '_main_project_id', true),
+            ];
+        },
+        'schema' => null,
+    ]);
 }
 add_action('init', 'projets_cpt_and_meta_init', 0);
 
