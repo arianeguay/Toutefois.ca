@@ -38,6 +38,9 @@ function get_all_projects(?WP_REST_Request $request = null)
     if ($request instanceof WP_REST_Request) {
         $main_param = $request->get_param('main_project');
     }
+    $posts = array();
+    $queried_ids = array();
+
     if ($main_param) {
         if (function_exists('toutefois_resolve_main_project_id')) {
             $main_id = toutefois_resolve_main_project_id($main_param);
@@ -46,12 +49,92 @@ function get_all_projects(?WP_REST_Request $request = null)
             $main_id = ctype_digit((string)$main_param) ? (int)$main_param : 0;
         }
         if ($main_id > 0) {
-            $args['post_parent'] = $main_id; // only sub-projects of the main
+            // Query A: direct children via post_parent
+            $children_q = new WP_Query(array_merge($args, array('post_parent' => $main_id)));
+            if ($children_q->have_posts()) {
+                while ($children_q->have_posts()) {
+                    $children_q->the_post();
+                    $queried_ids[] = get_the_ID();
+                }
+                wp_reset_postdata();
+            }
+
+            // Query B: associated via _main_project_id meta
+            $meta_q = new WP_Query(array_merge($args, array(
+                'post_parent' => '', // avoid forcing parent filter
+                'meta_query' => array(
+                    array(
+                        'key'     => '_main_project_id',
+                        'value'   => (string)$main_id,
+                        'compare' => '=',
+                    )
+                ),
+            )));
+            if ($meta_q->have_posts()) {
+                while ($meta_q->have_posts()) {
+                    $meta_q->the_post();
+                    $queried_ids[] = get_the_ID();
+                }
+                wp_reset_postdata();
+            }
+
+            // Deduplicate while preserving order
+            $queried_ids = array_values(array_unique($queried_ids));
+
+            // If we have IDs, load them in order
+            if (!empty($queried_ids)) {
+                $final_q = new WP_Query(array(
+                    'post_type' => 'projet',
+                    'post__in' => $queried_ids,
+                    'orderby' => 'post__in',
+                    'posts_per_page' => $args['posts_per_page'],
+                ));
+                if ($final_q->have_posts()) {
+                    while ($final_q->have_posts()) {
+                        $final_q->the_post();
+                        $post_id = get_the_ID();
+                        $post_meta = get_post_meta($post_id);
+                        $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
+                        $slug = get_post_field('post_name', $post_id);
+
+                        $categories = get_the_category($post_id);
+                        $child = null;
+                        if (! empty($categories)) {
+                            foreach ($categories as $cat) {
+                                if ($cat->parent != 0) {
+                                    $child = $cat;
+                                    break;
+                                }
+                            }
+                        }
+                        $type = $child ? $child->name : ($categories[0]->name ?? '');
+
+                        $posts[] = array(
+                            'id' => $post_id,
+                            'title' => get_the_title(),
+                            'excerpt' => get_the_excerpt(),
+                            'content' => get_the_content(),
+                            'meta' => $post_meta,
+                            'featured_image_url' => $featured_image_url,
+                            'slug' => $slug,
+                            'date' => get_the_date(),
+                            'type' => $type,
+                            'projet_date_debut' => $post_meta['_projet_date_debut'][0] ?? '',
+                            'projet_date_fin' => $post_meta['_projet_date_fin'][0] ?? '',
+                            'lien_de_reservation' => $post_meta['_projet_lien'][0] ?? '',
+                        );
+                    }
+                    wp_reset_postdata();
+                }
+
+                return new WP_REST_Response($posts, 200);
+            }
+            // If no IDs found, fall through to generic query below
         }
     }
 
+    // Generic (no main project) or fallback
     $query = new WP_Query($args);
-    $posts = array();
 
     if ($query->have_posts()) {
         while ($query->have_posts()) {
