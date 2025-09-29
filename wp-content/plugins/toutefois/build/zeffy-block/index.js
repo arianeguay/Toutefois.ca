@@ -1,0 +1,1 @@
+(()=>{"use strict";const e=window.wp.blocks,o=window.React,t=window.wp.blockEditor,c=window.wp.i18n,n=JSON.parse('{"UU":"toutefois/zeffy-block"}');(0,e.registerBlockType)(n.UU,{edit:function(){return(0,o.createElement)("p",{...(0,t.useBlockProps)()},(0,c.__)("Zeffy Block Placeholder","toutefois-blocks"))},save:function(){return null}})})();
