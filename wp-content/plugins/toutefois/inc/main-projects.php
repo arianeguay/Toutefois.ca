@@ -26,6 +26,20 @@ function toutefois_register_main_project_meta()
         'auth_callback' => '__return_true',
     ]);
 
+    // Generic: hide posts and collaborators from generic queries unless in main context
+    register_post_meta('post', '_only_in_main', [
+        'show_in_rest'  => true,
+        'single'        => true,
+        'type'          => 'boolean',
+        'auth_callback' => '__return_true',
+    ]);
+    register_post_meta('collaborateur', '_only_in_main', [
+        'show_in_rest'  => true,
+        'single'        => true,
+        'type'          => 'boolean',
+        'auth_callback' => '__return_true',
+    ]);
+
     // Association to a main project
     // posts and projets: single association
     $assoc_single = [
@@ -84,6 +98,10 @@ function toutefois_main_project_meta_box_render($post)
         // Only show inside a Main Project context
         $only_in_main = get_post_meta($post->ID, '_projet_only_in_main', true);
         echo '<p><label><input type="checkbox" name="_projet_only_in_main" value="1" ' . checked($only_in_main, '1', false) . ' /> ' . esc_html__('Show only inside its Main Project context', 'toutefois') . '</label></p>';
+    } else {
+        // For posts and collaborators: generic only-in-main flag
+        $only_in_main_generic = get_post_meta($post->ID, '_only_in_main', true);
+        echo '<p><label><input type="checkbox" name="_only_in_main" value="1" ' . checked($only_in_main_generic, '1', false) . ' /> ' . esc_html__('Show only inside its Main Project context', 'toutefois') . '</label></p>';
     }
 
     // Association UI
@@ -232,6 +250,14 @@ function toutefois_save_main_project_meta($post_id, $post, $update)
         } else {
             delete_post_meta($post_id, '_projet_only_in_main');
         }
+    } else {
+        // Save generic only_in_main for posts and collaborators
+        $only_in_main_generic = isset($_POST['_only_in_main']) ? '1' : '';
+        if ($only_in_main_generic === '1') {
+            update_post_meta($post_id, '_only_in_main', '1');
+        } else {
+            delete_post_meta($post_id, '_only_in_main');
+        }
     }
 }
 add_action('save_post', 'toutefois_save_main_project_meta', 10, 3);
@@ -241,24 +267,29 @@ add_action('save_post', 'toutefois_save_main_project_meta', 10, 3);
  * Context is considered present if:
  *  - The query meta_query includes key '_main_project_id', or
  *  - The request includes a 'main_project' parameter (REST or normal request), or
- *  - Explicit meta_key is '_main_project_id'.
+ *  - Explicit meta_key is '_main_project_id', or
+ *  - The query meta_query includes key '_only_in_main'.
  */
-function toutefois_filter_only_in_main_projets($query)
-{
+function toutefois_filter_only_in_main_projets($query) {
     // Only affect frontend and REST, not admin screens
     if (is_admin()) {
         return;
     }
 
-    // Only run on main queries and typical WP_Query usages
     if (!$query->is_main_query() && !defined('REST_REQUEST')) {
         return;
     }
 
-    // Restrict to the 'projet' post type when it is the only or targeted type
+    // Restrict to targeted post types
     $post_type = $query->get('post_type');
-    if ($post_type && $post_type !== 'projet' && !(is_array($post_type) && in_array('projet', $post_type, true))) {
-        return;
+    $targets = ['projet', 'post', 'collaborateur'];
+    if ($post_type) {
+        if (is_array($post_type)) {
+            $intersect = array_intersect($targets, $post_type);
+            if (empty($intersect)) return;
+        } else {
+            if (!in_array($post_type, $targets, true)) return;
+        }
     }
 
     // Determine if a main project context is present
@@ -288,16 +319,24 @@ function toutefois_filter_only_in_main_projets($query)
         }
     }
 
-    // If no main context: exclude projets with _projet_only_in_main = '1'
+    // If no main context: exclude items marked as only-in-main
     if (!$has_main_context) {
+        // Pick the right meta key per post type
+        $meta_key = '_projet_only_in_main';
+        if ($post_type === 'post' || (is_array($post_type) && in_array('post', $post_type, true))) {
+            $meta_key = '_only_in_main';
+        } elseif ($post_type === 'collaborateur' || (is_array($post_type) && in_array('collaborateur', $post_type, true))) {
+            $meta_key = '_only_in_main';
+        }
+
         $exclude_meta = [
             'relation' => 'OR',
             [
-                'key'     => '_projet_only_in_main',
+                'key'     => $meta_key,
                 'compare' => 'NOT EXISTS',
             ],
             [
-                'key'     => '_projet_only_in_main',
+                'key'     => $meta_key,
                 'value'   => '1',
                 'compare' => '!=',
             ],
