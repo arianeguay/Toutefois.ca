@@ -1,7 +1,8 @@
 import Typography from '@/components/common/Typography';
+import { IconProps } from '@/icons/types';
 import { JoinInfoRowLink } from './styles';
 
-type Icon = React.FC<{ width: number; height: number }>;
+type Icon = React.FC<IconProps>;
 interface JoinInfoRowProps {
   Icon: Icon;
   text: string;
@@ -10,7 +11,7 @@ interface JoinInfoRowProps {
 const JoinInfoRow: React.FC<JoinInfoRowProps> = ({ Icon, text, href }) => {
   return (
     <JoinInfoRowLink href={href} className="join-info-row">
-      <Icon width={20} height={20} />
+      <Icon size={20} />
       <Typography variant="small" element="p">
         {text}
       </Typography>
