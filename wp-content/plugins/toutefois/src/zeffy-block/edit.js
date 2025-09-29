@@ -10,7 +10,7 @@ export default function Edit({ attributes, setAttributes }) {
   const { src: attrSrc, height: attrHeight } = attributes; // store ID as string
 
   return (
-    <p {...useBlockProps()}>
+    <div {...useBlockProps()}>
       <InspectorControls>
         <PanelBody title={__("Zeffy Block Settings", "toutefois")} initialOpen>
           <TextControl
@@ -28,7 +28,17 @@ export default function Edit({ attributes, setAttributes }) {
           />
         </PanelBody>
       </InspectorControls>
-      {__("Zeffy Block Placeholder", "toutefois-blocks")}
-    </p>
+      <div
+        style={{ position: "relative", width: "100%", minHeight: attrHeight }}
+      >
+        <iframe
+          title="Zeffy Shop"
+          src={attrSrc}
+          style={{ width: "100%", height: "100%", border: "0" }}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      </div>
+    </div>
   );
 }
