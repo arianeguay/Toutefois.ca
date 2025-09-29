@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "toutefois/zeffy-block",
+  "version": "0.1.0",
+  "title": "Zeffy Block",
+  "category": "widgets",
+  "icon": "list-view",
+  "description": "Displays a list of all projects.",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "attributes": {
+    "src": {
+      "type": "string",
+      "default": ""
+    },
+    "height": {
+      "type": "number",
+      "default": 1200
+    }
+  }
+}

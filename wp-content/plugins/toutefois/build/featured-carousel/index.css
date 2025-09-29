@@ -1,0 +1,78 @@
+.wp-block-toutefois-featured-carousel {
+  width: 100%;
+  max-width: 100%;
+}
+
+.wp-block-toutefois-featured-carousel .swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.wp-block-toutefois-featured-carousel .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wp-block-toutefois-featured-carousel .project-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 450px;
+}
+
+.wp-block-toutefois-featured-carousel .project-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wp-block-toutefois-featured-carousel .project-card-content {
+  width: 100%;
+  color: #fff;
+  height: auto;
+}
+
+.wp-block-toutefois-featured-carousel .project-card-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-end;
+  padding-inline: 55px;
+  padding-block: 55px;
+
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.3) 25%,
+    transparent 50%,
+    transparent 100%
+  );
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Navigation arrows */
+.wp-block-toutefois-featured-carousel .swiper-button-next,
+.wp-block-toutefois-featured-carousel .swiper-button-prev {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Pagination */
+.wp-block-toutefois-featured-carousel .swiper-pagination-bullet {
+  background: #fff;
+  opacity: 0.5;
+}
+
+.wp-block-toutefois-featured-carousel .swiper-pagination-bullet-active {
+  background: #fff;
+  opacity: 1;
+}
