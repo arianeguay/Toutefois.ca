@@ -129,7 +129,12 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
           )
         ) {
           const data = domNode.attribs['data-props'];
-          return <CollaboratorsBlock {...JSON.parse(data)} />;
+          return (
+            <CollaboratorsBlock
+              mainProjectId={page.isMainProject ? page.id : undefined}
+              {...JSON.parse(data)}
+            />
+          );
         }
         if (
           domNode.attribs.class?.includes('wp-block-toutefois-content-carousel')
@@ -172,6 +177,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
                 viewAllUrl={viewAllUrl}
                 viewAllText={viewAllText}
                 limit={limit}
+                mainProjectId={page.isMainProject ? page.id : undefined}
               />
             );
           }

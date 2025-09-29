@@ -5,9 +5,12 @@ import * as S from './styles';
 import { CollaboratorsBlockProps } from './types';
 
 const CollaboratorsBlock: React.FC<CollaboratorsBlockProps> = async (props) => {
-  const { layout, noCollaboratorsText, memberStatus } = props;
+  const { layout, noCollaboratorsText, memberStatus, mainProjectId } = props;
 
-  const collaborators = await api.fetchCollaborators({ memberStatus });
+  const collaborators = await api.fetchCollaborators({
+    memberStatus,
+    mainProject: mainProjectId,
+  });
   if (!collaborators || collaborators.length === 0) {
     return <p>{noCollaboratorsText || 'No collaborators to display.'}</p>;
   }

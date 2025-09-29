@@ -48,6 +48,7 @@ export interface WordpressPage {
   meta?: {
     main_color?: string;
   };
+  isMainProject?: boolean;
 }
 
 export interface WordpressImage {
@@ -121,11 +122,21 @@ export interface WordpressProjectFull {
   title: {
     rendered: string;
   };
+  slug: string;
+  date: string;
   content: {
     rendered: string;
   };
   featured_image_url: string;
   template?: string;
+  toutefois_meta: {
+    _projet_is_main: boolean;
+    _projet_date_debut: string;
+    _projet_date_fin: string;
+    _projet_lien: string;
+    _projet_is_featured: boolean;
+    _main_project_id: number;
+  };
 }
 
 export interface WordpressMenuItem {

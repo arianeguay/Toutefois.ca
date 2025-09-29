@@ -235,6 +235,8 @@ export default async function Page({
           : projectData;
 
         if (project?.id) {
+          const isMainProject = project.toutefois_meta._projet_is_main;
+
           console.log(project);
           // Format the project data to match WordpressPage structure expected by PageLayout
           const formattedProjectPage: WordpressPage = {
@@ -248,6 +250,7 @@ export default async function Page({
             // Include all original project data for custom components to use
             meta: project.meta || {},
             thumbnail: project.featured_image_url || '',
+            isMainProject,
           };
 
           return (

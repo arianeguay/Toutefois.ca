@@ -2,7 +2,6 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-
 /**
  * Main Projects: meta, admin UI, and helpers
  */
@@ -15,10 +14,16 @@ function toutefois_register_main_project_meta()
         'show_in_rest' => true,
         'single'       => true,
         'type'         => 'boolean',
-        'auth_callback' => function () {
-            return true;
-        }, // allow public read
+        'auth_callback' => '__return_true', // expose publicly for frontend
+    ]);
 
+    // Hide from generic queries: only display when a main project context is provided
+    // (i.e., when filtering/associating by _main_project_id)
+    register_post_meta('projet', '_projet_only_in_main', [
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'boolean',
+        'auth_callback' => '__return_true',
     ]);
 
     // Association to a main project
@@ -27,6 +32,7 @@ function toutefois_register_main_project_meta()
         'show_in_rest' => true,
         'single'       => true,
         'type'         => 'integer',
+        'auth_callback' => '__return_true',
     ];
     register_post_meta('post', '_main_project_id', $assoc_single);
     register_post_meta('projet', '_main_project_id', $assoc_single); // sub-projects
@@ -36,6 +42,7 @@ function toutefois_register_main_project_meta()
         'show_in_rest' => true,
         'single'       => false, // multiple values allowed
         'type'         => 'integer',
+        'auth_callback' => '__return_true',
     ];
     register_post_meta('collaborateur', '_main_project_id', $assoc_multi);
 }
@@ -73,6 +80,10 @@ function toutefois_main_project_meta_box_render($post)
     // Only show the "Main Project" checkbox on projet post type
     if ($post->post_type === 'projet') {
         echo '<p><label><input type="checkbox" name="_projet_is_main" value="1" ' . checked($is_main, '1', false) . ' /> ' . esc_html__('Main Project', 'toutefois') . '</label></p>';
+
+        // Only show inside a Main Project context
+        $only_in_main = get_post_meta($post->ID, '_projet_only_in_main', true);
+        echo '<p><label><input type="checkbox" name="_projet_only_in_main" value="1" ' . checked($only_in_main, '1', false) . ' /> ' . esc_html__('Show only inside its Main Project context', 'toutefois') . '</label></p>';
     }
 
     // Association UI
@@ -213,9 +224,104 @@ function toutefois_save_main_project_meta($post_id, $post, $update)
         } else {
             delete_post_meta($post_id, '_projet_is_main');
         }
+
+        // Save only_in_main checkbox
+        $only_in_main_val = isset($_POST['_projet_only_in_main']) ? '1' : '';
+        if ($only_in_main_val === '1') {
+            update_post_meta($post_id, '_projet_only_in_main', '1');
+        } else {
+            delete_post_meta($post_id, '_projet_only_in_main');
+        }
     }
 }
 add_action('save_post', 'toutefois_save_main_project_meta', 10, 3);
+
+/**
+ * Filter queries to hide projets flagged as "only in main" unless a main project context is present.
+ * Context is considered present if:
+ *  - The query meta_query includes key '_main_project_id', or
+ *  - The request includes a 'main_project' parameter (REST or normal request), or
+ *  - Explicit meta_key is '_main_project_id'.
+ */
+function toutefois_filter_only_in_main_projets($query)
+{
+    // Only affect frontend and REST, not admin screens
+    if (is_admin()) {
+        return;
+    }
+
+    // Only run on main queries and typical WP_Query usages
+    if (!$query->is_main_query() && !defined('REST_REQUEST')) {
+        return;
+    }
+
+    // Restrict to the 'projet' post type when it is the only or targeted type
+    $post_type = $query->get('post_type');
+    if ($post_type && $post_type !== 'projet' && !(is_array($post_type) && in_array('projet', $post_type, true))) {
+        return;
+    }
+
+    // Determine if a main project context is present
+    $has_main_context = false;
+
+    // Check meta_query for _main_project_id
+    $mq = $query->get('meta_query');
+    if (is_array($mq)) {
+        foreach ($mq as $cond) {
+            if (is_array($cond) && isset($cond['key']) && $cond['key'] === '_main_project_id') {
+                $has_main_context = true;
+                break;
+            }
+        }
+    }
+
+    // Check direct meta_key usage
+    if (!$has_main_context && $query->get('meta_key') === '_main_project_id') {
+        $has_main_context = true;
+    }
+
+    // Check request parameter (covers REST routes that pass ?main_project=...)
+    if (!$has_main_context) {
+        $main_param = isset($_GET['main_project']) ? $_GET['main_project'] : null;
+        if ($main_param !== null && $main_param !== '') {
+            $has_main_context = true;
+        }
+    }
+
+    // If no main context: exclude projets with _projet_only_in_main = '1'
+    if (!$has_main_context) {
+        $exclude_meta = [
+            'relation' => 'OR',
+            [
+                'key'     => '_projet_only_in_main',
+                'compare' => 'NOT EXISTS',
+            ],
+            [
+                'key'     => '_projet_only_in_main',
+                'value'   => '1',
+                'compare' => '!=',
+            ],
+        ];
+
+        // Merge with existing meta_query using a top-level AND
+        if (!is_array($mq) || empty($mq)) {
+            $query->set('meta_query', $exclude_meta);
+        } else {
+            $new_mq = ['relation' => 'AND'];
+            // If existing has a relation, preserve by nesting
+            if (isset($mq['relation'])) {
+                $new_mq[] = $mq; // keep existing group as-is
+            } else {
+                foreach ($mq as $cond) {
+                    $new_mq[] = $cond;
+                }
+            }
+            $new_mq[] = $exclude_meta;
+            $query->set('meta_query', $new_mq);
+        }
+    }
+}
+add_action('pre_get_posts', 'toutefois_filter_only_in_main_projets');
 
 /**
  * Helper: resolve a projet ID from slug or ID

@@ -11,6 +11,7 @@ interface ContentCarouselProps {
   viewAllText?: string;
   limit?: number;
   noContentText?: string;
+  mainProjectId?: number;
 }
 
 const LIMIT_FB_POSTS = 5;
@@ -22,12 +23,13 @@ const ContentCarousel = async ({
   viewAllText,
   limit = 10,
   noContentText = 'No content found.',
+  mainProjectId,
 }: ContentCarouselProps) => {
   let items: (WordpressPost | WordpressProject | FacebookPost)[] = [];
 
   // Fetch projects if needed
   if (contentType === 'project' || contentType === 'mixed') {
-    const projects = await Api.fetchAllProjects();
+    const projects = await Api.fetchAllProjects(mainProjectId);
     if (projects.length > 0) {
       // Add projects with a type identifier to distinguish them
       items = [

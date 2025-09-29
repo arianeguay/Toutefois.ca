@@ -1,15 +1,16 @@
 export interface Collaborator {
-    id: number;
-    name: string;
-    position: string;
-    excerpt: string;
-    photoUrl: string;
-    link: string;
+  id: number;
+  name: string;
+  position: string;
+  excerpt: string;
+  photoUrl: string;
+  link: string;
 }
 
 export interface CollaboratorsBlockProps {
-    layout: 'vertical' | 'horizontal';
-    collaborators: Collaborator[];
-    memberStatus: 'all' | 'members' | 'non-members';
-    noCollaboratorsText?: string;
+  layout: 'vertical' | 'horizontal';
+  collaborators: Collaborator[];
+  memberStatus: 'all' | 'members' | 'non-members';
+  noCollaboratorsText?: string;
+  mainProjectId?: number;
 }
