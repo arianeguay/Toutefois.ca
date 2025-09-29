@@ -138,17 +138,6 @@ function projets_meta_box_callback($post)
     echo '<div class="projet-field"><label for="projet_date_fin">Date de fin :</label><input type="date" id="projet_date_fin" name="projet_date_fin" value="' . esc_attr($date_fin) . '" /></div>';
     echo '<div class="projet-field"><label for="projet_lien">Lien de réservation :</label><input type="url" id="projet_lien" name="projet_lien" value="' . esc_attr($lien) . '" size="25" /></div>';
     echo '<div class="projet-field"><label for="projet_is_featured">Projet vedette :</label><input type="checkbox" id="projet_is_featured" style="width:20px; height:20px;" name="projet_is_featured" value="1" ' . checked($is_featured, 1, false) . ' /></div>';
-
-    echo '<div class="projet-field"><label for="projet_image">Image :</label><div>';
-    echo '<input type="hidden" name="projet_image_id" id="projet_image_id" value="' . esc_attr($image_id) . '" />';
-    echo '<div id="projet_image_preview">';
-    if ($image_id) {
-        echo wp_get_attachment_image($image_id, 'medium');
-    }
-    echo '</div>';
-    echo '<input type="button" id="upload_image_button" class="button" value="' . __('Choisir une image', 'text_domain') . '" />';
-    echo '<input type="button" id="remove_image_button" class="button" value="' . __('Supprimer l’image', 'text_domain') . '" />';
-    echo '</div></div>';
 }
 
 // 4. Save Meta Box Data
@@ -165,13 +154,9 @@ function projets_save_meta_box_data($post_id)
     }
 
     $fields = [
-        'projet_type' => 'sanitize_text_field',
-        'projet_credits' => 'sanitize_textarea_field',
-        'projet_personnes' => 'sanitize_textarea_field',
         'projet_date_debut' => 'sanitize_text_field',
         'projet_date_fin' => 'sanitize_text_field',
         'projet_lien' => 'esc_url_raw',
-        'projet_image_id' => 'intval',
         'projet_is_featured' => 'boolval',
     ];
 
@@ -185,48 +170,3 @@ function projets_save_meta_box_data($post_id)
     }
 }
 add_action('save_post_projet', 'projets_save_meta_box_data');
-
-// 5. Enqueue WordPress media scripts
-function projets_enqueue_media_scripts()
-{
-    wp_enqueue_media();
-}
-add_action('admin_enqueue_scripts', 'projets_enqueue_media_scripts');
-
-// 6. Inline script for media uploader
-function projets_add_inline_media_script()
-{
-?>
-    <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            var mediaUploader;
-            $('body').on('click', '#upload_image_button', function(e) {
-                e.preventDefault();
-                if (mediaUploader) {
-                    mediaUploader.open();
-                    return;
-                }
-                mediaUploader = wp.media.frames.file_frame = wp.media({
-                    title: 'Choisir une image',
-                    button: {
-                        text: 'Choisir cette image'
-                    },
-                    multiple: false
-                });
-                mediaUploader.on('select', function() {
-                    var attachment = mediaUploader.state().get('selection').first().toJSON();
-                    $('#projet_image_id').val(attachment.id);
-                    $('#projet_image_preview').html('<img src="' + attachment.url + '" style="max-width:100%;height:auto;">');
-                });
-                mediaUploader.open();
-            });
-            $('body').on('click', '#remove_image_button', function(e) {
-                e.preventDefault();
-                $('#projet_image_id').val('');
-                $('#projet_image_preview').html('');
-            });
-        });
-    </script>
-<?php
-}
-add_action('admin_footer', 'projets_add_inline_media_script');

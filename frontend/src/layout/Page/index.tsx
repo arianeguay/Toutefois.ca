@@ -12,8 +12,8 @@ import {
   default as parse,
   type HTMLReactParserOptions,
 } from 'html-react-parser';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import FeaturedCarousel from '../../components/blocks/FeaturedCarousel';
 import type { WordpressPage } from '../../types';
 import Footer from '../Footer';
@@ -209,7 +209,13 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
         )}
 
         {parentPageSlug === 'notre-mission' && !!page.thumbnail && (
-          <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9' }}>
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              aspectRatio: '16 / 9',
+            }}
+          >
             <Image
               src={page.thumbnail}
               alt={page.title.rendered}
