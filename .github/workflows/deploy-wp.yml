@@ -2,15 +2,17 @@
 name: Deploy to DigitalOcean (Next.js)
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "wp-content/**"
-      - ".github/workflows/deploy.yml"
+  workflow_run:
+    workflows: ["Plugin Build"]
+    types: [completed]
+  workflow_dispatch: {}
 
 jobs:
   deploy-backend:
+    # Run only when the triggering workflow (Plugin Build) succeeded and on main branch
+    if: >-
+      ${{ (github.event_name == 'workflow_dispatch') ||
+          (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

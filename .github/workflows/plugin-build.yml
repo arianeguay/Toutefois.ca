@@ -3,8 +3,14 @@ name: Plugin Build
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'wp-content/plugins/toutefois/**'
+      - '.github/workflows/plugin-build.yml'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'wp-content/plugins/toutefois/**'
+      - '.github/workflows/plugin-build.yml'
 
 jobs:
   build-plugin:
