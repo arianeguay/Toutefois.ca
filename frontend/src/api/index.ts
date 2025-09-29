@@ -171,7 +171,7 @@ class Api {
     // Ensure meta is included (e.g., _projet_is_main exposed via REST)
     const params = new URLSearchParams({ slug });
     // Request only needed fields including meta to keep payload small
-    params.append(
+    params.set(
       '_fields',
       [
         'id',
@@ -180,7 +180,7 @@ class Api {
         'template',
         'slug',
         'date',
-        'projet_is_main',
+        'meta._projet_is_main',
         'meta._projet_date_debut',
         'meta._projet_date_fin',
         'meta._projet_lien',

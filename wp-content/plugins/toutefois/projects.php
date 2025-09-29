@@ -83,16 +83,28 @@ function projets_cpt_and_meta_init()
         'show_in_rest' => true,
         'single' => true,
         'type' => 'string',
+        'auth_callback' => function () {
+            return true;
+        }, // allow public read
+
     ));
     register_post_meta('projet', '_projet_date_fin', array(
         'show_in_rest' => true,
         'single' => true,
         'type' => 'string',
+        'auth_callback' => function () {
+            return true;
+        }, // allow public read
+
     ));
     register_post_meta('projet', '_projet_lien', array(
         'show_in_rest' => true,
         'single' => true,
         'type' => 'string',
+        'auth_callback' => function () {
+            return true;
+        }, // allow public read
+
     ));
     register_post_meta('projet', '_projet_is_featured', array(
         'show_in_rest' => true,
