@@ -18,6 +18,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Download plugin build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: toutefois-plugin-build
+          path: wp-content/plugins/toutefois/build
+          merge-multiple: true
+
       - name: Deploy backend files via rsync
         uses: burnett01/rsync-deployments@6.0.0
         with:
