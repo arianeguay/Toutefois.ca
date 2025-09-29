@@ -173,7 +173,15 @@ class Api {
     // Request only needed fields including meta to keep payload small
     params.append(
       '_fields',
-      ['id', 'title', 'content', 'template', 'slug', 'date', 'meta'].join(','),
+      [
+        'id',
+        'title',
+        'content',
+        'template',
+        'slug',
+        'date',
+        'projet_is_main',
+      ].join(','),
     );
     return this.fetchFromApi(`wp/v2/projet?${params.toString()}`);
   }

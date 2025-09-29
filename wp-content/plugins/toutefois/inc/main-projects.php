@@ -8,13 +8,13 @@ if (!defined('ABSPATH')) {
  */
 
 // Register meta for marking a Projet as Main and associating items to a Main Project
-function toutefois_register_main_project_meta() {
+function toutefois_register_main_project_meta()
+{
     // Mark a projet as a main project
     register_post_meta('projet', '_projet_is_main', [
         'show_in_rest' => true,
         'single'       => true,
         'type'         => 'boolean',
-        'auth_callback'=> '__return_true', // expose publicly for frontend
     ]);
 
     // Association to a main project
@@ -23,7 +23,6 @@ function toutefois_register_main_project_meta() {
         'show_in_rest' => true,
         'single'       => true,
         'type'         => 'integer',
-        'auth_callback'=> '__return_true',
     ];
     register_post_meta('post', '_main_project_id', $assoc_single);
     register_post_meta('projet', '_main_project_id', $assoc_single); // sub-projects
@@ -33,7 +32,6 @@ function toutefois_register_main_project_meta() {
         'show_in_rest' => true,
         'single'       => false, // multiple values allowed
         'type'         => 'integer',
-        'auth_callback'=> '__return_true',
     ];
     register_post_meta('collaborateur', '_main_project_id', $assoc_multi);
 }
@@ -42,12 +40,13 @@ add_action('init', 'toutefois_register_main_project_meta');
 /**
  * Admin UI: Meta boxes
  */
-function toutefois_get_main_projects_dropdown() {
+function toutefois_get_main_projects_dropdown()
+{
     // Fetch only projets flagged as main
     $projects = get_posts([
         'post_type'      => 'projet',
         'posts_per_page' => -1,
-        'post_status'    => ['publish','draft','pending'],
+        'post_status'    => ['publish', 'draft', 'pending'],
         'meta_query'     => [[
             'key'     => '_projet_is_main',
             'value'   => '1',
@@ -60,7 +59,8 @@ function toutefois_get_main_projects_dropdown() {
     return $projects;
 }
 
-function toutefois_main_project_meta_box_render($post) {
+function toutefois_main_project_meta_box_render($post)
+{
     wp_nonce_field('toutefois_main_project_meta', 'toutefois_main_project_meta_nonce');
 
     $is_main = get_post_meta($post->ID, '_projet_is_main', true);
@@ -102,7 +102,8 @@ function toutefois_main_project_meta_box_render($post) {
     }
 }
 
-function toutefois_add_main_project_meta_box() {
+function toutefois_add_main_project_meta_box()
+{
     $screens = ['post', 'collaborateur', 'projet'];
     foreach ($screens as $screen) {
         add_meta_box(
@@ -120,7 +121,8 @@ add_action('add_meta_boxes', 'toutefois_add_main_project_meta_box');
 /**
  * Save handler
  */
-function toutefois_save_main_project_meta($post_id, $post, $update) {
+function toutefois_save_main_project_meta($post_id, $post, $update)
+{
     // Prevent recursion and irrelevant saves
     static $toutefois_saving = false;
     if ($toutefois_saving) return;
@@ -129,7 +131,7 @@ function toutefois_save_main_project_meta($post_id, $post, $update) {
     }
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
-    if (!in_array($post->post_type, ['post','collaborateur','projet'], true)) return;
+    if (!in_array($post->post_type, ['post', 'collaborateur', 'projet'], true)) return;
 
     // Save association meta across all screens
     if (isset($_POST['_main_project_id'])) {
@@ -214,7 +216,8 @@ add_action('save_post', 'toutefois_save_main_project_meta', 10, 3);
 /**
  * Helper: resolve a projet ID from slug or ID
  */
-function toutefois_resolve_main_project_id($raw) {
+function toutefois_resolve_main_project_id($raw)
+{
     if (!$raw) return 0;
     // numeric ID
     if (ctype_digit((string)$raw)) {
