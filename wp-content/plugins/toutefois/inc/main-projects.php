@@ -14,6 +14,7 @@ function toutefois_register_main_project_meta()
     register_post_meta('projet', '_projet_is_main', [
         'show_in_rest' => true,
         'single'       => true,
+        'show_in_rest_api' => true,
         'type'         => 'boolean',
     ]);
 

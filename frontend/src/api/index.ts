@@ -181,6 +181,10 @@ class Api {
         'slug',
         'date',
         'projet_is_main',
+        'meta._projet_date_debut',
+        'meta._projet_date_fin',
+        'meta._projet_lien',
+        'meta._projet_is_featured',
       ].join(','),
     );
     return this.fetchFromApi(`wp/v2/projet?${params.toString()}`);
