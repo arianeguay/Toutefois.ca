@@ -235,7 +235,12 @@ export default async function Page({
           : projectData;
 
         if (project?.id) {
-          const isMainProject = project.toutefois_meta._projet_is_main;
+          // Determine main project flag robustly from meta
+          const rawIsMain =
+            project?.meta?._projet_is_main ??
+            project?._projet_is_main ??
+            project?.toutefois_meta?._projet_is_main;
+          const isMainProject = rawIsMain === true || rawIsMain === '1' || rawIsMain === 1 || rawIsMain === 'true';
 
           console.log(project);
           // Format the project data to match WordpressPage structure expected by PageLayout

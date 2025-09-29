@@ -44,7 +44,7 @@ const ContentCarousel = async ({
 
   // Fetch news if needed
   if (contentType === 'news' || contentType === 'mixed') {
-    const news = await Api.fetchAllNews();
+    const news = await Api.fetchAllNews(mainProjectId);
     if (news.length > 0) {
       // Add news with a type identifier
       const typedArticles = news.map((article) => ({
