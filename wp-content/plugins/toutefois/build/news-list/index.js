@@ -1,1 +1,0 @@
-(()=>{"use strict";const e=window.wp.blocks,o=window.React,t=window.wp.i18n,s=window.wp.blockEditor,i=JSON.parse('{"UU":"toutefois/news-list"}');(0,e.registerBlockType)(i.UU,{edit:function(){return(0,o.createElement)("p",{...(0,s.useBlockProps)()},(0,t.__)("News List Placeholder","toutefois-blocks"))},save:function(){return null}})})();
