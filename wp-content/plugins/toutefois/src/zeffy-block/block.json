@@ -6,7 +6,7 @@
   "title": "Zeffy Block",
   "category": "widgets",
   "icon": "list-view",
-  "description": "Displays a list of all projects.",
+  "description": "Displays a iframe of zeffy.",
   "editorScript": "file:./index.js",
   "render": "file:./render.php",
   "attributes": {
