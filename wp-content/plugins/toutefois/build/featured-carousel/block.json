@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "toutefois/featured-carousel",
+  "version": "0.1.0",
+  "title": "Featured Carousel",
+  "category": "widgets",
+  "icon": "images-alt2",
+  "description": "Displays a carousel of featured projects.",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./index.css",
+  "render": "file:./render.php",
+  "supports": {
+    "html": false,
+    "color": {
+      "background": true,
+      "text": false,
+      "gradients": true
+    }
+  }
+}
