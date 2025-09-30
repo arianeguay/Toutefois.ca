@@ -37,6 +37,7 @@ wp-content/advanced-cache.php
 wp-content/wp-cache-config.php
 *.log
 
+wp-content/plugins/toutefois/build
 
 wp-content/themes/twentysixteen/
 wp-content/themes/twentyseventeen/

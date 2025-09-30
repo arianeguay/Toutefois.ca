@@ -6,7 +6,7 @@
   "scripts": {
     "build": "wp-scripts build",
     "start": "wp-scripts start",
-    "postbuild": "cpr src build --overwrite --filter='**/*.php'"
+    "postbuild": "cpr src build --overwrite --filter='.*\\.php$'"
   },
   "devDependencies": {
     "@babel/runtime": "^7.24.0",
