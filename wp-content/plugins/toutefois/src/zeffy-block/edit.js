@@ -7,7 +7,7 @@ import {
 import { __ } from "@wordpress/i18n";
 
 export default function Edit({ attributes, setAttributes }) {
-  const { src: attrSrc, height: attrHeight } = attributes; // store ID as string
+  const { src: attrSrc, height: attrHeight = 600 } = attributes; // store ID as string
 
   return (
     <div {...useBlockProps()}>
@@ -31,13 +31,17 @@ export default function Edit({ attributes, setAttributes }) {
       <div
         style={{ position: "relative", width: "100%", minHeight: attrHeight }}
       >
-        <iframe
-          title="Zeffy Shop"
-          src={attrSrc}
-          style={{ width: "100%", height: "100%", border: "0" }}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
+        {attrSrc ? (
+          <iframe
+            title="Zeffy Shop"
+            src={attrSrc}
+            style={{ width: "100%", height: "100%", border: "0" }}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        ) : (
+          <p>{__("No URL provided", "toutefois")}</p>
+        )}
       </div>
     </div>
   );
