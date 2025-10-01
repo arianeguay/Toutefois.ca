@@ -1,4 +1,4 @@
-import { useBlockProps, InspectorControls } from "@wordpress/block-editor";
+import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
 import {
   __experimentalNumberControl as NumberControl,
   PanelBody,
@@ -29,13 +29,20 @@ export default function Edit({ attributes, setAttributes }) {
         </PanelBody>
       </InspectorControls>
       <div
-        style={{ position: "relative", width: "100%", minHeight: attrHeight }}
+        style={{
+          position: "relative",
+          width: "100%",
+          minHeight: attrHeight,
+          display: "flex",
+          alignItems: "stretch",
+          flexDirection: "column",
+        }}
       >
         {attrSrc ? (
           <iframe
             title="Zeffy Shop"
             src={attrSrc}
-            style={{ width: "100%", height: "100%", border: "0" }}
+            style={{ width: "100%", height: "auto", border: "0" }}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
