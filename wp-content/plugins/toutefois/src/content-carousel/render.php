@@ -12,6 +12,9 @@ $view_all_url = isset($attributes['viewAllUrl']) ? $attributes['viewAllUrl'] : '
 $view_all_text = isset($attributes['viewAllText']) ? $attributes['viewAllText'] : '';
 $limit = isset($attributes['limit']) ? intval($attributes['limit']) : 10;
 $no_content_text = isset($attributes['noContentText']) ? $attributes['noContentText'] : 'No content found.';
+// New attributes for news source selection
+$news_source = isset($attributes['newsSource']) ? $attributes['newsSource'] : 'both';
+$facebook_page_id = isset($attributes['facebookPageId']) ? $attributes['facebookPageId'] : '';
 
 
 // Fetch content based on type
@@ -53,7 +56,9 @@ if (!empty($items)) :
             data-view-all-url="<?php echo esc_attr($view_all_url); ?>"
             data-view-all-text="<?php echo esc_attr($view_all_text); ?>"
             data-limit="<?php echo esc_attr($limit); ?>"
-            data-no-content-text="<?php echo esc_attr($no_content_text); ?>">
+            data-no-content-text="<?php echo esc_attr($no_content_text); ?>"
+            data-news-source="<?php echo esc_attr($news_source); ?>"
+            data-facebook-page-id="<?php echo esc_attr($facebook_page_id); ?>">
             <!-- Fallback content for non-JS environments -->
             <h2><?php echo esc_html($title); ?></h2>
             <ul>

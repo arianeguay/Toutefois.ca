@@ -38,6 +38,15 @@
     "noContentText": {
       "type": "string",
       "default": "No content found."
+    },
+    "newsSource": {
+      "type": "string",
+      "default": "both",
+      "enum": ["wp", "facebook", "both"]
+    },
+    "facebookPageId": {
+      "type": "string",
+      "default": ""
     }
   }
 }

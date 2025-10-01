@@ -16,6 +16,8 @@ export default function Edit({ attributes, setAttributes }) {
     limit,
     noContentText,
     description,
+    newsSource,
+    facebookPageId,
   } = attributes;
 
   // Default titles based on content type
@@ -87,6 +89,26 @@ export default function Edit({ attributes, setAttributes }) {
             ]}
             onChange={handleContentTypeChange}
           />
+          {contentType === "news" && (
+            <>
+              <SelectControl
+                label={__("News Source", "toutefois-blocks")}
+                value={newsSource || "both"}
+                options={[
+                  { label: __("Facebook Only", "toutefois-blocks"), value: "facebook" },
+                  { label: __("WP News Only", "toutefois-blocks"), value: "wp" },
+                  { label: __("Both", "toutefois-blocks"), value: "both" },
+                ]}
+                onChange={(value) => setAttributes({ newsSource: value })}
+              />
+              <TextControl
+                label={__("Facebook Page ID (optional)", "toutefois-blocks")}
+                help={__("Leave empty to use the default Toutefois page.", "toutefois-blocks")}
+                value={facebookPageId}
+                onChange={(value) => setAttributes({ facebookPageId: value })}
+              />
+            </>
+          )}
           <TextControl
             label={__("Title", "toutefois-blocks")}
             value={title}
