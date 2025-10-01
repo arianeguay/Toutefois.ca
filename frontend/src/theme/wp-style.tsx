@@ -730,4 +730,72 @@ export const WordpressStyling = css`
       margin-block: 32px;
     }
   }
-`;
+
+  /* Match React blocks styling for WP fallbacks/mounts */
+  /* Content Carousel fallback container */
+  .content-carousel-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    ${ContainerContentStyling}
+    overflow: hidden;
+    padding-inline: ${({ theme }) => theme.spacing.xl}px;
+    padding-block-end: ${({ theme }) => theme.spacing.xs}px;
+  }
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    .content-carousel-block {
+      padding-inline: ${({ theme }) => theme.spacing.xxl}px;
+    }
+  }
+  .content-carousel-block > h2 {
+    margin-bottom: ${({ theme }) => theme.spacing.xs}px;
+    text-shadow: ${({ theme }) => theme.colors.primaryText}70 2px 3px 3px;
+  }
+  .content-carousel-block > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: ${({ theme }) => theme.spacing.lg}px;
+    width: 100%;
+  }
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    .content-carousel-block > ul {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+    .content-carousel-block > ul {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .content-carousel-block > ul > li {
+    background: ${({ theme }) => theme.colors.sectionColor3}10;
+    border: 1px solid ${({ theme }) => theme.colors.borderColor1};
+    border-radius: ${({ theme }) => theme.borderRadius.sm}px;
+    box-shadow: ${({ theme }) => theme.boxShadow.sm};
+    padding: ${({ theme }) => theme.spacing.md}px;
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.spacing.sm}px;
+  }
+  .content-carousel-block img {
+    width: 100%;
+    height: auto;
+    border-radius: ${({ theme }) => theme.borderRadius.sm}px;
+    box-shadow: ${({ theme }) => theme.boxShadow.xs};
+    object-fit: cover;
+  }
+  .content-carousel-block a {
+    align-self: center;
+    margin-top: ${({ theme }) => theme.spacing.md}px;
+  }
+
+  /* Collaborators block mount – provide outer spacing similar to React */
+  .toutefois-collaborators-block-react-root {
+    display: block;
+    width: 100%;
+    margin-block: ${({ theme }) => theme.spacing.lg}px;
+  }

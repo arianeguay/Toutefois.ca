@@ -34,8 +34,6 @@ export default function Edit({ attributes, setAttributes }) {
           width: "100%",
           minHeight: attrHeight,
           display: "flex",
-          alignItems: "stretch",
-          flexDirection: "column",
         }}
       >
         {attrSrc ? (

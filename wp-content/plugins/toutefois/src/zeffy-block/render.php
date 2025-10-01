@@ -6,7 +6,7 @@ $height = isset($attributes['height']) ? $attributes['height'] : 1200;
 if (!empty($all_projects)) :
 ?>
     <div <?php echo get_block_wrapper_attributes(); ?>>
-        <div style="position: relative; width: 100%; min-height: <?php echo $height; ?>px; display: flex;flex-direction: column; align-items: stretch;">
+        <div style="position: relative; width: 100%; min-height: <?php echo $height; ?>px; display: flex;">
             <iframe
                 title="Zeffy Shop"
                 src="<?php echo $src; ?>"
