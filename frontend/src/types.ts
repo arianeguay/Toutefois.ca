@@ -171,4 +171,5 @@ export interface WordpressCollaborator {
 export interface WordpressOptions {
   error_title: string;
   error_message: string;
+  donation_link: string;
 }

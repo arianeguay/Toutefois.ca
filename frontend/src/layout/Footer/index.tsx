@@ -6,8 +6,12 @@ import WebsiteInfo from './WebInfo';
 
 interface FooterProps {
   currentPage?: WordpressPage;
+  donation_link?: string;
 }
-const Footer: React.FC<FooterProps> = async ({ currentPage }) => {
+const Footer: React.FC<FooterProps> = async ({
+  currentPage,
+  donation_link,
+}) => {
   const footer = await api.fetchFooter();
 
   const mainColor = currentPage?.meta?.main_color;
@@ -17,7 +21,7 @@ const Footer: React.FC<FooterProps> = async ({ currentPage }) => {
       <FooterContent>
         <JoinSection footer={footer} />
         <WebsiteInfo footer={footer} />
-        <div></div>
+        <div>{donation_link}</div>
       </FooterContent>
     </FooterContainer>
   );

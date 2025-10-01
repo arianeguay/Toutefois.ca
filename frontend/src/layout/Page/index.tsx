@@ -23,10 +23,15 @@ import PageWrapper from './wrapper';
 
 interface PageLayoutProps {
   page: WordpressPage;
+  donation_link?: string;
   backTo?: string;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
+const PageLayout: React.FC<PageLayoutProps> = async ({
+  page,
+  donation_link,
+  backTo,
+}) => {
   // Treat the link as a string to robustly get the path, avoiding errors if it's not a full URL.
   const pathname = page.link.replace(/^(?:https?:\/\/)?[^/]+\/?/, '');
   const pathSegments = pathname.split('/').filter((segment: string) => segment);
@@ -180,7 +185,9 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
                 viewAllText={viewAllText}
                 limit={limit}
                 mainProjectId={page.isMainProject ? page.id : undefined}
-                newsSource={(newsSource as 'wp' | 'facebook' | 'both') || 'both'}
+                newsSource={
+                  (newsSource as 'wp' | 'facebook' | 'both') || 'both'
+                }
                 facebookPageId={facebookPageId}
               />
             );
@@ -199,7 +206,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
 
   return (
     <PageWrapper template={template}>
-      <Header currentPage={headerPage} />
+      <Header currentPage={headerPage} donation_link={donation_link} />
       <MainContent>
         {backTo && (
           <BackToLink href={backTo} $template={template} className="back-to">
@@ -239,7 +246,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
 
         {!!page.content?.rendered && parse(page.content.rendered, options)}
       </MainContent>
-      <Footer currentPage={headerPage} />
+      <Footer currentPage={headerPage} donation_link={donation_link} />
     </PageWrapper>
   );
 };

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Theme Options for Toutefois.
  */
@@ -8,7 +9,8 @@ if (!defined('ABSPATH')) {
 }
 
 // 1. Add Theme Options Page
-function toutefois_add_options_page() {
+function toutefois_add_options_page()
+{
     add_options_page(
         'Toutefois Options',
         'Toutefois Options',
@@ -20,7 +22,8 @@ function toutefois_add_options_page() {
 add_action('admin_menu', 'toutefois_add_options_page');
 
 // 2. Register Settings
-function toutefois_register_settings() {
+function toutefois_register_settings()
+{
     register_setting('toutefois_options', 'toutefois_error_title', [
         'type' => 'string',
         'sanitize_callback' => 'sanitize_text_field',
@@ -33,15 +36,22 @@ function toutefois_register_settings() {
         'default' => 'Une erreur est survenue.',
         'show_in_rest' => true,
     ]);
+    register_setting('toutefois_options', 'toutefois_donation_link', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => '',
+        'show_in_rest' => true,
+    ]);
 }
 add_action('admin_init', 'toutefois_register_settings');
 
 // 3. Render Options Page HTML
-function toutefois_options_page_html() {
+function toutefois_options_page_html()
+{
     if (!current_user_can('manage_options')) {
         return;
     }
-    ?>
+?>
     <div class="wrap">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
         <form action="options.php" method="post">
@@ -57,15 +67,20 @@ function toutefois_options_page_html() {
                     <th scope="row">Error Page Message</th>
                     <td><input type="text" name="toutefois_error_message" value="<?php echo esc_attr(get_option('toutefois_error_message')); ?>" size="40" /></td>
                 </tr>
+                <tr valign="top">
+                    <th scope="row">Lien de donation</th>
+                    <td><input type="text" name="toutefois_donation_link" value="<?php echo esc_attr(get_option('toutefois_donation_link')); ?>" size="40" /></td>
+                </tr>
             </table>
             <?php submit_button(); ?>
         </form>
     </div>
-    <?php
+<?php
 }
 
 // 4. Register REST API Endpoint for Options
-function toutefois_register_options_route() {
+function toutefois_register_options_route()
+{
     register_rest_route('toutefois/v1', '/options', [
         'methods' => 'GET',
         'callback' => 'toutefois_get_options',
@@ -74,10 +89,12 @@ function toutefois_register_options_route() {
 }
 add_action('rest_api_init', 'toutefois_register_options_route');
 
-function toutefois_get_options() {
+function toutefois_get_options()
+{
     $options = [
         'error_title' => get_option('toutefois_error_title', 'Erreur'),
         'error_message' => get_option('toutefois_error_message', 'Une erreur est survenue.'),
+        'donation_link' => get_option('toutefois_donation_link', ''),
     ];
     return new WP_REST_Response($options, 200);
 }

@@ -7,8 +7,9 @@ import { HeaderContainer } from './styles';
 
 interface HeaderProps {
   currentPage?: WordpressPage;
+  donation_link?: string;
 }
-const Header = async ({ currentPage }: HeaderProps) => {
+const Header = async ({ currentPage, donation_link }: HeaderProps) => {
   const menuItems = await api.fetchMenuItems();
   const specialProject = await api.fetchSpecialProjects();
 
@@ -19,6 +20,7 @@ const Header = async ({ currentPage }: HeaderProps) => {
       <Logo />
       <Menu menuItems={menuItems} />
       {specialProject && <SpecialProjectMenuItem {...specialProject} />}
+      <div>{donation_link}</div>
     </HeaderContainer>
   );
 };

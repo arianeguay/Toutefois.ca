@@ -13,6 +13,7 @@ export async function generateMetadata({
   params: { path?: string[] };
 }): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+
   // Handle root path (home)
   if (!params.path || params.path.length === 0) {
     const url = `${baseUrl}/`;
@@ -194,6 +195,9 @@ export default async function Page({
 }: {
   params: { path?: string[] };
 }) {
+  const options = await api.fetchOptions();
+  const donation_link = options?.donation_link;
+
   // Handle root path (home)
   if (!params.path || params.path.length === 0) {
     // This is the root route - render your homepage
@@ -202,7 +206,7 @@ export default async function Page({
       const homePage = await api.fetchPageBySlug('home');
       const homePageData = Array.isArray(homePage) ? homePage[0] : homePage;
 
-      return <PageLayout page={homePageData} />;
+      return <PageLayout page={homePageData} donation_link={donation_link} />;
     } catch (error) {
       console.error('Error fetching home page:', error);
       return (
@@ -240,7 +244,11 @@ export default async function Page({
             project?.meta?._projet_is_main ??
             project?._projet_is_main ??
             project?.toutefois_meta?._projet_is_main;
-          const isMainProject = rawIsMain === true || rawIsMain === '1' || rawIsMain === 1 || rawIsMain === 'true';
+          const isMainProject =
+            rawIsMain === true ||
+            rawIsMain === '1' ||
+            rawIsMain === 1 ||
+            rawIsMain === 'true';
 
           console.log(project);
           // Format the project data to match WordpressPage structure expected by PageLayout
@@ -259,7 +267,11 @@ export default async function Page({
           };
 
           return (
-            <PageLayout page={formattedProjectPage as any} backTo="/projets" />
+            <PageLayout
+              page={formattedProjectPage as any}
+              backTo="/projets"
+              donation_link={donation_link}
+            />
           );
         } else {
           console.warn('Project not found:', params.path[1]);
@@ -289,7 +301,13 @@ export default async function Page({
             isPost: true,
           };
 
-          return <PageLayout page={formattedPostPage as any} />;
+          return (
+            <PageLayout
+              page={formattedPostPage as any}
+              donation_link={donation_link}
+              backTo="/archives"
+            />
+          );
         } else {
           console.warn('Post not found:', params.path[1]);
           notFound();
@@ -397,7 +415,7 @@ export default async function Page({
       notFound();
     }
 
-    return <PageLayout page={pageData} />;
+    return <PageLayout page={pageData} donation_link={donation_link} />;
   } catch (error) {
     console.error('Error fetching page:', error);
     notFound();
