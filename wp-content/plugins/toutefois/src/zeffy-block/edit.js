@@ -1,4 +1,4 @@
-import { useBlockProps } from "@wordpress/block-editor";
+import { useBlockProps, InspectorControls } from "@wordpress/block-editor";
 import {
   __experimentalNumberControl as NumberControl,
   PanelBody,
