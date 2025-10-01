@@ -731,10 +731,54 @@ export const WordpressStyling = css`
     }
   }
 
+  /* Banner block: structure and alignment mapping */
+  .wp-block-toutefois-banner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+
+    .toutefois-banner__bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .toutefois-banner__content {
+      position: absolute;
+      inset: 0;
+      padding: ${({ theme }) => theme.spacing.md}px;
+    }
+
+    .toutefois-banner__body {
+      ${ContainerContentStyling}
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      color: ${({ theme }) => theme.colors.lightText};
+    }
+
+    /* Horizontal alignment */
+    &[data-ha='flex-start'] .toutefois-banner__body { align-items: flex-start; text-align: left; }
+    &[data-ha='center'] .toutefois-banner__body { align-items: center; text-align: center; }
+    &[data-ha='flex-end'] .toutefois-banner__body { align-items: flex-end; text-align: right; }
+
+    /* Vertical alignment */
+    &[data-va='flex-start'] .toutefois-banner__body { justify-content: flex-start; }
+    &[data-va='center'] .toutefois-banner__body { justify-content: center; }
+    &[data-va='flex-end'] .toutefois-banner__body { justify-content: flex-end; }
+
+    .toutefois-banner__title { margin: 0; }
+    .toutefois-banner__description { margin-top: ${({ theme }) => theme.spacing.sm}px; }
+
+    /* Optional blur hint (actual blur also inline) */
+    &[data-blurred='1'] .toutefois-banner__bg { filter: blur(4px); }
+  }
+
   /* Match React blocks styling for WP fallbacks/mounts */
   /* Content Carousel fallback container */
   .content-carousel-block {
-    position: relative;
+{{ ... }}
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -792,10 +836,10 @@ export const WordpressStyling = css`
     align-self: center;
     margin-top: ${({ theme }) => theme.spacing.md}px;
   }
-
   /* Collaborators block mount – provide outer spacing similar to React */
   .toutefois-collaborators-block-react-root {
     display: block;
     width: 100%;
     margin-block: ${({ theme }) => theme.spacing.lg}px;
   }
+`;

@@ -52,9 +52,7 @@ $content_styles = [
     'left: 0',
     'right: 0',
     'bottom: 0',
-
     'padding: 16px',
-
 ];
 
 $body_style = [
@@ -71,8 +69,12 @@ $body_style = [
 ];
 
 $template = $attributes['template'] ?? 'default';
+// Expose alignment and blur as data-attributes for theme CSS to hook into
 $wrapper_attributes = get_block_wrapper_attributes([
     'data-template' => $template,
+    'data-va' => $vertical_alignment,
+    'data-ha' => $horizontal_alignment,
+    'data-blurred' => $blurred_background ? '1' : '0',
     'style' => implode('; ', $container_styles),
 ]);
 
@@ -81,21 +83,19 @@ $heading_style = [
     'font-family: ' . esc_attr($font) . ', sans-serif',
     'text-shadow: ' . ($big_text_shadow ? '4px 3px 0px ' . esc_attr($text_shadow_color) : '1px 1px 3px ' . esc_attr($text_shadow_color)),
     'margin: 0',
-    ''
-
 ];
 
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <div style="<?php echo implode('; ', $image_style); ?>"></div>
-    <div style="<?php echo implode('; ', $content_styles); ?>">
-        <div style="<?php echo implode('; ', $body_style); ?>">
+    <div class="toutefois-banner__bg" style="<?php echo implode('; ', $image_style); ?>"></div>
+    <div class="toutefois-banner__content" style="<?php echo implode('; ', $content_styles); ?>">
+        <div class="toutefois-banner__body" style="<?php echo implode('; ', $body_style); ?>">
             <?php if ($title) : ?>
-                <h1 style="<?php echo implode('; ', $heading_style); ?>"><?php echo esc_html($title); ?></h1>
+                <h1 class="toutefois-banner__title" style="<?php echo implode('; ', $heading_style); ?>"><?php echo esc_html($title); ?></h1>
             <?php endif; ?>
             <?php if ($description) : ?>
-                <p style="width: fit-content"><?php echo esc_html($description); ?></p>
+                <p class="toutefois-banner__description" style="width: fit-content"><?php echo esc_html($description); ?></p>
             <?php endif; ?>
         </div>
     </div>
