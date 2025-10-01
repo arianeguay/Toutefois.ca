@@ -157,6 +157,8 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
               'data-view-all-url': viewAllUrl,
               'data-view-all-text': viewAllText,
               'data-limit': limitStr,
+              'data-news-source': newsSource,
+              'data-facebook-page-id': facebookPageId,
             } = contentCarouselDiv.attribs;
 
             const limit = limitStr ? parseInt(limitStr, 10) : 10;
@@ -178,6 +180,8 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
                 viewAllText={viewAllText}
                 limit={limit}
                 mainProjectId={page.isMainProject ? page.id : undefined}
+                newsSource={(newsSource as 'wp' | 'facebook' | 'both') || 'both'}
+                facebookPageId={facebookPageId}
               />
             );
           }

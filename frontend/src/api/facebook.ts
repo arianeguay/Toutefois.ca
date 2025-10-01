@@ -13,7 +13,7 @@ interface FetchFacebookPostsParams {
 }
 
 export async function fetchFacebookPosts({
-  pageId = '104368542729089', // Default page ID, replace with your actual page ID
+  pageId,
   limit,
 }: FetchFacebookPostsParams = {}): Promise<FacebookPost[]> {
   // Check if we're on server side
@@ -23,6 +23,10 @@ export async function fetchFacebookPosts({
       // This requires a Facebook App with appropriate permissions
       const accessToken = process.env.NEXT_PUBLIC_FACEBOOK_ACCESS_TOKEN;
 
+      // Resolve page ID: env var takes precedence if provided, otherwise fallback
+      const resolvedPageId =
+        pageId || process.env.NEXT_PUBLIC_FACEBOOK_PAGE_ID || '104368542729089';
+
       if (!accessToken) {
         console.error(
           'Facebook access token not found in environment variables',
@@ -31,7 +35,7 @@ export async function fetchFacebookPosts({
       }
 
       const response = await fetch(
-        `https://graph.facebook.com/v23.0/${pageId}/feed?fields=permalink_url,full_picture,height,message,created_time,attachments{title,url}${!!limit ? `&limit=${limit}` : ''}&access_token=${accessToken}`,
+        `https://graph.facebook.com/v23.0/${resolvedPageId}/feed?fields=permalink_url,full_picture,height,message,created_time,attachments{title,url}${!!limit ? `&limit=${limit}` : ''}&access_token=${accessToken}`,
         { next: { revalidate: 3600 } }, // Revalidate every hour
       );
 
