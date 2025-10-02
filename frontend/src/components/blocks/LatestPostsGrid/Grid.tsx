@@ -60,12 +60,6 @@ const ArticlesGrid: React.FC<GridProps> = ({ articles }) => {
           />
         ))}
       </GridContainer>
-      <Pagination
-        page={page}
-        limit={limit}
-        total={totalPages}
-        handlePageChange={handlePageChange}
-      />
     </>
   );
 };

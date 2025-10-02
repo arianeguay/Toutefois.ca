@@ -1,6 +1,15 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 
+function toutefois_fb_fetch_url($url) {
+    $response = wp_remote_get($url, array('timeout' => 25));
+    if (is_wp_error($response)) return array('data' => array());
+    $code = wp_remote_retrieve_response_code($response);
+    if ($code < 200 || $code >= 300) return array('data' => array());
+    $data = json_decode(wp_remote_retrieve_body($response), true);
+    return is_array($data) ? $data : array('data' => array());
+}
+
 // Option keys
 const TF_FB_ACCESS_TOKEN = 'toutefois_fb_access_token';
 const TF_FB_PAGE_ID = 'toutefois_fb_page_id';
@@ -9,6 +18,10 @@ const TF_FB_EXCLUDE_REELS = 'toutefois_fb_exclude_reels';
 const TF_FB_REQUIRE_IMAGE = 'toutefois_fb_require_image';
 const TF_FB_EXCLUDE_KEYWORDS = 'toutefois_fb_exclude_keywords'; // comma-separated
 const TF_FB_LAST_CURSOR = 'toutefois_fb_last_cursor';
+const TF_FB_LAST_NEXT_URL = 'toutefois_fb_last_next_url';
+const TF_FB_CRON_INTERVAL = 'toutefois_fb_cron_interval'; // hourly|twicedaily|daily
+const TF_FB_MAX_PAGES = 'toutefois_fb_max_pages';
+const TF_FB_PAGE_SIZE = 'toutefois_fb_page_size';
 // Token refresh related
 const TF_FB_APP_ID = 'toutefois_fb_app_id';
 const TF_FB_APP_SECRET = 'toutefois_fb_app_secret';
@@ -26,6 +39,43 @@ add_action('admin_init', function() {
     register_setting($group, TF_FB_APP_ID);
     register_setting($group, TF_FB_APP_SECRET);
     register_setting($group, TF_FB_USER_TOKEN);
+    register_setting($group, TF_FB_CRON_INTERVAL);
+    register_setting($group, TF_FB_MAX_PAGES);
+    register_setting($group, TF_FB_PAGE_SIZE);
+});
+
+// Admin-post manual actions
+add_action('admin_post_toutefois_fb_sync_now', function() {
+    if (!current_user_can('manage_options')) wp_die('Forbidden');
+    check_admin_referer('toutefois_fb_sync_now');
+    $max = (int) get_option(TF_FB_MAX_PAGES, 10);
+    $size = (int) get_option(TF_FB_PAGE_SIZE, 25);
+    toutefois_sync_facebook(max(1,$max), max(1,$size));
+    $redirect = wp_get_referer();
+    if (!$redirect) $redirect = admin_url('options-general.php?page=toutefois-fb-sync');
+    wp_safe_redirect(add_query_arg('tffb', 'synced', $redirect));
+    exit;
+});
+
+add_action('admin_post_toutefois_fb_refresh_now', function() {
+    if (!current_user_can('manage_options')) wp_die('Forbidden');
+    check_admin_referer('toutefois_fb_refresh_now');
+    toutefois_fb_try_refresh_token(true);
+    $redirect = wp_get_referer();
+    if (!$redirect) $redirect = admin_url('options-general.php?page=toutefois-fb-sync');
+    wp_safe_redirect(add_query_arg('tffb', 'refreshed', $redirect));
+    exit;
+});
+
+add_action('admin_post_toutefois_fb_reset_cursor', function() {
+    if (!current_user_can('manage_options')) wp_die('Forbidden');
+    check_admin_referer('toutefois_fb_reset_cursor');
+    delete_option(TF_FB_LAST_CURSOR);
+    delete_option(TF_FB_LAST_NEXT_URL);
+    $redirect = wp_get_referer();
+    if (!$redirect) $redirect = admin_url('options-general.php?page=toutefois-fb-sync');
+    wp_safe_redirect(add_query_arg('tffb', 'reset', $redirect));
+    exit;
 });
 
 // Simple settings page
@@ -63,6 +113,25 @@ add_action('admin_menu', function() {
                     </td>
                   </tr>
                   <tr>
+                    <th scope="row">Planification</th>
+                    <td>
+                      <label for="<?php echo esc_attr(TF_FB_CRON_INTERVAL); ?>">Fréquence du CRON</label><br/>
+                      <select name="<?php echo esc_attr(TF_FB_CRON_INTERVAL); ?>" id="<?php echo esc_attr(TF_FB_CRON_INTERVAL); ?>">
+                        <?php $cur = get_option(TF_FB_CRON_INTERVAL, 'hourly'); ?>
+                        <option value="hourly" <?php selected($cur, 'hourly'); ?>>Hourly</option>
+                        <option value="twicedaily" <?php selected($cur, 'twicedaily'); ?>>Twice Daily</option>
+                        <option value="daily" <?php selected($cur, 'daily'); ?>>Daily</option>
+                      </select>
+                      <p class="description">Change la fréquence du job d'import.</p>
+                      <label>Max pages par sync<br/>
+                        <input type="number" min="1" max="100" name="<?php echo esc_attr(TF_FB_MAX_PAGES); ?>" value="<?php echo esc_attr(get_option(TF_FB_MAX_PAGES, '10')); ?>"/>
+                      </label><br/>
+                      <label>Taille de page (limit)<br/>
+                        <input type="number" min="1" max="100" name="<?php echo esc_attr(TF_FB_PAGE_SIZE); ?>" value="<?php echo esc_attr(get_option(TF_FB_PAGE_SIZE, '25')); ?>"/>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
                     <th scope="row">Auto-refresh access token (optionnel)</th>
                     <td>
                       <label>App ID<br/><input type="text" class="regular-text" name="<?php echo esc_attr(TF_FB_APP_ID); ?>" value="<?php echo esc_attr(get_option(TF_FB_APP_ID, '')); ?>"/></label><br/>
@@ -74,21 +143,60 @@ add_action('admin_menu', function() {
                 </table>
                 <?php submit_button(); ?>
               </form>
+
+              <hr/>
+              <h2>Actions manuelles</h2>
+              <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin-right:10px;">
+                <?php wp_nonce_field('toutefois_fb_sync_now'); ?>
+                <input type="hidden" name="action" value="toutefois_fb_sync_now"/>
+                <button type="submit" class="button button-primary">Sync Now</button>
+              </form>
+              <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin-right:10px;">
+                <?php wp_nonce_field('toutefois_fb_refresh_now'); ?>
+                <input type="hidden" name="action" value="toutefois_fb_refresh_now"/>
+                <button type="submit" class="button">Refresh Token Now</button>
+              </form>
+              <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;">
+                <?php wp_nonce_field('toutefois_fb_reset_cursor'); ?>
+                <input type="hidden" name="action" value="toutefois_fb_reset_cursor"/>
+                <button type="submit" class="button">Reset Cursor</button>
+              </form>
             </div>
             <?php
         }
     );
 });
 
-// Ensure CRON jobs exist
+function toutefois_fb_reschedule_sync_cron($interval = '') {
+    $interval = $interval ? $interval : get_option(TF_FB_CRON_INTERVAL, 'hourly');
+    $ts = wp_next_scheduled('toutefois_fb_sync_cron');
+    if ($ts) wp_unschedule_event($ts, 'toutefois_fb_sync_cron');
+    if (in_array($interval, array('hourly','twicedaily','daily'), true)) {
+        wp_schedule_event(time() + 60, $interval, 'toutefois_fb_sync_cron');
+    } else {
+        wp_schedule_event(time() + 60, 'hourly', 'toutefois_fb_sync_cron');
+    }
+}
+
+// Ensure CRON jobs exist and align with chosen interval
 add_action('init', function() {
     if (!wp_next_scheduled('toutefois_fb_sync_cron')) {
-        wp_schedule_event(time() + 60, 'hourly', 'toutefois_fb_sync_cron');
+        toutefois_fb_reschedule_sync_cron();
+    } else {
+        // Ensure schedule matches saved interval
+        $saved = get_option(TF_FB_CRON_INTERVAL, 'hourly');
+        // No direct way to read current schedule; reschedule to be safe
+        toutefois_fb_reschedule_sync_cron($saved);
     }
     if (!wp_next_scheduled('toutefois_fb_refresh_token_cron')) {
         wp_schedule_event(time() + 120, 'daily', 'toutefois_fb_refresh_token_cron');
     }
 });
+
+// Reschedule when interval changes
+add_action('update_option_' . TF_FB_CRON_INTERVAL, function($old, $new) {
+    toutefois_fb_reschedule_sync_cron($new);
+}, 10, 2);
 
 add_action('toutefois_fb_sync_cron', 'toutefois_sync_facebook');
 add_action('toutefois_fb_refresh_token_cron', 'toutefois_fb_try_refresh_token');
@@ -209,12 +317,18 @@ function toutefois_fb_upsert_wp_post($fb) {
 }
 
 function toutefois_sync_facebook($max_pages = 5, $page_size = 25) {
-    $after = get_option(TF_FB_LAST_CURSOR, '');
+    $after = (string) get_option(TF_FB_LAST_CURSOR, '');
+    $next_url = (string) get_option(TF_FB_LAST_NEXT_URL, '');
     $pages = 0;
     $imported = 0;
 
     while ($pages < $max_pages) {
-        $data = toutefois_fb_fetch_feed(array('limit' => $page_size, 'after' => $after));
+        if (!empty($next_url)) {
+            $data = toutefois_fb_fetch_url($next_url);
+        } else {
+            $data = toutefois_fb_fetch_feed(array('limit' => $page_size, 'after' => $after));
+        }
+
         $items = isset($data['data']) && is_array($data['data']) ? $data['data'] : array();
         foreach ($items as $post) {
             if (toutefois_fb_passes_filters($post)) {
@@ -222,13 +336,21 @@ function toutefois_sync_facebook($max_pages = 5, $page_size = 25) {
                 $imported++;
             }
         }
-        $after = isset($data['paging']['cursors']['after']) ? $data['paging']['cursors']['after'] : '';
+
+        // Advance cursors/links for the next loop
+        $after = isset($data['paging']['cursors']['after']) ? (string)$data['paging']['cursors']['after'] : '';
+        $next_url = isset($data['paging']['next']) ? (string)$data['paging']['next'] : '';
         $pages++;
-        if (empty($after) || empty($items)) break; // no more
+
+        // Stop only when there is no next page at all
+        if (empty($after) && empty($next_url)) {
+            break;
+        }
     }
 
     update_option(TF_FB_LAST_CURSOR, $after);
-    return array('pages' => $pages, 'imported' => $imported, 'last_after' => $after);
+    update_option(TF_FB_LAST_NEXT_URL, $next_url);
+    return array('pages' => $pages, 'imported' => $imported, 'last_after' => $after, 'last_next' => $next_url);
 }
 
 // Token refresh logic (optional, requires App ID/Secret and a user token)
