@@ -1,10 +1,10 @@
 import api from '@/api';
 import ClientBlock from '@/components/blocks/ClientBlock';
-import ColorUpdater from '@/components/ColorUpdater';
 import CollaboratorsBlock from '@/components/blocks/CollaboratorsBlock';
 import ContentCarousel from '@/components/blocks/ContentCarousel';
 import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
+import ColorUpdater from '@/components/ColorUpdater';
 import Typography from '@/components/common/Typography';
 import {
   DOMNode,
@@ -255,6 +255,51 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
             );
           }
 
+          // Handle projects category rows for the projects template
+          if (className?.includes('wp-block-toutefois-projects-category-row')) {
+            // Extract category ID from data attribute if available
+            const categoryId = reactAttributes['data-category'] || '';
+            const title = reactAttributes['data-title'] || '';
+
+            return (
+              <ProjectsRow
+                key={`projects-row-${categoryId || Math.random().toString(36).substring(2, 9)}`}
+                categoryId={categoryId}
+                title={title}
+              />
+            );
+          }
+
+          // Handle collaborators block for the collaborators template
+          if (className?.includes('toutefois-collaborators-block-react-root')) {
+            const dataProps = reactAttributes['data-props'] || '{}';
+            let props: Record<string, any> = {
+              layout: 'vertical',
+              memberStatus: 'all',
+            };
+
+            try {
+              props = {
+                ...props,
+                ...JSON.parse(dataProps),
+              };
+            } catch (e) {
+              console.error('Failed to parse collaborators block props:', e);
+            }
+
+            return (
+              <CollaboratorsBlock
+                layout={props.layout as 'vertical' | 'horizontal'}
+                collaborators={[]} // Will be fetched inside the component using the memberStatus and mainProjectId
+                memberStatus={
+                  props.memberStatus as 'all' | 'members' | 'non-members'
+                }
+                noCollaboratorsText={props.noCollaboratorsText}
+                mainProjectId={page.isMainProject ? page.id : undefined}
+              />
+            );
+          }
+
           // Fallback if the inner div is not found
           const fallbackId = Math.random().toString(36).substring(2, 9);
           return (
@@ -268,19 +313,37 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
 
   // Get the mainColor from the header page or parent color
   const mainColor = headerPage.meta?.main_color || '';
-  
+
+  // Determine if we should show the back link based on template
+  const showBackLink = (currentTemplate: string) => {
+    // Don't show back link on banner template - it's handled separately
+    if (currentTemplate === 'template-banner.php') return false;
+    // Show back link on all other templates if backTo is provided
+    return !!backTo;
+  };
+
   return (
     <ClientBlock style={{ flex: 1 }}>
       {/* Update the color context when page loads */}
       <ColorUpdater color={mainColor} />
       <MainContent>
-        {template === 'template-title.php' && (
+        {/* Show title on templates that need a prominent title */}
+        {(template === 'template-title.php' ||
+          template === 'template-projects.php' ||
+          template === 'template-collaborators.php') && (
           <Typography variant={!!page.template ? 'h1' : 'h2'} element="h1">
             {page.title.rendered}
           </Typography>
         )}
 
-        {template !== 'template-banner.php' && (
+        {/* Carousel template may need special handling for featured carousel */}
+        {template === 'template-carousel.php' &&
+          !page.content?.rendered?.includes('featured-carousel') && (
+            <FeaturedCarousel />
+          )}
+
+        {/* Back link handling based on template */}
+        {showBackLink(template) && (
           <BackLink href={backTo} $template={template} />
         )}
         {parentPageSlug === 'notre-mission' && !!page.thumbnail && (
@@ -307,7 +370,11 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
 
         {/* Use Suspense and BlocksProvider to handle client-side rendering of blocks */}
         <Suspense fallback={null}>
-          {!!page.content?.rendered && parse(page.content.rendered, options)}
+          <div
+            className={`page-content template-${template.replace('.php', '')}`}
+          >
+            {!!page.content?.rendered && parse(page.content.rendered, options)}
+          </div>
         </Suspense>
       </MainContent>
     </ClientBlock>

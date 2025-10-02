@@ -1,15 +1,13 @@
 /* ------------------------------------------------------------------
    Toutefois – Gutenberg Editor Styles
-   Mirrors theme.ts for a faithful editor preview
+   Mirrors React theme styling for consistent editor/frontend display
 ------------------------------------------------------------------- */
 
 /* Load your fonts inside the editor */
-@import url("https://fonts.googleapis.com/css2?family=Cerebri+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Gagalin:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.cdnfonts.com/css/gagalin");
 
-/* Theme tokens (CSS custom properties) */
+/* Theme tokens (CSS custom properties) - matched with React theme */
 :root {
   /* Colors */
   --tfx-primary-text: #2f2c58;
@@ -19,11 +17,13 @@
   --tfx-header-bg: #2f2c58;
   --tfx-main-bg: #fff4d8;
 
+  /* Section colors - used in backgrounds and accents */
   --tfx-section-1: #862331; /* red */
   --tfx-section-2: #5a3d55; /* purple */
   --tfx-section-3: #333333; /* dark */
   --tfx-section-4: #588b8b; /* teal */
 
+  /* Button colors for consistent styling */
   --tfx-btn-prim-bg: #e1a42b;
   --tfx-btn-prim-fg: #2f2c58;
   --tfx-btn-sec-bg: #6b1e2c;
@@ -31,32 +31,53 @@
   --tfx-btn-ter-bg: #2f2c58;
   --tfx-btn-ter-fg: #f5f3ee;
 
+  /* Border colors */
   --tfx-border-1: #b1b1b1;
   --tfx-border-2: #e1a42b;
 
-  /* Typography */
+  /* Typography - matched with React component fonts */
   --tfx-font-primary: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto,
     Arial, sans-serif;
   --tfx-font-secondary: "Poppins", system-ui, -apple-system, Segoe UI, Roboto,
     Arial, sans-serif;
 
+  /* Font sizes and line heights matched with theme */
   --tfx-fs-h1: 48px;
   --tfx-lh-h1: 58px;
   --tfx-ls-h1: -0.5px;
+  --tfx-fw-h1: 700;
+
   --tfx-fs-h2: 36px;
   --tfx-lh-h2: 47px;
   --tfx-ls-h2: -0.3px;
+  --tfx-fw-h2: 600;
+
   --tfx-fs-h3: 28px;
   --tfx-lh-h3: 36px;
   --tfx-ls-h3: 0px;
+  --tfx-fw-h3: 600;
+
   --tfx-fs-h4: 22px;
   --tfx-lh-h4: 31px;
+  --tfx-ls-h4: 0px;
+  --tfx-fw-h4: 600;
+
   --tfx-fs-body: 16px;
   --tfx-lh-body: 26px;
+  --tfx-ls-body: 0px;
+  --tfx-fw-body: 400;
+
   --tfx-fs-small: 14px;
   --tfx-lh-small: 20px;
+  --tfx-ls-small: 0px;
+  --tfx-fw-small: 400;
 
-  /* Spacing & layout */
+  --tfx-fs-big: 18px;
+  --tfx-lh-big: 28px;
+  --tfx-ls-big: 0px;
+  --tfx-fw-big: 500;
+
+  /* Spacing & layout - matched with theme spacing */
   --tfx-space-xs: 4px;
   --tfx-space-sm: 8px;
   --tfx-space-md: 16px;
@@ -64,24 +85,30 @@
   --tfx-space-xl: 32px;
   --tfx-space-xxl: 54px;
 
+  /* Border radius values */
   --tfx-radius-xs: 2px;
   --tfx-radius-sm: 4px;
   --tfx-radius-md: 8px;
   --tfx-radius-lg: 12px;
   --tfx-radius-xl: 16px;
 
+  /* Box shadows */
   --tfx-shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.1);
   --tfx-shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.1);
   --tfx-shadow-md: 0 8px 16px rgba(0, 0, 0, 0.1);
 
+  /* Content layout */
   --tfx-content-max: 1200px;
   --tfx-content-pad-x: 24px;
   --tfx-content-pad-y: 32px;
   --tfx-content-narrow: 680px;
 
+  /* Common border styles */
   --tfx-border-subtle: 1px solid rgba(0, 0, 0, 0.08);
   --tfx-border-strong: 1px solid rgba(0, 0, 0, 0.18);
+  --tfx-border-section: 1px solid rgba(0, 0, 0, 0.12);
 
+  /* Prose styles */
   --tfx-link: #862331;
   --tfx-link-hover: #6b1e2c;
   --tfx-code-bg: #0b1020;
@@ -90,17 +117,27 @@
   --tfx-hr: rgba(0, 0, 0, 0.25);
   --tfx-zebra: rgba(0, 0, 0, 0.03);
   --tfx-softbg: rgba(0, 0, 0, 0.04);
+
+  /* Breakpoints (for editor only) */
+  --tfx-bp-sm: 576px;
+  --tfx-bp-md: 768px;
+  --tfx-bp-lg: 992px;
+  --tfx-bp-xl: 1200px;
 }
 
-/* Base editor canvas */
+/* Base editor canvas - matched with React app styles */
 .editor-styles-wrapper {
   background: var(--tfx-main-bg);
   color: var(--tfx-primary-text);
   font-family: var(--tfx-font-primary);
+  font-size: var(--tfx-fs-body);
   line-height: var(--tfx-lh-body);
+  letter-spacing: var(--tfx-ls-body);
+  font-weight: var(--tfx-fw-body);
+  overflow-x: hidden;
 }
 
-/* Content widths inside the editor */
+/* Content widths inside the editor - matched with ContainerContentStyling */
 .editor-styles-wrapper .wp-block {
   box-sizing: border-box;
   max-width: var(--tfx-content-max);
@@ -108,6 +145,22 @@
   padding-right: var(--tfx-content-pad-x);
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
+}
+
+/* Responsive adjustments for editor content */
+@media (max-width: 1200px) {
+  .editor-styles-wrapper .wp-block {
+    padding-left: var(--tfx-space-xl);
+    padding-right: var(--tfx-space-xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .editor-styles-wrapper .wp-block {
+    padding-left: var(--tfx-space-lg);
+    padding-right: var(--tfx-space-lg);
+  }
 }
 
 /* “Wide” and “Full” alignments in editor */
@@ -119,6 +172,7 @@
 .editor-styles-wrapper .wp-block[data-align="full"],
 .editor-styles-wrapper .alignfull {
   max-width: none;
+  width: 100%;
   padding-left: 0;
   padding-right: 0;
 }
@@ -136,51 +190,140 @@
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
+  width: 100%;
 }
 
-/* Typography */
+/* Responsive adjustments for inner containers */
+@media (max-width: 1200px) {
+  .editor-styles-wrapper
+    .wp-block-group.alignfull
+    > .wp-block-group__inner-container,
+  .editor-styles-wrapper
+    .wp-block-cover.alignfull
+    .wp-block-cover__inner-container {
+    padding-left: var(--tfx-space-xl);
+    padding-right: var(--tfx-space-xl);
+  }
+}
+
+/* Typography - matched with React font styles */
 .editor-styles-wrapper h1 {
   font-family: var(--tfx-font-primary);
   font-size: var(--tfx-fs-h1);
   line-height: var(--tfx-lh-h1);
   letter-spacing: var(--tfx-ls-h1);
-  margin: var(--tfx-space-xl) auto;
+  font-weight: var(--tfx-fw-h1);
+  margin-block-start: var(--tfx-space-xxl);
+  margin-block-end: var(--tfx-space-xl);
 }
+
 .editor-styles-wrapper h2 {
+  font-family: var(--tfx-font-primary);
   font-size: var(--tfx-fs-h2);
   line-height: var(--tfx-lh-h2);
   letter-spacing: var(--tfx-ls-h2);
-  margin: var(--tfx-space-xl) auto;
-}
-.editor-styles-wrapper h3 {
-  font-size: var(--tfx-fs-h3);
-  line-height: var(--tfx-lh-h3);
-  margin: var(--tfx-space-lg) auto;
-}
-.editor-styles-wrapper h4 {
-  font-size: var(--tfx-fs-h4);
-  line-height: var(--tfx-lh-h4);
-  margin: var(--tfx-space-lg) auto;
-}
-.editor-styles-wrapper p,
-.editor-styles-wrapper li {
-  font-size: var(--tfx-fs-body);
-  line-height: var(--tfx-lh-body);
-}
-.editor-styles-wrapper small,
-.editor-styles-wrapper .is-small-text {
-  font-size: var(--tfx-fs-small);
-  line-height: var(--tfx-lh-small);
+  font-weight: var(--tfx-fw-h2);
+  margin-block-start: var(--tfx-space-xl);
+  margin-block-end: var(--tfx-space-xl);
 }
 
-/* Links */
+.editor-styles-wrapper h1 + h2 {
+  margin-block-start: 0;
+}
+
+.editor-styles-wrapper h3 {
+  font-family: var(--tfx-font-primary);
+  font-size: var(--tfx-fs-h3);
+  line-height: var(--tfx-lh-h3);
+  letter-spacing: var(--tfx-ls-h3);
+  font-weight: var(--tfx-fw-h3);
+  margin-block-start: var(--tfx-space-lg);
+  margin-block-end: var(--tfx-space-lg);
+}
+
+.editor-styles-wrapper h2 + h3 {
+  margin-block-start: 0;
+}
+
+.editor-styles-wrapper h4 {
+  font-family: var(--tfx-font-primary);
+  font-size: var(--tfx-fs-h4);
+  line-height: var(--tfx-lh-h4);
+  letter-spacing: var(--tfx-ls-h4);
+  font-weight: var(--tfx-fw-h4);
+  margin-block-start: var(--tfx-space-lg);
+  margin-block-end: var(--tfx-space-lg);
+}
+
+.editor-styles-wrapper h3 + h4 {
+  margin-block-start: 0;
+}
+
+.editor-styles-wrapper p {
+  font-family: var(--tfx-font-primary);
+  font-size: var(--tfx-fs-body);
+  line-height: var(--tfx-lh-body);
+  letter-spacing: var(--tfx-ls-body);
+  font-weight: var(--tfx-fw-body);
+  margin-block-start: var(--tfx-space-sm);
+  margin-block-end: var(--tfx-space-sm);
+}
+
+.editor-styles-wrapper li {
+  font-family: var(--tfx-font-primary);
+  font-size: var(--tfx-fs-body);
+  line-height: var(--tfx-lh-body);
+  letter-spacing: var(--tfx-ls-body);
+  font-weight: var(--tfx-fw-body);
+}
+
+/* Font size variations */
+.editor-styles-wrapper .has-large-font-size,
+.editor-styles-wrapper .is-large-text {
+  font-size: var(--tfx-fs-big);
+  line-height: var(--tfx-lh-big);
+  letter-spacing: var(--tfx-ls-big);
+  font-weight: var(--tfx-fw-big);
+}
+
+.editor-styles-wrapper .has-medium-font-size {
+  font-size: var(--tfx-fs-body);
+  line-height: var(--tfx-lh-body);
+  letter-spacing: var(--tfx-ls-body);
+  font-weight: var(--tfx-fw-body);
+}
+
+.editor-styles-wrapper .has-small-font-size,
+.editor-styles-wrapper .is-small-text,
+.editor-styles-wrapper small {
+  font-size: var(--tfx-fs-small);
+  line-height: var(--tfx-lh-small);
+  letter-spacing: var(--tfx-ls-small);
+  font-weight: var(--tfx-fw-small);
+}
+
+/* Links - matched with React link styles */
 .editor-styles-wrapper a {
   color: var(--tfx-link);
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
+  text-decoration: underline;
+  transition: color 150ms ease;
 }
+
 .editor-styles-wrapper a:hover {
   color: var(--tfx-link-hover);
+  text-decoration: none;
+}
+
+/* Inherit color in colored backgrounds */
+.editor-styles-wrapper .has-text-color a {
+  color: inherit;
+}
+
+.editor-styles-wrapper .has-text-color a:hover {
+  color: inherit;
+  opacity: 0.9;
 }
 
 /* Palette classes (match your theme.json slugs) */
@@ -224,15 +367,82 @@
   padding-bottom: var(--tfx-content-pad-y);
 }
 
-/* Cover */
+/* Cover - matched with React styles */
 .editor-styles-wrapper .wp-block-cover {
   border-radius: var(--tfx-radius-lg);
   overflow: hidden;
   padding-top: var(--tfx-content-pad-y);
   padding-bottom: var(--tfx-content-pad-y);
 }
+
+.editor-styles-wrapper .wp-block-cover .wp-block-cover__image-background {
+  filter: saturate(1.05);
+}
+
 .editor-styles-wrapper .wp-block-cover__inner-container {
   padding: 24px;
+  max-width: var(--tfx-content-max);
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Banner block */
+.editor-styles-wrapper .wp-block-toutefois-banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 350px;
+}
+
+.editor-styles-wrapper .wp-block-toutefois-banner .toutefois-banner__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.editor-styles-wrapper .wp-block-toutefois-banner .toutefois-banner__content {
+  position: absolute;
+  inset: 0;
+  padding: var(--tfx-space-md);
+}
+
+.editor-styles-wrapper .wp-block-toutefois-banner .toutefois-banner__body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: var(--tfx-light-text);
+  max-width: var(--tfx-content-max);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* Banner alignment styles */
+.editor-styles-wrapper .wp-block-toutefois-banner[data-ha="flex-start"] .toutefois-banner__body {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.editor-styles-wrapper .wp-block-toutefois-banner[data-ha="center"] .toutefois-banner__body {
+  align-items: center;
+  text-align: center;
+}
+
+.editor-styles-wrapper .wp-block-toutefois-banner[data-ha="flex-end"] .toutefois-banner__body {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.editor-styles-wrapper .wp-block-toutefois-banner[data-va="flex-start"] .toutefois-banner__body {
+  justify-content: flex-start;
+}
+
+.editor-styles-wrapper .wp-block-toutefois-banner[data-va="center"] .toutefois-banner__body {
+  justify-content: center;
+}
+
+.editor-styles-wrapper .wp-block-toutefois-banner[data-va="flex-end"] .toutefois-banner__body {
+  justify-content: flex-end;
 }
 
 /* Quotes */
@@ -330,33 +540,66 @@
   color: inherit;
 }
 
-/* Buttons */
-.editor-styles-wrapper .wp-block-button .wp-block-button__link {
+/* Buttons - matched with React button components */
+.editor-styles-wrapper .wp-block-button .wp-block-button__link,
+.editor-styles-wrapper .button,
+.editor-styles-wrapper input[type="submit"],
+.editor-styles-wrapper input[type="button"] {
   display: inline-block;
   border: 1px solid transparent;
   border-radius: var(--tfx-radius-sm);
   padding: var(--tfx-space-sm) var(--tfx-space-md);
-  font-weight: 600;
+  font-weight: var(--tfx-fw-body);
   line-height: 1;
   background: var(--tfx-btn-prim-bg);
   color: var(--tfx-btn-prim-fg);
   text-decoration: none;
   transition: opacity 150ms ease, transform 60ms ease, background 150ms ease;
   box-shadow: var(--tfx-shadow-xs);
+  cursor: pointer;
 }
-.editor-styles-wrapper
-  .wp-block-button.is-style-outline
-  .wp-block-button__link {
+
+/* Button hover state */
+.editor-styles-wrapper .wp-block-button .wp-block-button__link:hover,
+.editor-styles-wrapper .button:hover,
+.editor-styles-wrapper input[type="submit"]:hover,
+.editor-styles-wrapper input[type="button"]:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+/* Button style variations */
+.editor-styles-wrapper .wp-block-button.is-style-outline .wp-block-button__link {
   background: transparent;
   color: var(--tfx-btn-ter-bg);
   border-color: var(--tfx-btn-ter-bg);
 }
 
-/* Images & captions */
+.editor-styles-wrapper .btn-secondary,
+.editor-styles-wrapper .is-style-secondary .wp-block-button__link {
+  background: var(--tfx-btn-sec-bg);
+  color: var(--tfx-btn-sec-fg);
+}
+
+.editor-styles-wrapper .btn-tertiary,
+.editor-styles-wrapper .is-style-tertiary .wp-block-button__link {
+  background: var(--tfx-btn-ter-bg);
+  color: var(--tfx-btn-ter-fg);
+}
+
+/* Images & captions - matched with React image styles */
+.editor-styles-wrapper .wp-block-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .editor-styles-wrapper figure {
   margin: 16px auto;
 }
-.editor-styles-wrapper figcaption {
+
+.editor-styles-wrapper figcaption,
+.editor-styles-wrapper .wp-caption-text {
   font-size: var(--tfx-fs-small);
   line-height: var(--tfx-lh-small);
   color: var(--tfx-secondary-text);
@@ -364,28 +607,106 @@
   margin-top: 8px;
 }
 
-/* Forms inside content */
+/* Image alignment classes */
+.editor-styles-wrapper .alignleft {
+  float: left;
+  margin: 4px 16px 8px 0;
+  max-width: 50%;
+}
+
+.editor-styles-wrapper .alignright {
+  float: right;
+  margin: 4px 0 8px 16px;
+  max-width: 50%;
+}
+
+.editor-styles-wrapper .aligncenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Gallery styles */
+.editor-styles-wrapper .wp-block-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--tfx-space-md);
+}
+
+.editor-styles-wrapper .wp-block-gallery .wp-block-image img {
+  border-radius: var(--tfx-radius-md);
+}
+
+/* Rounded image style */
+.editor-styles-wrapper .wp-block-image.is-style-rounded img {
+  border-radius: 9999px;
+}
+
+/* Image with shadow */
+.editor-styles-wrapper .wp-block-image.has-shadow img {
+  box-shadow: var(--tfx-shadow-sm);
+}
+
+/* Forms - matched with React form styling */
 .editor-styles-wrapper input[type="text"],
 .editor-styles-wrapper input[type="email"],
 .editor-styles-wrapper input[type="url"],
 .editor-styles-wrapper input[type="search"],
+.editor-styles-wrapper input[type="tel"],
+.editor-styles-wrapper input[type="password"],
+.editor-styles-wrapper input[type="number"],
 .editor-styles-wrapper textarea,
 .editor-styles-wrapper select {
   width: 100%;
   max-width: var(--tfx-content-narrow);
-  background: rgba(245, 243, 238, 0.1); /* light overlay */
+  background: white;
   color: var(--tfx-primary-text);
-  border: var(--tfx-border-subtle);
+  border: var(--tfx-border-strong);
   border-radius: var(--tfx-radius-sm);
   padding: 10px 12px;
   outline: none;
   box-sizing: border-box;
+  font-family: var(--tfx-font-primary);
+  font-size: var(--tfx-fs-body);
+  line-height: var(--tfx-lh-body);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
+
 .editor-styles-wrapper input:focus,
 .editor-styles-wrapper textarea:focus,
 .editor-styles-wrapper select:focus {
   border: var(--tfx-border-strong);
   box-shadow: 0 0 0 3px rgba(226, 164, 43, 0.25); /* E1A42B glow */
+}
+
+.editor-styles-wrapper input::placeholder,
+.editor-styles-wrapper textarea::placeholder {
+  color: #999;
+  opacity: 0.7;
+}
+
+/* Form layout */
+.editor-styles-wrapper .form-row {
+  margin-bottom: var(--tfx-space-md);
+}
+
+.editor-styles-wrapper label {
+  display: block;
+  margin-bottom: var(--tfx-space-xs);
+  font-weight: var(--tfx-fw-body);
+}
+
+/* Checkbox and radio styling */
+.editor-styles-wrapper input[type="checkbox"],
+.editor-styles-wrapper input[type="radio"] {
+  margin-right: var(--tfx-space-xs);
+}
+
+.editor-styles-wrapper .checkbox-label,
+.editor-styles-wrapper .radio-label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--tfx-space-md);
 }
 
 /* Alignment helpers (text alignment) */

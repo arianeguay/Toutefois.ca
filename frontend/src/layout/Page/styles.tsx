@@ -29,11 +29,34 @@ export const PageContainer = styled.div<PageContainerProps>`
           }
         `;
       case 'template-title.php':
+      case 'template-projects.php':
+      case 'template-collaborators.php':
         return css`
           > main {
             margin-block-start: 54px;
             margin-block-end: 32px;
             overflow-x: hidden;
+          }
+        `;
+      case 'template-carousel.php':
+        return css`
+          > main {
+            margin-top: 0;
+            margin-bottom: 32px;
+            overflow-x: hidden;
+          }
+        `;
+      case 'template-fullwidth.php':
+        return css`
+          > main {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            
+            .entry-content {
+              max-width: 100%;
+              padding: 0;
+            }
           }
         `;
       default:
