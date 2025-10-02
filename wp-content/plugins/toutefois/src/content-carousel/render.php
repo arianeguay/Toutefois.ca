@@ -34,11 +34,23 @@ if ($content_type === 'news' || $content_type === 'mixed') {
     $items = array_merge($items, $news);
 }
 
-// Sort by date
+// Sort by rule: end date desc > start date desc > generic date desc
 usort($items, function ($a, $b) {
-    $date_a = isset($a['date']) ? strtotime($a['date']) : 0;
-    $date_b = isset($b['date']) ? strtotime($b['date']) : 0;
-    return $date_b - $date_a;
+    $a_has_end = !empty($a['projet_date_fin']);
+    $b_has_end = !empty($b['projet_date_fin']);
+    if ($a_has_end !== $b_has_end) return $b_has_end <=> $a_has_end;
+    if ($a_has_end && $b_has_end) {
+        return strtotime($b['projet_date_fin']) <=> strtotime($a['projet_date_fin']);
+    }
+    $a_has_start = !empty($a['projet_date_debut']);
+    $b_has_start = !empty($b['projet_date_debut']);
+    if ($a_has_start !== $b_has_start) return $b_has_start <=> $a_has_start;
+    if ($a_has_start && $b_has_start) {
+        return strtotime($b['projet_date_debut']) <=> strtotime($a['projet_date_debut']);
+    }
+    $da = isset($a['date']) ? strtotime($a['date']) : 0;
+    $db = isset($b['date']) ? strtotime($b['date']) : 0;
+    return $db <=> $da;
 });
 
 // Apply limit
