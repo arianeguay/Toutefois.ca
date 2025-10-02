@@ -1,5 +1,4 @@
 import api from '@/api';
-import BlocksProvider from '@/components/blocks/BlocksProvider';
 import ClientBlock from '@/components/blocks/ClientBlock';
 import CollaboratorsBlock from '@/components/blocks/CollaboratorsBlock';
 import ContentCarousel from '@/components/blocks/ContentCarousel';
@@ -18,16 +17,25 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import FeaturedCarousel from '../../components/blocks/FeaturedCarousel';
 import type { WordpressPage } from '../../types';
-import Footer from '../Footer';
-import Header from '../Header';
 import { BackToLink, MainContent } from './styles';
-import PageWrapper from './wrapper';
 
 interface PageLayoutProps {
   page: WordpressPage;
   donation_link?: string;
   backTo?: string;
 }
+
+const BackLink = (props: { href?: string; $template?: string }) => {
+  const { href, $template } = props;
+  if (!href) return null;
+  return (
+    <BackToLink href={href} $template={$template} className="back-to">
+      <Typography variant="body" element="p">
+        Retour
+      </Typography>
+    </BackToLink>
+  );
+};
 
 const PageLayout: React.FC<PageLayoutProps> = async ({
   page,
@@ -160,19 +168,11 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
         }
 
         if (className?.includes('wp-block-toutefois-featured-carousel')) {
-          return (
-            <ClientBlock>
-              <FeaturedCarousel />
-            </ClientBlock>
-          );
+          return <FeaturedCarousel />;
         }
 
         if (className?.includes('wp-block-latest-posts__list')) {
-          return (
-            <ClientBlock>
-              <LatestPostsGrid />
-            </ClientBlock>
-          );
+          return <LatestPostsGrid />;
         }
         if (className?.includes('wp-block-toutefois-projects-category-row')) {
           // Extract category ID from data attribute if available
@@ -182,24 +182,20 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
           const rowId = Math.random().toString(36).substring(2, 9);
 
           return (
-            <ClientBlock>
-              <ProjectsRow
-                key={`projects-row-${rowId}`}
-                categoryId={categoryId}
-                title={reactAttributes['data-title']}
-              />
-            </ClientBlock>
+            <ProjectsRow
+              key={`projects-row-${rowId}`}
+              categoryId={categoryId}
+              title={reactAttributes['data-title']}
+            />
           );
         }
         if (className?.includes('toutefois-collaborators-block-react-root')) {
           const data = reactAttributes['data-props'];
           return (
-            <ClientBlock>
-              <CollaboratorsBlock
-                mainProjectId={page.isMainProject ? page.id : undefined}
-                {...JSON.parse(data)}
-              />
-            </ClientBlock>
+            <CollaboratorsBlock
+              mainProjectId={page.isMainProject ? page.id : undefined}
+              {...JSON.parse(data)}
+            />
           );
         }
         if (className?.includes('wp-block-toutefois-content-carousel')) {
@@ -235,33 +231,38 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
               ) || Math.random().toString(36).substring(2, 9);
 
             return (
-              <ClientBlock>
-                <ContentCarousel
-                  key={`content-carousel-${uniqueId}`}
-                  contentType={contentType as 'project' | 'news' | 'mixed'}
-                  title={title}
-                  description={description}
-                  viewAllUrl={viewAllUrl}
-                  viewAllText={viewAllText}
-                  limit={limit}
-                  mainProjectId={page.isMainProject ? page.id : undefined}
-                  newsSource={
-                    (newsSource as 'wp' | 'facebook' | 'both') || 'both'
-                  }
-                  facebookPageId={facebookPageId}
-                />
-              </ClientBlock>
+              <ContentCarousel
+                key={`content-carousel-${uniqueId}`}
+                contentType={contentType as 'project' | 'news' | 'mixed'}
+                title={title}
+                description={description}
+                viewAllUrl={viewAllUrl}
+                viewAllText={viewAllText}
+                limit={limit}
+                mainProjectId={page.isMainProject ? page.id : undefined}
+                newsSource={
+                  (newsSource as 'wp' | 'facebook' | 'both') || 'both'
+                }
+                facebookPageId={facebookPageId}
+              />
+            );
+          }
+
+          if (className?.includes('wp-block-toutefois-banner')) {
+            return (
+              <>
+                <div {...reactAttributes}>{domToReact(children)}</div>
+                {template === 'template-banner.php' && (
+                  <BackLink href={backTo} $template={template} />
+                )}
+              </>
             );
           }
 
           // Fallback if the inner div is not found
           const fallbackId = Math.random().toString(36).substring(2, 9);
           return (
-            <ClientBlock>
-              <ContentCarousel
-                key={`content-carousel-fallback-${fallbackId}`}
-              />
-            </ClientBlock>
+            <ContentCarousel key={`content-carousel-fallback-${fallbackId}`} />
           );
         }
       }
@@ -270,26 +271,17 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
   };
 
   return (
-    <PageWrapper template={template}>
-      <Header currentPage={headerPage} donation_link={donation_link} />
+    <ClientBlock style={{ flex: 1 }}>
       <MainContent>
-        {backTo && (
-          <BackToLink href={backTo} $template={template} className="back-to">
-            <Typography variant="body" element="p">
-              Retour
-            </Typography>
-          </BackToLink>
-        )}
         {template === 'template-title.php' && (
-          <Typography
-            variant={!!page.template ? 'h1' : 'h2'}
-            element="h1"
-            style={{ marginBlockEnd: 12 }}
-          >
+          <Typography variant={!!page.template ? 'h1' : 'h2'} element="h1">
             {page.title.rendered}
           </Typography>
         )}
 
+        {template !== 'template-banner.php' && (
+          <BackLink href={backTo} $template={template} />
+        )}
         {parentPageSlug === 'notre-mission' && !!page.thumbnail && (
           <div
             style={{
@@ -313,14 +305,11 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
         )}
 
         {/* Use Suspense and BlocksProvider to handle client-side rendering of blocks */}
-        <Suspense fallback={<div>Loading content...</div>}>
-          <BlocksProvider>
-            {!!page.content?.rendered && parse(page.content.rendered, options)}
-          </BlocksProvider>
+        <Suspense fallback={null}>
+          {!!page.content?.rendered && parse(page.content.rendered, options)}
         </Suspense>
       </MainContent>
-      <Footer currentPage={headerPage} donation_link={donation_link} />
-    </PageWrapper>
+    </ClientBlock>
   );
 };
 

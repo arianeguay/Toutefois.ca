@@ -195,12 +195,6 @@ export default async function Page({
 }: {
   params: { path?: string[] };
 }) {
-  const options = await api.fetchOptions();
-  const donation_link = options?.donation_link;
-
-  // On the server, this will always be false initially
-  // But it will be updated on client hydration
-
   // Handle root path (home)
   if (!params.path || params.path.length === 0) {
     // This is the root route - render your homepage
@@ -209,7 +203,7 @@ export default async function Page({
       const homePage = await api.fetchPageBySlug('home');
       const homePageData = Array.isArray(homePage) ? homePage[0] : homePage;
 
-      return <PageLayout page={homePageData} donation_link={donation_link} />;
+      return <PageLayout page={homePageData} />;
     } catch (error) {
       console.error('Error fetching home page:', error);
       return (
@@ -270,11 +264,7 @@ export default async function Page({
           };
 
           return (
-            <PageLayout
-              page={formattedProjectPage as any}
-              backTo="/projets"
-              donation_link={donation_link}
-            />
+            <PageLayout page={formattedProjectPage as any} backTo="/projets" />
           );
         } else {
           console.warn('Project not found:', params.path[1]);
@@ -305,11 +295,7 @@ export default async function Page({
           };
 
           return (
-            <PageLayout
-              page={formattedPostPage as any}
-              donation_link={donation_link}
-              backTo="/archives"
-            />
+            <PageLayout page={formattedPostPage as any} backTo="/archives" />
           );
         } else {
           console.warn('Post not found:', params.path[1]);
@@ -418,7 +404,7 @@ export default async function Page({
       notFound();
     }
 
-    return <PageLayout page={pageData} donation_link={donation_link} />;
+    return <PageLayout page={pageData} />;
   } catch (error) {
     console.error('Error fetching page:', error);
     notFound();

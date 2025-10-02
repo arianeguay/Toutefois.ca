@@ -276,9 +276,8 @@ export const WordpressStyling = css`
     }
   }
   h1 {
-    &:not(:first-child) {
-      margin-block-start: ${({ theme }) => theme.spacing.xl}px;
-    }
+    margin-block-start: ${({ theme }) => theme.spacing.xxl}px;
+
     &:not(:first-child) {
       margin-block-end: ${({ theme }) => theme.spacing.xl}px;
     }
@@ -287,10 +286,9 @@ export const WordpressStyling = css`
     }
   }
   h2 {
-    &:not(:first-child) {
-      margin-block-start: ${({ theme }) => theme.spacing.xl}px;
-    }
-    &:not(:first-child) {
+    margin-block-start: ${({ theme }) => theme.spacing.xl}px;
+
+    &:not(:last-child) {
       margin-block-end: ${({ theme }) => theme.spacing.xl}px;
     }
     & + h3 {
@@ -298,10 +296,10 @@ export const WordpressStyling = css`
     }
   }
   h3 {
-    &:not(:first-child):not(h2 + &) {
+    &:not(h2 + &) {
       margin-block-start: ${({ theme }) => theme.spacing.lg}px;
     }
-    &:not(:first-child) {
+    &:not(:last-child) {
       margin-block-end: ${({ theme }) => theme.spacing.lg}px;
     }
     & + h4 {
@@ -320,10 +318,10 @@ export const WordpressStyling = css`
     }
   }
   h4 {
-    &:not(:first-child):not(h3 + h4) {
+    &:not(h3 + h4) {
       margin-block-start: ${({ theme }) => theme.spacing.lg}px;
     }
-    &:not(:first-child) {
+    &:not(:last-child) {
       margin-block-end: ${({ theme }) => theme.spacing.lg}px;
     }
     & + h5 {
@@ -331,10 +329,10 @@ export const WordpressStyling = css`
     }
   }
   h5 {
-    &:not(:first-child) {
+    &:not(h4 + h5) {
       margin-block-start: ${({ theme }) => theme.spacing.md}px;
     }
-    &:not(:first-child) {
+    &:not(:last-child) {
       margin-block-end: ${({ theme }) => theme.spacing.md}px;
     }
     & + h6 {
@@ -342,10 +340,10 @@ export const WordpressStyling = css`
     }
   }
   h6 {
-    &:not(:first-child) {
+    &:not(h5 + h6) {
       margin-block-start: ${({ theme }) => theme.spacing.md}px;
     }
-    &:not(:first-child) {
+    &:not(:last-child) {
       margin-block-end: ${({ theme }) => theme.spacing.md}px;
     }
   }
@@ -841,20 +839,41 @@ export const WordpressStyling = css`
     }
 
     /* Horizontal alignment */
-    &[data-ha='flex-start'] .toutefois-banner__body { align-items: flex-start; text-align: left; }
-    &[data-ha='center'] .toutefois-banner__body { align-items: center; text-align: center; }
-    &[data-ha='flex-end'] .toutefois-banner__body { align-items: flex-end; text-align: right; }
+    &[data-ha='flex-start'] .toutefois-banner__body {
+      align-items: flex-start;
+      text-align: left;
+    }
+    &[data-ha='center'] .toutefois-banner__body {
+      align-items: center;
+      text-align: center;
+    }
+    &[data-ha='flex-end'] .toutefois-banner__body {
+      align-items: flex-end;
+      text-align: right;
+    }
 
     /* Vertical alignment */
-    &[data-va='flex-start'] .toutefois-banner__body { justify-content: flex-start; }
-    &[data-va='center'] .toutefois-banner__body { justify-content: center; }
-    &[data-va='flex-end'] .toutefois-banner__body { justify-content: flex-end; }
+    &[data-va='flex-start'] .toutefois-banner__body {
+      justify-content: flex-start;
+    }
+    &[data-va='center'] .toutefois-banner__body {
+      justify-content: center;
+    }
+    &[data-va='flex-end'] .toutefois-banner__body {
+      justify-content: flex-end;
+    }
 
-    .toutefois-banner__title { margin: 0; }
-    .toutefois-banner__description { margin-top: ${({ theme }) => theme.spacing.sm}px; }
+    .toutefois-banner__title {
+      margin: 0;
+    }
+    .toutefois-banner__description {
+      margin-top: ${({ theme }) => theme.spacing.sm}px;
+    }
 
     /* Optional blur hint (actual blur also inline) */
-    &[data-blurred='1'] .toutefois-banner__bg { filter: blur(4px); }
+    &[data-blurred='1'] .toutefois-banner__bg {
+      filter: blur(4px);
+    }
   }
 
   /* Match React blocks styling for WP fallbacks/mounts */
@@ -922,7 +941,7 @@ export const WordpressStyling = css`
     width: 100%;
     margin-block: ${({ theme }) => theme.spacing.lg}px;
   }
-  
+
   /* Featured Carousel (WP) */
   .wp-block-toutefois-featured-carousel {
     ${ContainerContentStyling}

@@ -1,40 +1,33 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface ClientBlockProps {
   children: React.ReactNode;
-  fallback?: React.ReactNode;
+  style?: React.CSSProperties;
 }
 
 /**
  * A component that ensures its children are only rendered on the client
  * This prevents hydration mismatches with complex interactive components
  */
-const ClientBlock: React.FC<ClientBlockProps> = ({ 
-  children, 
-  fallback = <div className="block-placeholder" style={{ minHeight: '50px', width: '100%' }} /> 
-}) => {
+const ClientBlock: React.FC<ClientBlockProps> = ({ children, style }) => {
   // Use a ref to track if we've mounted
   const [hasMounted, setHasMounted] = useState(false);
-  
+
   // Effect runs after hydration
   useEffect(() => {
-    // Set a small timeout to ensure full hydration is complete
-    const timer = setTimeout(() => {
-      setHasMounted(true);
-    }, 10); // Small delay to ensure React is done with hydration
-    
-    return () => clearTimeout(timer);
+    setHasMounted(true);
   }, []);
-  
-  // During SSR and initial hydration, render nothing to avoid hydration mismatch
-  if (!hasMounted) {
-    return fallback;
-  }
-  
+
+  const opacity = useMemo(() => (hasMounted ? 1 : 0), [hasMounted]);
+
   // Once mounted on client, render children
-  return <>{children}</>;
+  return (
+    <div style={{ opacity, transition: 'opacity 0.5s ease', ...style }}>
+      {children}
+    </div>
+  );
 };
 
 // Export both as default and named export

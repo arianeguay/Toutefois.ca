@@ -1,4 +1,7 @@
 import api from '@/api';
+import Footer from '@/layout/Footer';
+import Header from '@/layout/Header';
+import { PageContainer } from '@/layout/Page/styles';
 import StyledComponentsRegistry from '@/lib/registry';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { Metadata } from 'next';
@@ -114,18 +117,29 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const options = await api.fetchOptions();
+  const donation_link = options?.donation_link;
+
+  const mainColor = '';
   return (
     <html lang="fr">
       <body
         className={`${montserrat.variable} ${breeSerif.variable} ${poppins.variable} ${permanentMarker.variable}`}
+        suppressHydrationWarning
       >
         <StyledComponentsRegistry>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <PageContainer>
+              <Header mainColor={mainColor} donation_link={donation_link} />
+              {children}
+              <Footer donation_link={donation_link} mainColor={mainColor} />
+            </PageContainer>
+          </ThemeProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
