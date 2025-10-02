@@ -117,6 +117,25 @@ function projets_cpt_and_meta_init()
         'single' => true,
         'type' => 'string',
     ));
+    
+    // Ajouter les nouveaux champs pour couleur principale et image de prévisualisation
+    register_post_meta('projet', 'main_color', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string',
+        'auth_callback' => function () {
+            return true;
+        }, // allow public read
+    ));
+    
+    register_post_meta('projet', 'preview_image_id', array(
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'integer',
+        'auth_callback' => function () {
+            return true;
+        }, // allow public read
+    ));
 
     register_rest_field('projet', 'toutefois_meta', [
         'get_callback'    => function ($obj) {
@@ -128,6 +147,9 @@ function projets_cpt_and_meta_init()
                 '_projet_lien'        => (string) get_post_meta($post_id, '_projet_lien', true),
                 '_projet_is_featured' => (bool) get_post_meta($post_id, '_projet_is_featured', true),
                 '_main_project_id'    => (int)  get_post_meta($post_id, '_main_project_id', true),
+                'main_color'          => (string) get_post_meta($post_id, 'main_color', true),
+                'preview_image_id'    => (int) get_post_meta($post_id, 'preview_image_id', true),
+                'preview_image_url'   => wp_get_attachment_image_url(get_post_meta($post_id, 'preview_image_id', true), 'full') ?: get_the_post_thumbnail_url($post_id, 'full'),
             ];
         },
         'schema' => null,
@@ -158,6 +180,8 @@ function projets_meta_box_callback($post)
     $date_fin = get_post_meta($post->ID, '_projet_date_fin', true);
     $lien = get_post_meta($post->ID, '_projet_lien', true);
     $is_featured = get_post_meta($post->ID, '_projet_is_featured', true);
+    $main_color = get_post_meta($post->ID, 'main_color', true);
+    $preview_image_id = get_post_meta($post->ID, 'preview_image_id', true);
 
     echo '<style> .projet-field { display: grid; grid-template-columns: 150px 1fr; gap: 10px; margin-bottom: 15px; align-items: center; } .projet-field label { font-weight: bold; } .projet-field input, .projet-field textarea { width: 100%; } </style>';
 
@@ -165,6 +189,60 @@ function projets_meta_box_callback($post)
     echo '<div class="projet-field"><label for="projet_date_fin">Date de fin :</label><input type="date" id="projet_date_fin" name="projet_date_fin" value="' . esc_attr($date_fin) . '" /></div>';
     echo '<div class="projet-field"><label for="projet_lien">Lien de réservation :</label><input type="url" id="projet_lien" name="projet_lien" value="' . esc_attr($lien) . '" size="25" /></div>';
     echo '<div class="projet-field"><label for="projet_is_featured">Projet vedette :</label><input type="checkbox" id="projet_is_featured" style="width:20px; height:20px;" name="projet_is_featured" value="1" ' . checked($is_featured, 1, false) . ' /></div>';
+    
+    // Nouveaux champs pour la couleur et l'image de prévisualisation
+    echo '<hr style="margin: 20px 0;" />';
+    echo '<h3>Apparence</h3>';
+    echo '<div class="projet-field"><label for="main_color">Couleur principale :</label><input type="color" id="main_color" name="main_color" value="' . esc_attr($main_color ?: '#862331') . '" /></div>';
+    
+    // Champ d'image de prévisualisation avec prévisualisation
+    $image_preview = '';
+    if ($preview_image_id) {
+        $image_preview = wp_get_attachment_image($preview_image_id, 'thumbnail');
+    }
+    
+    echo '<div class="projet-field">';
+    echo '<label for="preview_image_id">Image de prévisualisation :</label>';
+    echo '<div>';
+    echo '<div id="preview-image-container" style="margin-bottom: 10px;">' . $image_preview . '</div>';
+    echo '<input type="hidden" id="preview_image_id" name="preview_image_id" value="' . esc_attr($preview_image_id) . '" />';
+    echo '<button type="button" id="upload_preview_image" class="button">Choisir une image</button> ';
+    echo '<button type="button" id="remove_preview_image" class="button"' . ($preview_image_id ? '' : ' style="display:none;"') . '>Supprimer l\'image</button>';
+    echo '</div></div>';
+    
+    // Script pour le sélecteur d'image
+    echo '<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        var mediaUploader;
+        $("#upload_preview_image").on("click", function(e) {
+            e.preventDefault();
+            if (mediaUploader) {
+                mediaUploader.open();
+                return;
+            }
+            mediaUploader = wp.media({
+                title: "Choisir une image de prévisualisation",
+                button: {
+                    text: "Utiliser cette image"
+                },
+                multiple: false
+            });
+            mediaUploader.on("select", function() {
+                var attachment = mediaUploader.state().get("selection").first().toJSON();
+                $("#preview_image_id").val(attachment.id);
+                $("#preview-image-container").html("<img src=\"" + attachment.sizes.thumbnail.url + "\" alt=\"Preview\" />");
+                $("#remove_preview_image").show();
+            });
+            mediaUploader.open();
+        });
+        $("#remove_preview_image").on("click", function(e) {
+            e.preventDefault();
+            $("#preview_image_id").val("");
+            $("#preview-image-container").html("");
+            $(this).hide();
+        });
+    });
+    </script>';
 }
 
 // 4. Save Meta Box Data
@@ -186,6 +264,12 @@ function projets_save_meta_box_data($post_id)
         'projet_lien' => 'esc_url_raw',
         'projet_is_featured' => 'boolval',
     ];
+    
+    // Champs additionnels sans préfixe '_'
+    $additional_fields = [
+        'main_color' => 'sanitize_text_field',
+        'preview_image_id' => 'absint',
+    ];
 
     foreach ($fields as $key => $sanitize_callback) {
         if (isset($_POST[$key])) {
@@ -193,6 +277,16 @@ function projets_save_meta_box_data($post_id)
             update_post_meta($post_id, '_' . $key, $value);
         } else {
             delete_post_meta($post_id, '_' . $key);
+        }
+    }
+    
+    // Traitement des champs additionnels (sans préfixe '_')
+    foreach ($additional_fields as $key => $sanitize_callback) {
+        if (isset($_POST[$key])) {
+            $value = call_user_func($sanitize_callback, $_POST[$key]);
+            update_post_meta($post_id, $key, $value);
+        } else {
+            delete_post_meta($post_id, $key);
         }
     }
 }
