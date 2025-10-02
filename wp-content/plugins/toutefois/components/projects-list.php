@@ -139,22 +139,9 @@ function get_all_projects(?WP_REST_Request $request = null)
                     wp_reset_postdata();
                 }
 
-                // Sort server-side by rule: end date desc > start date desc > modified desc
+                // Sort strictly by computed 'date' (DESC)
                 if (!empty($posts)) {
                     usort($posts, function($a, $b) {
-                        $a_has_end = !empty($a['projet_date_fin']);
-                        $b_has_end = !empty($b['projet_date_fin']);
-                        if ($a_has_end !== $b_has_end) return $b_has_end <=> $a_has_end;
-                        if ($a_has_end && $b_has_end) {
-                            return strtotime($b['projet_date_fin']) <=> strtotime($a['projet_date_fin']);
-                        }
-                        $a_has_start = !empty($a['projet_date_debut']);
-                        $b_has_start = !empty($b['projet_date_debut']);
-                        if ($a_has_start !== $b_has_start) return $b_has_start <=> $a_has_start;
-                        if ($a_has_start && $b_has_start) {
-                            return strtotime($b['projet_date_debut']) <=> strtotime($a['projet_date_debut']);
-                        }
-                        // fallback to computed 'date' (modified)
                         return strtotime($b['date']) <=> strtotime($a['date']);
                     });
                 }
@@ -219,21 +206,9 @@ function get_all_projects(?WP_REST_Request $request = null)
         wp_reset_postdata();
     }
 
-    // Sort server-side by rule: end date desc > start date desc > modified desc
+    // Sort strictly by computed 'date' (DESC)
     if (!empty($posts)) {
         usort($posts, function($a, $b) {
-            $a_has_end = !empty($a['projet_date_fin']);
-            $b_has_end = !empty($b['projet_date_fin']);
-            if ($a_has_end !== $b_has_end) return $b_has_end <=> $a_has_end;
-            if ($a_has_end && $b_has_end) {
-                return strtotime($b['projet_date_fin']) <=> strtotime($a['projet_date_fin']);
-            }
-            $a_has_start = !empty($a['projet_date_debut']);
-            $b_has_start = !empty($b['projet_date_debut']);
-            if ($a_has_start !== $b_has_start) return $b_has_start <=> $a_has_start;
-            if ($a_has_start && $b_has_start) {
-                return strtotime($b['projet_date_debut']) <=> strtotime($a['projet_date_debut']);
-            }
             return strtotime($b['date']) <=> strtotime($a['date']);
         });
     }

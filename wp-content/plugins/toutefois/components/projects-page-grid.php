@@ -126,7 +126,9 @@ function get_projects_for_grid($request)
 
                 $date_debut = $post_meta['_projet_date_debut'][0] ?? '';
                 $date_fin   = $post_meta['_projet_date_fin'][0] ?? '';
-                $computed_date = !empty($date_fin) ? $date_fin : get_the_modified_date('Y-m-d');
+                $computed_date = !empty($date_fin)
+                    ? $date_fin
+                    : (!empty($date_debut) ? $date_debut : get_the_modified_date('Y-m-d'));
 
                 $project = array(
                     'id' => $post_id,

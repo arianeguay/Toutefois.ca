@@ -1,5 +1,6 @@
 import Typography from '@/components/common/Typography';
 import { WordpressProject } from '@/types';
+import { formatDateFR } from '@/utils/formatDate';
 import parse from 'html-react-parser';
 import Image from 'next/image';
 import {
@@ -9,17 +10,6 @@ import {
   ProjectCardLink,
 } from './styles';
 
-const formatFR = (dateStr?: string) => {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return dateStr;
-  return new Intl.DateTimeFormat('fr-CA', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(d);
-};
-
 const ProjectCard: React.FC<WordpressProject> = ({
   id,
   title,
@@ -27,6 +17,7 @@ const ProjectCard: React.FC<WordpressProject> = ({
   featured_image_url,
   projet_date_debut,
   projet_date_fin,
+  date,
   slug,
 }) => {
   return (
@@ -48,11 +39,16 @@ const ProjectCard: React.FC<WordpressProject> = ({
         </ProjectCardCover>
         <ProjectCardBody>
           <Typography variant="h4">{parse(title)}</Typography>
-          {(projet_date_debut || projet_date_fin) && (
-            <Typography variant="overline" color="tertiaryText" element="p">
-              {[formatFR(projet_date_debut), formatFR(projet_date_fin)]
-                .filter(Boolean)
-                .join(' – ')}
+          {(date || projet_date_debut || projet_date_fin) && (
+            <Typography variant="overline" element="p">
+              {!!projet_date_debut || projet_date_fin
+                ? [
+                    formatDateFR(projet_date_debut),
+                    formatDateFR(projet_date_fin),
+                  ]
+                    .filter(Boolean)
+                    .join(' – ')
+                : formatDateFR(date)}
             </Typography>
           )}
           <Typography variant="body" lineClamp={4}>
