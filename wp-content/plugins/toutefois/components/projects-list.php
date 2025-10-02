@@ -116,8 +116,10 @@ function get_all_projects(?WP_REST_Request $request = null)
 
                         $date_debut = $post_meta['_projet_date_debut'][0] ?? '';
                         $date_fin   = $post_meta['_projet_date_fin'][0] ?? '';
-                        // Computed display/sort date: prefer end date, else modified date
-                        $computed_date = !empty($date_fin) ? $date_fin : get_the_modified_date('Y-m-d');
+                        // Computed display/sort date: prefer end > start > modified
+                        $computed_date = !empty($date_fin)
+                            ? $date_fin
+                            : (!empty($date_debut) ? $date_debut : get_the_modified_date('Y-m-d'));
 
                         $posts[] = array(
                             'id' => $post_id,
@@ -135,6 +137,15 @@ function get_all_projects(?WP_REST_Request $request = null)
                         );
                     }
                     wp_reset_postdata();
+                }
+
+                // Sort server-side by computed date desc: end > start > modified
+                if (!empty($posts)) {
+                    usort($posts, function($a, $b) {
+                        $da = strtotime($a['date']);
+                        $db = strtotime($b['date']);
+                        return $db <=> $da;
+                    });
                 }
 
                 return new WP_REST_Response($posts, 200);
@@ -174,7 +185,9 @@ function get_all_projects(?WP_REST_Request $request = null)
             }
             $date_debut = $post_meta['_projet_date_debut'][0] ?? '';
             $date_fin   = $post_meta['_projet_date_fin'][0] ?? '';
-            $computed_date = !empty($date_fin) ? $date_fin : get_the_modified_date('Y-m-d');
+            $computed_date = !empty($date_fin)
+                ? $date_fin
+                : (!empty($date_debut) ? $date_debut : get_the_modified_date('Y-m-d'));
 
             $posts[] = array(
                 'id' => $post_id,
@@ -193,6 +206,15 @@ function get_all_projects(?WP_REST_Request $request = null)
             );
         }
         wp_reset_postdata();
+    }
+
+    // Sort server-side by computed date desc: end > start > modified
+    if (!empty($posts)) {
+        usort($posts, function($a, $b) {
+            $da = strtotime($a['date']);
+            $db = strtotime($b['date']);
+            return $db <=> $da;
+        });
     }
 
     return new WP_REST_Response($posts, 200);

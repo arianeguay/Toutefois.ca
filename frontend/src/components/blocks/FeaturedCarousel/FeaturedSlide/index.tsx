@@ -3,9 +3,10 @@
 import Button from '@/components/common/Button';
 import Typography from '@/components/common/Typography';
 import type { WordpressProject } from '@/types';
+import { formatDateFR } from '@/utils/formatDate';
 import parse from 'html-react-parser';
-import { useTheme } from 'styled-components';
 import Image from 'next/image';
+import { useTheme } from 'styled-components';
 import {
   FeaturedSlideActions,
   FeaturedSlideContainer,
@@ -29,14 +30,19 @@ const FeaturedSlide: React.FC<{
           <Typography variant="h1" element="h2">
             {project.title}
           </Typography>
-          {project.projet_date_debut && project.projet_date_fin && (
+          {(project.projet_date_debut || project.projet_date_fin) && (
             <Typography
               variant="big"
               lineClamp={5}
               color="buttonPrimaryBackground"
               style={{ fontFamily: theme.fonts.tertiary }}
             >
-              {[project.projet_date_debut, project.projet_date_fin].join(' - ')}
+              {[
+                formatDateFR(project.projet_date_debut),
+                formatDateFR(project.projet_date_fin),
+              ]
+                .filter(Boolean)
+                .join(' - ')}
             </Typography>
           )}
           <Typography variant="body" lineClamp={5}>
@@ -68,7 +74,14 @@ const FeaturedSlide: React.FC<{
         </SlideBody>
         <SlideCover>
           {project.featured_image_url && (
-            <div style={{ position: 'relative', width: '100%', maxWidth: '720px', aspectRatio: '16 / 9' }}>
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: '720px',
+                aspectRatio: '16 / 9',
+              }}
+            >
               <Image
                 src={project.featured_image_url}
                 alt={project.title}
@@ -87,4 +100,3 @@ const FeaturedSlide: React.FC<{
 };
 
 export default FeaturedSlide;
-

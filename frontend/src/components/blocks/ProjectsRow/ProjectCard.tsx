@@ -9,6 +9,17 @@ import {
   ProjectCardLink,
 } from './styles';
 
+const formatFR = (dateStr?: string) => {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  return new Intl.DateTimeFormat('fr-CA', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(d);
+};
+
 const ProjectCard: React.FC<WordpressProject> = ({
   id,
   title,
@@ -39,7 +50,9 @@ const ProjectCard: React.FC<WordpressProject> = ({
           <Typography variant="h4">{parse(title)}</Typography>
           {(projet_date_debut || projet_date_fin) && (
             <Typography variant="overline" color="tertiaryText" element="p">
-              {[projet_date_debut, projet_date_fin].filter(Boolean).join(' – ')}
+              {[formatFR(projet_date_debut), formatFR(projet_date_fin)]
+                .filter(Boolean)
+                .join(' – ')}
             </Typography>
           )}
           <Typography variant="body" lineClamp={4}>

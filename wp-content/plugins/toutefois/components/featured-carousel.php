@@ -110,6 +110,14 @@ function get_featured_projects(?WP_REST_Request $request = null)
         }
         wp_reset_postdata();
     }
+    // Sort server-side by computed date desc: end > start > modified
+    if (!empty($posts)) {
+        usort($posts, function($a, $b) {
+            $da = isset($a['date']) ? strtotime($a['date']) : 0;
+            $db = isset($b['date']) ? strtotime($b['date']) : 0;
+            return $db <=> $da;
+        });
+    }
 
     return new WP_REST_Response($posts, 200);
 }

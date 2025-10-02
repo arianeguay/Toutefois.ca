@@ -1,5 +1,6 @@
 import Button from '@/components/common/Button';
 import Typography from '@/components/common/Typography';
+import { formatDateFR } from '@/utils/formatDate';
 import parse from 'html-react-parser';
 import { useTheme } from 'styled-components';
 import { ContentBodyContent } from '../../styles';
@@ -13,7 +14,7 @@ import {
 const ProjectCardBody: React.FC<CardBodyProps> = ({
   title,
   description,
-
+  date,
   type = 'project',
   dateDebut,
   dateFin,
@@ -23,11 +24,15 @@ const ProjectCardBody: React.FC<CardBodyProps> = ({
     <ProjectContentCardContent type={type}>
       <ContentBodyContent>
         <ContentBodyContentHeading>
-          {(dateDebut || dateFin) && (
-            <Typography variant="overline" color="tertiaryText" element="p">
-              {[dateDebut, dateFin].filter(Boolean).join(' – ')}
-            </Typography>
-          )}
+          <Typography variant="overline" color="tertiaryText" element="p">
+            {dateDebut || dateFin
+              ? [formatDateFR(dateDebut), formatDateFR(dateFin)]
+                  .filter(Boolean)
+                  .join(' – ')
+              : date
+                ? formatDateFR(date)
+                : ''}
+          </Typography>
           <Typography variant="h5" element="h3" lineClamp={1}>
             {parse(title)}
           </Typography>

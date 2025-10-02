@@ -136,6 +136,13 @@ function toutefois_get_projects_by_category(WP_REST_Request $request)
             'terms'    => $category_ids,
             'include_children' => false, // we already expanded children
         ]],
+        // Hint ordering: end date DESC then modified DESC
+        'meta_key'   => '_projet_date_fin',
+        'meta_type'  => 'DATE',
+        'orderby'    => [
+            'meta_value' => 'DESC',
+            'modified'   => 'DESC',
+        ],
     ];
     if ($main_parent_id > 0) {
         $args['post_parent'] = $main_parent_id;
@@ -157,22 +164,26 @@ function toutefois_get_projects_by_category(WP_REST_Request $request)
                 foreach ($post_terms as $t) {
                     if ((int)$t->parent === (int)$parent_cat->term_id) {
                         $chosen = $t;
-                        break;
                     }
                 }
             }
             if (!$chosen) $chosen = $parent_cat;
+
+            $date_debut = get_post_meta($post_id, '_projet_date_debut', true) ?: '';
+            $date_fin   = get_post_meta($post_id, '_projet_date_fin', true) ?: '';
+            $computed   = !empty($date_fin) ? $date_fin : (!empty($date_debut) ? $date_debut : get_the_modified_date('Y-m-d', $post_id));
 
             $items[] = [
                 'id'                 => $post_id,
                 'title'              => get_the_title(),
                 'slug'               => get_post_field('post_name', $post_id),
                 'excerpt'            => wp_strip_all_tags(get_the_excerpt($post_id)),
-                'projet_date_debut'  => get_post_meta($post_id, 'projet_date_debut', true),
-                'projet_date_fin'    => get_post_meta($post_id, 'projet_date_fin', true),
                 // Avoid dumping full content by default for perf; fetch lazily if needed
                 // 'content'         => apply_filters('the_content', get_post_field('post_content', $post_id)),
                 'featured_image_url' => get_the_post_thumbnail_url($post_id, 'large'),
+                'projet_date_debut'  => $date_debut,
+                'projet_date_fin'    => $date_fin,
+                'date'               => $computed,
                 'category'           => [
                     'id'        => (int) $chosen->term_id,
                     'name'      => $chosen->name,
@@ -187,12 +198,26 @@ function toutefois_get_projects_by_category(WP_REST_Request $request)
         wp_reset_postdata();
     }
 
+    // Sort items server-side by computed date DESC (end > start > modified)
+    if (!empty($items)) {
+        usort($items, function($a, $b) {
+            $da = isset($a['date']) ? strtotime($a['date']) : 0;
+            $db = isset($b['date']) ? strtotime($b['date']) : 0;
+            return $db <=> $da;
+        });
+    }
+
     // Accurate totals/pages when paginating; otherwise synthesize.
     $total       = $no_found_rows ? count($items) : (int) $q->found_posts;
     $total_pages = ($per_page > 0) ? (int) ceil($total / $per_page) : 1;
 
     $payload = ['items' => $items, 'total' => $total, 'total_pages' => $total_pages];
 
+    // Hint ordering: date DESC
+    $args['meta_key'] = 'date';
+    $args['orderby'] = [
+        'meta_value' => 'DESC',
+    ];
     // Short cache to avoid thundering herd; adjust to your needs (e.g., 60–300s)
     set_transient($cache_key, $payload, 120);
 
