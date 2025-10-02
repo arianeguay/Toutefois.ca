@@ -155,11 +155,17 @@ function get_collaborators(WP_REST_Request $request)
         if (!isset($args['meta_query'])) {
             $args['meta_query'] = array();
         }
-        // Use '!=' so posts with value '1' are excluded, and posts without the key are included.
         $args['meta_query'][] = array(
-            'key'     => '_collaborateur_is_hidden',
-            'value'   => '1',
-            'compare' => '!=',
+            'relation' => 'OR',
+            array(
+                'key'     => '_collaborateur_is_hidden',
+                'value'   => '0',
+                'compare' => '=',
+            ),
+            array(
+                'key'     => '_collaborateur_is_hidden',
+                'compare' => 'NOT EXISTS',
+            ),
         );
     }
 
