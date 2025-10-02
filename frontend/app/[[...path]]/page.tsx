@@ -192,8 +192,10 @@ export async function generateStaticParams() {
 
 export default async function Page({
   params,
+  searchParams,
 }: {
   params: { path?: string[] };
+  searchParams?: Record<string, string | string[] | undefined>;
 }) {
   // Handle root path (home)
   if (!params.path || params.path.length === 0) {
@@ -224,6 +226,25 @@ export default async function Page({
   }
 
   try {
+    // Parse pagination for archives
+    const qPageRaw = searchParams?.page ?? searchParams?.p ?? '1';
+    const qPage = Array.isArray(qPageRaw) ? qPageRaw[0] : qPageRaw;
+    const archivePageNumber = Math.max(
+      1,
+      parseInt(String(qPage || '1'), 10) || 1,
+    );
+    // Facebook cursors
+    const fbAfterRaw = searchParams?.fb_after;
+    const fbBeforeRaw = searchParams?.fb_before;
+    const fbAfter = Array.isArray(fbAfterRaw) ? fbAfterRaw[0] : fbAfterRaw;
+    const fbBefore = Array.isArray(fbBeforeRaw) ? fbBeforeRaw[0] : fbBeforeRaw;
+    // Facebook page index for UI numbering
+    const fbPageRaw = searchParams?.fb_page ?? '1';
+    const fbPage = Array.isArray(fbPageRaw) ? fbPageRaw[0] : fbPageRaw;
+    const archiveFbPageNumber = Math.max(
+      1,
+      parseInt(String(fbPage || '1'), 10) || 1,
+    );
     // Construct the slug from the path segments
     const slug = params.path.join('/');
 
@@ -255,7 +276,6 @@ export default async function Page({
             project?._projet_preview_image ??
             project?.toutefois_meta?._projet_preview_image;
 
-          console.log(project);
           // Format the project data to match WordpressPage structure expected by PageLayout
           const formattedProjectPage: WordpressPage = {
             id: project.id,
@@ -415,7 +435,20 @@ export default async function Page({
       notFound();
     }
 
-    return <PageLayout page={pageData} />;
+    // If this is the archives listing route (/archives), pass the page number for pagination
+    const isArchivesListing =
+      params.path.length === 1 && params.path[0] === 'archives';
+    return (
+      <PageLayout
+        page={pageData}
+        archivePageNumber={isArchivesListing ? archivePageNumber : undefined}
+        archiveFbAfter={isArchivesListing ? fbAfter : undefined}
+        archiveFbBefore={isArchivesListing ? fbBefore : undefined}
+        archiveFbPageNumber={
+          isArchivesListing ? archiveFbPageNumber : undefined
+        }
+      />
+    );
   } catch (error) {
     console.error('Error fetching page:', error);
     notFound();

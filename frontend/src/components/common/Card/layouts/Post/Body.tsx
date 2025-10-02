@@ -1,3 +1,4 @@
+'use client';
 import Typography from '@/components/common/Typography';
 import FacebookIcon from '@/icons/Facebook';
 import parse from 'html-react-parser';

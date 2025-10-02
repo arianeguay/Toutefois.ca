@@ -1,0 +1,272 @@
+<?php
+if (!defined('ABSPATH')) { exit; }
+
+// Option keys
+const TF_FB_ACCESS_TOKEN = 'toutefois_fb_access_token';
+const TF_FB_PAGE_ID = 'toutefois_fb_page_id';
+const TF_FB_EXCLUDE_EVENTS = 'toutefois_fb_exclude_events';
+const TF_FB_EXCLUDE_REELS = 'toutefois_fb_exclude_reels';
+const TF_FB_REQUIRE_IMAGE = 'toutefois_fb_require_image';
+const TF_FB_EXCLUDE_KEYWORDS = 'toutefois_fb_exclude_keywords'; // comma-separated
+const TF_FB_LAST_CURSOR = 'toutefois_fb_last_cursor';
+// Token refresh related
+const TF_FB_APP_ID = 'toutefois_fb_app_id';
+const TF_FB_APP_SECRET = 'toutefois_fb_app_secret';
+const TF_FB_USER_TOKEN = 'toutefois_fb_user_token'; // short/long-lived user token
+
+// Register settings
+add_action('admin_init', function() {
+    $group = 'toutefois_fb';
+    register_setting($group, TF_FB_PAGE_ID);
+    register_setting($group, TF_FB_ACCESS_TOKEN);
+    register_setting($group, TF_FB_EXCLUDE_EVENTS);
+    register_setting($group, TF_FB_EXCLUDE_REELS);
+    register_setting($group, TF_FB_REQUIRE_IMAGE);
+    register_setting($group, TF_FB_EXCLUDE_KEYWORDS);
+    register_setting($group, TF_FB_APP_ID);
+    register_setting($group, TF_FB_APP_SECRET);
+    register_setting($group, TF_FB_USER_TOKEN);
+});
+
+// Simple settings page
+add_action('admin_menu', function() {
+    add_options_page(
+        'Toutefois Facebook Sync',
+        'Toutefois Facebook',
+        'manage_options',
+        'toutefois-fb-sync',
+        function() {
+            if (!current_user_can('manage_options')) return;
+            ?>
+            <div class="wrap">
+              <h1>Toutefois — Facebook Sync</h1>
+              <form method="post" action="options.php">
+                <?php settings_fields('toutefois_fb'); ?>
+                <table class="form-table" role="presentation">
+                  <tr>
+                    <th scope="row"><label for="<?php echo esc_attr(TF_FB_PAGE_ID); ?>">Facebook Page ID</label></th>
+                    <td><input type="text" class="regular-text" name="<?php echo esc_attr(TF_FB_PAGE_ID); ?>" id="<?php echo esc_attr(TF_FB_PAGE_ID); ?>" value="<?php echo esc_attr(get_option(TF_FB_PAGE_ID, '')); ?>"/></td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><label for="<?php echo esc_attr(TF_FB_ACCESS_TOKEN); ?>">Page Access Token (stocké serveur)</label></th>
+                    <td><input type="password" class="regular-text" name="<?php echo esc_attr(TF_FB_ACCESS_TOKEN); ?>" id="<?php echo esc_attr(TF_FB_ACCESS_TOKEN); ?>" value="<?php echo esc_attr(get_option(TF_FB_ACCESS_TOKEN, '')); ?>"/></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Filtres</th>
+                    <td>
+                      <label><input type="checkbox" name="<?php echo esc_attr(TF_FB_EXCLUDE_EVENTS); ?>" value="1" <?php checked(get_option(TF_FB_EXCLUDE_EVENTS, '1'), '1'); ?>/> Exclure événements</label><br/>
+                      <label><input type="checkbox" name="<?php echo esc_attr(TF_FB_EXCLUDE_REELS); ?>" value="1" <?php checked(get_option(TF_FB_EXCLUDE_REELS, '1'), '1'); ?>/> Exclure reels</label><br/>
+                      <label><input type="checkbox" name="<?php echo esc_attr(TF_FB_REQUIRE_IMAGE); ?>" value="1" <?php checked(get_option(TF_FB_REQUIRE_IMAGE, '1'), '1'); ?>/> Exiger image</label><br/>
+                      <label>Mots-clés à exclure (séparés par des virgules):<br/>
+                        <input type="text" class="regular-text" name="<?php echo esc_attr(TF_FB_EXCLUDE_KEYWORDS); ?>" value="<?php echo esc_attr(get_option(TF_FB_EXCLUDE_KEYWORDS, '')); ?>"/>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Auto-refresh access token (optionnel)</th>
+                    <td>
+                      <label>App ID<br/><input type="text" class="regular-text" name="<?php echo esc_attr(TF_FB_APP_ID); ?>" value="<?php echo esc_attr(get_option(TF_FB_APP_ID, '')); ?>"/></label><br/>
+                      <label>App Secret<br/><input type="password" class="regular-text" name="<?php echo esc_attr(TF_FB_APP_SECRET); ?>" value="<?php echo esc_attr(get_option(TF_FB_APP_SECRET, '')); ?>"/></label><br/>
+                      <label>User token (short/long-lived)<br/><input type="password" class="regular-text" name="<?php echo esc_attr(TF_FB_USER_TOKEN); ?>" value="<?php echo esc_attr(get_option(TF_FB_USER_TOKEN, '')); ?>"/></label>
+                      <p class="description">Le plugin tentera d'échanger le user token en long-lived, puis d'obtenir un Page Access Token à partir de l'App ID/Secret et du Page ID.</p>
+                    </td>
+                  </tr>
+                </table>
+                <?php submit_button(); ?>
+              </form>
+            </div>
+            <?php
+        }
+    );
+});
+
+// Ensure CRON jobs exist
+add_action('init', function() {
+    if (!wp_next_scheduled('toutefois_fb_sync_cron')) {
+        wp_schedule_event(time() + 60, 'hourly', 'toutefois_fb_sync_cron');
+    }
+    if (!wp_next_scheduled('toutefois_fb_refresh_token_cron')) {
+        wp_schedule_event(time() + 120, 'daily', 'toutefois_fb_refresh_token_cron');
+    }
+});
+
+add_action('toutefois_fb_sync_cron', 'toutefois_sync_facebook');
+add_action('toutefois_fb_refresh_token_cron', 'toutefois_fb_try_refresh_token');
+
+// REST endpoint to trigger sync manually (admin only)
+add_action('rest_api_init', function () {
+    register_rest_route('toutefois/v1', '/facebook-sync', array(
+        'methods' => 'POST',
+        'permission_callback' => function() { return current_user_can('manage_options'); },
+        'callback' => function() {
+            $res = toutefois_sync_facebook();
+            return rest_ensure_response($res);
+        }
+    ));
+    register_rest_route('toutefois/v1', '/facebook-refresh-token', array(
+        'methods' => 'POST',
+        'permission_callback' => function() { return current_user_can('manage_options'); },
+        'callback' => function() {
+            $ok = toutefois_fb_try_refresh_token(true);
+            return rest_ensure_response(array('refreshed' => (bool)$ok));
+        }
+    ));
+});
+
+function toutefois_fb_fetch_feed($args = array()) {
+    $page_id = get_option(TF_FB_PAGE_ID, '');
+    $token = get_option(TF_FB_ACCESS_TOKEN, '');
+    if (empty($page_id) || empty($token)) return array('data' => array());
+
+    $defaults = array('limit' => 25, 'after' => '', 'before' => '');
+    $args = wp_parse_args($args, $defaults);
+
+    $fields = implode(',', array(
+        'permalink_url', 'full_picture', 'height', 'message', 'created_time', 'attachments{title,url,type,media_type}'
+    ));
+    $params = array('fields' => $fields, 'limit' => (int)$args['limit'], 'access_token' => $token);
+    if (!empty($args['after'])) $params['after'] = $args['after'];
+    if (!empty($args['before'])) $params['before'] = $args['before'];
+
+    $url = add_query_arg($params, 'https://graph.facebook.com/v23.0/' . rawurlencode($page_id) . '/feed');
+    $response = wp_remote_get($url, array('timeout' => 25));
+    if (is_wp_error($response)) return array('data' => array());
+    $code = wp_remote_retrieve_response_code($response);
+    if ($code < 200 || $code >= 300) return array('data' => array());
+    $data = json_decode(wp_remote_retrieve_body($response), true);
+    return is_array($data) ? $data : array('data' => array());
+}
+
+function toutefois_fb_passes_filters($post) {
+    $exclude_events = get_option(TF_FB_EXCLUDE_EVENTS, '1') === '1';
+    $exclude_reels = get_option(TF_FB_EXCLUDE_REELS, '1') === '1';
+    $require_image = get_option(TF_FB_REQUIRE_IMAGE, '1') === '1';
+    $exclude_keywords_raw = strtolower((string)get_option(TF_FB_EXCLUDE_KEYWORDS, ''));
+    $exclude_keywords = array_filter(array_map('trim', explode(',', $exclude_keywords_raw)));
+
+    $permalink = isset($post['permalink_url']) ? (string)$post['permalink_url'] : '';
+    $picture = isset($post['full_picture']) ? (string)$post['full_picture'] : '';
+    $attachments = isset($post['attachments']['data']) && is_array($post['attachments']['data']) ? $post['attachments']['data'] : array();
+    $primary = !empty($attachments) ? $attachments[0] : array();
+    $attachment_type = isset($primary['type']) ? (string)$primary['type'] : '';
+
+    if ($exclude_events && ($attachment_type === 'event' || strpos($permalink, '/events/') !== false)) return false;
+    if ($exclude_reels && strpos($permalink, '/reel/') !== false) return false;
+    if ($require_image && empty($picture)) return false;
+
+    if (!empty($exclude_keywords)) {
+        $msg = strtolower((string)($post['message'] ?? ''));
+        foreach ($exclude_keywords as $kw) {
+            if ($kw !== '' && strpos($msg, $kw) !== false) return false;
+        }
+    }
+    return true;
+}
+
+function toutefois_fb_upsert_wp_post($fb) {
+    $fb_id = $fb['id'];
+    $existing = new WP_Query(array(
+        'post_type' => 'post',
+        'posts_per_page' => 1,
+        'fields' => 'ids',
+        'meta_query' => array(array('key' => '_fb_post_id', 'value' => $fb_id, 'compare' => '='))
+    ));
+
+    $title = wp_strip_all_tags(wp_trim_words((string)($fb['message'] ?? ''), 12, '…'));
+    if ($title === '') $title = 'Publication Facebook';
+
+    $content = '';
+    if (!empty($fb['message'])) $content .= wp_kses_post($fb['message']);
+    if (!empty($fb['permalink_url'])) $content .= '<p><a href="' . esc_url($fb['permalink_url']) . '" target="_blank" rel="noopener">Voir sur Facebook</a></p>';
+
+    $postarr = array(
+        'post_title' => $title,
+        'post_content' => $content,
+        'post_status' => 'publish',
+        'post_type' => 'post',
+        'post_date' => isset($fb['created_time']) ? gmdate('Y-m-d H:i:s', strtotime($fb['created_time'])) : current_time('mysql', true),
+    );
+
+    if ($existing->have_posts()) {
+        $postarr['ID'] = (int)$existing->posts[0];
+        $post_id = wp_update_post($postarr, true);
+    } else {
+        $post_id = wp_insert_post($postarr, true);
+    }
+    if (is_wp_error($post_id) || !$post_id) return;
+
+    update_post_meta($post_id, '_fb_post_id', $fb_id);
+    if (!empty($fb['permalink_url'])) update_post_meta($post_id, '_fb_permalink', esc_url_raw($fb['permalink_url']));
+
+    // Featured image from full_picture
+    if (!empty($fb['full_picture'])) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        $media_id = media_sideload_image($fb['full_picture'], (int)$post_id, $title, 'id');
+        if (!is_wp_error($media_id)) set_post_thumbnail((int)$post_id, (int)$media_id);
+    }
+}
+
+function toutefois_sync_facebook($max_pages = 5, $page_size = 25) {
+    $after = get_option(TF_FB_LAST_CURSOR, '');
+    $pages = 0;
+    $imported = 0;
+
+    while ($pages < $max_pages) {
+        $data = toutefois_fb_fetch_feed(array('limit' => $page_size, 'after' => $after));
+        $items = isset($data['data']) && is_array($data['data']) ? $data['data'] : array();
+        foreach ($items as $post) {
+            if (toutefois_fb_passes_filters($post)) {
+                toutefois_fb_upsert_wp_post($post);
+                $imported++;
+            }
+        }
+        $after = isset($data['paging']['cursors']['after']) ? $data['paging']['cursors']['after'] : '';
+        $pages++;
+        if (empty($after) || empty($items)) break; // no more
+    }
+
+    update_option(TF_FB_LAST_CURSOR, $after);
+    return array('pages' => $pages, 'imported' => $imported, 'last_after' => $after);
+}
+
+// Token refresh logic (optional, requires App ID/Secret and a user token)
+function toutefois_fb_try_refresh_token($force = false) {
+    $app_id = trim((string)get_option(TF_FB_APP_ID, ''));
+    $app_secret = trim((string)get_option(TF_FB_APP_SECRET, ''));
+    $user_token = trim((string)get_option(TF_FB_USER_TOKEN, ''));
+    $page_id = trim((string)get_option(TF_FB_PAGE_ID, ''));
+    if ($app_id === '' || $app_secret === '' || $user_token === '' || $page_id === '') return false;
+
+    // Step 1: Exchange for a long-lived user token
+    $exchange_url = add_query_arg(array(
+        'grant_type' => 'fb_exchange_token',
+        'client_id' => $app_id,
+        'client_secret' => $app_secret,
+        'fb_exchange_token' => $user_token,
+    ), 'https://graph.facebook.com/v23.0/oauth/access_token');
+
+    $resp = wp_remote_get($exchange_url, array('timeout' => 20));
+    if (is_wp_error($resp)) return false;
+    $code = wp_remote_retrieve_response_code($resp);
+    if ($code < 200 || $code >= 300) return false;
+    $data = json_decode(wp_remote_retrieve_body($resp), true);
+    $long_user_token = isset($data['access_token']) ? $data['access_token'] : '';
+    if ($long_user_token === '') return false;
+
+    // Step 2: Get Page access token using the long-lived user token
+    $page_url = add_query_arg(array('fields' => 'access_token', 'access_token' => $long_user_token), 'https://graph.facebook.com/v23.0/' . rawurlencode($page_id));
+    $resp2 = wp_remote_get($page_url, array('timeout' => 20));
+    if (is_wp_error($resp2)) return false;
+    $code2 = wp_remote_retrieve_response_code($resp2);
+    if ($code2 < 200 || $code2 >= 300) return false;
+    $data2 = json_decode(wp_remote_retrieve_body($resp2), true);
+    $page_token = isset($data2['access_token']) ? $data2['access_token'] : '';
+    if ($page_token === '') return false;
+
+    update_option(TF_FB_ACCESS_TOKEN, $page_token);
+    // Also store the long-lived user token for future refreshes
+    update_option(TF_FB_USER_TOKEN, $long_user_token);
+    return true;
+}

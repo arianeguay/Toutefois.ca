@@ -1,3 +1,4 @@
+'use client';
 import { ContentCover, ContentImage } from '../styles';
 
 interface CardCoverProps {

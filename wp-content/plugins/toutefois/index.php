@@ -24,7 +24,6 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 }
 
 
-// Include Components
 require_once plugin_dir_path(__FILE__) . 'components/featured-carousel.php';
 require_once plugin_dir_path(__FILE__) . 'components/projects-list.php';
 require_once plugin_dir_path(__FILE__) . 'components/news-list.php';
@@ -37,12 +36,14 @@ require_once plugin_dir_path(__FILE__) . 'cpt-collaborateurs.php';
 require_once plugin_dir_path(__FILE__) . 'footer.php';
 require_once plugin_dir_path(__FILE__) . 'inc/theme-options.php';
 require_once plugin_dir_path(__FILE__) . 'inc/main-projects.php';
+// Facebook sync (imports Facebook posts as WordPress news with cron and REST trigger)
+require_once plugin_dir_path(__FILE__) . 'facebook-sync.php';
 
 // Add custom page templates
 function toutefois_add_page_templates($templates, $theme, $post)
 {
     if ($post && in_array($post->post_type, ['page', 'projet'])) {
-        $templates['template-no-margin.php'] = __('No Margin', 'toutefois');
+{{ ... }}
         $templates['template-banner.php'] = __('With Banner', 'toutefois');
         $templates['template-title.php'] = __('With Title', 'toutefois');
     }

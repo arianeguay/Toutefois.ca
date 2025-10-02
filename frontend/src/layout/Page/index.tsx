@@ -2,7 +2,8 @@ import api from '@/api';
 import ClientBlock from '@/components/blocks/ClientBlock';
 import CollaboratorsBlock from '@/components/blocks/CollaboratorsBlock';
 import ContentCarousel from '@/components/blocks/ContentCarousel';
-import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
+import Archive from '@/components/blocks/LatestPostsGrid/Archive';
+import FacebookArchive from '@/components/blocks/LatestPostsGrid/FacebookArchive';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
 import ColorUpdater from '@/components/ColorUpdater';
 import Typography from '@/components/common/Typography';
@@ -23,6 +24,13 @@ import { BackToLink, MainContent } from './styles';
 interface PageLayoutProps {
   page: WordpressPage;
   backTo?: string;
+  /** If provided, used for rendering archives pagination */
+  archivePageNumber?: number;
+  /** Facebook archive cursors */
+  archiveFbAfter?: string;
+  archiveFbBefore?: string;
+  /** Facebook archive current page number (UI only) */
+  archiveFbPageNumber?: number;
 }
 
 const BackLink = (props: { href?: string; $template?: string }) => {
@@ -37,7 +45,14 @@ const BackLink = (props: { href?: string; $template?: string }) => {
   );
 };
 
-const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
+const PageLayout: React.FC<PageLayoutProps> = async ({
+  page,
+  backTo,
+  archivePageNumber,
+  archiveFbAfter,
+  archiveFbBefore,
+  archiveFbPageNumber,
+}) => {
   // Treat the link as a string to robustly get the path, avoiding errors if it's not a full URL.
   const pathname = page.link.replace(/^(?:https?:\/\/)?[^/]+\/?/, '');
   const pathSegments = pathname.split('/').filter((segment: string) => segment);
@@ -79,7 +94,6 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element) {
-        console.log(domNode);
         // Convert 'class' to 'className' for React compatibility
         const className = domNode.attribs.class;
         const name = domNode.name;
@@ -174,7 +188,17 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
         }
 
         if (className?.includes('wp-block-latest-posts__list')) {
-          return <LatestPostsGrid />;
+          // Render both WP paginated archive and Facebook paginated archive
+          return (
+            <>
+              <Archive page={archivePageNumber || 1} />
+              <FacebookArchive
+                after={archiveFbAfter}
+                before={archiveFbBefore}
+                currentPage={archiveFbPageNumber || 1}
+              />
+            </>
+          );
         }
         if (className?.includes('wp-block-toutefois-projects-category-row')) {
           // Extract category ID from data attribute if available

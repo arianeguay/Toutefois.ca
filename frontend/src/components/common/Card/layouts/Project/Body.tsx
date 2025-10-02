@@ -1,3 +1,4 @@
+'use client';
 import Button from '@/components/common/Button';
 import Typography from '@/components/common/Typography';
 import { formatDateFR } from '@/utils/formatDate';

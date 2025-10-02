@@ -1,3 +1,5 @@
+'use client';
+
 import styled, { css } from 'styled-components';
 
 export const ContentBodyContent = styled.div`

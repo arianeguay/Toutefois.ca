@@ -6,7 +6,6 @@ import { useMemo } from 'react';
 import { SpecialProjectContainer, SpecialProjectLink } from './styles';
 
 const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = (item) => {
-  console.log(item);
   const { name, href, mainColor, previewImage } = item;
   const currentPathname = usePathname();
 

@@ -85,7 +85,7 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
       {current && <BackgroundImage $src={getBackgroundImage()} />}
       <ContentListContainer>
         <ContentListHeader>
-          <Typography variant="h2" element="h2">
+          <Typography variant="h2" element="h2" style={{ marginBlock: 0 }}>
             {title}
           </Typography>
           {!!description && (
