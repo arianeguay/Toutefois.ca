@@ -75,7 +75,6 @@ $wrapper_attributes = get_block_wrapper_attributes([
     'data-ha' => $horizontal_alignment,
     'data-blurred' => $blurred_background ? '1' : '0',
     'style' => implode('; ', $container_styles),
-    'class' => 'wp-block-toutefois-banner',
 ]);
 
 $heading_style = [

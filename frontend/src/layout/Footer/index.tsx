@@ -5,13 +5,12 @@ import WebsiteInfo from './WebInfo';
 
 interface FooterProps {
   donation_link?: string;
-  mainColor?: string;
 }
-const Footer: React.FC<FooterProps> = async ({ donation_link, mainColor }) => {
+const Footer: React.FC<FooterProps> = async ({ donation_link }) => {
   const footer = await api.fetchFooter();
 
   return (
-    <FooterContainer $mainColor={mainColor}>
+    <FooterContainer>
       <FooterContent>
         <JoinSection footer={footer} />
         <WebsiteInfo footer={footer} />

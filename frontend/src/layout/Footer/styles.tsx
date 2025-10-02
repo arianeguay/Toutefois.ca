@@ -1,12 +1,15 @@
 'use client';
 
+import { useColorContext } from '@/providers/color-provider';
 import { ContainerContentStyling } from '@/theme/global-styles';
 import styled from 'styled-components';
 
-export const FooterContainer = styled.footer<{ $mainColor?: string }>`
+export const FooterContainer = styled.footer`
   width: 100%;
-  background-color: ${({ theme, $mainColor }) =>
-    $mainColor || theme.colors.headerBackground};
+  background-color: ${({ theme }) => {
+    const { mainColor } = useColorContext();
+    return mainColor || theme.colors.headerBackground;
+  }};
   color: ${({ theme }) => theme.colors.lightText};
   padding-block: ${({ theme }) => theme.spacing.lg}px;
   padding-inline: ${({ theme }) => theme.spacing.xxl}px;

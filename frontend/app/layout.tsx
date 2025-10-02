@@ -3,6 +3,7 @@ import Footer from '@/layout/Footer';
 import Header from '@/layout/Header';
 import { PageContainer } from '@/layout/Page/styles';
 import StyledComponentsRegistry from '@/lib/registry';
+import { ColorProvider } from '@/providers/color-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { Metadata } from 'next';
 import {
@@ -124,8 +125,6 @@ export default async function RootLayout({
 }>) {
   const options = await api.fetchOptions();
   const donation_link = options?.donation_link;
-
-  const mainColor = '';
   return (
     <html lang="fr">
       <body
@@ -134,11 +133,13 @@ export default async function RootLayout({
       >
         <StyledComponentsRegistry>
           <ThemeProvider>
-            <PageContainer>
-              <Header mainColor={mainColor} donation_link={donation_link} />
-              {children}
-              <Footer donation_link={donation_link} mainColor={mainColor} />
-            </PageContainer>
+            <ColorProvider>
+              <PageContainer>
+                <Header donation_link={donation_link} />
+                {children}
+                <Footer donation_link={donation_link} />
+              </PageContainer>
+            </ColorProvider>
           </ThemeProvider>
         </StyledComponentsRegistry>
       </body>

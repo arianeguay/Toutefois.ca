@@ -12,7 +12,6 @@ export const WordpressStyling = css`
 
   /* Zeffy Block (WP) */
   .wp-block-toutefois-zeffy {
-    ${ContainerContentStyling}
     .toutefois-zeffy__frame {
       width: 100%;
       min-height: 400px;

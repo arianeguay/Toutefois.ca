@@ -1,5 +1,6 @@
 import api from '@/api';
 import ClientBlock from '@/components/blocks/ClientBlock';
+import ColorUpdater from '@/components/ColorUpdater';
 import CollaboratorsBlock from '@/components/blocks/CollaboratorsBlock';
 import ContentCarousel from '@/components/blocks/ContentCarousel';
 import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
@@ -21,7 +22,6 @@ import { BackToLink, MainContent } from './styles';
 
 interface PageLayoutProps {
   page: WordpressPage;
-  donation_link?: string;
   backTo?: string;
 }
 
@@ -37,11 +37,7 @@ const BackLink = (props: { href?: string; $template?: string }) => {
   );
 };
 
-const PageLayout: React.FC<PageLayoutProps> = async ({
-  page,
-  donation_link,
-  backTo,
-}) => {
+const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
   // Treat the link as a string to robustly get the path, avoiding errors if it's not a full URL.
   const pathname = page.link.replace(/^(?:https?:\/\/)?[^/]+\/?/, '');
   const pathSegments = pathname.split('/').filter((segment: string) => segment);
@@ -270,8 +266,13 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
     },
   };
 
+  // Get the mainColor from the header page or parent color
+  const mainColor = headerPage.meta?.main_color || '';
+  
   return (
     <ClientBlock style={{ flex: 1 }}>
+      {/* Update the color context when page loads */}
+      <ColorUpdater color={mainColor} />
       <MainContent>
         {template === 'template-title.php' && (
           <Typography variant={!!page.template ? 'h1' : 'h2'} element="h1">

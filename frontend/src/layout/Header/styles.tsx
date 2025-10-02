@@ -1,11 +1,14 @@
 'use client';
 
+import { useColorContext } from '@/providers/color-provider';
 import styled from 'styled-components';
 
-export const HeaderContainer = styled.header<{ $mainColor?: string }>`
+export const HeaderContainer = styled.header`
   width: 100%;
-  background-color: ${({ theme, $mainColor }) =>
-    $mainColor || theme.colors.headerBackground};
+  background-color: ${({ theme }) => {
+    const { mainColor } = useColorContext();
+    return mainColor || theme.colors.headerBackground;
+  }};
   height: ${({ theme }) => theme.appearance.headerHeight};
   padding-block: ${({ theme }) => theme.spacing.md}px;
   padding-inline: ${({ theme }) => theme.spacing.xxl}px;
