@@ -168,6 +168,8 @@ function toutefois_get_projects_by_category(WP_REST_Request $request)
                 'title'              => get_the_title(),
                 'slug'               => get_post_field('post_name', $post_id),
                 'excerpt'            => wp_strip_all_tags(get_the_excerpt($post_id)),
+                'projet_date_debut'  => get_post_meta($post_id, 'projet_date_debut', true),
+                'projet_date_fin'    => get_post_meta($post_id, 'projet_date_fin', true),
                 // Avoid dumping full content by default for perf; fetch lazily if needed
                 // 'content'         => apply_filters('the_content', get_post_field('post_content', $post_id)),
                 'featured_image_url' => get_the_post_thumbnail_url($post_id, 'large'),
