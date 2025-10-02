@@ -9,6 +9,8 @@ export interface CardLayoutProps {
   cover?: string;
   alt?: string;
   permalink?: string;
+  dateDebut?: string;
+  dateFin?: string;
   permalinkType?: 'internal' | 'external';
 }
 
@@ -17,6 +19,8 @@ export interface CardBodyProps {
   description?: string;
   date?: string;
   type: ContentType;
+  dateDebut?: string;
+  dateFin?: string;
 }
 
 export interface CardEventHandlers {

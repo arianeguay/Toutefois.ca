@@ -13,17 +13,19 @@ import {
 const ProjectCardBody: React.FC<CardBodyProps> = ({
   title,
   description,
-  date,
+
   type = 'project',
+  dateDebut,
+  dateFin,
 }) => {
   const theme = useTheme();
   return (
     <ProjectContentCardContent type={type}>
       <ContentBodyContent>
         <ContentBodyContentHeading>
-          {date && (
+          {(dateDebut || dateFin) && (
             <Typography variant="overline" color="tertiaryText" element="p">
-              {date}
+              {[dateDebut, dateFin].filter(Boolean).join(' – ')}
             </Typography>
           )}
           <Typography variant="h5" element="h3" lineClamp={1}>

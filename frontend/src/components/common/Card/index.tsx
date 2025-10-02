@@ -50,6 +50,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
         alt: wpItem.title,
         permalink: `/projets/${wpItem.slug}`,
         permalinkType: 'internal',
+        dateDebut: wpItem.projet_date_debut,
+        dateFin: wpItem.projet_date_fin,
       };
       return <CardProjectLayout {...cardProps} {...eventHandlers} />;
     }

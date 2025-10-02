@@ -13,6 +13,8 @@ const CardProjectLayout: React.FC<CardLayoutProps> = ({
   alt,
   permalink,
   permalinkType = 'internal',
+  dateDebut,
+  dateFin,
   ...eventHandlers
 }) => {
   return (
@@ -24,6 +26,8 @@ const CardProjectLayout: React.FC<CardLayoutProps> = ({
           title={title}
           description={description}
           date={date}
+          dateDebut={dateDebut}
+          dateFin={dateFin}
         />
       </ProjectContentCardContainer>
     </LinkWrapper>

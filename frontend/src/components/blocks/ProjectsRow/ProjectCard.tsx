@@ -14,7 +14,8 @@ const ProjectCard: React.FC<WordpressProject> = ({
   title,
   excerpt,
   featured_image_url,
-
+  projet_date_debut,
+  projet_date_fin,
   slug,
 }) => {
   return (
@@ -36,6 +37,11 @@ const ProjectCard: React.FC<WordpressProject> = ({
         </ProjectCardCover>
         <ProjectCardBody>
           <Typography variant="h4">{parse(title)}</Typography>
+          {(projet_date_debut || projet_date_fin) && (
+            <Typography variant="overline" color="tertiaryText" element="p">
+              {[projet_date_debut, projet_date_fin].filter(Boolean).join(' – ')}
+            </Typography>
+          )}
           <Typography variant="body" lineClamp={4}>
             {excerpt}
           </Typography>
