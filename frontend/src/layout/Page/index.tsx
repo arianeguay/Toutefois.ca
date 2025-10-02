@@ -78,10 +78,11 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
   const template = page.template?.length ? page.template : 'template-title.php';
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
-      if (domNode instanceof Element && domNode.attribs) {
+      if (domNode instanceof Element) {
+        console.log(domNode);
         // Convert 'class' to 'className' for React compatibility
         const className = domNode.attribs.class;
-        const name = domNode.attribs.name;
+        const name = domNode.name;
         const hasChild = domNode.children.length > 0;
         const children = domNode.children;
         const reactAttributes = domNode.attribs;
@@ -114,7 +115,10 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
           if (!hasChild) return <></>;
           delete reactAttributes.style;
           return (
-            <p {...reactAttributes}>
+            <p
+              {...reactAttributes}
+              className={[className, 'wp-block'].filter(Boolean).join(' ')}
+            >
               {domToReact(children as DOMNode[], options)}
             </p>
           );
