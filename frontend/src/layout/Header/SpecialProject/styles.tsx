@@ -27,9 +27,11 @@ const backgroundImageStyling = (
 ) => css`
   background: ${mainColor};
   background-image: url(${previewImage});
-  background-size: cover;
-  background-position: center;
+  background-size: 160px;
+  background-position: 120px center;
   background-repeat: no-repeat;
+  background-blend-mode: screen;
+  justify-content: flex-start;
 `;
 
 const noBackgroundImageStyling = (mainColor: string) => css`
@@ -37,6 +39,7 @@ const noBackgroundImageStyling = (mainColor: string) => css`
     ${hexToRgba(mainColor, 1)},
     ${hexToRgba(mainColor, 1)}
   );
+  justify-content: center;
 `;
 
 export const SpecialProjectContainer = styled.div<{
@@ -50,16 +53,16 @@ export const SpecialProjectContainer = styled.div<{
       : noBackgroundImageStyling($mainColor)}
   margin-block-start: -${({ theme }) => theme.spacing.md}px;
   margin-inline-end: -${({ theme }) => theme.spacing.xxl}px;
-  padding-inline: ${({ theme }) => theme.spacing.xxl}px;
   padding-block: ${({ theme }) => theme.spacing.md}px;
+  padding-inline-end: ${({ theme }) => theme.spacing.md}px;
   white-space: nowrap;
   display: flex;
   align-items: center;
-  justify-content: center;
+  min-width: 250px;
   height: ${({ theme }) =>
     Number(theme.appearance.headerHeight.replace('px', ''))}px;
   color: ${({ $textColor }) => $textColor};
-  font-size: ${({ theme }) => theme.fontSizes.body}px;
+  font-size: ${({ theme }) => theme.fontSizes.big}px;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   cursor: pointer;
   position: relative;
