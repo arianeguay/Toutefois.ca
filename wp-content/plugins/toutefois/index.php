@@ -37,6 +37,8 @@ require_once plugin_dir_path(__FILE__) . 'cpt-collaborateurs.php';
 require_once plugin_dir_path(__FILE__) . 'footer.php';
 require_once plugin_dir_path(__FILE__) . 'inc/theme-options.php';
 require_once plugin_dir_path(__FILE__) . 'inc/main-projects.php';
+// Facebook sync (imports Facebook posts as WordPress news with cron and REST trigger)
+require_once plugin_dir_path(__FILE__) . 'facebook-sync.php';
 
 // Add custom page templates
 function toutefois_add_page_templates($templates, $theme, $post)
