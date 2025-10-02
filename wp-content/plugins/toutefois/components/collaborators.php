@@ -91,69 +91,33 @@ function get_collaborators(WP_REST_Request $request)
 
 
     if ($member_status === 'members') {
-        $args['meta_query'] = [
-            [
+        $args['meta_query'] = array(
+            array(
                 'key'     => '_collaborateur_is_member',
                 'value'   => '1',
                 'compare' => '=',
-            ],
-        ];
+            ),
+        );
     } elseif ($member_status === 'non-members') {
-        $args['meta_query'] = [
+        $args['meta_query'] = array(
             'relation' => 'OR',
-            [
+            array(
                 'key'     => '_collaborateur_is_member',
                 'value'   => '',
                 'compare' => '=',
-            ],
-            [
+            ),
+            array(
                 'key'     => '_collaborateur_is_member',
                 'compare' => 'NOT EXISTS',
-            ],
-            [
+            ),
+            array(
                 'key'     => '_collaborateur_is_member',
                 'value'   => '0',
                 'compare' => '=',
-            ],
-        ];
+            ),
+        );
     }
 
-
-    // Optional boolean filter on _collaborateur_is_member
-    $is_member_param = $request->get_param('is_member');
-    if (null !== $is_member_param) {
-        // Normalize boolean and match WP storage format
-        $is_member_bool = filter_var($is_member_param, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        if ($is_member_bool !== null) {
-            if ($is_member_bool) {
-                $args['meta_query'] = array(
-                    array(
-                        'key'     => '_collaborateur_is_member',
-                        'value'   => '1',
-                        'compare' => '=',
-                    ),
-                );
-            } else {
-                $args['meta_query'] = array(
-                    'relation' => 'OR',
-                    array(
-                        'key'     => '_collaborateur_is_member',
-                        'value'   => '',
-                        'compare' => '=',
-                    ),
-                    array(
-                        'key'     => '_collaborateur_is_member',
-                        'compare' => 'NOT EXISTS',
-                    ),
-                    array(
-                        'key'     => '_collaborateur_is_member',
-                        'value'   => '0',
-                        'compare' => '=',
-                    ),
-                );
-            }
-        }
-    }
 
     // Optional filter by main project association via _main_project_id meta
     $main_param = $request->get_param('main_project');
@@ -177,19 +141,22 @@ function get_collaborators(WP_REST_Request $request)
 
     // Exclude hidden collaborators by default (unless main_project filter is used)
     if (!$main_param) {
-        if (!isset($args['meta_query'])) {
-            $args['meta_query'] = array();
-        }
+
         $args['meta_query'][] = array(
             'relation' => 'OR',
             array(
                 'key'     => '_collaborateur_is_hidden',
-                'value'   => '0',
+                'value'   => '',
                 'compare' => '=',
             ),
             array(
                 'key'     => '_collaborateur_is_hidden',
                 'compare' => 'NOT EXISTS',
+            ),
+            array(
+                'key'     => '_collaborateur_is_hidden',
+                'value'   => '0',
+                'compare' => '=',
             ),
         );
     }
