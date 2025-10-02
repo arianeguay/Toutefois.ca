@@ -139,7 +139,19 @@ if (!empty($items)) :
                 <div class="content-carousel-slides">
                     <?php foreach ($items as $item) :
                         $item_type = toutefois_get_item_type($item, $content_type);
-                        $item_date = toutefois_format_date_for_react(isset($item['date']) ? $item['date'] : '');
+                        // Determine displayed date(s): prefer project-specific start/end when present
+                        $display_date = '';
+                        $start_raw = isset($item['projet_date_debut']) ? $item['projet_date_debut'] : '';
+                        $end_raw   = isset($item['projet_date_fin']) ? $item['projet_date_fin'] : '';
+                        if (!empty($start_raw) && !empty($end_raw)) {
+                            $display_date = toutefois_format_date_for_react($start_raw) . ' – ' . toutefois_format_date_for_react($end_raw);
+                        } elseif (!empty($start_raw)) {
+                            $display_date = toutefois_format_date_for_react($start_raw);
+                        } elseif (!empty($end_raw)) {
+                            $display_date = toutefois_format_date_for_react($end_raw);
+                        } else {
+                            $display_date = toutefois_format_date_for_react(isset($item['date']) ? $item['date'] : '');
+                        }
                         $permalink = '';
                         $permalink_type = 'internal';
 
