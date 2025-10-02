@@ -30,7 +30,16 @@ const nextConfig = {
         hostname: 'admin.toutefois.arianeguay.ca',
         pathname: '/wp-content/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'scontent-iad3-*.xx.fbcdn.net',
+        pathname: '/**',
+      },
     ],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 2592000, // 30 days
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   async headers() {
     return [
@@ -48,7 +57,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=86400, s-maxage=86400',
+            value: 'public, max-age=604800, s-maxage=604800, stale-while-revalidate=86400',
           },
         ],
       },
@@ -57,7 +66,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=2592000, s-maxage=2592000',
+            value: 'public, max-age=2592000, s-maxage=2592000, stale-while-revalidate=86400',
           },
         ],
       },
@@ -67,6 +76,32 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=60, stale-while-revalidate=300',
+          },
+        ],
+      },
+      {
+        source: '/:path*',
+        headers: [
+          { 
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          { 
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          { 
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
           },
         ],
       },

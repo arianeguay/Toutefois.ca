@@ -20,7 +20,6 @@ const Header = async ({ currentPage, donation_link }: HeaderProps) => {
       <Logo />
       <Menu menuItems={menuItems} />
       {specialProject && <SpecialProjectMenuItem {...specialProject} />}
-      <div>{donation_link}</div>
     </HeaderContainer>
   );
 };

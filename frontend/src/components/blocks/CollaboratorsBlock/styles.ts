@@ -22,8 +22,14 @@ export const Name = styled.h3``;
 export const Position = styled.p`
   color: ${({ theme }) => theme.colors.primaryText};
 `;
-export const Excerpt = styled.p`
+export const Excerpt = styled.div`
   color: ${({ theme }) => theme.colors.tertiaryText};
+  
+  /* Apply paragraph styling to maintain appearance */
+  .paragraph {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 export const PhotoContainer = styled.div`

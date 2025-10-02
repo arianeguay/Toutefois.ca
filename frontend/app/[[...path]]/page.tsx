@@ -198,6 +198,9 @@ export default async function Page({
   const options = await api.fetchOptions();
   const donation_link = options?.donation_link;
 
+  // On the server, this will always be false initially
+  // But it will be updated on client hydration
+
   // Handle root path (home)
   if (!params.path || params.path.length === 0) {
     // This is the root route - render your homepage

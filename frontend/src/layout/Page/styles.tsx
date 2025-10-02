@@ -12,7 +12,7 @@ interface PageContainerProps {
 
 export const PageContainer = styled.div<PageContainerProps>`
   background-color: ${({ $color }) => $color || 'transparent'};
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

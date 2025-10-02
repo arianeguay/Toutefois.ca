@@ -1,11 +1,9 @@
 'use client';
+import theme from '@/theme';
 import { WordpressMenuItem } from '@/types';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import { useTheme } from 'styled-components';
-import { SpecialProjectContainer } from './styles';
+import { SpecialProjectContainer, SpecialProjectLink } from './styles';
 
 const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
   name,
@@ -14,8 +12,7 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
   previewImage,
 }) => {
   const currentPathname = usePathname();
-  const theme = useTheme();
-  const isMobile = useMediaQuery({ maxWidth: theme.breakpoints.lg });
+
   const pathName = useMemo(() => {
     let path = new URL(href).pathname;
 
@@ -28,10 +25,8 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
     return path;
   }, [href, currentPathname]);
 
-  if (isMobile) return null;
-
   return (
-    <Link href={pathName}>
+    <SpecialProjectLink href={pathName}>
       <SpecialProjectContainer
         $mainColor={
           pathName === '/' ? theme.colors.headerBackground : mainColor
@@ -45,7 +40,7 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = ({
       >
         {pathName !== '/' ? name : 'Théâtre de Toutefois'}
       </SpecialProjectContainer>
-    </Link>
+    </SpecialProjectLink>
   );
 };
 

@@ -1,3 +1,4 @@
+'use client';
 import createFontStyleCSS from '@/theme/utils/createFontStyleCSS';
 import styled from 'styled-components';
 import { TypographyElementType, TypographyVariant } from './types';

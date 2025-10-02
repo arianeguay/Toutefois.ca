@@ -1,10 +1,11 @@
 import api from '@/api';
+import BlocksProvider from '@/components/blocks/BlocksProvider';
+import ClientBlock from '@/components/blocks/ClientBlock';
 import CollaboratorsBlock from '@/components/blocks/CollaboratorsBlock';
 import ContentCarousel from '@/components/blocks/ContentCarousel';
 import LatestPostsGrid from '@/components/blocks/LatestPostsGrid';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
 import Typography from '@/components/common/Typography';
-import console from 'console';
 import {
   DOMNode,
   domToReact,
@@ -14,6 +15,7 @@ import {
 } from 'html-react-parser';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import FeaturedCarousel from '../../components/blocks/FeaturedCarousel';
 import type { WordpressPage } from '../../types';
 import Footer from '../Footer';
@@ -73,23 +75,70 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.attribs) {
-        if (domNode.name === 'p') {
-          const hasChild = domNode.children.length > 0;
+        // Convert 'class' to 'className' for React compatibility
+        const className = domNode.attribs.class;
+        const name = domNode.attribs.name;
+        const hasChild = domNode.children.length > 0;
+        const children = domNode.children;
+        const reactAttributes = domNode.attribs;
 
+        if (className) {
+          domNode.attribs.className = className;
+          delete domNode.attribs.class;
+        }
+
+        // Add missing alt attributes and loading attributes to images
+        if (name === 'img') {
+          // Add alt text if missing
+          if (!reactAttributes.alt) {
+            reactAttributes.alt = reactAttributes.src
+              ? `Image: ${reactAttributes.src.split('/').pop()}`
+              : 'Image';
+          }
+
+          // Add loading="lazy" for below-the-fold images
+          if (!reactAttributes.loading) {
+            reactAttributes.loading = 'lazy';
+          }
+
+          // Add decoding="async" for better performance
+          if (!reactAttributes.decoding) {
+            reactAttributes.decoding = 'async';
+          }
+        }
+        if (name === 'p') {
           if (!hasChild) return <></>;
-          const reactAttributes = domNode.attribs;
           delete reactAttributes.style;
           return (
-            <p {...reactAttributes}>
-              {domToReact(domNode.childNodes as DOMNode[])}
-            </p>
+            <p {...reactAttributes}>{domToReact(children as DOMNode[])}</p>
           );
         }
-        if (domNode.name === 'a') {
+        if (name === 'a') {
           const adminUrl =
             process.env.NEXT_PUBLIC_ADMIN_URL ?? 'http://admin.toutefois.ca';
-          if (domNode.attribs.href.startsWith(adminUrl)) {
-            const parsedUrl = new URL(domNode.attribs.href);
+
+          // Check if link has no text content and add accessible text
+          const hasVisibleText = children.some((child) => {
+            return (
+              child.type === 'text' &&
+              (child as any).data &&
+              (child as any).data.trim().length > 0
+            );
+          });
+
+          // If no visible text and no img child with alt text, add screen reader text
+          if (
+            !hasVisibleText &&
+            !children.some((child) => (child as any).name === 'img')
+          ) {
+            const linkText =
+              reactAttributes.title ||
+              `Link to ${reactAttributes.href.split('/').pop() || 'page'}`;
+            reactAttributes['aria-label'] = linkText;
+          }
+
+          if (reactAttributes.href.startsWith(adminUrl)) {
+            const parsedUrl = new URL(reactAttributes.href);
             const pathName = parsedUrl.pathname.endsWith('/')
               ? parsedUrl.pathname.slice(0, -1)
               : parsedUrl.pathname;
@@ -110,52 +159,50 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
           }
         }
 
-        if (
-          domNode.attribs.class?.includes(
-            'wp-block-toutefois-featured-carousel',
-          )
-        ) {
-          return <FeaturedCarousel />;
+        if (className?.includes('wp-block-toutefois-featured-carousel')) {
+          return (
+            <ClientBlock>
+              <FeaturedCarousel />
+            </ClientBlock>
+          );
         }
 
-        if (domNode.attribs.class?.includes('wp-block-latest-posts__list')) {
-          return <LatestPostsGrid />;
+        if (className?.includes('wp-block-latest-posts__list')) {
+          return (
+            <ClientBlock>
+              <LatestPostsGrid />
+            </ClientBlock>
+          );
         }
-        if (
-          domNode.attribs.class?.includes(
-            'wp-block-toutefois-projects-category-row',
-          )
-        ) {
+        if (className?.includes('wp-block-toutefois-projects-category-row')) {
           // Extract category ID from data attribute if available
-          const categoryId = domNode.attribs['data-category'] || '';
+          const categoryId = reactAttributes['data-category'] || '';
 
           // Generate a unique ID for the row
           const rowId = Math.random().toString(36).substring(2, 9);
 
           return (
-            <ProjectsRow
-              key={`projects-row-${rowId}`}
-              categoryId={categoryId}
-              title={domNode.attribs['data-title']}
-            />
+            <ClientBlock>
+              <ProjectsRow
+                key={`projects-row-${rowId}`}
+                categoryId={categoryId}
+                title={reactAttributes['data-title']}
+              />
+            </ClientBlock>
           );
         }
-        if (
-          domNode.attribs.class?.includes(
-            'toutefois-collaborators-block-react-root',
-          )
-        ) {
-          const data = domNode.attribs['data-props'];
+        if (className?.includes('toutefois-collaborators-block-react-root')) {
+          const data = reactAttributes['data-props'];
           return (
-            <CollaboratorsBlock
-              mainProjectId={page.isMainProject ? page.id : undefined}
-              {...JSON.parse(data)}
-            />
+            <ClientBlock>
+              <CollaboratorsBlock
+                mainProjectId={page.isMainProject ? page.id : undefined}
+                {...JSON.parse(data)}
+              />
+            </ClientBlock>
           );
         }
-        if (
-          domNode.attribs.class?.includes('wp-block-toutefois-content-carousel')
-        ) {
+        if (className?.includes('wp-block-toutefois-content-carousel')) {
           // Find the inner div that contains all our data attributes
           // Cast domNode.children to Element[] to handle proper typing
           const children = domNode.children as Element[];
@@ -188,27 +235,33 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
               ) || Math.random().toString(36).substring(2, 9);
 
             return (
-              <ContentCarousel
-                key={`content-carousel-${uniqueId}`}
-                contentType={contentType as 'project' | 'news' | 'mixed'}
-                title={title}
-                description={description}
-                viewAllUrl={viewAllUrl}
-                viewAllText={viewAllText}
-                limit={limit}
-                mainProjectId={page.isMainProject ? page.id : undefined}
-                newsSource={
-                  (newsSource as 'wp' | 'facebook' | 'both') || 'both'
-                }
-                facebookPageId={facebookPageId}
-              />
+              <ClientBlock>
+                <ContentCarousel
+                  key={`content-carousel-${uniqueId}`}
+                  contentType={contentType as 'project' | 'news' | 'mixed'}
+                  title={title}
+                  description={description}
+                  viewAllUrl={viewAllUrl}
+                  viewAllText={viewAllText}
+                  limit={limit}
+                  mainProjectId={page.isMainProject ? page.id : undefined}
+                  newsSource={
+                    (newsSource as 'wp' | 'facebook' | 'both') || 'both'
+                  }
+                  facebookPageId={facebookPageId}
+                />
+              </ClientBlock>
             );
           }
 
           // Fallback if the inner div is not found
           const fallbackId = Math.random().toString(36).substring(2, 9);
           return (
-            <ContentCarousel key={`content-carousel-fallback-${fallbackId}`} />
+            <ClientBlock>
+              <ContentCarousel
+                key={`content-carousel-fallback-${fallbackId}`}
+              />
+            </ClientBlock>
           );
         }
       }
@@ -247,16 +300,24 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
           >
             <Image
               src={page.thumbnail}
-              alt={page.title.rendered}
+              alt={page.title.rendered || 'Page thumbnail image'}
               fill
               sizes="(max-width: 768px) 100vw, 800px"
-              priority={false}
+              priority={true} /* LCP image should be prioritized */
               style={{ objectFit: 'cover' }}
+              quality={80} /* Balance quality and file size */
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
             />
           </div>
         )}
 
-        {!!page.content?.rendered && parse(page.content.rendered, options)}
+        {/* Use Suspense and BlocksProvider to handle client-side rendering of blocks */}
+        <Suspense fallback={<div>Loading content...</div>}>
+          <BlocksProvider>
+            {!!page.content?.rendered && parse(page.content.rendered, options)}
+          </BlocksProvider>
+        </Suspense>
       </MainContent>
       <Footer currentPage={headerPage} donation_link={donation_link} />
     </PageWrapper>

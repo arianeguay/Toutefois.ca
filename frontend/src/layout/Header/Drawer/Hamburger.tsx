@@ -1,3 +1,5 @@
+'use client';
+
 import { HamburgerContainer, HamburgerLine } from './styles';
 
 interface HamburgerProps {
@@ -7,9 +9,9 @@ interface HamburgerProps {
 const Hamburger = ({ onClick, isOpen }: HamburgerProps) => {
   return (
     <HamburgerContainer onClick={onClick} $isOpen={isOpen}>
-      <HamburgerLine />
-      <HamburgerLine />
-      <HamburgerLine />
+      <HamburgerLine key="line1" />
+      <HamburgerLine key="line2" />
+      <HamburgerLine key="line3" />
     </HamburgerContainer>
   );
 };

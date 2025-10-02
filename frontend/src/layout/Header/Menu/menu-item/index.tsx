@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { MenuItemLink } from './styles';
 
 const MenuItem: React.FC<WordpressMenuItem> = ({ name, href }) => {
-  const currentPathname = usePathname();
+  const pathname = usePathname();
   const getPathFromUrl = (url: string) => {
     try {
       const path = new URL(url).pathname;
@@ -17,7 +17,7 @@ const MenuItem: React.FC<WordpressMenuItem> = ({ name, href }) => {
   return (
     <MenuItemLink
       href={getPathFromUrl(href)}
-      $isActive={currentPathname === getPathFromUrl(href)}
+      $isActive={pathname === getPathFromUrl(href)}
     >
       {name}
     </MenuItemLink>

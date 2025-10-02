@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import styled, { css } from 'styled-components';
 
 export const hexToRgba = (hex: string, alpha: number = 1): string => {
@@ -81,5 +82,11 @@ export const SpecialProjectContainer = styled.div<{
     transform: skewX(-50deg);
     transform-origin: top right;
     z-index: -1;
+  }
+`;
+
+export const SpecialProjectLink = styled(Link)`
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none;
   }
 `;

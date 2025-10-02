@@ -48,7 +48,7 @@ export const DrawerContainer = styled.div<{ $isOpen?: boolean }>`
   position: fixed;
   top: ${({ theme }) => theme.appearance.headerHeight};
   right: 0;
-  width: 100vw;
+  width: 100%;
   height: calc(100vh - ${({ theme }) => theme.appearance.headerHeight} + 3px);
   background-color: ${({ theme }) => theme.colors.mainBackground};
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
