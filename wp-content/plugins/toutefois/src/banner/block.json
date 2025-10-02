@@ -17,6 +17,10 @@
       "type": "string",
       "default": ""
     },
+    "height": {
+      "type": "string",
+      "default": "350px"
+    },
     "title": {
       "type": "string",
       "default": ""
@@ -64,6 +68,10 @@
     "textShadowColor": {
       "type": "string",
       "default": "rgba(0,0,0,0.5)"
+    },
+    "heightUnit": {
+      "type": "string",
+      "default": "px"
     }
   }
 }

@@ -254,9 +254,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
             return (
               <>
                 <div {...reactAttributes}>{domToReact(children, options)}</div>
-                {template === 'template-banner.php' && (
-                  <BackLink href={backTo} $template={template} />
-                )}
+                <BackLink href={backTo} $template={template} />
               </>
             );
           }

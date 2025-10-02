@@ -821,6 +821,17 @@ export const WordpressStyling = css`
     position: relative;
     width: 100%;
     overflow: hidden;
+    height: var(--banner-height, 350px);
+
+    /* Support de hauteur personnalisée */
+    &[data-height] {
+      height: var(--banner-height);
+    }
+    
+    /* Convertir les attributs de données en variable CSS */
+    &[data-height][data-height-unit] {
+      --banner-height: attr(data-height) attr(data-height-unit);
+    }
 
     .toutefois-banner__bg {
       position: absolute;

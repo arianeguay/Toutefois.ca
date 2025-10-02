@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import styled, { css } from 'styled-components';
 
-export const hexToRgba = (hex: string, alpha: number = 1): string => {
+export const hexToRgba = (hex: string, multiplier: number = 1): string => {
   // Remove leading "#" if present
   hex = hex.replace(/^#/, '');
 
@@ -14,11 +14,11 @@ export const hexToRgba = (hex: string, alpha: number = 1): string => {
       .join('');
   }
 
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
+  const r = parseInt(hex.substring(0, 2), 16) * multiplier;
+  const g = parseInt(hex.substring(2, 4), 16) * multiplier;
+  const b = parseInt(hex.substring(4, 6), 16) * multiplier;
 
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  return `rgb(${r}, ${g}, ${b})`;
 };
 
 const backgroundImageStyling = (
@@ -30,7 +30,6 @@ const backgroundImageStyling = (
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-blend-mode: lighten;
 `;
 
 const noBackgroundImageStyling = (mainColor: string) => css`
@@ -65,9 +64,9 @@ export const SpecialProjectContainer = styled.div<{
   cursor: pointer;
   position: relative;
   &:hover {
-    background-color: ${({ $mainColor }) => hexToRgba($mainColor, 0.9)};
+    background-color: ${({ $mainColor }) => hexToRgba($mainColor, 1.1)};
     &:after {
-      background-color: ${({ $mainColor }) => hexToRgba($mainColor, 0.9)};
+      background-color: ${({ $mainColor }) => hexToRgba($mainColor, 1.1)};
     }
   }
   &:after {

@@ -28,6 +28,8 @@ export default function Edit({ attributes, setAttributes }) {
     textShadowColor,
     template,
     blurredBackground,
+    height,
+    heightUnit,
   } = attributes;
 
   // Wrapper props with data-attributes for theme CSS hooks
@@ -35,7 +37,7 @@ export default function Edit({ attributes, setAttributes }) {
     className: "wp-block-toutefois-banner",
     style: {
       position: "relative",
-      height: "300px",
+      height: height || "350px",
       width: "100%",
       marginBottom: "24px",
     },
@@ -43,6 +45,8 @@ export default function Edit({ attributes, setAttributes }) {
     "data-va": verticalAlignment,
     "data-ha": horizontalAlignment,
     "data-blurred": blurredBackground ? "1" : "0",
+    "data-height": height,
+    "data-height-unit": heightUnit,
   });
 
   const bgStyles = {
@@ -180,6 +184,34 @@ export default function Edit({ attributes, setAttributes }) {
             value={textShadowColor}
             onChange={(value) => setAttributes({ textShadowColor: value })}
           />
+          <div style={{ marginTop: "16px" }}>
+            <TextControl
+              label={__('Banner Height', 'toutefois')}
+              type="number"
+              value={height?.replace ? height.replace(/[^0-9.]/g, '') : height}
+              onChange={(value) => {
+                const numValue = parseFloat(value);
+                if (!isNaN(numValue) && numValue > 0) {
+                  setAttributes({ height: `${numValue}${heightUnit}` });
+                }
+              }}
+            />
+            <SelectControl
+              label={__('Height Unit', 'toutefois')}
+              value={heightUnit}
+              options={[
+                { label: 'px', value: 'px' },
+                { label: '%', value: '%' },
+                { label: 'vh', value: 'vh' },
+                { label: 'rem', value: 'rem' },
+              ]}
+              onChange={(value) => {
+                setAttributes({ heightUnit: value });
+                const heightValue = height?.replace ? parseFloat(height.replace(/[^0-9.]/g, '')) : 350;
+                setAttributes({ height: `${heightValue}${value}` });
+              }}
+            />
+          </div>
         </PanelBody>
       </InspectorControls>
       <div {...wrapperProps}>

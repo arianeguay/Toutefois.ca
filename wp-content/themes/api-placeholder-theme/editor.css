@@ -391,20 +391,14 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: 350px;
-}
-
-.editor-styles-wrapper .wp-block-toutefois-banner .toutefois-banner__bg {
-  position: absolute;
-  inset: 0;
+  height: var(--banner-height, 350px);
   background-size: cover;
   background-position: center;
 }
 
-.editor-styles-wrapper .wp-block-toutefois-banner .toutefois-banner__content {
-  position: absolute;
-  inset: 0;
-  padding: var(--tfx-space-md);
+/* Gérer les hauteurs personnalisées */
+.editor-styles-wrapper .wp-block-toutefois-banner[data-height] {
+  --banner-height: attr(data-height);
 }
 
 .editor-styles-wrapper .wp-block-toutefois-banner .toutefois-banner__body {

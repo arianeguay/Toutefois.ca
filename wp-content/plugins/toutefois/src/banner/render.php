@@ -18,11 +18,13 @@ $text_color = isset($attributes['textColor']) ? $attributes['textColor'] : '#FFF
 $big_text_shadow = isset($attributes['bigTextShadow']) ? $attributes['bigTextShadow'] : false;
 $text_shadow_color = isset($attributes['textShadowColor']) ? $attributes['textShadowColor'] : 'rgba(0,0,0,0.5)';
 $blurred_background = isset($attributes['blurredBackground']) ? $attributes['blurredBackground'] : true;
+$height = isset($attributes['height']) ? $attributes['height'] : '350px';
+$height_unit = isset($attributes['heightUnit']) ? $attributes['heightUnit'] : 'px';
 
 // Build inline styles for the container
 $container_styles = [
     'position: relative',
-    'height: 350px',
+    'height: ' . esc_attr($height),
     'width: 100%',
 ];
 
@@ -74,6 +76,8 @@ $wrapper_attributes = get_block_wrapper_attributes([
     'data-va' => $vertical_alignment,
     'data-ha' => $horizontal_alignment,
     'data-blurred' => $blurred_background ? '1' : '0',
+    'data-height' => $height,
+    'data-height-unit' => $height_unit,
     'style' => implode('; ', $container_styles),
 ]);
 

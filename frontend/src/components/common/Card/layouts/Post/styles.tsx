@@ -26,5 +26,4 @@ export const PostContentCardContent = styled.article<{ type: ContentType }>`
 
 export const PostContentCardContainer = styled.div`
   ${ContentCardContainerStyling}
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
 `;

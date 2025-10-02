@@ -31,7 +31,7 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = (item) => {
         $textColor={
           pathName === '/'
             ? theme.colors.buttonSecondaryBackground
-            : theme.colors.primaryText
+            : theme.colors.lightText
         }
         $previewImage={pathName !== '/' ? previewImage : '/logo.png'}
       >
