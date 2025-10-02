@@ -24,7 +24,6 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 }
 
 
-// Include Components
 require_once plugin_dir_path(__FILE__) . 'components/featured-carousel.php';
 require_once plugin_dir_path(__FILE__) . 'components/projects-list.php';
 require_once plugin_dir_path(__FILE__) . 'components/news-list.php';
