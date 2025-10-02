@@ -93,8 +93,8 @@ function get_collaborators(WP_REST_Request $request)
     if ($member_status === 'members') {
         $args['meta_query'] = [
             [
-                'key' => '_collaborateur_is_member',
-                'value' => true,
+                'key'     => '_collaborateur_is_member',
+                'value'   => '1',
                 'compare' => '=',
             ],
         ];
@@ -102,13 +102,18 @@ function get_collaborators(WP_REST_Request $request)
         $args['meta_query'] = [
             'relation' => 'OR',
             [
-                'key' => '_collaborateur_is_member',
-                'value' => false,
+                'key'     => '_collaborateur_is_member',
+                'value'   => '',
                 'compare' => '=',
             ],
             [
-                'key' => '_collaborateur_is_member',
+                'key'     => '_collaborateur_is_member',
                 'compare' => 'NOT EXISTS',
+            ],
+            [
+                'key'     => '_collaborateur_is_member',
+                'value'   => '0',
+                'compare' => '=',
             ],
         ];
     }
@@ -117,16 +122,36 @@ function get_collaborators(WP_REST_Request $request)
     // Optional boolean filter on _collaborateur_is_member
     $is_member_param = $request->get_param('is_member');
     if (null !== $is_member_param) {
-        // Normalize to 1/0 (WP usually stores boolean meta as "1"/"0")
+        // Normalize boolean and match WP storage format
         $is_member_bool = filter_var($is_member_param, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         if ($is_member_bool !== null) {
-            $args['meta_query'] = array(
-                array(
-                    'key'     => '_collaborateur_is_member',
-                    'value'   => $is_member_bool ? '1' : '0',
-                    'compare' => '=',
-                ),
-            );
+            if ($is_member_bool) {
+                $args['meta_query'] = array(
+                    array(
+                        'key'     => '_collaborateur_is_member',
+                        'value'   => '1',
+                        'compare' => '=',
+                    ),
+                );
+            } else {
+                $args['meta_query'] = array(
+                    'relation' => 'OR',
+                    array(
+                        'key'     => '_collaborateur_is_member',
+                        'value'   => '',
+                        'compare' => '=',
+                    ),
+                    array(
+                        'key'     => '_collaborateur_is_member',
+                        'compare' => 'NOT EXISTS',
+                    ),
+                    array(
+                        'key'     => '_collaborateur_is_member',
+                        'value'   => '0',
+                        'compare' => '=',
+                    ),
+                );
+            }
         }
     }
 
