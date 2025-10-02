@@ -23,7 +23,7 @@ export const MenuItemLink = styled(Link)<{ $isActive?: boolean }>`
           }
         `}
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
     ${({ $isActive, theme }) =>
       $isActive
         ? css`

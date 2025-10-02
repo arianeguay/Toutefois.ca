@@ -17,7 +17,7 @@ const Header = async ({ donation_link }: HeaderProps) => {
     <ClientBlock>
       <HeaderContainer>
         <Logo />
-        <Menu menuItems={menuItems} />
+        <Menu menuItems={menuItems} donation_link={donation_link} />
         {specialProject && <SpecialProjectMenuItem {...specialProject} />}
       </HeaderContainer>
     </ClientBlock>

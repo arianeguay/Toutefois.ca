@@ -2,7 +2,8 @@
 
 import Typography from '@/components/common/Typography';
 import { WordpressMenuItem } from '@/types';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import MenuItem from '../Menu/menu-item';
 import Hamburger from './Hamburger';
 import { DrawerContainer, DrawerMenuContent } from './styles';
@@ -12,7 +13,12 @@ interface MenuDrawerProps {
 }
 const MenuDrawer: React.FC<MenuDrawerProps> = ({ menuItems }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
   const toggleDrawer = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
   return (
     <>
       <Hamburger onClick={toggleDrawer} isOpen={isOpen} />

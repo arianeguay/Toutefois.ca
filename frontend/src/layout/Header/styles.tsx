@@ -18,8 +18,7 @@ export const HeaderContainer = styled.header`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl}px;
   box-shadow: ${({ theme }) => theme.boxShadow.xl};
-  border-bottom: ${({ theme }) => theme.borders.subtle};
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
     flex-direction: row;
     gap: ${({ theme }) => theme.spacing.xl}px;
     justify-content: space-between;

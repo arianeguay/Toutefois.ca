@@ -45,11 +45,11 @@ export const SpecialProjectContainer = styled.div<{
   $textColor: string;
   $previewImage: string | null;
 }>`
-  ${({ $previewImage, $mainColor, $textColor }) =>
+  ${({ $previewImage, $mainColor }) =>
     $previewImage
       ? backgroundImageStyling($mainColor, $previewImage)
       : noBackgroundImageStyling($mainColor)}
-  margin-block: -${({ theme }) => theme.spacing.md}px;
+  margin-block-start: -${({ theme }) => theme.spacing.md}px;
   margin-inline-end: -${({ theme }) => theme.spacing.xxl}px;
   padding-inline: ${({ theme }) => theme.spacing.xxl}px;
   padding-block: ${({ theme }) => theme.spacing.md}px;
@@ -58,7 +58,7 @@ export const SpecialProjectContainer = styled.div<{
   align-items: center;
   justify-content: center;
   height: ${({ theme }) =>
-    Number(theme.appearance.headerHeight.replace('px', '')) - 3}px;
+    Number(theme.appearance.headerHeight.replace('px', ''))}px;
   color: ${({ $textColor }) => $textColor};
   font-size: ${({ theme }) => theme.fontSizes.body}px;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
@@ -86,7 +86,7 @@ export const SpecialProjectContainer = styled.div<{
 `;
 
 export const SpecialProjectLink = styled(Link)`
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
     display: none;
   }
 `;
