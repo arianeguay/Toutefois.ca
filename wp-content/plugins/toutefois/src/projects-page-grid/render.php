@@ -11,8 +11,11 @@ $projects = $response->get_data();
 $total_pages = $response->get_headers()['X-WP-TotalPages'];
 
 if (!empty($projects)) :
+    $wrapper_attributes = get_block_wrapper_attributes([
+        'class' => 'wp-block-toutefois-projects-page-grid',
+    ]);
 ?>
-    <div <?php echo get_block_wrapper_attributes(); ?>>
+    <div <?php echo $wrapper_attributes; ?> >
         <ul class="projects-grid">
             <?php foreach ($projects as $project) : ?>
                 <li class="project-item">
@@ -38,7 +41,7 @@ if (!empty($projects)) :
 <?php
 else :
 ?>
-    <div <?php echo get_block_wrapper_attributes(); ?>>
+    <div <?php echo get_block_wrapper_attributes(['class' => 'wp-block-toutefois-projects-page-grid']); ?>>
         <p>No projects found.</p>
     </div>
 <?php

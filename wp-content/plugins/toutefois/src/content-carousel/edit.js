@@ -152,29 +152,39 @@ export default function Edit({ attributes, setAttributes }) {
         </PanelBody>
       </InspectorControls>
 
-      <div {...useBlockProps()}>
-        <div className="wp-block-toutefois-content-carousel-placeholder">
-          <h3>{__("Content Carousel", "toutefois-blocks")}</h3>
-          <p>
-            {contentType === "project" &&
-              __("Displaying recent projects", "toutefois-blocks")}
-            {contentType === "news" &&
-              __("Displaying recent news", "toutefois-blocks")}
-            {contentType === "mixed" &&
-              __("Displaying recent projects and news", "toutefois-blocks")}
-          </p>
-          <p>
-            {__("Limit:", "toutefois-blocks")} {limit}
-          </p>
-          <p>
-            {__("Title:", "toutefois-blocks")} {title || getDefaultTitle()}
-          </p>
-          <p>
-            {__(
-              "This block will be rendered as a carousel in the frontend.",
-              "toutefois-blocks"
+      <div
+        {...useBlockProps({ className: "wp-block-toutefois-content-carousel" })}
+      >
+        <div className="content-carousel-block">
+          <h2>{title || getDefaultTitle()}</h2>
+          {description && <p>{description}</p>}
+          <ul>
+            {Array.from({ length: Math.min(Number(limit) || 3, 6) }).map(
+              (_, i) => (
+                <li key={`placeholder-${i}`}>
+                  <h3>
+                    {contentType === "project"
+                      ? __("Project", "toutefois-blocks")
+                      : contentType === "news"
+                      ? __("News", "toutefois-blocks")
+                      : __("Item", "toutefois-blocks")}{" "}
+                    #{i + 1}
+                  </h3>
+                  <div
+                    style={{
+                      width: "100%",
+                      aspectRatio: "16/9",
+                      background: "#f2f2f2",
+                      borderRadius: 4,
+                    }}
+                  />
+                  <p style={{ opacity: 0.8 }}>
+                    {__("Excerpt preview...", "toutefois-blocks")}
+                  </p>
+                </li>
+              )
             )}
-          </p>
+          </ul>
         </div>
       </div>
     </>

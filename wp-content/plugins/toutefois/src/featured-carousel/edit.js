@@ -22,7 +22,9 @@ export default function Edit() {
     <div {...blockProps}>
       <Carousel>
         {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+          <div key={project.id} className="toutefois-featured-carousel__item">
+            <ProjectCard project={project} />
+          </div>
         ))}
       </Carousel>
     </div>

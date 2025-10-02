@@ -10,7 +10,7 @@ export default function Edit({ attributes, setAttributes }) {
   const { src: attrSrc, height: attrHeight = 600 } = attributes; // store ID as string
 
   return (
-    <div {...useBlockProps()}>
+    <div {...useBlockProps({ className: 'wp-block-toutefois-zeffy' })}>
       <InspectorControls>
         <PanelBody title={__("Zeffy Block Settings", "toutefois")} initialOpen>
           <TextControl
@@ -29,18 +29,14 @@ export default function Edit({ attributes, setAttributes }) {
         </PanelBody>
       </InspectorControls>
       <div
-        style={{
-          position: "relative",
-          width: "100%",
-          minHeight: attrHeight,
-          display: "flex",
-        }}
+        className="toutefois-zeffy__frame"
+        style={{ position: 'relative', width: '100%', minHeight: attrHeight, display: 'flex' }}
       >
         {attrSrc ? (
           <iframe
             title="Zeffy Shop"
             src={attrSrc}
-            style={{ width: "100%", height: "auto", border: "0" }}
+            style={{ width: '100%', height: 'auto', border: '0' }}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />

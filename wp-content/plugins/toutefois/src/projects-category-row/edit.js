@@ -1,4 +1,4 @@
-import { InspectorControls } from "@wordpress/block-editor";
+import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
 import {
   Notice,
   PanelBody,
@@ -157,6 +157,10 @@ export default function Edit({ attributes, setAttributes }) {
     );
   };
 
+  const blockProps = useBlockProps({
+    className: "wp-block-toutefois-projects-row",
+  });
+
   return (
     <>
       <InspectorControls>
@@ -179,20 +183,23 @@ export default function Edit({ attributes, setAttributes }) {
           />
           <TextControl
             label={__("Title", "toutefois")}
-            value={attrTitle || ""}
             onChange={(val) => setAttributes({ title: val })}
           />
         </PanelBody>
       </InspectorControls>
 
-      <div
-        className="toutefois-projects-row__preview"
-        style={{
-          display: "grid",
-          gap: 12,
-          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-        }}
-      >
+      <div {...blockProps}>
+        {attrTitle ? (
+          <h2 className="toutefois-projects-row__title">{attrTitle}</h2>
+        ) : null}
+        <div
+          className="toutefois-projects-row__preview projects-grid"
+          style={{
+            display: "grid",
+            gap: 12,
+            gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+          }}
+        >
         {(termsIsResolving || postsIsResolving) && <Spinner />}
 
         {termsError && (
@@ -260,6 +267,7 @@ export default function Edit({ attributes, setAttributes }) {
               </div>
             );
           })}
+        </div>
       </div>
     </>
   );

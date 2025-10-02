@@ -1,22 +1,26 @@
 <?php
 $featured_projects = get_featured_projects()->get_data();
-$wrapper_attributes = get_block_wrapper_attributes();
+$count = is_array($featured_projects) ? count($featured_projects) : 0;
+$wrapper_attributes = get_block_wrapper_attributes([
+    'class' => 'wp-block-toutefois-featured-carousel',
+    'data-count' => (string) $count,
+]);
 ?>
 <div <?php echo $wrapper_attributes; ?>>
     <?php if (!empty($featured_projects)) : ?>
-        <h2>Featured Projects</h2>
-        <div class="featured-carousel-content">
+        <h2 class="toutefois-featured-carousel__heading">Featured Projects</h2>
+        <div class="toutefois-featured-carousel__list">
             <?php foreach ($featured_projects as $project) : ?>
-                <div>
-                    <h3><?php echo esc_html($project['title']); ?></h3>
+                <div class="toutefois-featured-carousel__item">
+                    <h3 class="toutefois-featured-carousel__title"><?php echo esc_html($project['title']); ?></h3>
                     <?php if (!empty($project['featured_image_url'])) : ?>
-                        <img src="<?php echo esc_url($project['featured_image_url']); ?>" alt="<?php echo esc_attr($project['title']); ?>">
+                        <img class="toutefois-featured-carousel__image" src="<?php echo esc_url($project['featured_image_url']); ?>" alt="<?php echo esc_attr($project['title']); ?>">
                     <?php endif; ?>
-                    <p><?php echo esc_html($project['excerpt']); ?></p>
+                    <p class="toutefois-featured-carousel__excerpt"><?php echo esc_html($project['excerpt']); ?></p>
                 </div>
             <?php endforeach; ?>
         </div>
     <?php else : ?>
-        <p>No featured projects found.</p>
+        <p class="toutefois-featured-carousel__empty">No featured projects found.</p>
     <?php endif; ?>
 </div>

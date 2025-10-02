@@ -30,27 +30,33 @@ export default function Edit({ attributes, setAttributes }) {
     blurredBackground,
   } = attributes;
 
-  const blockStyles = {
-    position: "relative",
-    height: "300px",
-    border: "1px dashed #ccc",
-    backgroundColor: "#f0f0f0",
-    width: "100%",
-    ...(!image && {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }),
-  };
+  // Wrapper props with data-attributes for theme CSS hooks
+  const wrapperProps = useBlockProps({
+    className: "wp-block-toutefois-banner",
+    style: {
+      position: "relative",
+      height: "300px",
+      width: "100%",
+      marginBottom: "24px",
+    },
+    "data-template": template,
+    "data-va": verticalAlignment,
+    "data-ha": horizontalAlignment,
+    "data-blurred": blurredBackground ? "1" : "0",
+  });
 
-  const imageStyles = {
+  const bgStyles = {
     width: "100%",
     height: "100%",
-    objectFit: "cover",
-    objectPosition: objectPosition,
     position: "absolute",
     top: 0,
     left: 0,
+    backgroundImage: image?.url ? `url(${image.url})` : undefined,
+    backgroundSize: "cover",
+    backgroundPosition: objectPosition || "50% 50%",
+    filter: blurredBackground ? "blur(4px)" : undefined,
+    backgroundColor: image?.url ? undefined : "#f0f0f0",
+    border: image?.url ? undefined : "1px dashed #ccc",
   };
 
   const contentStyles = {
@@ -60,21 +66,10 @@ export default function Edit({ attributes, setAttributes }) {
     right: 0,
     bottom: 0,
     zIndex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: horizontalAlignment,
-    justifyContent: verticalAlignment,
-    textAlign:
-      horizontalAlignment === "flex-start"
-        ? "left"
-        : horizontalAlignment === "flex-end"
-        ? "right"
-        : "center",
-    color: textColor,
-    padding: "1rem",
+    padding: "16px",
   };
 
-  const HeadingStyle = {
+  const headingStyle = {
     width: "fit-content",
     fontFamily: font || "Poppins, sans-serif",
     textShadow: bigTextShadow
@@ -187,12 +182,38 @@ export default function Edit({ attributes, setAttributes }) {
           />
         </PanelBody>
       </InspectorControls>
-      <div {...useBlockProps({ style: blockStyles })}>
-        {image && <img src={image.url} alt={title} style={imageStyles} />}
-        {!image && <p>{__("Please select an image", "toutefois")}</p>}
-        <div style={contentStyles}>
-          <h1 style={HeadingStyle}>{title}</h1>
-          <p style={{ width: "fit-content" }}>{description}</p>
+      <div {...wrapperProps}>
+        <div className="toutefois-banner__bg" style={bgStyles} />
+        <div className="toutefois-banner__content" style={contentStyles}>
+          <div
+            className="toutefois-banner__body"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              alignItems: horizontalAlignment,
+              justifyContent: verticalAlignment,
+              textAlign:
+                horizontalAlignment === "flex-start"
+                  ? "left"
+                  : horizontalAlignment === "flex-end"
+                  ? "right"
+                  : "center",
+              color: textColor,
+            }}
+          >
+            <h1 className="toutefois-banner__title" style={headingStyle}>
+              {title}
+            </h1>
+            <p className="toutefois-banner__description" style={{ width: "fit-content" }}>
+              {description}
+            </p>
+            {!image && (
+              <p style={{ marginTop: "8px", opacity: 0.8 }}>
+                {__("Please select an image", "toutefois")}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </>
