@@ -1,6 +1,7 @@
 import api from '@/api';
 import ClientBlock from '@/components/blocks/ClientBlock';
 import CollaboratorsBlock from '@/components/blocks/CollaboratorsBlock';
+import ContentCarousel from '@/components/blocks/ContentCarousel';
 import Archive from '@/components/blocks/LatestPostsGrid/Archive';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
 import ColorUpdater from '@/components/ColorUpdater';
