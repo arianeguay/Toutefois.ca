@@ -36,7 +36,14 @@ function get_featured_projects(?WP_REST_Request $request = null)
                 'value' => '1',
                 'compare' => '=='
             )
-        )
+        ),
+        // Sort: end date desc, then modified desc
+        'meta_key'   => '_projet_date_fin',
+        'meta_type'  => 'DATE',
+        'orderby'    => array(
+            'meta_value' => 'DESC',
+            'modified'   => 'DESC',
+        ),
     );
 
     $main_param = null;
@@ -82,6 +89,10 @@ function get_featured_projects(?WP_REST_Request $request = null)
             } else {
                 $type = $categories[0]->name; // fallback if no child
             }
+            $date_debut = $post_meta['_projet_date_debut'][0] ?? '';
+            $date_fin   = $post_meta['_projet_date_fin'][0] ?? '';
+            $computed_date = !empty($date_fin) ? $date_fin : get_the_modified_date('Y-m-d');
+
             $posts[] = array(
                 'id' => $post_id,
                 'title' => get_the_title(),
@@ -89,11 +100,12 @@ function get_featured_projects(?WP_REST_Request $request = null)
                 'content' => get_the_content(),
                 'meta' => $post_meta,
                 'featured_image_url' => $featured_image_url,
-                'projet_date_debut' => $post_meta['_projet_date_debut'][0],
-                'projet_date_fin' => $post_meta['_projet_date_fin'][0],
+                'projet_date_debut' => $date_debut,
+                'projet_date_fin' => $date_fin,
+                'date' => $computed_date,
                 'type' => $type,
                 'slug' => get_post_field('post_name', $post_id),
-                'lien_de_reservation' => $post_meta['_projet_lien'][0],
+                'lien_de_reservation' => $post_meta['_projet_lien'][0] ?? '',
             );
         }
         wp_reset_postdata();

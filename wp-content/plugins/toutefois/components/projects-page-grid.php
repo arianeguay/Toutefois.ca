@@ -71,7 +71,14 @@ function get_projects_for_grid($request)
                     'field' => 'term_id',
                     'terms' => $category_ids,
                 )
-            )
+            ),
+            // Sort: end date desc, then modified desc
+            'meta_key'   => '_projet_date_fin',
+            'meta_type'  => 'DATE',
+            'orderby'    => array(
+                'meta_value' => 'DESC',
+                'modified'   => 'DESC',
+            ),
         );
 
         $query = new WP_Query($args);
@@ -117,6 +124,10 @@ function get_projects_for_grid($request)
                     );
                 }
 
+                $date_debut = $post_meta['_projet_date_debut'][0] ?? '';
+                $date_fin   = $post_meta['_projet_date_fin'][0] ?? '';
+                $computed_date = !empty($date_fin) ? $date_fin : get_the_modified_date('Y-m-d');
+
                 $project = array(
                     'id' => $post_id,
                     'title' => get_the_title(),
@@ -125,7 +136,10 @@ function get_projects_for_grid($request)
                     'content' => get_the_content(),
                     'meta' => $post_meta,
                     'featured_image_url' => $featured_image_url,
-                    'category' => $post_category
+                    'category' => $post_category,
+                    'projet_date_debut' => $date_debut,
+                    'projet_date_fin'   => $date_fin,
+                    'date' => $computed_date,
                 );
 
                 $category_posts[] = $project;
@@ -134,6 +148,15 @@ function get_projects_for_grid($request)
             }
 
             wp_reset_postdata();
+        }
+
+        // Sort posts within this category by computed date desc
+        if (!empty($category_posts)) {
+            usort($category_posts, function ($a, $b) {
+                $da = isset($a['projet_date_fin']) && $a['projet_date_fin'] !== '' ? strtotime($a['projet_date_fin']) : (isset($a['date']) ? strtotime($a['date']) : 0);
+                $db = isset($b['projet_date_fin']) && $b['projet_date_fin'] !== '' ? strtotime($b['projet_date_fin']) : (isset($b['date']) ? strtotime($b['date']) : 0);
+                return $db <=> $da;
+            });
         }
 
         // Add this category and its posts to the result
@@ -147,6 +170,15 @@ function get_projects_for_grid($request)
                 'projects' => $category_posts
             );
         }
+    }
+
+    // Sort the overall list as well by end date then modified
+    if (!empty($all_projects)) {
+        usort($all_projects, function ($a, $b) {
+            $da = isset($a['projet_date_fin']) && $a['projet_date_fin'] !== '' ? strtotime($a['projet_date_fin']) : (isset($a['date']) ? strtotime($a['date']) : 0);
+            $db = isset($b['projet_date_fin']) && $b['projet_date_fin'] !== '' ? strtotime($b['projet_date_fin']) : (isset($b['date']) ? strtotime($b['date']) : 0);
+            return $db <=> $da;
+        });
     }
 
     // Apply pagination to the final result

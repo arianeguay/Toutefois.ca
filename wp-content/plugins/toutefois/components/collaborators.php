@@ -90,8 +90,12 @@ function get_collaborators(WP_REST_Request $request)
     );
 
 
+    if (!isset($args['meta_query'])) {
+        $args['meta_query'] = array();
+    }
+
     if ($member_status === 'members') {
-        $args['meta_query'] = array(
+        $args['meta_query'][] = array(
             array(
                 'key'     => '_collaborateur_is_member',
                 'value'   => '1',
@@ -99,7 +103,7 @@ function get_collaborators(WP_REST_Request $request)
             ),
         );
     } elseif ($member_status === 'non-members') {
-        $args['meta_query'] = array(
+        $args['meta_query'][] = array(
             'relation' => 'OR',
             array(
                 'key'     => '_collaborateur_is_member',
@@ -128,9 +132,7 @@ function get_collaborators(WP_REST_Request $request)
             $main_id = ctype_digit((string)$main_param) ? (int)$main_param : 0;
         }
         if ($main_id > 0) {
-            if (!isset($args['meta_query'])) {
-                $args['meta_query'] = array();
-            }
+
             $args['meta_query'][] = array(
                 'key'     => '_main_project_id',
                 'value'   => (string)$main_id,
