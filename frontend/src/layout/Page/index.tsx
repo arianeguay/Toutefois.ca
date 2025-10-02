@@ -114,7 +114,9 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
           if (!hasChild) return <></>;
           delete reactAttributes.style;
           return (
-            <p {...reactAttributes}>{domToReact(children as DOMNode[])}</p>
+            <p {...reactAttributes}>
+              {domToReact(children as DOMNode[], options)}
+            </p>
           );
         }
         if (name === 'a') {
@@ -151,13 +153,13 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
               const collaboratorSlug = pathName.split('/').pop();
               return (
                 <Link href={`/notre-mission#${collaboratorSlug}`}>
-                  {domToReact(domNode.childNodes as DOMNode[])}
+                  {domToReact(domNode.childNodes as DOMNode[], options)}
                 </Link>
               );
             }
             return (
               <Link href={pathName}>
-                {domToReact(domNode.childNodes as DOMNode[])}
+                {domToReact(domNode.childNodes as DOMNode[], options)}
               </Link>
             );
           }
@@ -247,7 +249,7 @@ const PageLayout: React.FC<PageLayoutProps> = async ({ page, backTo }) => {
           if (className?.includes('wp-block-toutefois-banner')) {
             return (
               <>
-                <div {...reactAttributes}>{domToReact(children)}</div>
+                <div {...reactAttributes}>{domToReact(children, options)}</div>
                 {template === 'template-banner.php' && (
                   <BackLink href={backTo} $template={template} />
                 )}

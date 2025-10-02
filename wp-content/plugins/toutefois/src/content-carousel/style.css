@@ -1,0 +1,288 @@
+/**
+ * Content Carousel Block Styles
+ * 
+ * These styles provide a fallback appearance that matches the React components
+ * when JavaScript is disabled or during initial page load.
+ */
+
+/* Main container */
+.toutefois-content-carousel-block {
+    margin-bottom: 32px;
+    width: 100%;
+}
+
+/* Header styles */
+.content-list-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.content-carousel-title {
+    font-size: 36px;
+    line-height: 47px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.content-carousel-description {
+    font-size: 18px;
+    line-height: 28px;
+    max-width: 800px;
+    margin: 0 auto 24px;
+    color: #2f2c58;
+}
+
+/* Carousel container */
+.content-carousel-swiper {
+    position: relative;
+    width: 100%;
+}
+
+.content-carousel-slides {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    width: 100%;
+    padding: 0 24px;
+}
+
+/* Card styles */
+.content-card-slide {
+    width: 100%;
+}
+
+.content-card-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+    background-color: #fff;
+}
+
+.content-card-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.content-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Card cover */
+.content-card-cover {
+    position: relative;
+    background-color: #2f2c58;
+    aspect-ratio: 310/221;
+    overflow: hidden;
+}
+
+.content-card-image {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+/* Card content - Project style */
+.project-card .content-card-content {
+    background-color: white;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+}
+
+/* Diagonal cut for project card */
+.project-card .content-card-content:before {
+    content: '';
+    position: absolute;
+    top: -79px;
+    left: 1px;
+    width: 100%;
+    height: 80px;
+    background-color: white;
+    clip-path: polygon(100% 0, 100% 100%, 15% 99%);
+    pointer-events: none;
+}
+
+.project-card .content-card-content:after {
+    content: '';
+    position: absolute;
+    top: -79px;
+    left: -1px;
+    width: 100%;
+    height: 80px;
+    background-color: white;
+    clip-path: polygon(59% 100%, 0 34%, 0 100%);
+    pointer-events: none;
+}
+
+.project-card .content-body-content {
+    margin-top: -30px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Card content - Post/News style */
+.news-card .content-card-content,
+.facebook-card .content-card-content {
+    background-color: white;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 24px;
+    height: 130px;
+}
+
+/* Content body styles */
+.content-body-content {
+    height: fit-content;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.content-body-heading {
+    text-align: right;
+    color: #862331;
+    padding: 4px 16px 16px;
+}
+
+.content-body-heading h3 {
+    margin: 0 0 8px 0;
+    font-size: 22px;
+    line-height: 31px;
+    /* Line clamp to match React */
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-height: 31px; /* fallback for non-webkit browsers */
+}
+
+.content-card-date {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    color: #6b1e2c;
+}
+
+.content-body-description {
+    padding: 16px;
+    border-top: 1px solid #b1b1b1;
+}
+
+.content-body-description p {
+    /* Line clamp to match React */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-height: 78px; /* fallback for non-webkit browsers - 3 lines * 26px line height */
+    margin: 0;
+}
+
+.news-card .content-body-content,
+.facebook-card .content-body-content {
+    text-align: left;
+}
+
+/* Button styles */
+.content-card-button {
+    align-self: center;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.btn {
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.btn-primary {
+    background: #e1a42b;
+    color: #2f2c58;
+}
+
+.btn-secondary {
+    background: #6b1e2c;
+    color: #f5f3ee;
+}
+
+.btn-tertiary {
+    background: #2f2c58;
+    color: #f5f3ee;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.btn-lg {
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+/* Navigation */
+.content-carousel-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.carousel-prev,
+.carousel-next {
+    background: #2f2c58;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.content-carousel-footer {
+    text-align: center;
+    margin-top: 32px;
+}
+
+/* Empty state */
+.content-carousel-empty {
+    text-align: center;
+    padding: 32px;
+    font-style: italic;
+    color: #6b1e2c;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+    .content-carousel-slides {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .content-carousel-slides {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

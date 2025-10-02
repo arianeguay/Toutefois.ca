@@ -8,6 +8,7 @@
   "icon": "slides",
   "description": "Displays a carousel of recent projects, news, or both.",
   "editorScript": "file:./index.js",
+  "style": "file:./style.css",
   "render": "file:./render.php",
   "attributes": {
     "contentType": {

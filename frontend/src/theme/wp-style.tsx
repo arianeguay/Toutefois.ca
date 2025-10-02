@@ -10,6 +10,12 @@ export const WordpressStyling = css`
     ${createFontStyleCSS('body')}
   }
 
+  .wp-block {
+    &:where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+      ${ContainerContentStyling}
+    }
+  }
+
   /* Zeffy Block (WP) */
   .wp-block-toutefois-zeffy {
     .toutefois-zeffy__frame {
