@@ -1,6 +1,35 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 
+/**
+ * Collect all image URLs from a Facebook post payload (full_picture, attachment media, subattachments)
+ * @param array $fb
+ * @return string[]
+ */
+function toutefois_fb_collect_image_urls($fb) {
+    $urls = array();
+    if (!empty($fb['full_picture']) && is_string($fb['full_picture'])) {
+        $urls[] = $fb['full_picture'];
+    }
+    if (!empty($fb['attachments']['data']) && is_array($fb['attachments']['data'])) {
+        foreach ($fb['attachments']['data'] as $att) {
+            if (!empty($att['media']['image']['src'])) {
+                $urls[] = $att['media']['image']['src'];
+            }
+            if (!empty($att['subattachments']['data']) && is_array($att['subattachments']['data'])) {
+                foreach ($att['subattachments']['data'] as $sub) {
+                    if (!empty($sub['media']['image']['src'])) {
+                        $urls[] = $sub['media']['image']['src'];
+                    }
+                }
+            }
+        }
+    }
+    // De-duplicate
+    $urls = array_values(array_unique(array_map('strval', $urls)));
+    return $urls;
+}
+
 function toutefois_fb_fetch_url($url) {
     $response = wp_remote_get($url, array('timeout' => 25));
     if (is_wp_error($response)) return array('data' => array());
@@ -230,7 +259,13 @@ function toutefois_fb_fetch_feed($args = array()) {
     $args = wp_parse_args($args, $defaults);
 
     $fields = implode(',', array(
-        'permalink_url', 'full_picture', 'height', 'message', 'created_time', 'attachments{title,url,type,media_type}'
+        'permalink_url',
+        'full_picture',
+        'height',
+        'message',
+        'created_time',
+        // Request media image sources for primary and subattachments to support multi-image posts
+        'attachments{title,url,type,media_type,media{image{src}},subattachments{media{image{src}}}}'
     ));
     $params = array('fields' => $fields, 'limit' => (int)$args['limit'], 'access_token' => $token);
     if (!empty($args['after'])) $params['after'] = $args['after'];
@@ -260,7 +295,19 @@ function toutefois_fb_passes_filters($post) {
 
     if ($exclude_events && ($attachment_type === 'event' || strpos($permalink, '/events/') !== false)) return false;
     if ($exclude_reels && strpos($permalink, '/reel/') !== false) return false;
-    if ($require_image && empty($picture)) return false;
+    // Determine if there is any image available (primary, media image, or subattachments images)
+    $has_any_image = !empty($picture);
+    if (!$has_any_image && !empty($attachments)) {
+        foreach ($attachments as $att) {
+            if (!empty($att['media']['image']['src'])) { $has_any_image = true; break; }
+            if (!empty($att['subattachments']['data']) && is_array($att['subattachments']['data'])) {
+                foreach ($att['subattachments']['data'] as $sub) {
+                    if (!empty($sub['media']['image']['src'])) { $has_any_image = true; break 2; }
+                }
+            }
+        }
+    }
+    if ($require_image && !$has_any_image) return false;
 
     if (!empty($exclude_keywords)) {
         $msg = strtolower((string)($post['message'] ?? ''));
@@ -307,12 +354,29 @@ function toutefois_fb_upsert_wp_post($fb) {
     if (!empty($fb['permalink_url'])) update_post_meta($post_id, '_fb_permalink', esc_url_raw($fb['permalink_url']));
 
     // Featured image from full_picture
-    if (!empty($fb['full_picture'])) {
+    // Sideload images (featured + gallery)
+    $image_urls = toutefois_fb_collect_image_urls($fb);
+    $gallery_ids = array();
+    if (!empty($image_urls)) {
         require_once ABSPATH . 'wp-admin/includes/image.php';
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/media.php';
-        $media_id = media_sideload_image($fb['full_picture'], (int)$post_id, $title, 'id');
-        if (!is_wp_error($media_id)) set_post_thumbnail((int)$post_id, (int)$media_id);
+        foreach ($image_urls as $idx => $imgUrl) {
+            $mid = media_sideload_image($imgUrl, (int)$post_id, $title, 'id');
+            if (!is_wp_error($mid) && $mid) {
+                $gallery_ids[] = (int)$mid;
+                if ($idx === 0) {
+                    set_post_thumbnail((int)$post_id, (int)$mid);
+                }
+            }
+        }
+        if (!empty($gallery_ids)) {
+            // Append a gallery to the content using the classic shortcode for broad compatibility
+            $content .= '\n\n' . '[gallery ids="' . implode(',', $gallery_ids) . '"]';
+            // Update the post content with gallery appended
+            wp_update_post(array('ID' => (int)$post_id, 'post_content' => $content));
+            update_post_meta((int)$post_id, '_fb_gallery_ids', $gallery_ids);
+        }
     }
 }
 
