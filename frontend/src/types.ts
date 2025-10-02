@@ -47,6 +47,7 @@ export interface WordpressPage {
   };
   meta?: {
     main_color?: string;
+    preview_image_url?: string;
   };
   isMainProject?: boolean;
 }
@@ -136,6 +137,8 @@ export interface WordpressProjectFull {
     _projet_lien: string;
     _projet_is_featured: boolean;
     _main_project_id: number;
+    main_color: string;
+    preview_image_url: string;
   };
 }
 

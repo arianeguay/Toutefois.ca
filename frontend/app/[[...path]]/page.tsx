@@ -246,6 +246,14 @@ export default async function Page({
             rawIsMain === '1' ||
             rawIsMain === 1 ||
             rawIsMain === 'true';
+          const mainColor =
+            project?.meta?._projet_main_color ??
+            project?._projet_main_color ??
+            project?.toutefois_meta?._projet_main_color;
+          const previewImage =
+            project?.meta?._projet_preview_image ??
+            project?._projet_preview_image ??
+            project?.toutefois_meta?._projet_preview_image;
 
           console.log(project);
           // Format the project data to match WordpressPage structure expected by PageLayout
@@ -258,7 +266,10 @@ export default async function Page({
             slug: project.slug || '',
             template: project.template,
             // Include all original project data for custom components to use
-            meta: project.meta || {},
+            meta: {
+              main_color: mainColor,
+              preview_image_url: previewImage,
+            },
             thumbnail: project.featured_image_url || '',
             isMainProject,
           };

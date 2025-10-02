@@ -125,16 +125,18 @@ const ContentCarousel: React.FC<ContentCarouselProps> = ({
             </SwiperSlide>
           ))}
         </Swiper>
-        {viewAllUrl && (
-          <Button
-            variant="primary"
-            href={viewAllUrl}
-            size="lg"
-            style={{ marginBlockStart: theme.spacing.xl }}
-          >
-            {viewAllText}
-          </Button>
-        )}
+        {!!viewAllUrl?.length &&
+          viewAllUrl !== '/' &&
+          !!viewAllText?.length && (
+            <Button
+              variant="primary"
+              href={viewAllUrl}
+              size="lg"
+              style={{ marginBlockStart: theme.spacing.xl }}
+            >
+              {viewAllText}
+            </Button>
+          )}
       </ContentListContainer>
     </>
   );

@@ -114,8 +114,9 @@ function special_projects_menu()
         $preview_image_url = '';
 
         // If menu item points to a page, fetch its meta
-        if ($item->object === 'page' && !empty($item->object_id)) {
+        if (!empty($item->object_id)) {
             $page_id = intval($item->object_id);
+
             $main_color = get_post_meta($page_id, 'main_color', true);
             $preview_id = intval(get_post_meta($page_id, 'preview_image_id', true));
             if ($preview_id) {
