@@ -34,70 +34,37 @@ if ($content_type === 'news' || $content_type === 'mixed') {
     $items = array_merge($items, $news);
 }
 
-// Sort by rule: end date desc > start date desc > generic date desc
+// Sort by date
 usort($items, function ($a, $b) {
-    $a_has_end = !empty($a['projet_date_fin']);
-    $b_has_end = !empty($b['projet_date_fin']);
-    if ($a_has_end !== $b_has_end) return $b_has_end <=> $a_has_end;
-    if ($a_has_end && $b_has_end) {
-        return strtotime($b['projet_date_fin']) <=> strtotime($a['projet_date_fin']);
-    }
-    $a_has_start = !empty($a['projet_date_debut']);
-    $b_has_start = !empty($b['projet_date_debut']);
-    if ($a_has_start !== $b_has_start) return $b_has_start <=> $a_has_start;
-    if ($a_has_start && $b_has_start) {
-        return strtotime($b['projet_date_debut']) <=> strtotime($a['projet_date_debut']);
-    }
-    $da = isset($a['date']) ? strtotime($a['date']) : 0;
-    $db = isset($b['date']) ? strtotime($b['date']) : 0;
-    return $db <=> $da;
+    $date_a = isset($a['date']) ? strtotime($a['date']) : 0;
+    $date_b = isset($b['date']) ? strtotime($b['date']) : 0;
+    return $date_b - $date_a;
 });
 
 // Apply limit
 $items = array_slice($items, 0, $limit);
 
-/**
- * Format a date string to match dayjs format in React
- */
-if (!function_exists('toutefois_format_date_for_react')) {
-    function toutefois_format_date_for_react($date_string) {
-        if (empty($date_string)) return '';
-        $timestamp = strtotime($date_string);
-        if (!$timestamp) return '';
-        
-        // Format as "D MMMM YYYY" to match React's dayjs locale('fr') format
-        // Use French month names
-        $months = array(
-            'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-            'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
-        );
-        $day = date('j', $timestamp);
-        $month = $months[date('n', $timestamp) - 1];
-        $year = date('Y', $timestamp);
-        
-        return $day . ' ' . $month . ' ' . $year;
-    }
-}
 
 /**
  * Determine content type similar to React component
  */
 if (!function_exists('toutefois_get_item_type')) {
-    function toutefois_get_item_type($item, $content_type) {
+    function toutefois_get_item_type($item, $content_type)
+    {
         if (isset($item['type']) && $item['type'] === 'facebook') {
             return 'facebook';
         }
-        
+
         // If specific content type is set
         if ($content_type === 'project' || $content_type === 'news') {
             return $content_type;
         }
-        
+
         // For mixed content
         if (isset($item['type']) && $item['type'] === 'wordpress') {
             return 'news';
         }
-        
+
         // Default to project
         return 'project';
     }
@@ -122,22 +89,22 @@ if (!empty($items)) :
             data-no-content-text="<?php echo esc_attr($no_content_text); ?>"
             data-news-source="<?php echo esc_attr($news_source); ?>"
             data-facebook-page-id="<?php echo esc_attr($facebook_page_id); ?>">
-            
+
             <!-- Fallback content matching React structure -->
             <div class="content-list-header">
                 <?php if (!empty($title)) : ?>
-                <h2 class="content-carousel-title"><?php echo esc_html($title); ?></h2>
+                    <h2 class="content-carousel-title"><?php echo esc_html($title); ?></h2>
                 <?php endif; ?>
-                
+
                 <?php if (!empty($description)) : ?>
-                <p class="content-carousel-description"><?php echo esc_html($description); ?></p>
+                    <p class="content-carousel-description"><?php echo esc_html($description); ?></p>
                 <?php endif; ?>
             </div>
-            
+
             <!-- Swiper-like container -->
             <div class="content-carousel-swiper">
                 <div class="content-carousel-slides">
-                    <?php foreach ($items as $item) : 
+                    <?php foreach ($items as $item) :
                         $item_type = toutefois_get_item_type($item, $content_type);
                         // Determine displayed date(s): prefer project-specific start/end when present
                         $display_date = '';
@@ -154,7 +121,7 @@ if (!empty($items)) :
                         }
                         $permalink = '';
                         $permalink_type = 'internal';
-                        
+
                         if ($item_type === 'facebook') {
                             $permalink = isset($item['permalink_url']) ? $item['permalink_url'] : '';
                             $permalink_type = 'external';
@@ -164,90 +131,89 @@ if (!empty($items)) :
                             $permalink = '/actualites/' . (isset($item['slug']) ? $item['slug'] : '');
                         }
                     ?>
-                    <div class="content-card-slide">
-                        <!-- Card container based on type -->
-                        <div class="content-card-container <?php echo esc_attr($item_type); ?>-card">
-                            <!-- Link wrapper -->
-                            <<?php echo $permalink_type === 'external' ? 'a href="'.esc_url($permalink).'" target="_blank" rel="noopener noreferrer"' : 'a href="'.esc_url($permalink).'"'; ?> class="content-card-link">
-                                <!-- Card Cover -->
-                                <div class="content-card-cover">
-                                    <?php 
+                        <div class="content-card-slide">
+                            <!-- Card container based on type -->
+                            <div class="content-card-container <?php echo esc_attr($item_type); ?>-card">
+                                <!-- Link wrapper -->
+                                <<?php echo $permalink_type === 'external' ? 'a href="' . esc_url($permalink) . '" target="_blank" rel="noopener noreferrer"' : 'a href="' . esc_url($permalink) . '"'; ?> class="content-card-link">
+                                    <!-- Card Cover -->
+                                    <div class="content-card-cover">
+                                        <?php
                                         $image_url = '';
                                         if (isset($item['featured_image_url']) && !empty($item['featured_image_url'])) {
                                             $image_url = $item['featured_image_url'];
                                         } elseif (isset($item['picture']) && !empty($item['picture'])) {
                                             $image_url = $item['picture'];
                                         }
-                                        if (!empty($image_url)) : 
-                                    ?>
-                                    <img 
-                                        class="content-card-image" 
-                                        src="<?php echo esc_url($image_url); ?>" 
-                                        alt="<?php echo esc_attr(isset($item['title']) ? $item['title'] : (isset($item['message']) ? $item['message'] : '')); ?>"
-                                        onerror="this.src='/Logo.png'; this.style.objectFit='contain';"
-                                    >
-                                    <?php endif; ?>
-                                </div>
-                                
-                                <!-- Card Content -->
-                                <div class="content-card-content <?php echo esc_attr($item_type); ?>-content">
-                                    <div class="content-body-content">
-                                        <div class="content-body-heading">
-                                            <?php if (!empty($item_date)) : ?>
-                                            <p class="content-card-date"><?php echo esc_html($item_date); ?></p>
-                                            <?php endif; ?>
-                                            
-                                            <h3 class="content-card-title"><?php 
-                                                if (isset($item['title'])) {
-                                                    echo esc_html($item['title']); 
-                                                } elseif (isset($item['message'])) {
-                                                    echo esc_html($item['message']);
-                                                } else {
-                                                    echo '';
-                                                }
-                                            ?></h3>
-                                        </div>
-                                        
-                                        <?php 
+                                        if (!empty($image_url)) :
+                                        ?>
+                                            <img
+                                                class="content-card-image"
+                                                src="<?php echo esc_url($image_url); ?>"
+                                                alt="<?php echo esc_attr(isset($item['title']) ? $item['title'] : (isset($item['message']) ? $item['message'] : '')); ?>"
+                                                onerror="this.src='/Logo.png'; this.style.objectFit='contain';">
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <!-- Card Content -->
+                                    <div class="content-card-content <?php echo esc_attr($item_type); ?>-content">
+                                        <div class="content-body-content">
+                                            <div class="content-body-heading">
+                                                <?php if (!empty($item_date)) : ?>
+                                                    <p class="content-card-date"><?php echo esc_html($item_date); ?></p>
+                                                <?php endif; ?>
+
+                                                <h3 class="content-card-title"><?php
+                                                                                if (isset($item['title'])) {
+                                                                                    echo esc_html($item['title']);
+                                                                                } elseif (isset($item['message'])) {
+                                                                                    echo esc_html($item['message']);
+                                                                                } else {
+                                                                                    echo '';
+                                                                                }
+                                                                                ?></h3>
+                                            </div>
+
+                                            <?php
                                             $description = '';
                                             if (isset($item['excerpt']) && !empty($item['excerpt'])) {
                                                 $description = $item['excerpt'];
                                             } elseif (isset($item['message']) && !empty($item['message'])) {
                                                 $description = $item['message'];
                                             }
-                                            if (!empty($description)) : 
-                                        ?>
-                                        <div class="content-body-description">
-                                            <p><?php echo esc_html($description); ?></p>
+                                            if (!empty($description)) :
+                                            ?>
+                                                <div class="content-body-description">
+                                                    <p><?php echo esc_html($description); ?></p>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
-                                        <?php endif; ?>
+
+                                        <!-- Card action button -->
+                                        <div class="content-card-button">
+                                            <button class="btn btn-tertiary btn-sm">En savoir plus</button>
+                                        </div>
                                     </div>
-                                    
-                                    <!-- Card action button -->
-                                    <div class="content-card-button">
-                                        <button class="btn btn-tertiary btn-sm">En savoir plus</button>
-                                    </div>
-                                </div>
-                            </a>
+                                    </a>
+                            </div>
                         </div>
-                    </div>
                     <?php endforeach; ?>
                 </div>
-                
+
                 <!-- Navigation buttons -->
                 <div class="content-carousel-navigation">
                     <button class="carousel-prev">Précédent</button>
                     <button class="carousel-next">Suivant</button>
                 </div>
             </div>
-            
+
             <!-- View all button -->
             <?php if (!empty($view_all_url)) : ?>
-            <div class="content-carousel-footer">
-                <a href="<?php echo esc_url($view_all_url); ?>" class="btn btn-primary btn-lg">
-                    <?php echo esc_html(empty($view_all_text) ? 'Voir tout' : $view_all_text); ?>
-                </a>
-            </div>
+                <div class="content-carousel-footer">
+                    <a href="<?php echo esc_url($view_all_url); ?>" class="btn btn-primary btn-lg">
+                        <?php echo esc_html(empty($view_all_text) ? 'Voir tout' : $view_all_text); ?>
+                    </a>
+                </div>
             <?php endif; ?>
         </div>
     </div>
