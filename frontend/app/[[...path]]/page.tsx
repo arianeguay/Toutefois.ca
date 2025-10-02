@@ -233,18 +233,7 @@ export default async function Page({
       1,
       parseInt(String(qPage || '1'), 10) || 1,
     );
-    // Facebook cursors
-    const fbAfterRaw = searchParams?.fb_after;
-    const fbBeforeRaw = searchParams?.fb_before;
-    const fbAfter = Array.isArray(fbAfterRaw) ? fbAfterRaw[0] : fbAfterRaw;
-    const fbBefore = Array.isArray(fbBeforeRaw) ? fbBeforeRaw[0] : fbBeforeRaw;
-    // Facebook page index for UI numbering
-    const fbPageRaw = searchParams?.fb_page ?? '1';
-    const fbPage = Array.isArray(fbPageRaw) ? fbPageRaw[0] : fbPageRaw;
-    const archiveFbPageNumber = Math.max(
-      1,
-      parseInt(String(fbPage || '1'), 10) || 1,
-    );
+
     // Construct the slug from the path segments
     const slug = params.path.join('/');
 
@@ -442,11 +431,6 @@ export default async function Page({
       <PageLayout
         page={pageData}
         archivePageNumber={isArchivesListing ? archivePageNumber : undefined}
-        archiveFbAfter={isArchivesListing ? fbAfter : undefined}
-        archiveFbBefore={isArchivesListing ? fbBefore : undefined}
-        archiveFbPageNumber={
-          isArchivesListing ? archiveFbPageNumber : undefined
-        }
       />
     );
   } catch (error) {

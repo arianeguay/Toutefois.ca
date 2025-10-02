@@ -25,11 +25,6 @@ interface PageLayoutProps {
   backTo?: string;
   /** If provided, used for rendering archives pagination */
   archivePageNumber?: number;
-  /** Facebook archive cursors */
-  archiveFbAfter?: string;
-  archiveFbBefore?: string;
-  /** Facebook archive current page number (UI only) */
-  archiveFbPageNumber?: number;
 }
 
 const BackLink = (props: { href?: string; $template?: string }) => {
@@ -48,9 +43,6 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
   page,
   backTo,
   archivePageNumber,
-  archiveFbAfter,
-  archiveFbBefore,
-  archiveFbPageNumber,
 }) => {
   // Treat the link as a string to robustly get the path, avoiding errors if it's not a full URL.
   const pathname = page.link.replace(/^(?:https?:\/\/)?[^/]+\/?/, '');
