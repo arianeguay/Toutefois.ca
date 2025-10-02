@@ -44,6 +44,39 @@ usort($items, function ($a, $b) {
 // Apply limit
 $items = array_slice($items, 0, $limit);
 
+/**
+ * Format a date string to match dayjs format in React
+ */
+if (!function_exists('toutefois_format_date_for_react')) {
+    function toutefois_format_date_for_react($date_string)
+    {
+        if (empty($date_string)) return '';
+        $timestamp = strtotime($date_string);
+        if (!$timestamp) return '';
+
+        // Format as "D MMMM YYYY" to match React's dayjs locale('fr') format
+        // Use French month names
+        $months = array(
+            'janvier',
+            'février',
+            'mars',
+            'avril',
+            'mai',
+            'juin',
+            'juillet',
+            'août',
+            'septembre',
+            'octobre',
+            'novembre',
+            'décembre'
+        );
+        $day = date('j', $timestamp);
+        $month = $months[date('n', $timestamp) - 1];
+        $year = date('Y', $timestamp);
+
+        return $day . ' ' . $month . ' ' . $year;
+    }
+}
 
 /**
  * Determine content type similar to React component
@@ -106,19 +139,7 @@ if (!empty($items)) :
                 <div class="content-carousel-slides">
                     <?php foreach ($items as $item) :
                         $item_type = toutefois_get_item_type($item, $content_type);
-                        // Determine displayed date(s): prefer project-specific start/end when present
-                        $display_date = '';
-                        $start_raw = isset($item['projet_date_debut']) ? $item['projet_date_debut'] : '';
-                        $end_raw   = isset($item['projet_date_fin']) ? $item['projet_date_fin'] : '';
-                        if (!empty($start_raw) && !empty($end_raw)) {
-                            $display_date = toutefois_format_date_for_react($start_raw) . ' – ' . toutefois_format_date_for_react($end_raw);
-                        } elseif (!empty($start_raw)) {
-                            $display_date = toutefois_format_date_for_react($start_raw);
-                        } elseif (!empty($end_raw)) {
-                            $display_date = toutefois_format_date_for_react($end_raw);
-                        } else {
-                            $display_date = toutefois_format_date_for_react(isset($item['date']) ? $item['date'] : '');
-                        }
+                        $item_date = toutefois_format_date_for_react(isset($item['date']) ? $item['date'] : '');
                         $permalink = '';
                         $permalink_type = 'internal';
 

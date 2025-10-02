@@ -1,7 +1,6 @@
 import api from '@/api';
 import ClientBlock from '@/components/blocks/ClientBlock';
 import CollaboratorsBlock from '@/components/blocks/CollaboratorsBlock';
-import ContentCarousel from '@/components/blocks/ContentCarousel';
 import Archive from '@/components/blocks/LatestPostsGrid/Archive';
 import FacebookArchive from '@/components/blocks/LatestPostsGrid/FacebookArchive';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
@@ -222,116 +221,6 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
               mainProjectId={page.isMainProject ? page.id : undefined}
               {...JSON.parse(data)}
             />
-          );
-        }
-        if (className?.includes('wp-block-toutefois-content-carousel')) {
-          // Find the inner div that contains all our data attributes
-          // Cast domNode.children to Element[] to handle proper typing
-          const children = domNode.children as Element[];
-          const contentCarouselDiv = children?.find(
-            (child) =>
-              child.type === 'tag' &&
-              child.name === 'div' &&
-              child.attribs?.class?.includes('content-carousel-block'),
-          );
-
-          if (contentCarouselDiv && 'attribs' in contentCarouselDiv) {
-            const {
-              'data-content-type': contentType = 'mixed',
-              'data-title': title,
-              'data-description': description,
-              'data-view-all-url': viewAllUrl,
-              'data-view-all-text': viewAllText,
-              'data-limit': limitStr,
-              'data-news-source': newsSource,
-              'data-facebook-page-id': facebookPageId,
-            } = contentCarouselDiv.attribs;
-
-            const limit = limitStr ? parseInt(limitStr, 10) : 10;
-
-            // Extract the unique ID from the carousel div's ID
-            const uniqueId =
-              contentCarouselDiv.attribs?.id?.replace(
-                'content-carousel-',
-                '',
-              ) || Math.random().toString(36).substring(2, 9);
-
-            return (
-              <ContentCarousel
-                key={`content-carousel-${uniqueId}`}
-                contentType={contentType as 'project' | 'news' | 'mixed'}
-                title={title}
-                description={description}
-                viewAllUrl={viewAllUrl}
-                viewAllText={viewAllText}
-                limit={limit}
-                mainProjectId={page.isMainProject ? page.id : undefined}
-                newsSource={
-                  (newsSource as 'wp' | 'facebook' | 'both') || 'both'
-                }
-                facebookPageId={facebookPageId}
-              />
-            );
-          }
-
-          if (className?.includes('wp-block-toutefois-banner')) {
-            return (
-              <>
-                <div {...reactAttributes}>{domToReact(children, options)}</div>
-                <BackLink href={backTo} $template={template} />
-              </>
-            );
-          }
-
-          // Handle projects category rows for the projects template
-          if (className?.includes('wp-block-toutefois-projects-category-row')) {
-            // Extract category ID from data attribute if available
-            const categoryId = reactAttributes['data-category'] || '';
-            const title = reactAttributes['data-title'] || '';
-
-            return (
-              <ProjectsRow
-                key={`projects-row-${categoryId || Math.random().toString(36).substring(2, 9)}`}
-                categoryId={categoryId}
-                title={title}
-              />
-            );
-          }
-
-          // Handle collaborators block for the collaborators template
-          if (className?.includes('toutefois-collaborators-block-react-root')) {
-            const dataProps = reactAttributes['data-props'] || '{}';
-            let props: Record<string, any> = {
-              layout: 'vertical',
-              memberStatus: 'all',
-            };
-
-            try {
-              props = {
-                ...props,
-                ...JSON.parse(dataProps),
-              };
-            } catch (e) {
-              console.error('Failed to parse collaborators block props:', e);
-            }
-
-            return (
-              <CollaboratorsBlock
-                layout={props.layout as 'vertical' | 'horizontal'}
-                collaborators={[]} // Will be fetched inside the component using the memberStatus and mainProjectId
-                memberStatus={
-                  props.memberStatus as 'all' | 'members' | 'non-members'
-                }
-                noCollaboratorsText={props.noCollaboratorsText}
-                mainProjectId={page.isMainProject ? page.id : undefined}
-              />
-            );
-          }
-
-          // Fallback if the inner div is not found
-          const fallbackId = Math.random().toString(36).substring(2, 9);
-          return (
-            <ContentCarousel key={`content-carousel-fallback-${fallbackId}`} />
           );
         }
       }
