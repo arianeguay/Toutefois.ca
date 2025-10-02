@@ -73,6 +73,18 @@ const PageLayout: React.FC<PageLayoutProps> = async ({
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.attribs) {
+        if (domNode.name === 'p') {
+          const hasChild = domNode.children.length > 0;
+
+          if (!hasChild) return <></>;
+          const reactAttributes = domNode.attribs;
+          delete reactAttributes.style;
+          return (
+            <p {...reactAttributes}>
+              {domToReact(domNode.childNodes as DOMNode[])}
+            </p>
+          );
+        }
         if (domNode.name === 'a') {
           const adminUrl =
             process.env.NEXT_PUBLIC_ADMIN_URL ?? 'http://admin.toutefois.ca';

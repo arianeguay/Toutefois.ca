@@ -10,6 +10,20 @@ export const WordpressStyling = css`
     ${createFontStyleCSS('body')}
   }
 
+  /* Zeffy Block (WP) */
+  .wp-block-toutefois-zeffy {
+    ${ContainerContentStyling}
+    .toutefois-zeffy__frame {
+      width: 100%;
+      min-height: 400px;
+      iframe {
+        display: block;
+        width: 100%;
+        border: 0;
+      }
+    }
+  }
+
   /* Projects List (WP) */
   .wp-block-toutefois-projects-list {
     ${ContainerContentStyling}
