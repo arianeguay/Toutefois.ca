@@ -55,6 +55,7 @@ function prepare_collaborator()
     $post_meta          = get_post_meta($post_id);
     $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
     $is_member = get_post_meta($post_id, '_collaborateur_is_member', true);
+    $is_hidden = get_post_meta($post_id, '_collaborateur_is_hidden', true);
     $slug = get_post_field('post_name', $post_id);
     $position = get_post_meta($post_id, '_collaborateur_poste', true);
     $content = apply_filters('the_content', get_the_content());
@@ -70,6 +71,7 @@ function prepare_collaborator()
         'position'           => $position,
         'slug'               => $slug,
         'is_member'          => $is_member,
+        'is_hidden'          => (bool) $is_hidden,
     );
 }
 
@@ -146,6 +148,19 @@ function get_collaborators(WP_REST_Request $request)
                 'compare' => '=',
             );
         }
+    }
+
+    // Exclude hidden collaborators by default (unless main_project filter is used)
+    if (!$main_param) {
+        if (!isset($args['meta_query'])) {
+            $args['meta_query'] = array();
+        }
+        // Use '!=' so posts with value '1' are excluded, and posts without the key are included.
+        $args['meta_query'][] = array(
+            'key'     => '_collaborateur_is_hidden',
+            'value'   => '1',
+            'compare' => '!=',
+        );
     }
 
     $query = new WP_Query($args);

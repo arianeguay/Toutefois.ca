@@ -45,6 +45,28 @@ function collaborateurs_cpt_and_meta_init()
         'single' => true,
         'type' => 'boolean',
     ]);
+
+    // New: hidden flag to allow collaborators to be visible only in the main project context
+    register_post_meta('collaborateur', '_collaborateur_is_hidden', [
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'boolean',
+    ]);
+
+    // Expose consolidated meta similar to projets => 'toutefois_meta'
+    register_rest_field('collaborateur', 'toutefois_meta', [
+        'get_callback' => function ($obj) {
+            $post_id = (int) $obj['id'];
+            return [
+                '_collaborateur_poste'      => (string) get_post_meta($post_id, '_collaborateur_poste', true),
+                '_collaborateur_is_member'  => (bool) get_post_meta($post_id, '_collaborateur_is_member', true),
+                '_collaborateur_is_hidden'  => (bool) get_post_meta($post_id, '_collaborateur_is_hidden', true),
+                'featured_image_url'        => get_the_post_thumbnail_url($post_id, 'full'),
+                'featured_image_thumbnail'  => get_the_post_thumbnail_url($post_id, 'thumbnail'),
+            ];
+        },
+        'schema' => null,
+    ]);
 }
 add_action('init', 'collaborateurs_cpt_and_meta_init', 0);
 
@@ -69,9 +91,11 @@ function collaborateurs_meta_box_callback($post)
 
     $poste = get_post_meta($post->ID, '_collaborateur_poste', true);
     $is_member = get_post_meta($post->ID, '_collaborateur_is_member', true);
+    $is_hidden = get_post_meta($post->ID, '_collaborateur_is_hidden', true);
 
     echo '<p><label for="collaborateur_poste"><strong>Poste :</strong></label><br/><input type="text" id="collaborateur_poste" name="collaborateur_poste" value="' . esc_attr($poste) . '" size="25" /></p>';
     echo "<p><label for=\"collaborateur_is_member\"><input type=\"checkbox\" id=\"collaborateur_is_member\" name=\"collaborateur_is_member\" value=\"1\" " . checked($is_member, 1, false) . " /> Membre de l'équipe</label></p>";
+    echo "<p><label for=\"collaborateur_is_hidden\"><input type=\"checkbox\" id=\"collaborateur_is_hidden\" name=\"collaborateur_is_hidden\" value=\"1\" " . checked($is_hidden, 1, false) . " /> Masquer ce collaborateur (visible seulement dans le projet principal)</label></p>";
     echo "<p><em>Pour l'image du collaborateur, veuillez utiliser l'option \"Image à la une\" sur le côté droit de l'éditeur.</em></p>";
 }
 
@@ -94,5 +118,9 @@ function collaborateurs_save_meta_box_data($post_id)
 
     $is_member = isset($_POST['collaborateur_is_member']) ? true : false;
     update_post_meta($post_id, '_collaborateur_is_member', $is_member);
+
+    // Save hidden flag
+    $is_hidden = isset($_POST['collaborateur_is_hidden']) ? true : false;
+    update_post_meta($post_id, '_collaborateur_is_hidden', $is_hidden);
 }
 add_action('save_post_collaborateur', 'collaborateurs_save_meta_box_data');

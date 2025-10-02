@@ -33,7 +33,7 @@ const SpecialProjectMenuItem: React.FC<WordpressMenuItem> = (item) => {
         }
         $previewImage={pathName !== '/' ? previewImage : '/LogoSimple.png'}
       >
-        {pathName !== '/' ? name : 'Théâtre de Toutefois'}
+        {pathName !== '/' ? name : 'Toutefois'}
       </SpecialProjectContainer>
     </SpecialProjectLink>
   );
