@@ -40,7 +40,7 @@ export const resetStyles = css`
   /* Remove list styles on ul, ol elements */
   ul,
   ol {
-    list-style: none;
+    list-style: disc;
     margin: 0;
     padding: 0;
   }
