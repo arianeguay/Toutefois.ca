@@ -282,10 +282,8 @@ export const WordpressStyling = css`
   }
   h1 {
     margin-block-start: ${({ theme }) => theme.spacing.xxl}px;
+    margin-block-end: ${({ theme }) => theme.spacing.md}px;
 
-    &:not(:first-child) {
-      margin-block-end: ${({ theme }) => theme.spacing.xl}px;
-    }
     & + h2 {
       margin-block-start: 0;
     }
@@ -827,7 +825,7 @@ export const WordpressStyling = css`
     &[data-height] {
       height: var(--banner-height);
     }
-    
+
     /* Convertir les attributs de données en variable CSS */
     &[data-height][data-height-unit] {
       --banner-height: attr(data-height) attr(data-height-unit);

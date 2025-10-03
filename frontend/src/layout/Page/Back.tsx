@@ -3,12 +3,20 @@ import { BackToLink } from './styles';
 
 const BackLink = (props: { href?: string; $template?: string }) => {
   const { href, $template } = props;
-  if (!href) return null;
   return (
-    <BackToLink href={href} $template={$template} className="back-to">
-      <Typography variant="body" element="p">
-        Retour
-      </Typography>
+    <BackToLink href={href || '/'} $template={$template} className="back-to">
+      <span style={{ rotate: '-180deg', lineHeight: '1' }}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          width="24"
+          height="24"
+          viewBox="0 0 256 256"
+        >
+          <path d="M218.82812,130.82812l-72,72a3.99957,3.99957,0,0,1-5.65625-5.65625L206.34326,132H40a4,4,0,0,1,0-8H206.34326L141.17187,58.82812a3.99957,3.99957,0,0,1,5.65625-5.65625l72,72A3.99854,3.99854,0,0,1,218.82812,130.82812Z" />
+        </svg>
+      </span>
+      <Typography variant="body">Retour</Typography>
     </BackToLink>
   );
 };

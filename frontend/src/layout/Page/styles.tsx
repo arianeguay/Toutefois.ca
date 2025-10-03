@@ -9,7 +9,6 @@ interface PageContainerProps {
   $template?: string;
   $color?: string;
 }
-
 export const PageContainer = styled.div<PageContainerProps>`
   background-color: ${({ $color }) => $color || 'transparent'};
   width: 100%;
@@ -52,7 +51,7 @@ export const PageContainer = styled.div<PageContainerProps>`
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            
+
             .entry-content {
               max-width: 100%;
               padding: 0;
@@ -71,7 +70,6 @@ export const PageContainer = styled.div<PageContainerProps>`
 `;
 
 export const MainContent = styled.main`
-  width: 100%;
   flex: 1;
   position: relative;
   ${WordpressStyling}
@@ -104,11 +102,27 @@ export const BackToLink = styled(Link)<{ $template?: string }>`
     display: block;
     margin-block-start: 12px;
     width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     ${ContainerContentStyling}
 
     ${({ theme, $template }) =>
       $template === 'template-banner.php' ? LightLink(theme) : DarkLink(theme)}
- 
+
+    /* Arrow hover animation */
+    svg {
+      transition: transform 200ms ease;
+      transform-origin: left center;
+    }
+    p {
+      margin-block: 0;
+    }
+
+    &:hover svg {
+      transform: scaleX(1.35);
+    }
+
     @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
       display: none;
     }
