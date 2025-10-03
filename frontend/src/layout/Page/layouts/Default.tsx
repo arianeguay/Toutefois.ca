@@ -11,8 +11,9 @@ const DefaultPageLayout: React.FC<PageLayoutProps> = ({
   template,
   page,
   parentPageSlug,
+  pageNumber,
 }) => {
-  const options = getOptions(page);
+  const options = getOptions(page, pageNumber);
   return (
     <MainContent>
       {/* Show title on templates that need a prominent title */}

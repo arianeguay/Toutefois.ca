@@ -96,7 +96,7 @@ class Api {
   }
 
   async fetchPostBySlug(slug: string): Promise<WordpressPost[]> {
-    return this.fetchFromApi(`wp/v2/posts?slug=${slug}`);
+    return this.fetchFromApi(`wp/v2/posts?slug=${slug}&fields=*`);
   }
 
   async fetchPages(): Promise<WordpressPage[]> {

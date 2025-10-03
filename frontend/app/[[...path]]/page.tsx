@@ -303,6 +303,7 @@ export default async function Page({
         const post = Array.isArray(postData) ? postData[0] : postData;
 
         if (post?.id) {
+          console.log(post);
           // Format the post data to match WordpressPage structure expected by PageLayout
           const formattedPostPage = {
             id: post.id,

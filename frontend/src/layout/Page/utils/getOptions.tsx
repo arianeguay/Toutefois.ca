@@ -3,6 +3,7 @@ import ContentCarousel from '@/components/blocks/ContentCarousel';
 import FeaturedCarousel from '@/components/blocks/FeaturedCarousel';
 import Archive from '@/components/blocks/LatestPostsGrid/Archive';
 import ProjectsRow from '@/components/blocks/ProjectsRow';
+import Gallery, { type GalleryImage } from '@/components/Gallery';
 import { WordpressPage } from '@/types';
 import {
   DOMNode,
@@ -12,13 +13,27 @@ import {
 } from 'html-react-parser';
 import Link from 'next/link';
 
-const getOptions = (
-  page: WordpressPage,
-  backTo?: string,
-  archivePageNumber?: number,
-) => {
-  const template = page.template?.length ? page.template : 'template-title.php';
+// Walk a DOM subtree to extract all <img> nodes
+function collectImagesFromDom(
+  node: any,
+  acc: GalleryImage[] = [],
+): GalleryImage[] {
+  if (!node) return acc;
+  const nodes: any[] = Array.isArray(node) ? node : [node];
+  for (const n of nodes) {
+    if (!n) continue;
+    if ((n as any).type === 'tag' && (n as any).name === 'img') {
+      const a = (n as any).attribs || {};
+      if (a.src) acc.push({ src: a.src, alt: a.alt });
+    }
+    if ((n as any).children && (n as any).children.length) {
+      collectImagesFromDom((n as any).children, acc);
+    }
+  }
+  return acc;
+}
 
+const getOptions = (page: WordpressPage, archivePageNumber?: number) => {
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element) {
@@ -32,6 +47,21 @@ const getOptions = (
         if (className) {
           domNode.attribs.className = className;
           delete domNode.attribs.class;
+        }
+
+        // Render WP galleries via our Gallery component
+        if (
+          (className &&
+            (className.includes('wp-block-gallery') ||
+              className.split(' ').includes('gallery'))) ||
+          (name === 'ul' && className?.includes('blocks-gallery-grid'))
+        ) {
+          const images = collectImagesFromDom(children).filter(
+            (img) => !!img.src,
+          );
+          if (images.length > 0) {
+            return <Gallery images={images} />;
+          }
         }
 
         // Add missing alt attributes and loading attributes to images

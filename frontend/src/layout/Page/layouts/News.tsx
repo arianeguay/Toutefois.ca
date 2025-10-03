@@ -5,8 +5,12 @@ import { MainContent } from '../styles';
 import getOptions from '../utils/getOptions';
 import { PageLayoutProps } from './types';
 
-const NewsPageLayout: React.FC<PageLayoutProps> = ({ template, page }) => {
-  const options = getOptions(page);
+const NewsPageLayout: React.FC<PageLayoutProps> = ({
+  template,
+  page,
+  pageNumber,
+}) => {
+  const options = getOptions(page, pageNumber);
   return (
     <MainContent>
       {!!page.thumbnail && (

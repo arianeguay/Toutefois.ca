@@ -62,14 +62,6 @@ const PageLayout: React.FC<LayoutProps> = async ({
   // Get the mainColor from the header page or parent color
   const mainColor = headerPage.meta?.main_color || '';
 
-  // Determine if we should show the back link based on template
-  const showBackLink = (currentTemplate: string) => {
-    // Don't show back link on banner template - it's handled separately
-    if (currentTemplate === 'template-banner.php') return false;
-    // Show back link on all other templates if backTo is provided
-    return !!backTo;
-  };
-
   const LayoutComponent: React.FC<PageLayoutProps> =
     type === 'news' ? NewsPageLayout : DefaultPageLayout;
   return (
@@ -80,6 +72,7 @@ const PageLayout: React.FC<LayoutProps> = async ({
         page={page}
         template={page.template || ''}
         parentPageSlug={parentPageSlug}
+        pageNumber={archivePageNumber}
       />
     </ClientBlock>
   );
