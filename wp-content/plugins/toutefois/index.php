@@ -67,6 +67,68 @@ function toutefois_register_template_meta()
 }
 add_action('rest_api_init', 'toutefois_register_template_meta');
 
+// Register custom page meta: splashes (CSV string) and expose via REST
+function toutefois_register_splashes_meta() {
+    register_post_meta('page', 'splashes', array(
+        'show_in_rest' => array(
+            'schema' => array(
+                'type' => 'string', // stored as CSV string e.g. "Splash1,Splash2"
+            )
+        ),
+        'single' => true,
+        'type' => 'string',
+        'auth_callback' => function () {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
+add_action('init', 'toutefois_register_splashes_meta');
+
+// Add a meta box to choose background splashes for pages
+function toutefois_add_splashes_metabox() {
+    add_meta_box(
+        'toutefois_splashes',
+        __('Background Splashes', 'toutefois'),
+        'toutefois_render_splashes_metabox',
+        'page',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'toutefois_add_splashes_metabox');
+
+function toutefois_render_splashes_metabox($post) {
+    wp_nonce_field('toutefois_save_splashes', 'toutefois_splashes_nonce');
+    $value = get_post_meta($post->ID, 'splashes', true);
+    $selected = array_filter(array_map('trim', explode(',', (string)$value)));
+    $options = array('Splash1', 'Splash2', 'Splash3');
+    echo '<p>' . esc_html__('Select decorative background shapes to show on this page.', 'toutefois') . '</p>';
+    foreach ($options as $opt) {
+        $checked = in_array($opt, $selected, true) ? 'checked' : '';
+        echo '<label style="display:block;margin:.25rem 0;">';
+        echo '<input type="checkbox" name="toutefois_splashes[]" value="' . esc_attr($opt) . '" ' . $checked . ' /> ' . esc_html($opt);
+        echo '</label>';
+    }
+}
+
+function toutefois_save_splashes_metabox($post_id) {
+    if (!isset($_POST['toutefois_splashes_nonce']) || !wp_verify_nonce($_POST['toutefois_splashes_nonce'], 'toutefois_save_splashes')) {
+        return;
+    }
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    $splashes = isset($_POST['toutefois_splashes']) && is_array($_POST['toutefois_splashes']) ? array_map('sanitize_text_field', (array)$_POST['toutefois_splashes']) : array();
+    // Keep only known values
+    $allowed = array('Splash1', 'Splash2', 'Splash3');
+    $splashes = array_values(array_intersect($splashes, $allowed));
+    update_post_meta($post_id, 'splashes', implode(',', $splashes));
+}
+add_action('save_post_page', 'toutefois_save_splashes_metabox');
+
 
 // 8. Expose menu to REST API
 function get_top_nav_menu()

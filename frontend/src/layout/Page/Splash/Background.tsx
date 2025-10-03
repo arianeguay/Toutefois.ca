@@ -4,9 +4,9 @@ import Splash1 from './Splash1';
 import Splash2 from './Splash2';
 import Splash3 from './Splash3';
 
-type Splashes = 'Splash1' | 'Splash2' | 'Splash3';
+export type SplashName = 'Splash1' | 'Splash2' | 'Splash3';
 interface BackgroundProps {
-  items: Splashes[];
+  items: SplashName[];
   startingSide?: 'left' | 'right';
 }
 const Background: React.FC<BackgroundProps> = ({

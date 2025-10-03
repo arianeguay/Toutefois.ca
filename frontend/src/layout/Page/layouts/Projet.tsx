@@ -1,19 +1,17 @@
-import theme from '@/theme';
 import parse from 'html-react-parser';
 import { Suspense } from 'react';
-import BackLink from '../Back';
 import Background, { SplashName } from '../Splash/Background';
 import { MainContent } from '../styles';
 import getOptions from '../utils/getOptions';
 import { PageLayoutProps } from './types';
 
-const NewsPageLayout: React.FC<PageLayoutProps> = ({
+const ProjetPageLayout: React.FC<PageLayoutProps> = ({
   template,
   page,
   pageNumber,
 }) => {
   const options = getOptions(page, pageNumber);
-  const defaults: SplashName[] = ['Splash2'];
+  const defaults: SplashName[] = ['Splash3'];
   const metaSplashes = (page as any)?.meta?.splashes as string | undefined;
   const allowed: SplashName[] = ['Splash1', 'Splash2', 'Splash3'];
   const parsed = (metaSplashes || '')
@@ -24,10 +22,7 @@ const NewsPageLayout: React.FC<PageLayoutProps> = ({
   return (
     <>
       <Background items={items} />
-      <MainContent style={{ marginBlock: theme.spacing.xxl }}>
-        <div style={{ marginBlock: theme.spacing.md }} />
-        <BackLink href="/archives" />
-        <div style={{ marginBlock: theme.spacing.md }} />
+      <MainContent>
         {/* Use Suspense and BlocksProvider to handle client-side rendering of blocks */}
         <Suspense fallback={null}>
           <div
@@ -41,4 +36,4 @@ const NewsPageLayout: React.FC<PageLayoutProps> = ({
   );
 };
 
-export default NewsPageLayout;
+export default ProjetPageLayout;

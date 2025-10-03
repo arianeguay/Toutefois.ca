@@ -4,6 +4,7 @@ import ColorUpdater from '@/components/ColorUpdater';
 import type { WordpressPage } from '../../types';
 import DefaultPageLayout from './layouts/Default';
 import NewsPageLayout from './layouts/News';
+import ProjetPageLayout from './layouts/Projet';
 import { PageLayoutProps } from './layouts/types';
 
 interface LayoutProps {
@@ -63,9 +64,13 @@ const PageLayout: React.FC<LayoutProps> = async ({
   const mainColor = headerPage.meta?.main_color || '';
 
   const LayoutComponent: React.FC<PageLayoutProps> =
-    type === 'news' ? NewsPageLayout : DefaultPageLayout;
+    type === 'news'
+      ? NewsPageLayout
+      : type === 'projects'
+        ? ProjetPageLayout
+        : DefaultPageLayout;
   return (
-    <ClientBlock style={{ flex: 1 }}>
+    <ClientBlock style={{ flex: 1, position: 'relative' }}>
       {/* Update the color context when page loads */}
       <ColorUpdater color={mainColor} />
       <LayoutComponent
