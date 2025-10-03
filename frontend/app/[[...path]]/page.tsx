@@ -284,7 +284,7 @@ export default async function Page({
           };
 
           return (
-            <PageLayout page={formattedProjectPage as any} backTo="/projets" />
+            <PageLayout page={formattedProjectPage as any} type="projects" />
           );
         } else {
           console.warn('Project not found:', params.path[1]);
@@ -312,11 +312,15 @@ export default async function Page({
             link: `/archives/${post.slug}`,
             slug: post.slug,
             isPost: true,
+            template: '',
+
+            thumbnail: post.featured_image_url || '',
+            meta: {
+              main_color: '',
+            },
           };
 
-          return (
-            <PageLayout page={formattedPostPage as any} backTo="/archives" />
-          );
+          return <PageLayout page={formattedPostPage as any} type="news" />;
         } else {
           console.warn('Post not found:', params.path[1]);
           notFound();

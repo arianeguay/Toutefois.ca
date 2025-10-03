@@ -354,29 +354,57 @@ function toutefois_fb_upsert_wp_post($fb) {
     if (!empty($fb['permalink_url'])) update_post_meta($post_id, '_fb_permalink', esc_url_raw($fb['permalink_url']));
 
     // Featured image from full_picture
-    // Sideload images (featured + gallery)
+    // Sideload images (featured + gallery) with URL comparison to avoid duplicates
     $image_urls = toutefois_fb_collect_image_urls($fb);
     $gallery_ids = array();
     if (!empty($image_urls)) {
         require_once ABSPATH . 'wp-admin/includes/image.php';
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/media.php';
+
+        // Load or init URL→attachment map
+        $url_map = get_post_meta((int)$post_id, '_fb_image_url_map', true);
+        if (!is_array($url_map)) $url_map = array();
+
         foreach ($image_urls as $idx => $imgUrl) {
-            $mid = media_sideload_image($imgUrl, (int)$post_id, $title, 'id');
-            if (!is_wp_error($mid) && $mid) {
-                $gallery_ids[] = (int)$mid;
+            $attachment_id = 0;
+            if (isset($url_map[$imgUrl]) && $url_map[$imgUrl]) {
+                $maybe_id = (int)$url_map[$imgUrl];
+                // Verify attachment still exists
+                if (get_post_status($maybe_id)) {
+                    $attachment_id = $maybe_id;
+                }
+            }
+            if (!$attachment_id) {
+                $mid = media_sideload_image($imgUrl, (int)$post_id, $title, 'id');
+                if (!is_wp_error($mid) && $mid) {
+                    $attachment_id = (int)$mid;
+                    $url_map[$imgUrl] = $attachment_id;
+                }
+            }
+            if ($attachment_id) {
+                $gallery_ids[] = $attachment_id;
                 if ($idx === 0) {
-                    set_post_thumbnail((int)$post_id, (int)$mid);
+                    set_post_thumbnail((int)$post_id, $attachment_id);
                 }
             }
         }
+
         if (!empty($gallery_ids)) {
-            // Append a gallery to the content using the classic shortcode for broad compatibility
-            $content .= '\n\n' . '[gallery ids="' . implode(',', $gallery_ids) . '"]';
-            // Update the post content with gallery appended
-            wp_update_post(array('ID' => (int)$post_id, 'post_content' => $content));
+            // Append or update a gallery shortcode in content
+            $content_with_gallery = $content . "\n\n" . '[gallery ids="' . implode(',', $gallery_ids) . '"]';
+            wp_update_post(array('ID' => (int)$post_id, 'post_content' => $content_with_gallery));
             update_post_meta((int)$post_id, '_fb_gallery_ids', $gallery_ids);
+        } else {
+            // Ensure content is at least up to date without gallery
+            wp_update_post(array('ID' => (int)$post_id, 'post_content' => $content));
         }
+
+        // Persist the URL map for future comparisons
+        update_post_meta((int)$post_id, '_fb_image_url_map', $url_map);
+    } else {
+        // No images: keep content without gallery
+        wp_update_post(array('ID' => (int)$post_id, 'post_content' => $content));
     }
 }
 
