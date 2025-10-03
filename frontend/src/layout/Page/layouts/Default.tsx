@@ -3,6 +3,7 @@ import Typography from '@/components/common/Typography';
 import parse from 'html-react-parser';
 import Image from 'next/image';
 import { Suspense } from 'react';
+import Background from '../Splash/Background';
 import { MainContent } from '../styles';
 import getOptions from '../utils/getOptions';
 import { PageLayoutProps } from './types';
@@ -58,6 +59,11 @@ const DefaultPageLayout: React.FC<PageLayoutProps> = ({
         <div
           className={`page-content template-${template.replace('.php', '')}`}
         >
+          <Background
+            items={['Splash3', 'Splash2', 'Splash1']}
+            startingSide="left"
+          />
+
           {!!page.content?.rendered && parse(page.content.rendered, options)}
         </div>
       </Suspense>

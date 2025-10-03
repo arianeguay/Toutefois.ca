@@ -130,6 +130,7 @@ export default async function RootLayout({
       <body
         className={`${montserrat.variable} ${breeSerif.variable} ${poppins.variable} ${permanentMarker.variable}`}
         suppressHydrationWarning
+        style={{ overflowY: 'auto' }}
       >
         <StyledComponentsRegistry>
           <ThemeProvider>

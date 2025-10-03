@@ -2,6 +2,7 @@ import theme from '@/theme';
 import parse from 'html-react-parser';
 import { Suspense } from 'react';
 import BackLink from '../Back';
+import Background from '../Splash/Background';
 import { MainContent } from '../styles';
 import getOptions from '../utils/getOptions';
 import { PageLayoutProps } from './types';
@@ -22,6 +23,7 @@ const NewsPageLayout: React.FC<PageLayoutProps> = ({
         <div
           className={`page-content template-${template.replace('.php', '')}`}
         >
+          <Background items={['Splash2']} />
           {!!page.content?.rendered && parse(page.content.rendered, options)}
         </div>
       </Suspense>
