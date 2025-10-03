@@ -391,8 +391,8 @@ function toutefois_fb_upsert_wp_post($fb) {
         }
 
         if (!empty($gallery_ids)) {
-            // Append or update a gallery shortcode in content
-            $content_with_gallery = $content . "\n\n" . '[gallery ids="' . implode(',', $gallery_ids) . '"]';
+            // Append or update a gallery shortcode in content, force larger rendition
+            $content_with_gallery = $content . "\n\n" . '[gallery size="large" ids="' . implode(',', $gallery_ids) . '"]';
             wp_update_post(array('ID' => (int)$post_id, 'post_content' => $content_with_gallery));
             update_post_meta((int)$post_id, '_fb_gallery_ids', $gallery_ids);
         } else {

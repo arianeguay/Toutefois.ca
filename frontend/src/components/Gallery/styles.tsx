@@ -1,12 +1,15 @@
+import { ContainerContentStyling } from '@/theme/global-styles';
 import styled from 'styled-components';
 
 export const Grid = styled.div<{ $gap?: number; $minColWidth?: number }>`
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(${(p) => (p.$minColWidth ?? 220)}px, 1fr)
+    minmax(${(p) => p.$minColWidth ?? 220}px, 1fr)
   );
-  gap: ${(p) => (p.$gap ?? 12)}px;
+  gap: ${(p) => p.$gap ?? 12}px;
+  margin-block: ${({ theme }) => theme.spacing.lg}px;
+  ${ContainerContentStyling}
 `;
 
 export const Item = styled.button<{
@@ -53,10 +56,27 @@ export const CloseBtn = styled.button`
   top: 8px;
   right: 8px;
   z-index: 1001;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
   border: 0;
   border-radius: 999px;
   padding: 8px 10px;
   cursor: pointer;
+`;
+
+export const GalleryButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  background: transparent;
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 54px;
+  &:hover {
+    color: #ffffffaa;
+  }
 `;

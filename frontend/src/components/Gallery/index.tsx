@@ -1,8 +1,15 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CloseBtn, Grid, Item, LightboxBackdrop, LightboxBody } from './styles';
+import {
+  CloseBtn,
+  GalleryButton,
+  Grid,
+  Item,
+  LightboxBackdrop,
+  LightboxBody,
+} from './styles';
 
 export interface GalleryImage {
   id?: number | string;
@@ -30,24 +37,33 @@ const Gallery: React.FC<GalleryProps> = ({
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
-  const safeIndex = useMemo(() => Math.min(Math.max(index, 0), images.length - 1), [index, images.length]);
+  const safeIndex = useMemo(
+    () => Math.min(Math.max(index, 0), images.length - 1),
+    [index, images.length],
+  );
   const current = images[safeIndex];
 
   const close = useCallback(() => setOpen(false), []);
-  const openAt = useCallback((i: number) => {
-    if (!lightbox) return;
-    setIndex(i);
-    setOpen(true);
-  }, [lightbox]);
+  const openAt = useCallback(
+    (i: number) => {
+      if (!lightbox) return;
+      setIndex(i);
+      setOpen(true);
+    },
+    [lightbox],
+  );
 
-  const go = useCallback((dir: 1 | -1) => {
-    setIndex((prev) => {
-      const next = prev + dir;
-      if (next < 0) return images.length - 1;
-      if (next >= images.length) return 0;
-      return next;
-    });
-  }, [images.length]);
+  const go = useCallback(
+    (dir: 1 | -1) => {
+      setIndex((prev) => {
+        const next = prev + dir;
+        if (next < 0) return images.length - 1;
+        if (next >= images.length) return 0;
+        return next;
+      });
+    },
+    [images.length],
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -66,7 +82,12 @@ const Gallery: React.FC<GalleryProps> = ({
     <>
       <Grid $gap={gap} $minColWidth={minColWidth}>
         {images.map((img, i) => (
-          <Item key={img.id ?? `${img.src}-${i}`} onClick={() => openAt(i)} $aspectRatio={aspectRatio} aria-label={`View image ${i + 1}`}>
+          <Item
+            key={img.id ?? `${img.src}-${i}`}
+            onClick={() => openAt(i)}
+            $aspectRatio={aspectRatio}
+            aria-label={`View image ${i + 1}`}
+          >
             <Image
               src={img.src}
               alt={img.alt || `Gallery image ${i + 1}`}
@@ -83,22 +104,36 @@ const Gallery: React.FC<GalleryProps> = ({
       {lightbox && open && current && (
         <LightboxBackdrop onClick={close} role="dialog" aria-modal="true">
           <LightboxBody onClick={(e) => e.stopPropagation()}>
-            <CloseBtn onClick={close} aria-label="Close">✕</CloseBtn>
+            <CloseBtn onClick={close} aria-label="Close">
+              ✕
+            </CloseBtn>
             {/* Simple carousel controls */}
-            <button
+            <GalleryButton
               onClick={() => go(-1)}
               aria-label="Previous"
-              style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', zIndex: 1002 }}
+              style={{
+                position: 'absolute',
+                left: 8,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 1002,
+              }}
             >
               ‹
-            </button>
-            <button
+            </GalleryButton>
+            <GalleryButton
               onClick={() => go(1)}
               aria-label="Next"
-              style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', zIndex: 1002 }}
+              style={{
+                position: 'absolute',
+                right: 8,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 1002,
+              }}
             >
               ›
-            </button>
+            </GalleryButton>
 
             <div style={{ position: 'absolute', inset: 0 }}>
               <Image

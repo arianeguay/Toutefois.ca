@@ -12,3 +12,5 @@ const BackLink = (props: { href?: string; $template?: string }) => {
     </BackToLink>
   );
 };
+
+export default BackLink;
