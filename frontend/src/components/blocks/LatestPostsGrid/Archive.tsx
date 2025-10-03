@@ -109,6 +109,10 @@ export default async function Archive({
               <Link href={`/archives?page=${p}`} prefetch>
                 …
               </Link>
+            ) : p === page ? (
+              <span style={{ fontWeight: 'bold' }} key={i}>
+                {p}
+              </span>
             ) : (
               <Link href={`/archives?page=${p}`} prefetch>
                 {p}
