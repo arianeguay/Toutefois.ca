@@ -102,13 +102,53 @@ function toutefois_render_splashes_metabox($post) {
     $value = get_post_meta($post->ID, 'splashes', true);
     $selected = array_filter(array_map('trim', explode(',', (string)$value)));
     $options = array('Splash1', 'Splash2', 'Splash3');
-    echo '<p>' . esc_html__('Select decorative background shapes to show on this page.', 'toutefois') . '</p>';
-    foreach ($options as $opt) {
+    echo '<p>' . esc_html__('Choose and order decorative splashes. Checked items will render in the order shown.', 'toutefois') . '</p>';
+    echo '<ul id="toutefois_splashes_list" style="list-style:none;margin:0;padding:0;">';
+    // Ensure list shows selected items first in their saved order, then the rest
+    $ordered = array_unique(array_merge($selected, $options));
+    foreach ($ordered as $opt) {
+        if (!in_array($opt, $options, true)) continue;
         $checked = in_array($opt, $selected, true) ? 'checked' : '';
-        echo '<label style="display:block;margin:.25rem 0;">';
-        echo '<input type="checkbox" name="toutefois_splashes[]" value="' . esc_attr($opt) . '" ' . $checked . ' /> ' . esc_html($opt);
-        echo '</label>';
+        echo '<li style="display:flex;align-items:center;gap:.5rem;margin:.25rem 0;" data-name="' . esc_attr($opt) . '">';
+        echo '<input type="checkbox" class="tfs-item" value="' . esc_attr($opt) . '" ' . $checked . ' /> ' . esc_html($opt);
+        echo '<span style="margin-left:auto;display:inline-flex;gap:.25rem;">';
+        echo '<button type="button" class="button tfs-up">' . esc_html__('Up', 'toutefois') . '</button>';
+        echo '<button type="button" class="button tfs-down">' . esc_html__('Down', 'toutefois') . '</button>';
+        echo '</span>';
+        echo '</li>';
     }
+    echo '</ul>';
+    echo '<input type="hidden" id="toutefois_splashes_order" name="toutefois_splashes_order" value="' . esc_attr(implode(',', $selected)) . '" />';
+    echo '<script>(function(){
+      const list = document.getElementById("toutefois_splashes_list");
+      const hidden = document.getElementById("toutefois_splashes_order");
+      if(!list||!hidden) return;
+      function updateHidden(){
+        const items = Array.from(list.querySelectorAll("li"));
+        const chosen = items
+          .filter(li=>li.querySelector(".tfs-item").checked)
+          .map(li=>li.getAttribute("data-name"));
+        hidden.value = chosen.join(",");
+      }
+      list.addEventListener("click", function(e){
+        const btn = e.target;
+        if(!(btn instanceof HTMLButtonElement)) return;
+        const li = btn.closest("li");
+        if(!li) return;
+        if(btn.classList.contains("tfs-up") && li.previousElementSibling){
+          li.parentNode.insertBefore(li, li.previousElementSibling);
+          updateHidden();
+        }
+        if(btn.classList.contains("tfs-down") && li.nextElementSibling){
+          li.parentNode.insertBefore(li.nextElementSibling, li);
+          updateHidden();
+        }
+      });
+      list.addEventListener("change", function(e){
+        if(e.target && e.target.classList.contains("tfs-item")) updateHidden();
+      });
+      updateHidden();
+    })();</script>';
 }
 
 function toutefois_save_splashes_metabox($post_id) {
@@ -121,11 +161,22 @@ function toutefois_save_splashes_metabox($post_id) {
     if (!current_user_can('edit_post', $post_id)) {
         return;
     }
-    $splashes = isset($_POST['toutefois_splashes']) && is_array($_POST['toutefois_splashes']) ? array_map('sanitize_text_field', (array)$_POST['toutefois_splashes']) : array();
-    // Keep only known values
+    // Prefer ordered CSV from hidden field if present
+    $ordered_csv = isset($_POST['toutefois_splashes_order']) ? sanitize_text_field((string)$_POST['toutefois_splashes_order']) : '';
+    $ordered = array_filter(array_map('trim', explode(',', $ordered_csv)));
     $allowed = array('Splash1', 'Splash2', 'Splash3');
-    $splashes = array_values(array_intersect($splashes, $allowed));
-    update_post_meta($post_id, 'splashes', implode(',', $splashes));
+    // If not present, fallback to checkbox array order
+    if (empty($ordered)) {
+        $ordered = isset($_POST['toutefois_splashes']) && is_array($_POST['toutefois_splashes']) ? array_map('sanitize_text_field', (array)$_POST['toutefois_splashes']) : array();
+    }
+    // Sanitize and dedupe while preserving order
+    $clean = array();
+    foreach ($ordered as $o) {
+        if (in_array($o, $allowed, true) && !in_array($o, $clean, true)) {
+            $clean[] = $o;
+        }
+    }
+    update_post_meta($post_id, 'splashes', implode(',', $clean));
 }
 add_action('save_post_page', 'toutefois_save_splashes_metabox');
 
