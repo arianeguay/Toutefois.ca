@@ -15,6 +15,7 @@ const Background: React.FC<BackgroundProps> = ({
 }) => {
   const theme = useTheme();
   const otherSide = startingSide === 'left' ? 'right' : 'left';
+  const splashColor = theme.colors.headerBackground + '10';
   return (
     <div
       style={{
@@ -36,7 +37,7 @@ const Background: React.FC<BackgroundProps> = ({
             return (
               <Splash1
                 key={index}
-                color={theme.colors.headerBackground + '30'}
+                color={splashColor}
                 size="large"
                 side={index % 2 === 0 ? startingSide : otherSide}
                 top={index * 1200}
@@ -46,7 +47,7 @@ const Background: React.FC<BackgroundProps> = ({
             return (
               <Splash2
                 key={index}
-                color={theme.colors.headerBackground + '30'}
+                color={splashColor}
                 size="large"
                 side={index % 2 === 0 ? startingSide : otherSide}
                 top={index * 1200}
@@ -56,7 +57,7 @@ const Background: React.FC<BackgroundProps> = ({
             return (
               <Splash3
                 key={index}
-                color={theme.colors.headerBackground + '30'}
+                color={splashColor}
                 size="large"
                 side={index % 2 === 0 ? startingSide : otherSide}
                 top={index * 1200}
