@@ -17,6 +17,10 @@ import FeaturedCarousel from '@/components/blocks/FeaturedCarousel';
     const options = getOptions(page, pageNumber);
     const defaults: SplashName[] = ['Splash3', 'Splash2', 'Splash1'];
     const metaSplashes = (page as any)?.meta?.splashes as string | undefined;
+    const metaStartingSide = (page as any)?.meta?.splashes_starting_side as
+      | 'left'
+      | 'right'
+      | undefined;
     const allowed: SplashName[] = ['Splash1', 'Splash2', 'Splash3'];
     const parsed = (metaSplashes || '')
       .split(',')
@@ -25,7 +29,7 @@ import FeaturedCarousel from '@/components/blocks/FeaturedCarousel';
     const items: SplashName[] = parsed.length ? parsed : defaults;
     return (
       <>
-      <Background items={items} startingSide="left" />
+      <Background items={items} startingSide={metaStartingSide || 'left'} />
       <MainContent>
         {/* Show title on templates that need a prominent title */}
         {(template === 'template-title.php' ||

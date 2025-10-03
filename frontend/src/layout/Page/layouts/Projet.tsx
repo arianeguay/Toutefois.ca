@@ -13,15 +13,20 @@ const ProjetPageLayout: React.FC<PageLayoutProps> = ({
   const options = getOptions(page, pageNumber);
   const defaults: SplashName[] = ['Splash3'];
   const metaSplashes = (page as any)?.meta?.splashes as string | undefined;
+  const metaStartingSide = (page as any)?.meta?.splashes_starting_side as
+    | 'left'
+    | 'right'
+    | undefined;
   const allowed: SplashName[] = ['Splash1', 'Splash2', 'Splash3'];
   const parsed = (metaSplashes || '')
     .split(',')
     .map((s) => s.trim())
     .filter((s): s is SplashName => (allowed as string[]).includes(s));
   const items: SplashName[] = parsed.length ? parsed : defaults;
+  const startingSide: StartingSide = metaStartingSide || 'left';
   return (
     <>
-      <Background items={items} />
+      <Background items={items} startingSide={startingSide} />
       <MainContent>
         {/* Use Suspense and BlocksProvider to handle client-side rendering of blocks */}
         <Suspense fallback={null}>

@@ -15,6 +15,10 @@ const NewsPageLayout: React.FC<PageLayoutProps> = ({
   const options = getOptions(page, pageNumber);
   const defaults: SplashName[] = ['Splash2'];
   const metaSplashes = (page as any)?.meta?.splashes as string | undefined;
+  const metaStartingSide = (page as any)?.meta?.splashes_starting_side as
+    | 'left'
+    | 'right'
+    | undefined;
   const allowed: SplashName[] = ['Splash1', 'Splash2', 'Splash3'];
   const parsed = (metaSplashes || '')
     .split(',')
@@ -23,7 +27,10 @@ const NewsPageLayout: React.FC<PageLayoutProps> = ({
   const items: SplashName[] = parsed.length ? parsed : defaults;
   return (
     <>
-      <Background items={items} />
+      <Background
+        items={items}
+        startingSide={metaStartingSide || 'right'}
+      />
       <MainContent style={{ marginBlock: theme.spacing.xxl }}>
         <div style={{ marginBlock: theme.spacing.md }} />
         <BackLink href="/archives" />

@@ -64,6 +64,20 @@ function toutefois_register_template_meta()
             return current_user_can('edit_posts');
         }
     ));
+    // starting side meta
+    register_post_meta('page', 'splashes_starting_side', array(
+        'show_in_rest' => array(
+            'schema' => array(
+                'type' => 'string',
+                'enum' => array('left', 'right'),
+            )
+        ),
+        'single' => true,
+        'type' => 'string',
+        'auth_callback' => function () {
+            return current_user_can('edit_posts');
+        }
+    ));
 }
 add_action('rest_api_init', 'toutefois_register_template_meta');
 
@@ -102,6 +116,10 @@ function toutefois_render_splashes_metabox($post) {
     $value = get_post_meta($post->ID, 'splashes', true);
     $selected = array_filter(array_map('trim', explode(',', (string)$value)));
     $options = array('Splash1', 'Splash2', 'Splash3');
+    $starting_side = get_post_meta($post->ID, 'splashes_starting_side', true);
+    if ($starting_side !== 'left' && $starting_side !== 'right') {
+        $starting_side = '';
+    }
     echo '<p>' . esc_html__('Choose and order decorative splashes. Checked items will render in the order shown.', 'toutefois') . '</p>';
     echo '<ul id="toutefois_splashes_list" style="list-style:none;margin:0;padding:0;">';
     // Ensure list shows selected items first in their saved order, then the rest
@@ -119,6 +137,12 @@ function toutefois_render_splashes_metabox($post) {
     }
     echo '</ul>';
     echo '<input type="hidden" id="toutefois_splashes_order" name="toutefois_splashes_order" value="' . esc_attr(implode(',', $selected)) . '" />';
+    echo '<p style="margin-top:.75rem;">' . esc_html__('Starting side', 'toutefois') . '</p>';
+    echo '<select name="toutefois_splashes_starting_side" style="width:100%">';
+    echo '<option value="" ' . selected($starting_side, '', false) . '>' . esc_html__('Theme default', 'toutefois') . '</option>';
+    echo '<option value="left" ' . selected($starting_side, 'left', false) . '>' . esc_html__('Left', 'toutefois') . '</option>';
+    echo '<option value="right" ' . selected($starting_side, 'right', false) . '>' . esc_html__('Right', 'toutefois') . '</option>';
+    echo '</select>';
     echo '<script>(function(){
       const list = document.getElementById("toutefois_splashes_list");
       const hidden = document.getElementById("toutefois_splashes_order");
@@ -177,6 +201,12 @@ function toutefois_save_splashes_metabox($post_id) {
         }
     }
     update_post_meta($post_id, 'splashes', implode(',', $clean));
+    // Save starting side
+    $side = isset($_POST['toutefois_splashes_starting_side']) ? sanitize_text_field((string)$_POST['toutefois_splashes_starting_side']) : '';
+    if ($side !== 'left' && $side !== 'right') {
+        $side = '';
+    }
+    update_post_meta($post_id, 'splashes_starting_side', $side);
 }
 add_action('save_post_page', 'toutefois_save_splashes_metabox');
 
