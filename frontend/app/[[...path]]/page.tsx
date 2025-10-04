@@ -283,9 +283,7 @@ export default async function Page({
             isMainProject,
           };
 
-          return (
-            <PageLayout page={formattedProjectPage as any} type="projects" />
-          );
+          return <PageLayout page={formattedProjectPage} type="projects" />;
         } else {
           console.warn('Project not found:', params.path[1]);
           notFound();
@@ -305,23 +303,18 @@ export default async function Page({
         if (post?.id) {
           console.log(post);
           // Format the post data to match WordpressPage structure expected by PageLayout
-          const formattedPostPage = {
+          const formattedPostPage: WordpressPage = {
             id: post.id,
             title: post.title,
             content: post.content,
-            excerpt: post.excerpt,
+            excerpt: { rendered: post.excerpt },
             link: `/archives/${post.slug}`,
-            slug: post.slug,
-            isPost: true,
+            slug: post.slug ?? '',
             template: '',
-
-            thumbnail: post.featured_image_url || '',
-            meta: {
-              main_color: '',
-            },
+            date: post.date,
           };
 
-          return <PageLayout page={formattedPostPage as any} type="news" />;
+          return <PageLayout page={formattedPostPage} type="news" />;
         } else {
           console.warn('Post not found:', params.path[1]);
           notFound();

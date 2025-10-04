@@ -1,6 +1,7 @@
 'use client';
 import Typography from '@/components/common/Typography';
 import FacebookIcon from '@/icons/Facebook';
+import { formatDateFR } from '@/utils/formatDate';
 import parse from 'html-react-parser';
 import { useTheme } from 'styled-components';
 import { ContentBodyContent } from '../../styles';
@@ -18,7 +19,7 @@ const PostCardBody: React.FC<CardBodyProps> = ({
       <ContentBodyContent>
         {date && (
           <Typography variant="small" color="tertiaryText" element="p">
-            {date}
+            {formatDateFR(date)}
           </Typography>
         )}
         {description && (
