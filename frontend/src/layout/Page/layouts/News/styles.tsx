@@ -6,14 +6,15 @@ export const NewsPageContent = styled.div`
   background-color: white;
   ${ContainerContentStyling}
 
-  padding-inline: ${({ theme }) => theme.spacing.xl}px;
-  padding-block: ${({ theme }) => theme.spacing.lg}px;
   border: ${({ theme }) => theme.borders.strong};
 `;
 
 export const NewsPageHeaderContainer = styled.div`
   display: flex;
-
+  padding-inline: ${({ theme }) => theme.spacing.xl}px;
+  padding-block: ${({ theme }) => theme.spacing.md}px;
+  border-bottom: ${({ theme }) => theme.borders.strong};
+  width: 100%;
   gap: ${({ theme }) => theme.spacing.sm}px;
 `;
 
@@ -37,4 +38,9 @@ export const NewsPageHeaderHeading = styled.div`
   a {
     text-decoration: none;
   }
+`;
+
+export const NewsPageBody = styled.div`
+  padding-inline: ${({ theme }) => theme.spacing.xl}px;
+  padding-block: ${({ theme }) => theme.spacing.lg}px;
 `;

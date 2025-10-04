@@ -352,6 +352,23 @@ function toutefois_fb_upsert_wp_post($fb) {
 
     update_post_meta($post_id, '_fb_post_id', $fb_id);
     if (!empty($fb['permalink_url'])) update_post_meta($post_id, '_fb_permalink', esc_url_raw($fb['permalink_url']));
+    // Store originating Facebook Page info for multi-page support
+    $fb_page_id = '';
+    $fb_page_name = '';
+    // Prefer explicit 'from' if provided by Graph API
+    if (!empty($fb['from']['id']) && is_string($fb['from']['id'])) {
+        $fb_page_id = (string)$fb['from']['id'];
+    }
+    if (!empty($fb['from']['name']) && is_string($fb['from']['name'])) {
+        $fb_page_name = (string)$fb['from']['name'];
+    }
+    // Fallback: parse composite post id like PAGEID_POSTID
+    if (!$fb_page_id && strpos($fb_id, '_') !== false) {
+        $parts = explode('_', $fb_id, 2);
+        if (!empty($parts[0])) $fb_page_id = (string)$parts[0];
+    }
+    if ($fb_page_id) update_post_meta($post_id, '_fb_page_id', $fb_page_id);
+    if ($fb_page_name) update_post_meta($post_id, '_fb_page_name', $fb_page_name);
 
     // Featured image from full_picture
     // Sideload images (featured + gallery) with URL comparison to avoid duplicates

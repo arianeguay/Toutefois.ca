@@ -81,6 +81,20 @@ function toutefois_register_template_meta()
 }
 add_action('rest_api_init', 'toutefois_register_template_meta');
 
+// Expose Facebook origin meta for posts in REST
+function toutefois_register_fb_meta_rest() {
+    $fields = array('_fb_post_id', '_fb_permalink', '_fb_page_id', '_fb_page_name');
+    foreach ($fields as $field) {
+        register_post_meta('post', $field, array(
+            'show_in_rest' => true,
+            'single' => true,
+            'type' => 'string',
+            'auth_callback' => '__return_true',
+        ));
+    }
+}
+add_action('init', 'toutefois_register_fb_meta_rest');
+
 // Register custom page meta: splashes (CSV string) and expose via REST
 function toutefois_register_splashes_meta() {
     register_post_meta('page', 'splashes', array(
