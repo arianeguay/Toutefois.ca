@@ -134,7 +134,7 @@ class Api {
       const matchingPages = allPages.filter((page) => {
         // Normalize paths for comparison
         const normalizedSlug = slug.replace(/^\/|\/$/g, ''); // Remove leading/trailing slashes
-        const normalizedPageSlug = page.slug.replace(/^\/|\/$/g, '');
+        const normalizedPageSlug = page.slug?.replace(/^\/|\/$/g, '');
         const normalizedPageLink = page.link
           .replace(/https?:\/\/[^/]+\//g, '')
           .replace(/^\/|\/$/g, '');

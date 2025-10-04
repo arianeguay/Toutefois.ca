@@ -179,7 +179,7 @@ export async function generateStaticParams() {
 
     // Format for Next.js static paths
     return pages.map((page) => {
-      const slugParts = page.slug.split('/');
+      const slugParts = page.slug?.split('/');
       return {
         path: slugParts,
       };
