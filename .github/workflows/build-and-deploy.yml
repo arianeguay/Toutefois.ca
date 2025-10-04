@@ -5,13 +5,13 @@ on:
     branches: [main]
     paths:
       - "wp-content/plugins/toutefois/**"
-      - ".github/workflows/plugin-build.yml"
+      - ".github/workflows/build-and-deploy.yml"
       - "nginx/**"
   pull_request:
     branches: [main]
     paths:
       - "wp-content/plugins/toutefois/**"
-      - ".github/workflows/plugin-build.yml"
+      - ".github/workflows/build-and-deploy.yml"
       - "nginx/**"
 
 jobs:
