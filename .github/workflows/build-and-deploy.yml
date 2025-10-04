@@ -6,11 +6,13 @@ on:
     paths:
       - "wp-content/plugins/toutefois/**"
       - ".github/workflows/plugin-build.yml"
+      - "nginx/**"
   pull_request:
     branches: [main]
     paths:
       - "wp-content/plugins/toutefois/**"
       - ".github/workflows/plugin-build.yml"
+      - "nginx/**"
 
 jobs:
   build-plugin:
