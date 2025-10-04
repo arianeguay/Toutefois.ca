@@ -4,7 +4,7 @@ import ArticlesGrid from './Grid';
 
 async function fetchPostsPaged(page: number, perPage: number) {
   const base = (
-    process.env.NEXT_PUBLIC_ADMIN_URL || 'https://admin.toutefois.arianeguay.ca'
+    process.env.NEXT_PUBLIC_ADMIN_URL || 'https://admin.toutefois.ca'
   ).replace(/\/$/, '');
   const url = `${base}/wp-json/wp/v2/posts?page=${page}&per_page=${perPage}&_embed=1`;
 

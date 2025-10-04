@@ -6,7 +6,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-
 // Generate metadata for the page
 export async function generateMetadata({
   params,
@@ -43,6 +42,35 @@ export async function generateMetadata({
     const url = `${baseUrl}/`;
     const title = 'Toutefois - Accueil';
     const description = "Page d'accueil de Toutefois";
+    return {
+      title,
+      description,
+      alternates: { canonical: url },
+      openGraph: { url, title, description, type: 'website' },
+      twitter: { card: 'summary_large_image', title, description },
+    };
+  }
+
+  // Listing pages
+  // Archives listing (/archives)
+  if (params.path.length === 1 && params.path[0] === 'archives') {
+    const url = `${baseUrl}/archives`;
+    const title = 'Toutefois - Archives';
+    const description = 'Nouvelles et articles de Toutefois';
+    return {
+      title,
+      description,
+      alternates: { canonical: url },
+      openGraph: { url, title, description, type: 'website' },
+      twitter: { card: 'summary_large_image', title, description },
+    };
+  }
+
+  // Projects listing (/projets)
+  if (params.path.length === 1 && params.path[0] === 'projets') {
+    const url = `${baseUrl}/projets`;
+    const title = 'Toutefois - Projets';
+    const description = 'Découvrez les projets de Toutefois';
     return {
       title,
       description,
@@ -89,13 +117,41 @@ export async function generateMetadata({
       };
     }
 
-    // Handle posts
+    // Handle single news posts (/archives/[slug])
     if (params.path.length === 2 && params.path[0] === 'archives') {
-      const postData = await api.fetchPostBySlug(params.path[1]);
-      const post = Array.isArray(postData) ? postData[0] : postData;
+      const requestedSlug = params.path[1];
+      let postData = await api.fetchPostBySlug(requestedSlug);
+      let post = Array.isArray(postData) ? postData[0] : postData;
+
+      // Fallback: if not found by exact slug, try WP search and match by slug or link path
+      if (!post?.id) {
+        try {
+          const candidates = await api.fetchFromApi(
+            `wp/v2/posts?search=${encodeURIComponent(requestedSlug)}`,
+          );
+          if (Array.isArray(candidates) && candidates.length > 0) {
+            const best = candidates.find((p: any) => {
+              try {
+                if (p?.slug === requestedSlug) return true;
+                const pathFromLink = (p?.link || '')
+                  .replace(/^https?:\/\/[^/]+\//, '')
+                  .replace(/^\/?|\/?$/g, '');
+                const segments = pathFromLink.split('/').filter(Boolean);
+                const last = segments[segments.length - 1];
+                return last === requestedSlug;
+              } catch {
+                return false;
+              }
+            });
+            if (best) post = best;
+          }
+        } catch (e) {
+          // ignore and fall through to not found
+        }
+      }
 
       if (!post?.id) {
-        const url = `${baseUrl}/archives/${params.path[1]}`;
+        const url = `${baseUrl}/archives/${requestedSlug}`;
         const title = 'Toutefois - Article non trouvé';
         const description = "L'article que vous cherchez n'existe pas";
         return {
@@ -107,12 +163,14 @@ export async function generateMetadata({
         };
       }
 
-      const description = post.excerpt
+      const description = post?.excerpt
         ? post.excerpt.replace(/<[^>]*>/g, '').slice(0, 160)
-        : 'Toutefois';
+        : post?.content?.rendered
+          ? post.content.rendered.replace(/<[^>]*>/g, '').slice(0, 160)
+          : 'Toutefois';
 
       const url = `${baseUrl}/archives/${post.slug}`;
-      const title = `Toutefois - ${post.title.rendered}`;
+      const title = `Toutefois - ${post.title?.rendered || post.title}`;
       return {
         title,
         description,
@@ -179,15 +237,17 @@ export async function generateStaticParams() {
     const pages = await api.fetchPages();
 
     // Format for Next.js static paths
-    return pages
-      // Do not pre-render the archives listing; it reads query params at runtime
-      .filter((page) => page.slug !== 'archives')
-      .map((page) => {
-        const slugParts = page.slug?.split('/');
-        return {
-          path: slugParts,
-        };
-      });
+    return (
+      pages
+        // Do not pre-render the archives listing; it reads query params at runtime
+        .filter((page) => page.slug !== 'archives')
+        .map((page) => {
+          const slugParts = page.slug?.split('/');
+          return {
+            path: slugParts,
+          };
+        })
+    );
   } catch (error) {
     console.error('Error generating static params:', error);
     return [];
@@ -425,10 +485,7 @@ export default async function Page({
     if (isArchivesListing) {
       const qPageRaw = searchParams?.page ?? searchParams?.p ?? '1';
       const qPage = Array.isArray(qPageRaw) ? qPageRaw[0] : qPageRaw;
-      archivePageNumber = Math.max(
-        1,
-        parseInt(String(qPage || '1'), 10) || 1,
-      );
+      archivePageNumber = Math.max(1, parseInt(String(qPage || '1'), 10) || 1);
     }
     return (
       <PageLayout

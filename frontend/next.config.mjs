@@ -8,8 +8,7 @@ const nextConfig = {
     NEXT_PUBLIC_FACEBOOK_ACCESS_TOKEN:
       process.env.NEXT_PUBLIC_FACEBOOK_ACCESS_TOKEN,
     NEXT_PUBLIC_ADMIN_URL:
-      process.env.NEXT_PUBLIC_ADMIN_URL ||
-      'https://admin.toutefois.arianeguay.ca/wp-json',
+      process.env.NEXT_PUBLIC_ADMIN_URL || 'https://admin.toutefois.ca/wp-json',
     NEXT_PUBLIC_SITE_URL:
       process.env.NEXT_PUBLIC_SITE_URL || 'https://toutefois.ca',
   },
@@ -22,12 +21,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'admin.toutefois.arianeguay.ca',
+        hostname: 'admin.toutefois.ca',
         pathname: '/wp-content/**',
       },
       {
         protocol: 'http',
-        hostname: 'admin.toutefois.arianeguay.ca',
+        hostname: 'admin.toutefois.ca',
         pathname: '/wp-content/**',
       },
       {
@@ -57,7 +56,8 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=604800, s-maxage=604800, stale-while-revalidate=86400',
+            value:
+              'public, max-age=604800, s-maxage=604800, stale-while-revalidate=86400',
           },
         ],
       },
@@ -66,7 +66,8 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=2592000, s-maxage=2592000, stale-while-revalidate=86400',
+            value:
+              'public, max-age=2592000, s-maxage=2592000, stale-while-revalidate=86400',
           },
         ],
       },
@@ -84,22 +85,23 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=60, s-maxage=60, stale-while-revalidate=300',
+            value:
+              'public, max-age=60, s-maxage=60, stale-while-revalidate=300',
           },
         ],
       },
       {
         source: '/:path*',
         headers: [
-          { 
+          {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
           },
-          { 
+          {
             key: 'X-Frame-Options',
             value: 'DENY',
           },
-          { 
+          {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
           },

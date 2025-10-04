@@ -16,8 +16,7 @@ class Api {
 
   constructor() {
     const raw =
-      process.env.NEXT_PUBLIC_ADMIN_URL ||
-      'https://admin.toutefois.arianeguay.ca/wp-json';
+      process.env.NEXT_PUBLIC_ADMIN_URL || 'https://admin.toutefois.ca/wp-json';
     // Ensure baseUrl ends with /wp-json and has no trailing slash beyond it
     let normalized = raw.trim();
     try {

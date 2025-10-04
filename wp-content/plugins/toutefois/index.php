@@ -82,7 +82,8 @@ function toutefois_register_template_meta()
 add_action('rest_api_init', 'toutefois_register_template_meta');
 
 // Expose Facebook origin meta for posts in REST
-function toutefois_register_fb_meta_rest() {
+function toutefois_register_fb_meta_rest()
+{
     $fields = array('_fb_post_id', '_fb_permalink', '_fb_page_id', '_fb_page_name');
     foreach ($fields as $field) {
         register_post_meta('post', $field, array(
@@ -96,7 +97,8 @@ function toutefois_register_fb_meta_rest() {
 add_action('init', 'toutefois_register_fb_meta_rest');
 
 // Register custom page meta: splashes (CSV string) and expose via REST
-function toutefois_register_splashes_meta() {
+function toutefois_register_splashes_meta()
+{
     register_post_meta('page', 'splashes', array(
         'show_in_rest' => array(
             'schema' => array(
@@ -113,7 +115,8 @@ function toutefois_register_splashes_meta() {
 add_action('init', 'toutefois_register_splashes_meta');
 
 // Add a meta box to choose background splashes for pages
-function toutefois_add_splashes_metabox() {
+function toutefois_add_splashes_metabox()
+{
     add_meta_box(
         'toutefois_splashes',
         __('Background Splashes', 'toutefois'),
@@ -125,7 +128,8 @@ function toutefois_add_splashes_metabox() {
 }
 add_action('add_meta_boxes', 'toutefois_add_splashes_metabox');
 
-function toutefois_render_splashes_metabox($post) {
+function toutefois_render_splashes_metabox($post)
+{
     wp_nonce_field('toutefois_save_splashes', 'toutefois_splashes_nonce');
     $value = get_post_meta($post->ID, 'splashes', true);
     $selected = array_filter(array_map('trim', explode(',', (string)$value)));
@@ -189,7 +193,8 @@ function toutefois_render_splashes_metabox($post) {
     })();</script>';
 }
 
-function toutefois_save_splashes_metabox($post_id) {
+function toutefois_save_splashes_metabox($post_id)
+{
     if (!isset($_POST['toutefois_splashes_nonce']) || !wp_verify_nonce($_POST['toutefois_splashes_nonce'], 'toutefois_save_splashes')) {
         return;
     }
@@ -325,7 +330,7 @@ function add_cors_headers()
 
     $allowed_origins = array(
         'https://toutefois.arianeguay.ca',
-        'https://admin.toutefois.arianeguay.ca',
+        'https://admin.toutefois.ca',
         'http://localhost:3000',
         'http://localhost:5173'
     );

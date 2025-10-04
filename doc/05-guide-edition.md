@@ -4,7 +4,7 @@ Ce guide explique comment éditer le contenu du site Toutefois en utilisant l'é
 
 ## Connexion à WordPress
 
-1. Accédez à `https://admin.toutefois.arianeguay.ca/wp-admin`
+1. Accédez à `https://admin.toutefois.ca/wp-admin`
 2. Entrez votre nom d'utilisateur et mot de passe
 3. Vous arriverez sur le tableau de bord WordPress
 
@@ -16,6 +16,7 @@ Ce guide explique comment éditer le contenu du site Toutefois en utilisant l'é
 WordPress utilise un éditeur appelé Gutenberg qui fonctionne avec des "blocs" de contenu. Cela ressemble à l'assemblage de blocs Lego pour construire vos pages.
 
 Liens utiles WordPress:
+
 - Éditeur de blocs (Gutenberg): https://wordpress.org/documentation/article/wordpress-block-editor/
 - Vue d’ensemble de l’éditeur: https://wordpress.org/documentation/article/block-editor-screen-overview/
 
@@ -32,30 +33,38 @@ Liens utiles WordPress:
 ## Blocs standards utiles
 
 ### Paragraphe
+
 Pour le texte normal. Options : taille, couleur, style.
 
 ### Titre
+
 Pour les titres et sous-titres (H2, H3, H4, etc.).
 
 ### Image
+
 Pour ajouter des images. Options : taille, alignement, légende.
 
 Documentation WordPress:
+
 - Bibliothèque des médias: https://wordpress.org/documentation/article/media-library-screen/
 - Téléverser des médias: https://wordpress.org/documentation/article/media-add-new-screen/
 
 <SCREENSHOT> Insertion d’une image via la Bibliothèque des médias
 
 ### Galerie
+
 Pour ajouter plusieurs images en grille.
 
 ### Liste
+
 Pour créer des listes à puces ou numérotées.
 
 ### Citation
+
 Pour mettre en évidence une citation.
 
 ### Bouton
+
 Pour ajouter un bouton cliquable avec lien.
 
 ## Blocs personnalisés Toutefois
@@ -67,6 +76,7 @@ Le site dispose de blocs personnalisés spécifiques à Toutefois :
 Affiche un carrousel de projets, nouvelles ou contenu mixte.
 
 **Comment l'utiliser :**
+
 1. Ajoutez un bloc "Content Carousel"
 2. Dans les paramètres à droite, choisissez :
    - Type de contenu (Projets, Nouvelles, Mixte)
@@ -83,6 +93,7 @@ Affiche un carrousel de projets, nouvelles ou contenu mixte.
 Affiche une liste ou grille de projets.
 
 **Comment l'utiliser :**
+
 1. Ajoutez un bloc "Projects List"
 2. Configurez les options :
    - Affichage (Grille ou Liste)
@@ -97,6 +108,7 @@ Affiche une liste ou grille de projets.
 Affiche les dernières actualités.
 
 **Comment l'utiliser :**
+
 1. Ajoutez un bloc "News List"
 2. Configurez :
    - Source (WordPress, Facebook, ou les deux)
@@ -110,6 +122,7 @@ Affiche les dernières actualités.
 Affiche les membres de l'équipe.
 
 **Comment l'utiliser :**
+
 1. Ajoutez un bloc "Collaborators"
 2. Choisissez :
    - Type de collaborateurs (Permanents, Invités, etc.)
@@ -123,6 +136,7 @@ Affiche les membres de l'équipe.
 ### Images
 
 - **Tailles recommandées** :
+
   - Images de projets : 1200 × 800 pixels minimum
   - Photos de collaborateurs : 800 × 800 pixels (carrées)
   - Bannières : 1920 × 600 pixels
@@ -133,6 +147,7 @@ Affiche les membres de l'équipe.
   - Compressez les images avant de les téléverser (via TinyPNG par exemple)
 
 Liens utiles WordPress:
+
 - Images à la Une: https://wordpress.org/documentation/article/featured-images/
 
 ### Texte

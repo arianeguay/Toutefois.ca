@@ -50,7 +50,7 @@ Le site dispose de plusieurs environnements :
 Le site utilise la configuration suivante pour les URL :
 
 - **Frontend public** : `https://toutefois.arianeguay.ca`
-- **Administration WordPress** : `https://admin.toutefois.arianeguay.ca`
+- **Administration WordPress** : `https://admin.toutefois.ca`
 
 ## Configuration serveur
 
@@ -72,7 +72,7 @@ Le serveur de production utilise Nginx comme serveur web et proxy inverse :
 ```
 nginx/
 ├── sites-available/
-│   ├── admin.toutefois.arianeguay.ca.conf - Config pour l'admin WordPress
+│   ├── admin.toutefois.ca.conf - Config pour l'admin WordPress
 │   ├── nginx.conf - Configuration principale
 │   └── toutefois.arianeguay.ca.conf - Config pour le frontend
 ```
@@ -89,19 +89,22 @@ Pour maintenir le site sécurisé, il est important de mettre à jour régulièr
 
 ### Problème : Le contenu mis à jour dans WordPress n'apparaît pas sur le site
 
-**Solution** : 
+**Solution** :
+
 1. Vérifiez que le contenu est bien publié (pas en brouillon)
 2. Déclenchez manuellement une reconstruction du site via Vercel
 
 ### Problème : Images qui ne s'affichent pas
 
 **Solution** :
+
 1. Vérifiez que l'image est bien téléversée dans WordPress
 2. Assurez-vous que le domaine de l'image est configuré dans Next.js (remotePatterns)
 
 ### Problème : Erreurs 404 sur certaines pages
 
 **Solution** :
+
 1. Vérifiez que la page existe dans WordPress
 2. Assurez-vous que le slug (URL) correspond
 3. Vérifiez les journaux d'erreur Vercel pour plus de détails

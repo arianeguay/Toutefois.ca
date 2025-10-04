@@ -18,7 +18,7 @@ Les métadonnées se trouvent dans des encadrés (boîtes) sur la page d’édit
 
 ## Avant de commencer
 
-1. Connectez-vous à l’administration: `https://admin.toutefois.arianeguay.ca/wp-admin`
+1. Connectez-vous à l’administration: `https://admin.toutefois.ca/wp-admin`
 2. Dans le menu de gauche, choisissez le type de contenu que vous voulez modifier:
    - Projets: « Projets » → « Tous les Projets », puis cliquez sur le projet.
    - Articles: « Articles » → « Tous les articles », puis cliquez sur l’article.
@@ -28,6 +28,7 @@ Les métadonnées se trouvent dans des encadrés (boîtes) sur la page d’édit
 <SCREENSHOT> Tableau de bord WordPress et menu de gauche
 
 Liens utiles WordPress:
+
 - Éditeur de blocs (Gutenberg): https://wordpress.org/documentation/article/wordpress-block-editor/
 - Vue d’ensemble de l’éditeur: https://wordpress.org/documentation/article/block-editor-screen-overview/
 
@@ -49,6 +50,7 @@ Après avoir rempli ces champs, descendez plus bas si besoin.
 ### 2) Apparence (couleur et image de prévisualisation)
 
 - **Couleur principale**:
+
   1. Cliquez sur le carré de couleur.
   2. Choisissez une couleur qui représente le projet.
   3. Conseil: gardez un bon contraste avec le texte.
@@ -64,6 +66,7 @@ Après avoir rempli ces champs, descendez plus bas si besoin.
 <VIDEO> Sélectionner et téléverser une image dans la Bibliothèque des médias
 
 Documentation WordPress:
+
 - Bibliothèque des médias: https://wordpress.org/documentation/article/media-library-screen/
 - Téléverser des médias: https://wordpress.org/documentation/article/media-add-new-screen/
 
@@ -72,10 +75,12 @@ Cette image sert dans certaines listes ou menus pour illustrer le projet.
 ### 3) Main Project (colonne de droite)
 
 - **Main Project** (case à cocher):
+
   - Cochez si ce projet est un « Projet principal » (une production phare ou un projet chapeau).
   - Si vous cochez cette case, le projet ne doit pas avoir de « parent » (WordPress s’en occupe automatiquement).
 
 - **Associated Main Project** (liste déroulante):
+
   - Si votre projet est un **sous-projet**, sélectionnez le **Projet principal** auquel il appartient.
   - Laissez sur « — None — » si ce n’est pas un sous-projet.
 
@@ -94,6 +99,7 @@ Cette image sert dans certaines listes ou menus pour illustrer le projet.
 <VIDEO> Choisir une image à la Une depuis la Bibliothèque
 
 Documentation WordPress:
+
 - Images à la Une: https://wordpress.org/documentation/article/featured-images/
 
 ### 5) Enregistrer
@@ -108,10 +114,12 @@ Documentation WordPress:
 Quand vous éditez un **Article**:
 
 - **Main Project** (colonne de droite):
+
   - Dans « Associated Main Project », sélectionnez le Projet principal auquel l’article est lié, si applicable.
   - Laissez « — None — » si l’article est général.
 
 - **Show only inside its Main Project context**:
+
   - Laissez décoché sauf si vous voulez que l’article n’apparaisse que dans la page du Projet principal.
 
 - **Image mise en avant** (colonne de droite):
@@ -120,6 +128,7 @@ Quand vous éditez un **Article**:
 <SCREENSHOT> Panneau « Image mise en avant » pour un Article
 
 Documentation WordPress:
+
 - Images à la Une: https://wordpress.org/documentation/article/featured-images/
 
 - Cliquez sur **Mettre à jour** (ou **Publier**).
@@ -139,6 +148,7 @@ Quand vous éditez un **Collaborateur**:
 <VIDEO> Associer/dissocier plusieurs Projets principaux à un Collaborateur
 
 - **Show only inside its Main Project context**:
+
   - Laissez décoché sauf si vous voulez que le collaborateur n’apparaisse que sur les pages des projets sélectionnés.
 
 - Ajoutez **Photo** (image à la Une) et **Biographie** dans le contenu principal.
@@ -175,6 +185,7 @@ Cliquez sur **Enregistrer les modifications**.
 - **Je ne vois pas les boîtes (métadonnées)**: Dans l’écran d’édition, cliquez sur l’icône en haut à droite (options) et vérifiez les « Préférences » → « Panneaux ». Assurez-vous que les boîtes sont affichées.
 
 Documentation WordPress:
+
 - Préférences de l’éditeur / interface: https://wordpress.org/documentation/article/block-editor-screen-overview/
 - **L’image ne s’affiche pas sur le site**: Vérifiez que l’image à la Une est bien définie. Patientez quelques minutes.
 - **L’article/le projet n’apparaît pas**: Vérifiez qu’il est **Publié** (pas en Brouillon). Assurez-vous que « Show only inside its Main Project context » n’est pas coché par erreur.
@@ -185,6 +196,7 @@ Documentation WordPress:
 ## Récapitulatif rapide (checklist)
 
 - Projet:
+
   - [ ] Dates (début/fin)
   - [ ] Lien de réservation
   - [ ] Projet vedette? (si oui)
@@ -195,11 +207,13 @@ Documentation WordPress:
   - [ ] Mettre à jour
 
 - Article:
+
   - [ ] Projet principal associé (facultatif)
   - [ ] Image à la Une
   - [ ] Mettre à jour
 
 - Collaborateur:
+
   - [ ] Projets principaux associés (un ou plusieurs)
   - [ ] Photo (image à la Une)
   - [ ] Biographie

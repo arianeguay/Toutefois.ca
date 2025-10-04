@@ -8,7 +8,7 @@ WordPress est un système de gestion de contenu (CMS) qui permet de créer et g�
 
 1. Pour accéder au panneau d'administration WordPress :
 
-   - Allez à : `https://admin.toutefois.arianeguay.ca/wp-admin`
+   - Allez à : `https://admin.toutefois.ca/wp-admin`
    - Connectez-vous avec vos identifiants
 
 2. Une fois connecté, vous verrez le "Tableau de bord" WordPress où vous pourrez gérer tout le contenu du site.
