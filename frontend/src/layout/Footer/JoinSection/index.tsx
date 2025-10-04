@@ -6,7 +6,7 @@ import EmailIcon from '../../../icons/Email';
 import PhoneIcon from '../../../icons/Phone';
 import Socials from '../socials';
 import JoinInfoRow from './JoinInfoRow';
-import { JoinSectionContainer } from './styles';
+import { JoinSectionContainer, JoinSectionContent } from './styles';
 
 interface JoinSectionProps {
   footer: WordpressFooter | null;
@@ -28,16 +28,18 @@ const JoinSection: React.FC<JoinSectionProps> = ({ footer }) => {
         Nous joindre
       </Typography>
 
-      <JoinInfoRow
-        Icon={PhoneIcon}
-        text={footer?.phone}
-        href={`tel:${footer?.phone}`}
-      />
-      <JoinInfoRow
-        Icon={EmailIcon}
-        text={footer?.email}
-        href={`mailto:${footer?.email}`}
-      />
+      <JoinSectionContent>
+        <JoinInfoRow
+          Icon={PhoneIcon}
+          text={footer?.phone}
+          href={`tel:${footer?.phone}`}
+        />
+        <JoinInfoRow
+          Icon={EmailIcon}
+          text={footer?.email}
+          href={`mailto:${footer?.email}`}
+        />
+      </JoinSectionContent>
       <Socials instagram={footer?.instagram} facebook={footer?.facebook} />
     </JoinSectionContainer>
   );

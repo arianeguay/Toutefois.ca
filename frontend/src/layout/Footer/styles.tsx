@@ -33,7 +33,7 @@ export const FooterContent = styled.div`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     grid-template-columns: repeat(1, 1fr);
-    gap: ${({ theme }) => theme.spacing.md}px;
+    gap: 0;
     text-align: center;
   }
 `;
@@ -47,13 +47,33 @@ export const CenterSection = styled.div`
   align-self: stretch;
   @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     align-items: stretch;
+    gap: ${({ theme }) => theme.spacing.xs}px;
     &:before {
       content: '';
       display: block;
       height: 1px;
       width: 100%;
       background-color: ${({ theme }) => theme.colors.lightText};
-      margin-top: ${({ theme }) => theme.spacing.xs}px;
+      margin-block: ${({ theme }) => theme.spacing.md}px;
+    }
+  }
+`;
+
+export const FooterActionContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    justify-content: center;
+    flex-direction: column;
+    &:before {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 100%;
+      background-color: ${({ theme }) => theme.colors.lightText};
+      margin-block: ${({ theme }) => theme.spacing.lg}px;
     }
   }
 `;

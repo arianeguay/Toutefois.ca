@@ -1,5 +1,5 @@
 import api from '@/api';
-import Button from '@/components/common/Button';
+import FooterAction from './Action';
 import JoinSection from './JoinSection';
 import { FooterContainer, FooterContent } from './styles';
 import WebsiteInfo from './WebInfo';
@@ -15,15 +15,7 @@ const Footer: React.FC<FooterProps> = async ({ donation_link }) => {
       <FooterContent>
         <JoinSection footer={footer} />
         <WebsiteInfo footer={footer} />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}
-        >
-          <Button href={donation_link}>Faire un don</Button>
-        </div>
+        <FooterAction donation_link={donation_link} />
       </FooterContent>
     </FooterContainer>
   );
