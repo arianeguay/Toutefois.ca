@@ -180,8 +180,72 @@ export async function generateMetadata({
       };
     }
 
-    const page = await api.fetchPageBySlug(slug);
-    const pageData = Array.isArray(page) ? page[0] : page;
+    // Regular page handling - mirror the same resolution strategies as Page()
+    let page = await api.fetchPageBySlug(slug);
+    let pageData = Array.isArray(page) ? page[0] : page;
+
+    // Strategy 2: Try the last segment and select best match by path
+    if (!pageData?.id && params.path.length > 1) {
+      const lastSegment = params.path[params.path.length - 1];
+      page = await api.fetchPageBySlug(lastSegment);
+
+      const possibleMatches = Array.isArray(page) ? page : [page].filter(Boolean);
+      if (possibleMatches.length > 0) {
+        const normalizedRequestPath = slug.replace(/^\/?|\/?$/g, '');
+        const bestMatch = possibleMatches.find((p: any) => {
+          try {
+            let pagePath: string;
+            if (p.link.startsWith('http')) {
+              const u = new URL(p.link);
+              pagePath = u.pathname.replace(/^\/?|\/?$/g, '');
+            } else {
+              pagePath = p.link.replace(/^\/?|\/?$/g, '');
+            }
+            return (
+              pagePath === normalizedRequestPath ||
+              pagePath.endsWith(`/${normalizedRequestPath}`) ||
+              normalizedRequestPath.endsWith(pagePath) ||
+              (params.path && p.slug === params.path[params.path.length - 1])
+            );
+          } catch {
+            return false;
+          }
+        });
+        if (bestMatch) {
+          pageData = bestMatch;
+        }
+      }
+    }
+
+    // Strategy 3: Parent-child hierarchy matching using all pages
+    if (!pageData?.id && params.path.length >= 3) {
+      const allPages = await api.fetchPages();
+      for (let i = params.path.length - 1; i >= 0; i--) {
+        const currentSegment = params.path[i];
+        const potentialPage = allPages.find((p) => p.slug === currentSegment);
+        if (potentialPage) {
+          if (i === params.path.length - 1) {
+            pageData = potentialPage;
+            break;
+          }
+          let currentPage = potentialPage as any;
+          let hierarchyMatches = true;
+          for (let j = i - 1; j >= 0; j--) {
+            const parentSegment = params.path[j];
+            const parentPage = allPages.find((p) => p.id === currentPage.parent);
+            if (!parentPage || parentPage.slug !== parentSegment) {
+              hierarchyMatches = false;
+              break;
+            }
+            currentPage = parentPage;
+          }
+          if (hierarchyMatches) {
+            pageData = potentialPage;
+            break;
+          }
+        }
+      }
+    }
 
     if (!pageData?.id) {
       const url = `${baseUrl}/${params.path.join('/')}`;

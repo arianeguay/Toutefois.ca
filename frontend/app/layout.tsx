@@ -160,6 +160,13 @@ export default async function RootLayout({
             </Script>
           </>
         ) : null}
+        <script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="fc4bcff0-442c-4f8c-8bb2-b3e2ebfc96b4"
+          type="text/javascript"
+          async
+        ></script>
         <StyledComponentsRegistry>
           <ThemeProvider>
             <ColorProvider>
