@@ -1,9 +1,9 @@
 import type {
+  OptionsResponse,
   WordpressCollaborator,
   WordpressFooter,
   WordpressImage,
   WordpressMenuItem,
-  WordpressOptions,
   WordpressPage,
   WordpressPost,
   WordpressProject,
@@ -276,7 +276,7 @@ class Api {
     return this.fetchFromApi(`toutefois/v1/collaborators/${slug}`);
   }
 
-  async fetchOptions(): Promise<WordpressOptions> {
+  async fetchOptions(): Promise<OptionsResponse> {
     return this.fetchFromApi('toutefois/v1/options');
   }
 }

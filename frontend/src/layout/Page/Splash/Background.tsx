@@ -3,11 +3,11 @@ import { useTheme } from 'styled-components';
 import Splash1 from './Splash1';
 import Splash2 from './Splash2';
 import Splash3 from './Splash3';
+import { SplashName, StartingSide } from './types';
 
-export type SplashName = 'Splash1' | 'Splash2' | 'Splash3';
 interface BackgroundProps {
   items: SplashName[];
-  startingSide?: 'left' | 'right';
+  startingSide?: StartingSide;
 }
 const Background: React.FC<BackgroundProps> = ({
   items,

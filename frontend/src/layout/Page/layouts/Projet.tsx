@@ -1,6 +1,7 @@
 import parse from 'html-react-parser';
 import { Suspense } from 'react';
-import Background, { SplashName } from '../Splash/Background';
+import Background from '../Splash/Background';
+import { SplashName, StartingSide } from '../Splash/types';
 import { MainContent } from '../styles';
 import getOptions from '../utils/getOptions';
 import { PageLayoutProps } from './types';

@@ -3,7 +3,9 @@ import FeaturedCarousel from '@/components/blocks/FeaturedCarousel';
   import parse from 'html-react-parser';
   import Image from 'next/image';
   import { Suspense } from 'react';
-  import Background, { SplashName } from '../Splash/Background';
+  import Background from '../Splash/Background';
+  import  { SplashName, StartingSide } from "../Splash/types";
+  
   import { MainContent } from '../styles';
   import getOptions from '../utils/getOptions';
   import { PageLayoutProps } from './types';
