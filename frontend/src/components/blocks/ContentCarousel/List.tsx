@@ -8,10 +8,6 @@ import { pxToNumber } from '@/theme';
 import { FacebookPost, WordpressPost, WordpressProject } from '@/types';
 import { useState } from 'react';
 import { useTheme } from 'styled-components';
-import 'swiper/css';
-import 'swiper/css/effect-fade';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import {
   BackgroundImage,

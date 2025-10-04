@@ -5,10 +5,6 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ProjectCard from './ProjectCard';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-
 interface ProjectsRowContentProps {
   projects: WordpressProject[];
 }

@@ -1,9 +1,6 @@
-import { Children } from '@wordpress/element';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { Children } from "@wordpress/element";
+import { Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function Carousel({ children }) {
   return (
@@ -14,7 +11,7 @@ export default function Carousel({ children }) {
       navigation
       pagination={{ clickable: true }}
     >
-            {Children.map(children, (child, index) => (
+      {Children.map(children, (child, index) => (
         <SwiperSlide key={index}>{child}</SwiperSlide>
       ))}
     </Swiper>
