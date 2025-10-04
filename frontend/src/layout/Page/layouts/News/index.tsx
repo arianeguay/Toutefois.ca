@@ -8,7 +8,7 @@ import { MainContent } from '../../styles';
 import getOptions from '../../utils/getOptions';
 import { PageLayoutProps } from '../types';
 import NewsHeader from './NewsHeader';
-import { NewsPageContent } from './styles';
+import { NewsPageBody, NewsPageContent } from './styles';
 
 const NewsPageLayout: React.FC<PageLayoutProps> = async ({
   template,
@@ -88,10 +88,12 @@ const NewsPageLayout: React.FC<PageLayoutProps> = async ({
             className={`page-content template-${template.replace('.php', '')}`}
           >
             <NewsHeader facebookInfo={facebookInfo} date={page.date} />
-            <div style={{ marginBlock: theme.spacing.md }} />
-            <BackLink href="/archives" />
-            <div style={{ marginBlock: theme.spacing.md }} />
-            {!!page.content?.rendered && parse(page.content.rendered, options)}
+            <NewsPageBody>
+              <BackLink href="/archives" />
+              <div style={{ marginBlock: theme.spacing.md }} />
+              {!!page.content?.rendered &&
+                parse(page.content.rendered, options)}
+            </NewsPageBody>
           </NewsPageContent>
         </Suspense>
       </MainContent>

@@ -42,5 +42,5 @@ export const NewsPageHeaderHeading = styled.div`
 
 export const NewsPageBody = styled.div`
   padding-inline: ${({ theme }) => theme.spacing.xl}px;
-  padding-block: ${({ theme }) => theme.spacing.lg}px;
+  padding-block: ${({ theme }) => theme.spacing.md}px;
 `;
