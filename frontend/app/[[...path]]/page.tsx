@@ -41,6 +41,7 @@ export async function generateMetadata({
   if (params.path.length === 1 && params.path[0] === 'home') {
     const url = `${baseUrl}/`;
     const title = 'Toutefois - Accueil';
+
     const description = "Page d'accueil de Toutefois";
     return {
       title,
@@ -189,7 +190,9 @@ export async function generateMetadata({
       const lastSegment = params.path[params.path.length - 1];
       page = await api.fetchPageBySlug(lastSegment);
 
-      const possibleMatches = Array.isArray(page) ? page : [page].filter(Boolean);
+      const possibleMatches = Array.isArray(page)
+        ? page
+        : [page].filter(Boolean);
       if (possibleMatches.length > 0) {
         const normalizedRequestPath = slug.replace(/^\/?|\/?$/g, '');
         const bestMatch = possibleMatches.find((p: any) => {
@@ -232,7 +235,9 @@ export async function generateMetadata({
           let hierarchyMatches = true;
           for (let j = i - 1; j >= 0; j--) {
             const parentSegment = params.path[j];
-            const parentPage = allPages.find((p) => p.id === currentPage.parent);
+            const parentPage = allPages.find(
+              (p) => p.id === currentPage.parent,
+            );
             if (!parentPage || parentPage.slug !== parentSegment) {
               hierarchyMatches = false;
               break;
