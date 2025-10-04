@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
+
 // Generate metadata for the page
 export async function generateMetadata({
   params,
@@ -178,12 +179,15 @@ export async function generateStaticParams() {
     const pages = await api.fetchPages();
 
     // Format for Next.js static paths
-    return pages.map((page) => {
-      const slugParts = page.slug?.split('/');
-      return {
-        path: slugParts,
-      };
-    });
+    return pages
+      // Do not pre-render the archives listing; it reads query params at runtime
+      .filter((page) => page.slug !== 'archives')
+      .map((page) => {
+        const slugParts = page.slug?.split('/');
+        return {
+          path: slugParts,
+        };
+      });
   } catch (error) {
     console.error('Error generating static params:', error);
     return [];
@@ -226,14 +230,6 @@ export default async function Page({
   }
 
   try {
-    // Parse pagination for archives
-    const qPageRaw = searchParams?.page ?? searchParams?.p ?? '1';
-    const qPage = Array.isArray(qPageRaw) ? qPageRaw[0] : qPageRaw;
-    const archivePageNumber = Math.max(
-      1,
-      parseInt(String(qPage || '1'), 10) || 1,
-    );
-
     // Construct the slug from the path segments
     const slug = params.path.join('/');
 
@@ -425,6 +421,15 @@ export default async function Page({
     // If this is the archives listing route (/archives), pass the page number for pagination
     const isArchivesListing =
       params.path.length === 1 && params.path[0] === 'archives';
+    let archivePageNumber: number | undefined = undefined;
+    if (isArchivesListing) {
+      const qPageRaw = searchParams?.page ?? searchParams?.p ?? '1';
+      const qPage = Array.isArray(qPageRaw) ? qPageRaw[0] : qPageRaw;
+      archivePageNumber = Math.max(
+        1,
+        parseInt(String(qPage || '1'), 10) || 1,
+      );
+    }
     return (
       <PageLayout
         page={pageData}
