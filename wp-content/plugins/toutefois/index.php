@@ -329,7 +329,7 @@ function add_cors_headers()
     }
 
     $allowed_origins = array(
-        'https://toutefois.arianeguay.ca',
+        'https://toutefois.ca',
         'https://admin.toutefois.ca',
         'http://localhost:3000',
         'http://localhost:5173'
@@ -342,7 +342,7 @@ function add_cors_headers()
         header('Access-Control-Allow-Origin: ' . $origin);
     } else {
         // Fallback to the main site URL for production
-        header('Access-Control-Allow-Origin: https://toutefois.arianeguay.ca');
+        header('Access-Control-Allow-Origin: https://toutefois.ca');
     }
 
     // Set standard CORS headers

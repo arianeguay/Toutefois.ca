@@ -41,7 +41,7 @@ Le site utilise des "deploy hooks" (déclencheurs de déploiement) pour automati
 
 Le site dispose de plusieurs environnements :
 
-1. **Production** : Site public live (`https://toutefois.arianeguay.ca`)
+1. **Production** : Site public live (`https://toutefois.ca`)
 2. **Prévisualisation** : Version de prévisualisation pour tester les changements
 3. **Développement** : Environnement local pour les développeurs
 
@@ -49,7 +49,7 @@ Le site dispose de plusieurs environnements :
 
 Le site utilise la configuration suivante pour les URL :
 
-- **Frontend public** : `https://toutefois.arianeguay.ca`
+- **Frontend public** : `https://toutefois.ca`
 - **Administration WordPress** : `https://admin.toutefois.ca`
 
 ## Configuration serveur
@@ -74,7 +74,7 @@ nginx/
 ├── sites-available/
 │   ├── admin.toutefois.ca.conf - Config pour l'admin WordPress
 │   ├── nginx.conf - Configuration principale
-│   └── toutefois.arianeguay.ca.conf - Config pour le frontend
+│   └── toutefois.ca.conf - Config pour le frontend
 ```
 
 ## Mise à jour de WordPress

@@ -130,7 +130,7 @@ add_action('rest_api_init', function () {
     add_filter('rest_pre_serve_request', function ($served, $result, $request, $server) {
         $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
         $allowed = [
-            'https://toutefois.arianeguay.ca', // your React site
+            'https://toutefois.ca', // your React site
             'http://localhost:3000',           // dev
         ];
         if (in_array($origin, $allowed, true)) {
