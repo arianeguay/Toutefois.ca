@@ -12,6 +12,7 @@ import {
   Permanent_Marker,
   Poppins,
 } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 
 const montserrat = Montserrat({
@@ -46,6 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
     const home = await api.fetchPageBySlug('home');
     const page = Array.isArray(home) ? home[0] : home;
+    const options = await api.fetchOptions();
     const description = page?.excerpt?.rendered
       ? page.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160)
       : page?.content?.rendered
@@ -70,6 +72,12 @@ export async function generateMetadata(): Promise<Metadata> {
         card: 'summary_large_image',
         title: 'Toutefois',
         description,
+      },
+      verification: {
+        google:
+          options?.google_site_verification ||
+          process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
+          undefined,
       },
       robots: {
         index: true,
@@ -103,6 +111,9 @@ export async function generateMetadata(): Promise<Metadata> {
         card: 'summary_large_image',
         title: 'Toutefois',
       },
+      verification: {
+        google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+      },
       robots: {
         index: true,
         follow: true,
@@ -125,6 +136,7 @@ export default async function RootLayout({
 }>) {
   const options = await api.fetchOptions();
   const donation_link = options?.donation_link;
+  const gaId = options?.ga_measurement_id || process.env.NEXT_PUBLIC_GA_ID;
   return (
     <html lang="fr">
       <body
@@ -132,6 +144,22 @@ export default async function RootLayout({
         suppressHydrationWarning
         style={{ overflowY: 'auto' }}
       >
+        {gaId ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}', { anonymize_ip: true });
+              `}
+            </Script>
+          </>
+        ) : null}
         <StyledComponentsRegistry>
           <ThemeProvider>
             <ColorProvider>

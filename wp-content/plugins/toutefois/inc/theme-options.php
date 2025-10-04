@@ -42,6 +42,20 @@ function toutefois_register_settings()
         'default' => '',
         'show_in_rest' => true,
     ]);
+    // Google Analytics 4 Measurement ID (e.g. G-XXXXXXXXXX)
+    register_setting('toutefois_options', 'toutefois_ga_measurement_id', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => '',
+        'show_in_rest' => true,
+    ]);
+    // Google Search Console verification token
+    register_setting('toutefois_options', 'toutefois_google_site_verification', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => '',
+        'show_in_rest' => true,
+    ]);
 }
 add_action('admin_init', 'toutefois_register_settings');
 
@@ -71,6 +85,20 @@ function toutefois_options_page_html()
                     <th scope="row">Lien de donation</th>
                     <td><input type="text" name="toutefois_donation_link" value="<?php echo esc_attr(get_option('toutefois_donation_link')); ?>" size="40" /></td>
                 </tr>
+                <tr valign="top">
+                    <th scope="row">Google Analytics 4 Measurement ID</th>
+                    <td>
+                        <input type="text" name="toutefois_ga_measurement_id" value="<?php echo esc_attr(get_option('toutefois_ga_measurement_id')); ?>" size="40" placeholder="G-XXXXXXXXXX" />
+                        <p class="description">Entrez l'identifiant GA4 (par ex. G-XXXXXXXXXX).</p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">Google Site Verification</th>
+                    <td>
+                        <input type="text" name="toutefois_google_site_verification" value="<?php echo esc_attr(get_option('toutefois_google_site_verification')); ?>" size="60" placeholder="Token de vérification Search Console" />
+                        <p class="description">Collez la valeur du meta tag <code>google-site-verification</code> fourni par la Google Search Console.</p>
+                    </td>
+                </tr>
             </table>
             <?php submit_button(); ?>
         </form>
@@ -95,6 +123,9 @@ function toutefois_get_options()
         'error_title' => get_option('toutefois_error_title', 'Erreur'),
         'error_message' => get_option('toutefois_error_message', 'Une erreur est survenue.'),
         'donation_link' => get_option('toutefois_donation_link', ''),
+        // Expose analytics and search verification values to the frontend
+        'ga_measurement_id' => get_option('toutefois_ga_measurement_id', ''),
+        'google_site_verification' => get_option('toutefois_google_site_verification', ''),
     ];
     return new WP_REST_Response($options, 200);
 }

@@ -50,6 +50,7 @@ export interface WordpressPage {
     preview_image_url?: string;
   };
   isMainProject?: boolean;
+  date?: string;
 }
 
 export interface WordpressImage {
@@ -175,4 +176,12 @@ export interface WordpressOptions {
   error_title: string;
   error_message: string;
   donation_link: string;
+  /**
+   * Google Analytics 4 Measurement ID (e.g., G-XXXXXXXXXX) provided by WP options
+   */
+  ga_measurement_id?: string;
+  /**
+   * Google Search Console site verification token provided by WP options
+   */
+  google_site_verification?: string;
 }
