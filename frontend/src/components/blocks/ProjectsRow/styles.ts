@@ -4,24 +4,58 @@ import { ContainerContentStyling } from '@/theme/global-styles';
 import Link from 'next/link';
 import styled from 'styled-components';
 
+const hexToRgba = (hex: string, alpha: number) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? `rgba(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}, ${alpha})`
+    : null;
+};
+
 export const ProjectsRowContainer = styled.div`
-  ${ContainerContentStyling}
+  position: relative;
+  --gradient-size: 32px;
+  --gradient-size-negative: -32px;
+  box-shadow: ${({ theme }) => theme.boxShadow.md};
+  border-top: 1px solid ${({ theme }) => theme.colors.sectionColor1};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.sectionColor2};
+  padding-block: ${({ theme }) => theme.spacing.md}px;
+  background-color: ${({ theme }) =>
+    hexToRgba(theme.colors.sectionColor1, 0.6)};
+
   &:not(:first-child) {
     margin-block-start: ${({ theme }) => theme.spacing.lg}px;
   }
-  .swiper {
+  h2 {
+    margin-block: 0;
     position: relative;
+    z-index: 2;
+  }
+`;
+
+export const ProjectsRowContainerContent = styled.div`
+  ${ContainerContentStyling}
+  .swiper {
     width: 100%;
     --swiper-navigation-size: 36px;
     --swiper-pagination-bottom: -20px;
-    --swiper-navigation-sides-offset: -32px;
+    --swiper-navigation-sides-offset: ;
     --swiper-navigation-color: ${({ theme }) =>
       theme.colors.buttonPrimaryBackground};
     --swiper-pagination-color: ${({ theme }) => theme.colors.primaryText};
     overflow: visible;
     --swiper-padding-horizontal: 30px;
-
+    z-index: auto;
     padding-block: 4px;
+
+    overflow: hidden;
+    margin-left: var(--gradient-size-negative);
+    margin-right: var(--gradient-size-negative);
+    padding-left: var(--gradient-size);
+    padding-right: var(--gradient-size);
+    width: auto !important;
+    .swiper-wrapper {
+      z-index: 1;
+    }
 
     @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
       margin-left: -24px;
@@ -49,7 +83,7 @@ export const ProjectCard = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.borderColor1};
   border-radius: ${({ theme }) => theme.borderRadius.md}px;
   overflow: hidden;
-  background-color: white;
+  background: white;
   transition: all 0.2s ease-in-out;
   height: 100%;
 

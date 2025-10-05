@@ -25,12 +25,22 @@ img {
   height: auto;
 }
 
-/* Swiper styles */
-.swiper-button-next,
-.swiper-button-prev {
-  color: #fff;
-}
-
 .swiper-pagination-bullet-active {
   background: #fff;
+}
+
+.swiper .swiper-button-prev:after,
+.swiper .swiper-rtl .swiper-button-next:after {
+  font-size: 24px;
+  content: '◀';
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.swiper .swiper-button-next:after,
+.swiper .swiper-rtl .swiper-button-prev:after {
+  font-size: 24px;
+  content: '▶';
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
 }

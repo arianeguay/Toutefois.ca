@@ -27,7 +27,7 @@ export const ContentListContainer = styled.div`
   align-items: center;
   ${ContainerContentStyling}
   overflow:hidden;
-  padding-inline: ${({ theme }) => theme.spacing.xl}px;
+  padding-inline: 30px;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding-inline: ${({ theme }) => theme.spacing.xxl}px;
   }
@@ -36,10 +36,11 @@ export const ContentListContainer = styled.div`
     width: 100%;
     --swiper-navigation-size: 36px;
     --swiper-pagination-bottom: -20px;
-    --swiper-navigation-sides-offset: -32px;
+    --swiper-navigation-sides-offset: -28px;
     --swiper-navigation-color: ${({ theme }) => theme.colors.lightText};
     --swiper-pagination-color: ${({ theme }) => theme.colors.lightText};
     overflow: visible;
+
     .swiper-wrapper {
       padding-block: ${({ theme }) => theme.spacing.md}px;
       width: 100%;

@@ -1,7 +1,7 @@
 import Typography from '@/components/common/Typography';
 import Api from '../../../api';
 import ProjectsRowContent from './Row';
-import { ProjectsRowContainer } from './styles';
+import { ProjectsRowContainer, ProjectsRowContainerContent } from './styles';
 
 interface ProjectsRowProps {
   categoryId?: string;
@@ -16,10 +16,12 @@ const ProjectsRow: React.FC<ProjectsRowProps> = async ({
 
   return (
     <ProjectsRowContainer>
-      <Typography variant="h3" element="h2" style={{ marginBottom: 4 }}>
-        {title}
-      </Typography>
-      <ProjectsRowContent projects={allProjects} />
+      <ProjectsRowContainerContent>
+        <Typography variant="h3" element="h2" style={{ marginBottom: 4 }}>
+          {title}
+        </Typography>
+        <ProjectsRowContent projects={allProjects} />
+      </ProjectsRowContainerContent>
     </ProjectsRowContainer>
   );
 };
