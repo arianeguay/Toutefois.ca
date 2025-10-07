@@ -116,9 +116,12 @@ $heading_style = [
                     'svg' => [
                         'xmlns' => true,
                         'viewBox' => true,
+                        'viewbox' => true,
                         'width' => true,
                         'height' => true,
                         'preserveAspectRatio' => true,
+                        'preserveaspectratio' => true,
+
                         'style' => true,
                         'fill' => true,
                         'stroke' => true,
