@@ -1,27 +1,22 @@
 'use client';
 
 import { ContainerContentStyling } from '@/theme/global-styles';
+import hexToRgba from '@/theme/utils/hexToRgba';
 import Link from 'next/link';
-import styled from 'styled-components';
-
-const hexToRgba = (hex: string, alpha: number) => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? `rgba(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}, ${alpha})`
-    : null;
-};
+import styled, { css } from 'styled-components';
 
 export const ProjectsRowContainer = styled.div`
   position: relative;
-  --gradient-size: 32px;
-  --gradient-size-negative: -32px;
+  --gradient-size: 48px;
+  --gradient-size-negative: -48px;
   box-shadow: ${({ theme }) => theme.boxShadow.md};
   border-top: 1px solid ${({ theme }) => theme.colors.sectionColor1};
   border-bottom: 1px solid ${({ theme }) => theme.colors.sectionColor2};
   padding-block: ${({ theme }) => theme.spacing.md}px;
   background-color: ${({ theme }) =>
-    hexToRgba(theme.colors.sectionColor1, 0.6)};
+    hexToRgba(theme.colors.sectionColor1, 0.2)};
 
+  backdrop-filter: blur(4px);
   &:not(:first-child) {
     margin-block-start: ${({ theme }) => theme.spacing.lg}px;
   }
@@ -36,26 +31,16 @@ export const ProjectsRowContainerContent = styled.div`
   ${ContainerContentStyling}
   .swiper {
     width: 100%;
-    --swiper-navigation-size: 36px;
-    --swiper-pagination-bottom: -20px;
-    --swiper-navigation-sides-offset: ;
+
     --swiper-navigation-color: ${({ theme }) =>
       theme.colors.buttonPrimaryBackground};
     --swiper-pagination-color: ${({ theme }) => theme.colors.primaryText};
-    overflow: visible;
-    --swiper-padding-horizontal: 30px;
-    z-index: auto;
-    padding-block: 4px;
 
-    overflow: hidden;
-    margin-left: var(--gradient-size-negative);
-    margin-right: var(--gradient-size-negative);
-    padding-left: var(--gradient-size);
-    padding-right: var(--gradient-size);
-    width: auto !important;
     .swiper-wrapper {
       z-index: 1;
     }
+
+    padding-bottom: ${({ theme }) => theme.spacing.xl}px;
 
     @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
       margin-left: -24px;
@@ -164,7 +149,6 @@ export const ProjectCardBody = styled.div`
 `;
 
 export const ProjectCardContainer = styled.div`
-  width: 300px;
   aspect-ratio: 1;
   border-radius: ${({ theme }) => theme.borderRadius.md}px;
   overflow: hidden;
@@ -210,4 +194,43 @@ export const ProjectCardsRow = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.md}px;
   flex-direction: row;
+`;
+
+export const SwiperNavigationButton = styled.button<{
+  $side?: 'left' | 'right';
+  $disabled?: boolean;
+}>`
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  color: ${({ theme }) => theme.colors.buttonPrimaryBackground};
+  position: absolute;
+  top: 50%;
+
+  width: 30px;
+  aspect-ratio: 1;
+  transform: translateY(-50%) !important;
+  left: ${({ $side }) => ($side === 'left' ? '-35px' : 'auto')};
+  right: ${({ $side }) => ($side === 'right' ? '-35px' : 'auto')};
+  z-index: 2;
+  padding: 0;
+  font-size: 30px;
+
+  ${({ $disabled }) =>
+    $disabled
+      ? css`
+          opacity: 0.2;
+          &:hover {
+            transform: translateY(-50%) !important;
+
+            opacity: 0.2 !important;
+          }
+        `
+      : css`
+          cursor: pointer;
+          &:hover {
+            opacity: 0.8;
+            transform: translateY(-50%) !important;
+          }
+        `}
 `;

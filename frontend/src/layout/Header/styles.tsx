@@ -1,14 +1,30 @@
 'use client';
 
 import { useColorContext } from '@/providers/color-provider';
-import styled from 'styled-components';
+import { hexToEquivalentRgba } from '@/theme/utils/hexToRgba';
+import styled, { css } from 'styled-components';
 
 export const HeaderContainer = styled.header`
   width: 100%;
-  background-color: ${({ theme }) => {
+  ${({ theme }) => {
     const { mainColor } = useColorContext();
-    return mainColor || theme.colors.headerBackground;
+    const color = mainColor || theme.colors.headerBackground;
+    const bgColor = hexToEquivalentRgba(
+      color,
+      theme.colors.mainBackground,
+      0.9,
+    );
+
+    const boxShadow = theme.boxShadow.xxlColored(color);
+
+    return css`
+      background-color: ${bgColor};
+      box-shadow: ${boxShadow};
+      border-bottom: 1px solid ${color};
+    `;
   }};
+
+  backdrop-filter: blur(10px);
   height: ${({ theme }) => theme.appearance.headerHeight};
   padding-block: ${({ theme }) => theme.spacing.md}px;
   padding-inline: ${({ theme }) => theme.spacing.xxl}px;
@@ -17,7 +33,7 @@ export const HeaderContainer = styled.header`
   z-index: 100;
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl}px;
-  box-shadow: ${({ theme }) => theme.boxShadow.xl};
+
   @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
     flex-direction: row;
     gap: ${({ theme }) => theme.spacing.xl}px;

@@ -17,9 +17,13 @@ $object_position = isset($attributes['objectPosition']) ? $attributes['objectPos
 $text_color = isset($attributes['textColor']) ? $attributes['textColor'] : '#FFFFFF';
 $big_text_shadow = isset($attributes['bigTextShadow']) ? $attributes['bigTextShadow'] : false;
 $text_shadow_color = isset($attributes['textShadowColor']) ? $attributes['textShadowColor'] : 'rgba(0,0,0,0.5)';
-$blurred_background = isset($attributes['blurredBackground']) ? $attributes['blurredBackground'] : true;
+$blurred_background = isset($attributes['blurredBackground']) ? $attributes['blurredBackground'] : false;
 $height = isset($attributes['height']) ? $attributes['height'] : '350px';
 $height_unit = isset($attributes['heightUnit']) ? $attributes['heightUnit'] : 'px';
+// New background settings
+$background_mode = isset($attributes['backgroundMode']) ? $attributes['backgroundMode'] : 'image';
+$background_color = isset($attributes['backgroundColor']) ? $attributes['backgroundColor'] : '#f0f0f0';
+$background_svg = isset($attributes['backgroundSvg']) ? $attributes['backgroundSvg'] : '';
 
 // Build inline styles for the container
 $container_styles = [
@@ -34,16 +38,26 @@ $image_style = [
     'height: 100%',
 ];
 
-if ($image && !empty($image['url'])) {
-    $image_style[] = 'background-image: url(' . esc_url($image['url']) . ')';
-    $image_style[] = 'background-size: cover';
-    $image_style[] = 'background-position: ' . esc_attr($object_position);
-    if ($blurred_background) {
-        $image_style[] = 'filter: blur(4px)';
+// Determine background rendering based on mode
+if ($background_mode === 'image') {
+    if ($image && !empty($image['url'])) {
+        $image_style[] = 'background-image: url(' . esc_url($image['url']) . ')';
+        $image_style[] = 'background-size: cover';
+        $image_style[] = 'background-position: ' . esc_attr($object_position);
+        if ($blurred_background) {
+            $image_style[] = 'filter: blur(4px)';
+        }
+    } else {
+        // Fallback if no image
+        $image_style[] = 'background-color: ' . esc_attr($background_color);
+        $image_style[] = 'border: 1px dashed #ccc';
     }
-} else {
-    $image_style[] = 'background-color: #f0f0f0';
-    $image_style[] = 'border: 1px dashed #ccc';
+} elseif ($background_mode === 'color') {
+    $image_style[] = 'background-color: ' . esc_attr($background_color);
+} elseif ($background_mode === 'svg') {
+    // Base color behind the SVG if provided
+    $image_style[] = 'position: relative';
+    $image_style[] = 'background-color: ' . esc_attr($background_color);
 }
 
 // Build inline styles for the content wrapper
@@ -78,6 +92,7 @@ $wrapper_attributes = get_block_wrapper_attributes([
     'data-blurred' => $blurred_background ? '1' : '0',
     'data-height' => $height,
     'data-height-unit' => $height_unit,
+    'data-background-mode' => $background_mode,
     'style' => implode('; ', $container_styles),
 ]);
 
@@ -91,7 +106,71 @@ $heading_style = [
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <div class="toutefois-banner__bg" style="<?php echo implode('; ', $image_style); ?>"></div>
+    <div class="toutefois-banner__bg" style="<?php echo implode('; ', $image_style); ?>">
+        <?php if ($background_mode === 'svg' && !empty($background_svg)) : ?>
+            <div class="toutefois-banner__bg-svg" style="position:absolute; inset:0;">
+                <?php
+                // Allow only safe SVG tags/attributes
+                $allowed_svg = [
+                    'svg' => [
+                        'xmlns' => true,
+                        'viewBox' => true,
+                        'width' => true,
+                        'height' => true,
+                        'preserveAspectRatio' => true,
+                        'fill' => true,
+                        'stroke' => true,
+                        'stroke-width' => true,
+                    ],
+                    'path' => [
+                        'd' => true,
+                        'fill' => true,
+                        'stroke' => true,
+                        'stroke-width' => true,
+                    ],
+                    'rect' => [
+                        'x' => true,
+                        'y' => true,
+                        'width' => true,
+                        'height' => true,
+                        'rx' => true,
+                        'ry' => true,
+                        'fill' => true,
+                        'stroke' => true,
+                        'stroke-width' => true,
+                    ],
+                    'circle' => [
+                        'cx' => true,
+                        'cy' => true,
+                        'r' => true,
+                        'fill' => true,
+                        'stroke' => true,
+                        'stroke-width' => true,
+                    ],
+                    'g' => [
+                        'fill' => true,
+                        'stroke' => true,
+                        'stroke-width' => true,
+                        'opacity' => true,
+                    ],
+                    'polygon' => [
+                        'points' => true,
+                        'fill' => true,
+                        'stroke' => true,
+                        'stroke-width' => true,
+                    ],
+                    'polyline' => [
+                        'points' => true,
+                        'fill' => true,
+                        'stroke' => true,
+                        'stroke-width' => true,
+                    ],
+                ];
+                echo wp_kses($background_svg, $allowed_svg);
+                ?>
+            </div>
+        <?php endif; ?>
+    </div>
     <div class="toutefois-banner__content" style="<?php echo implode('; ', $content_styles); ?>">
         <div class="toutefois-banner__body" style="<?php echo implode('; ', $body_style); ?>">
             <?php if ($title) : ?>

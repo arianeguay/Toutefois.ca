@@ -23,9 +23,11 @@ body {
     font-family: ${({ theme }) => theme.fonts.primary};
     margin: 0;
     padding: 0;
-    width: 100%;
-    overflow-x: hidden;
     
+      max-width: 100vw;
+  width: 100vw;
+  overflow-x: hidden;
+  
     .app {
       width: 100%;
     }

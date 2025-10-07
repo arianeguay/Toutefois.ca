@@ -14,7 +14,7 @@ const Header = async ({ donation_link }: HeaderProps) => {
   const specialProject = await api.fetchSpecialProjects();
 
   return (
-    <ClientBlock>
+    <ClientBlock style={{ position: 'sticky', top: 0, zIndex: 100 }}>
       <HeaderContainer>
         <Logo />
         <Menu menuItems={menuItems} donation_link={donation_link} />

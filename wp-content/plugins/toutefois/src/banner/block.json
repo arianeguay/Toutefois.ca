@@ -43,7 +43,7 @@
     },
     "blurredBackground": {
       "type": "boolean",
-      "default": true
+      "default": false
     },
     "verticalAlignment": {
       "type": "string",
@@ -72,6 +72,18 @@
     "heightUnit": {
       "type": "string",
       "default": "px"
+    },
+    "backgroundMode": {
+      "type": "string",
+      "default": "image"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "#f0f0f0"
+    },
+    "backgroundSvg": {
+      "type": "string",
+      "default": ""
     }
   }
 }

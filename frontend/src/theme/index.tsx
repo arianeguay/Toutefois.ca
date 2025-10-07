@@ -1,3 +1,5 @@
+import hexToRgba from './utils/hexToRgba';
+
 export const theme = {
   colors: {
     primaryText: '#282651',
@@ -6,14 +8,14 @@ export const theme = {
     lightText: '#F5F3EE',
 
     headerBackground: '#282651',
-    mainBackground: '#FFF4D8',
+    mainBackground: '#f4f2ef',
 
     sectionColor1: '#862331',
     sectionColor2: '#5A3D55',
     sectionColor3: '#333333',
     sectionColor4: '#437C90',
 
-    buttonPrimaryBackground: '#E1A42B',
+    buttonPrimaryBackground: '#eaaa19',
     buttonPrimaryColor: '#282651',
     buttonSecondaryBackground: '#6B1E2C',
     buttonSecondaryColor: '#F5F3EE',
@@ -104,6 +106,8 @@ export const theme = {
     lg: '0 16px 32px rgba(0, 0, 0, 0.1)',
     xl: '0 32px 64px rgba(0, 0, 0, 0.1)',
     xxl: '0 64px 128px rgba(0, 0, 0, 0.1)',
+
+    xxlColored: (color: string) => `2px 2px 4px ${hexToRgba(color, 0.5)}`,
   },
   buttonSize: {
     height_sm: '24px',
