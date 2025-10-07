@@ -42,7 +42,7 @@ $image_style = [
 // Determine background rendering based on mode
 if ($background_mode === 'image') {
     if ($image && !empty($image['url'])) {
-        $image_style[] = 'background-image: url(' . esc_url($image['url']) . ')';
+        $image_style[] = 'background-image: url("' . esc_url_raw($image['url']) . '")';
         $image_style[] = 'background-size: cover';
         $image_style[] = 'background-position: ' . esc_attr($object_position);
         if ($blurred_background) {
@@ -116,12 +116,11 @@ $heading_style = [
                     'svg' => [
                         'xmlns' => true,
                         'viewBox' => true,
-                        'viewbox' => true,
+                        'view-box' => true,
                         'width' => true,
                         'height' => true,
                         'preserveAspectRatio' => true,
-                        'preserveaspectratio' => true,
-
+                        'preserve-aspect-ratio' => true,
                         'style' => true,
                         'fill' => true,
                         'stroke' => true,
