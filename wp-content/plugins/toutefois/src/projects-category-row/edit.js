@@ -6,6 +6,7 @@ import {
   Spinner,
   TextControl,
   ToggleControl,
+  ColorPalette,
 } from "@wordpress/components";
 import { useSelect } from "@wordpress/data";
 import { useMemo, useState } from "@wordpress/element";
@@ -21,8 +22,21 @@ const PREVIEW_LIMIT = 6; // keep small to reduce load
 // helper for hierarchical labels
 const labelWithDepth = (name, depth) => `${"— ".repeat(depth)}${name}`;
 
+// lightweight hex -> rgba helper for alpha previews
+const hexToRgba = (hex, alpha = 0.1) => {
+  if (!hex || typeof hex !== "string") return undefined;
+  const m = hex.trim().replace("#", "");
+  if (m.length !== 3 && m.length !== 6) return undefined;
+  const full = m.length === 3 ? m.split("").map((c) => c + c).join("") : m;
+  const num = parseInt(full, 16);
+  const r = (num >> 16) & 255;
+  const g = (num >> 8) & 255;
+  const b = num & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
+
 export default function Edit({ attributes, setAttributes }) {
-  const { category: attrCategory, title: attrTitle } = attributes; // store ID as string
+  const { category: attrCategory, title: attrTitle, backgroundColor } = attributes; // store ID as string
   const [includeChildren, setIncludeChildren] = useState(true);
 
   const categoryId = useMemo(() => {
@@ -185,10 +199,25 @@ export default function Edit({ attributes, setAttributes }) {
             label={__("Title", "toutefois")}
             onChange={(val) => setAttributes({ title: val })}
           />
+          <PanelBody title={__("Background", "toutefois")}>
+            <ColorPalette
+              value={backgroundColor || ""}
+              onChange={(val) => setAttributes({ backgroundColor: val || "" })}
+              clearable
+            />
+          </PanelBody>
         </PanelBody>
       </InspectorControls>
 
-      <div {...blockProps}>
+      <div
+        {...blockProps}
+        style={{
+          background: backgroundColor ? hexToRgba(backgroundColor, 0.1) : undefined,
+          borderTop: "1px solid #e0e0e0",
+          borderBottom: "1px solid #e0e0e0",
+          padding: 16,
+        }}
+      >
         {attrTitle ? (
           <h2 className="toutefois-projects-row__title">{attrTitle}</h2>
         ) : null}

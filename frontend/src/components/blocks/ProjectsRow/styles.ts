@@ -5,7 +5,7 @@ import hexToRgba from '@/theme/utils/hexToRgba';
 import Link from 'next/link';
 import styled, { css } from 'styled-components';
 
-export const ProjectsRowContainer = styled.div`
+export const ProjectsRowContainer = styled.div<{ $bgColor?: string }>`
   position: relative;
   --gradient-size: 48px;
   --gradient-size-negative: -48px;
@@ -14,8 +14,8 @@ export const ProjectsRowContainer = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.sectionColor2};
   padding-block-start: ${({ theme }) => theme.spacing.lg}px;
   padding-block-end: ${({ theme }) => theme.spacing.xl}px;
-  background-color: ${({ theme }) =>
-    hexToRgba(theme.colors.sectionColor1, 0.1)};
+  background-color: ${({ theme, $bgColor }) =>
+    $bgColor ? hexToRgba($bgColor, 0.1) : hexToRgba(theme.colors.sectionColor1, 0.1)};
 
   backdrop-filter: blur(2px);
   &:not(:first-child) {

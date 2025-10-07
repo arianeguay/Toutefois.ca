@@ -6,6 +6,8 @@ $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
 $category = isset($attributes['category']) ? $attributes['category'] : '';
 
 $title = isset($attributes['title']) ? $attributes['title'] : '';
+// Optional background color hex chosen in editor
+$background_color = isset($attributes['backgroundColor']) ? $attributes['backgroundColor'] : '';
 // Create a mock request to pass to our function
 $request = new WP_REST_Request('GET', '/toutefois/v1/projects-category-row');
 $request->set_query_params([
@@ -22,7 +24,8 @@ if (!empty($projects)) :
 ?>
     <div <?php echo get_block_wrapper_attributes(); ?>
         data-title="<?php echo esc_attr($title); ?>"
-        data-category="<?php echo esc_attr($category); ?>">
+        data-category="<?php echo esc_attr($category); ?>"
+        data-background-color="<?php echo esc_attr($background_color); ?>">
         <ul class="projects-grid">
             <?php foreach ($projects as $project) : ?>
                 <li class="project-item">

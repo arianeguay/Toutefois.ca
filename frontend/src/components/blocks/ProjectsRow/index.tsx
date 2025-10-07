@@ -5,16 +5,18 @@ import { ProjectsRowContainer } from './styles';
 interface ProjectsRowProps {
   categoryId?: string;
   title?: string;
+  backgroundColor?: string;
 }
 
 const ProjectsRow: React.FC<ProjectsRowProps> = async ({
   categoryId = '',
   title = '',
+  backgroundColor,
 }) => {
   const allProjects = await Api.fetchAllProjectsByCategory(categoryId);
 
   return (
-    <ProjectsRowContainer>
+    <ProjectsRowContainer $bgColor={backgroundColor}>
       <ProjectsRowContent projects={allProjects} title={title} />
     </ProjectsRowContainer>
   );

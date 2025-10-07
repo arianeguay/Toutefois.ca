@@ -156,6 +156,7 @@ const getOptions = (page: WordpressPage, archivePageNumber?: number) => {
         if (className?.includes('wp-block-toutefois-projects-category-row')) {
           // Extract category ID from data attribute if available
           const categoryId = reactAttributes['data-category'] || '';
+          const backgroundColor = reactAttributes['data-background-color'] || '';
 
           // Generate a unique ID for the row
           const rowId = Math.random().toString(36).substring(2, 9);
@@ -165,6 +166,7 @@ const getOptions = (page: WordpressPage, archivePageNumber?: number) => {
               key={`projects-row-${rowId}`}
               categoryId={categoryId}
               title={reactAttributes['data-title']}
+              backgroundColor={backgroundColor || undefined}
             />
           );
         }
@@ -232,12 +234,14 @@ const getOptions = (page: WordpressPage, archivePageNumber?: number) => {
             // Extract category ID from data attribute if available
             const categoryId = reactAttributes['data-category'] || '';
             const title = reactAttributes['data-title'] || '';
+            const backgroundColor = reactAttributes['data-background-color'] || '';
 
             return (
               <ProjectsRow
                 key={`projects-row-${categoryId || Math.random().toString(36).substring(2, 9)}`}
                 categoryId={categoryId}
                 title={title}
+                backgroundColor={backgroundColor || undefined}
               />
             );
           }
