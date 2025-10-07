@@ -108,7 +108,7 @@ $heading_style = [
 <div <?php echo $wrapper_attributes; ?>>
     <div class="toutefois-banner__bg" style="<?php echo implode('; ', $image_style); ?>">
         <?php if ($background_mode === 'svg' && !empty($background_svg)) : ?>
-            <div class="toutefois-banner__bg-svg" style="position:absolute; inset:0;">
+            <div class="toutefois-banner__bg-svg" style="position:absolute; inset:0;  bottom: -20; right: -30;">
                 <?php
                 // Allow only safe SVG tags/attributes
                 $allowed_svg = [
