@@ -13,6 +13,7 @@ export const ProjectsRowContainer = styled.div`
   border-top: 1px solid ${({ theme }) => theme.colors.sectionColor1};
   border-bottom: 1px solid ${({ theme }) => theme.colors.sectionColor2};
   padding-block-start: ${({ theme }) => theme.spacing.lg}px;
+  padding-block-end: ${({ theme }) => theme.spacing.xl}px;
   background-color: ${({ theme }) =>
     hexToRgba(theme.colors.sectionColor1, 0.1)};
 
@@ -42,8 +43,6 @@ export const ProjectsRowContainerContent = styled.div`
     .swiper-wrapper {
       z-index: 1;
     }
-
-    padding-bottom: ${({ theme }) => theme.spacing.xl}px;
 
     @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
       margin-left: -24px;
@@ -219,21 +218,41 @@ export const SwiperNavigationButton = styled.button<{
   padding: 0;
   font-size: 30px;
 
-  ${({ $disabled }) =>
-    $disabled
-      ? css`
-          opacity: 0.2;
-          &:hover {
-            transform: translateY(-50%) !important;
+  ${() => css`
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8 !important;
+      transform: translateY(-50%) !important;
+    }
+  `}
+`;
 
-            opacity: 0.2 !important;
-          }
+export const NavPagination = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.xs}px;
+  align-items: center;
+  justify-content: center;
+  padding-top: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+export const NavPaginationDot = styled.div<{ $active?: boolean }>`
+  width: 12px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.buttonPrimaryBackground};
+  box-shadow: ${({ theme }) => theme.boxShadow.xs};
+  ${({ $active }) =>
+    $active
+      ? css`
+          background-color: ${({ theme }) => theme.colors.headerBackground};
         `
       : css`
+          background-color: ${({ theme }) =>
+            theme.colors.buttonPrimaryBackground}80;
           cursor: pointer;
           &:hover {
-            opacity: 0.8;
-            transform: translateY(-50%) !important;
+            transform: translateY(-1px);
+            box-shadow: ${({ theme }) => theme.boxShadow.sm};
           }
-        `}
+        `};
 `;

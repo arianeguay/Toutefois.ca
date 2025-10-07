@@ -10,7 +10,12 @@ import { useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { ProjectsRowContainerContent, SwiperNavigationButton } from './styles';
+import {
+  NavPagination,
+  NavPaginationDot,
+  ProjectsRowContainerContent,
+  SwiperNavigationButton,
+} from './styles';
 
 interface ProjectsRowContentProps {
   projects: WordpressProject[];
@@ -21,12 +26,10 @@ const ProjectsRowContent: React.FC<ProjectsRowContentProps> = ({
   title,
 }) => {
   const theme = useTheme();
-
+  const [activeIndex, setActiveIndex] = useState(0);
   const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(
     null,
   );
-
-  const [index, setIndex] = useState(0);
 
   const [showButtons, setShowButtons] = useState(false);
 
@@ -59,7 +62,6 @@ const ProjectsRowContent: React.FC<ProjectsRowContentProps> = ({
             <SwiperNavigationButton
               onClick={() => {
                 swiperInstance?.slidePrev();
-                setIndex(swiperInstance?.activeIndex || 0);
               }}
               $side="left"
               className="carousel-nav carousel-nav-button-prev"
@@ -68,8 +70,15 @@ const ProjectsRowContent: React.FC<ProjectsRowContentProps> = ({
             </SwiperNavigationButton>
             <SwiperNavigationButton
               onClick={() => {
-                swiperInstance?.slideNext();
-                setIndex(swiperInstance?.activeIndex || 0);
+                if (!swiperInstance) return;
+                const total = projects.length;
+                const next =
+                  (swiperInstance.realIndex + 1) % Math.max(1, total);
+                if (total > 1) {
+                  swiperInstance.slideToLoop(next);
+                } else {
+                  swiperInstance.slideTo(0);
+                }
               }}
               $side="right"
               className="carousel-nav carousel-nav-button-next"
@@ -78,14 +87,17 @@ const ProjectsRowContent: React.FC<ProjectsRowContentProps> = ({
             </SwiperNavigationButton>
           </>
         )}
+
         <Swiper
+          style={{ width: '100%' }}
           slidesPerView={1}
           slidesPerGroup={1}
+          cssMode
           spaceBetween={theme.spacing.md}
-          style={{ width: '100%' }}
-          loop
-          loopAdditionalSlides={projects.length * 2}
-          pagination
+          loop={projects.length > 1}
+          rewind
+          watchOverflow={false}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           grabCursor={true}
           onSwiper={setSwiperInstance}
           breakpoints={{
@@ -98,12 +110,23 @@ const ProjectsRowContent: React.FC<ProjectsRowContentProps> = ({
           }}
         >
           {projects.map((project) => (
-            <SwiperSlide key={project.id} style={{ width: 300 }}>
+            <SwiperSlide key={project.id}>
               <ProjectCard {...project} />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
+      {showButtons && (
+        <NavPagination>
+          {Array.from({ length: projects.length }, (_, index) => (
+            <NavPaginationDot
+              key={index}
+              $active={index === activeIndex}
+              onClick={() => swiperInstance?.slideToLoop(index)}
+            />
+          ))}
+        </NavPagination>
+      )}
     </ProjectsRowContainerContent>
   );
 };
