@@ -44,11 +44,11 @@ const ProjectsRowContent: React.FC<ProjectsRowContentProps> = ({
   return (
     <ProjectsRowContainerContent>
       <Typography
-        variant="h3"
+        variant="h2"
         element="h2"
         style={{
           marginBottom: theme.spacing.md,
-          color: theme.colors.lightText,
+          color: theme.colors.primaryText,
         }}
       >
         {title}
@@ -84,7 +84,6 @@ const ProjectsRowContent: React.FC<ProjectsRowContentProps> = ({
           spaceBetween={theme.spacing.md}
           style={{ width: '100%' }}
           loop
-          centeredSlides
           loopAdditionalSlides={projects.length * 2}
           pagination
           grabCursor={true}

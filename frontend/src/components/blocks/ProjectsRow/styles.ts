@@ -12,13 +12,16 @@ export const ProjectsRowContainer = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadow.md};
   border-top: 1px solid ${({ theme }) => theme.colors.sectionColor1};
   border-bottom: 1px solid ${({ theme }) => theme.colors.sectionColor2};
-  padding-block: ${({ theme }) => theme.spacing.md}px;
+  padding-block-start: ${({ theme }) => theme.spacing.lg}px;
   background-color: ${({ theme }) =>
-    hexToRgba(theme.colors.sectionColor1, 0.2)};
+    hexToRgba(theme.colors.sectionColor1, 0.1)};
 
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(2px);
   &:not(:first-child) {
     margin-block-start: ${({ theme }) => theme.spacing.lg}px;
+  }
+  &:last-child {
+    margin-block-end: ${({ theme }) => theme.spacing.lg}px;
   }
   h2 {
     margin-block: 0;
