@@ -10,12 +10,14 @@ export const ProjectsRowContainer = styled.div<{ $bgColor?: string }>`
   --gradient-size: 48px;
   --gradient-size-negative: -48px;
   box-shadow: ${({ theme }) => theme.boxShadow.md};
-  border-top: 1px solid ${({ theme }) => theme.colors.sectionColor1};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.sectionColor2};
+  border-top: 1px solid
+    ${({ theme, $bgColor }) => $bgColor ?? theme.colors.sectionColor1};
+  border-bottom: 1px solid
+    ${({ theme, $bgColor }) => $bgColor ?? theme.colors.sectionColor2};
   padding-block-start: ${({ theme }) => theme.spacing.lg}px;
   padding-block-end: ${({ theme }) => theme.spacing.xl}px;
   background-color: ${({ theme, $bgColor }) =>
-    $bgColor ? hexToRgba($bgColor, 0.1) : hexToRgba(theme.colors.sectionColor1, 0.1)};
+    hexToRgba($bgColor ?? theme.colors.sectionColor1, 0.1)};
 
   backdrop-filter: blur(2px);
   &:not(:first-child) {
@@ -25,9 +27,11 @@ export const ProjectsRowContainer = styled.div<{ $bgColor?: string }>`
     margin-block-end: ${({ theme }) => theme.spacing.lg}px;
   }
   h2 {
-    margin-block: 0;
     position: relative;
-    z-index: 2;
+    margin-block-start: 0;
+    &:not(:last-child) {
+      margin-block-end: ${({ theme }) => theme.spacing.xs}px;
+    }
   }
 `;
 
@@ -51,16 +55,6 @@ export const ProjectsRowContainerContent = styled.div`
       padding-right: 24px;
       width: calc(100% + 48px) !important;
     }
-  }
-`;
-
-export const ProjectsGrid = styled.div`
-  display: grid;
-  gap: ${({ theme }) => theme.spacing.md}px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 `;
 

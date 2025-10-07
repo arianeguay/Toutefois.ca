@@ -119,6 +119,7 @@ $heading_style = [
                         'width' => true,
                         'height' => true,
                         'preserveAspectRatio' => true,
+                        'style' => true,
                         'fill' => true,
                         'stroke' => true,
                         'stroke-width' => true,
