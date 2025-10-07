@@ -87,7 +87,8 @@ class Api {
   }
 
   async fetchPosts(): Promise<WordpressPost[]> {
-    return this.fetchFromApi('wp/v2/posts');
+    // Fetch enough published posts for sitemap and listings
+    return this.fetchFromApi('wp/v2/posts?status=publish&per_page=100&_fields=id,slug,date,modified');
   }
 
   async fetchPostById(id: number): Promise<WordpressPost> {
@@ -99,7 +100,8 @@ class Api {
   }
 
   async fetchPages(): Promise<WordpressPage[]> {
-    return this.fetchFromApi('wp/v2/pages');
+    // Fetch published pages (increase per_page to include more items)
+    return this.fetchFromApi('wp/v2/pages?status=publish&per_page=100&_fields=id,slug,link,date,modified');
   }
 
   async fetchPageById(id: number): Promise<WordpressPage> {
