@@ -1,5 +1,10 @@
-import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
 import {
+  InspectorControls,
+  MediaUpload,
+  useBlockProps,
+} from "@wordpress/block-editor";
+import {
+  Button,
   ColorPalette,
   PanelBody,
   SelectControl,
@@ -112,6 +117,16 @@ export default function Edit({ attributes, setAttributes }) {
     margin: 0,
   };
 
+  const onSelectImage = (media) => {
+    if (!media) return;
+    const img = {
+      id: media.id,
+      url: media.url || media.source_url,
+      alt: media.alt || media.alt_text || media.title || "",
+    };
+    setAttributes({ image: img });
+  };
+
   return (
     <>
       <InspectorControls>
@@ -148,12 +163,25 @@ export default function Edit({ attributes, setAttributes }) {
             ]}
           />
           {backgroundMode === "image" && (
-            <ToggleControl
-              label={__("Blurred Background", "toutefois")}
-              checked={!!blurredBackground}
-              onChange={(value) => setAttributes({ blurredBackground: value })}
-              help={__("Applies to image backgrounds", "toutefois")}
-            />
+            <>
+              <ToggleControl
+                label={__("Blurred Background", "toutefois")}
+                checked={!!blurredBackground}
+                onChange={(value) =>
+                  setAttributes({ blurredBackground: value })
+                }
+                help={__("Applies to image backgrounds", "toutefois")}
+              />
+              <MediaUpload
+                onSelect={onSelectImage}
+                allowedTypes={["image"]}
+                render={({ open }) => (
+                  <Button onClick={open} variant="primary">
+                    {__("Sélectionner l'image", "toutefois")}
+                  </Button>
+                )}
+              />
+            </>
           )}
           {(backgroundMode === "color" || backgroundMode === "svg") && (
             <>
