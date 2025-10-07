@@ -42,7 +42,7 @@ $image_style = [
 // Determine background rendering based on mode
 if ($background_mode === 'image') {
     if ($image && !empty($image['url'])) {
-        $image_style[] = 'background-image: url("' . esc_url($image['url']) . '")';
+        $image_style[] = 'background-image: url(' . esc_url($image['url']) . ')';
         $image_style[] = 'background-size: cover';
         $image_style[] = 'background-position: ' . esc_attr($object_position);
         if ($blurred_background) {
@@ -107,7 +107,7 @@ $heading_style = [
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <div class="toutefois-banner__bg" style="<?php echo implode('; ', $image_style); ?>">
+    <div class="toutefois-banner__bg" style="<?php echo esc_attr(implode('; ', $image_style)); ?>">
         <?php if ($background_mode === 'svg' && !empty($background_svg)) : ?>
             <div class="toutefois-banner__bg-svg" style="position:absolute; inset:0;  bottom: -20; right: -30; color: <?php echo esc_attr($background_svg_color); ?>;">
                 <?php
@@ -175,8 +175,8 @@ $heading_style = [
             </div>
         <?php endif; ?>
     </div>
-    <div class="toutefois-banner__content" style="<?php echo implode('; ', $content_styles); ?>">
-        <div class="toutefois-banner__body" style="<?php echo implode('; ', $body_style); ?>">
+    <div class="toutefois-banner__content" style="<?php echo esc_attr(implode('; ', $content_styles)); ?>">
+        <div class="toutefois-banner__body" style="<?php echo esc_attr(implode('; ', $body_style)); ?>">
             <?php if ($title) : ?>
                 <h1 class="toutefois-banner__title" style="<?php echo implode('; ', $heading_style); ?>"><?php echo esc_html($title); ?></h1>
             <?php endif; ?>
