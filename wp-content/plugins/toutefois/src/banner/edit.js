@@ -154,6 +154,39 @@ export default function Edit({ attributes, setAttributes }) {
               help={__("Applies to image backgrounds", "toutefois")}
             />
           )}
+          {(backgroundMode === "color" || backgroundMode === "svg") && (
+            <>
+              <p>
+                <strong>{__("Background Color", "toutefois")}</strong>
+              </p>
+              <ColorPalette
+                value={backgroundColor}
+                onChange={(value) => setAttributes({ backgroundColor: value })}
+              />
+            </>
+          )}
+          {backgroundMode === "svg" && (
+            <SelectControl
+              label={__("SVG Preset", "toutefois")}
+              value={backgroundSvg ? "custom" : "wave"}
+              options={[
+                { label: __("Wave (placeholder)", "toutefois"), value: "wave" },
+                { label: __("Diagonal (placeholder)", "toutefois"), value: "diagonal" },
+                { label: __("Circle (placeholder)", "toutefois"), value: "circle" },
+              ]}
+              onChange={(value) => {
+                const presets = {
+                  wave:
+                    '<svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path fill="white" fill-opacity="0.25" d="M0,64L48,69.3C96,75,192,85,288,122.7C384,160,480,224,576,229.3C672,235,768,181,864,165.3C960,149,1056,171,1152,170.7C1248,171,1344,149,1392,138.7L1440,128L1440,0L0,0Z"/></svg>',
+                  diagonal:
+                    '<svg viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="0,100 100,0 100,100" fill="white" fill-opacity="0.2"/></svg>',
+                  circle:
+                    '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="white" fill-opacity="0.2"/></svg>',
+                };
+                setAttributes({ backgroundSvg: presets[value] });
+              }}
+            />
+          )}
           <SelectControl
             label={__("Font", "toutefois")}
             value={font}
