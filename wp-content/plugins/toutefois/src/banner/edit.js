@@ -1,11 +1,5 @@
+import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
 import {
-  InspectorControls,
-  MediaUpload,
-  MediaUploadCheck,
-  useBlockProps,
-} from "@wordpress/block-editor";
-import {
-  Button,
   ColorPalette,
   PanelBody,
   SelectControl,
@@ -212,9 +206,9 @@ export default function Edit({ attributes, setAttributes }) {
           />
           <div style={{ marginTop: "16px" }}>
             <TextControl
-              label={__('Banner Height', 'toutefois')}
+              label={__("Banner Height", "toutefois")}
               type="number"
-              value={height?.replace ? height.replace(/[^0-9.]/g, '') : height}
+              value={height?.replace ? height.replace(/[^0-9.]/g, "") : height}
               onChange={(value) => {
                 const numValue = parseFloat(value);
                 if (!isNaN(numValue) && numValue > 0) {
@@ -223,17 +217,19 @@ export default function Edit({ attributes, setAttributes }) {
               }}
             />
             <SelectControl
-              label={__('Height Unit', 'toutefois')}
+              label={__("Height Unit", "toutefois")}
               value={heightUnit}
               options={[
-                { label: 'px', value: 'px' },
-                { label: '%', value: '%' },
-                { label: 'vh', value: 'vh' },
-                { label: 'rem', value: 'rem' },
+                { label: "px", value: "px" },
+                { label: "%", value: "%" },
+                { label: "vh", value: "vh" },
+                { label: "rem", value: "rem" },
               ]}
               onChange={(value) => {
                 setAttributes({ heightUnit: value });
-                const heightValue = height?.replace ? parseFloat(height.replace(/[^0-9.]/g, '')) : 350;
+                const heightValue = height?.replace
+                  ? parseFloat(height.replace(/[^0-9.]/g, ""))
+                  : 350;
                 setAttributes({ height: `${heightValue}${value}` });
               }}
             />
@@ -271,7 +267,10 @@ export default function Edit({ attributes, setAttributes }) {
             <h1 className="toutefois-banner__title" style={headingStyle}>
               {title}
             </h1>
-            <p className="toutefois-banner__description" style={{ width: "fit-content" }}>
+            <p
+              className="toutefois-banner__description"
+              style={{ width: "fit-content" }}
+            >
               {description}
             </p>
             {backgroundMode === "image" && !image && (
@@ -284,3 +283,4 @@ export default function Edit({ attributes, setAttributes }) {
       </div>
     </>
   );
+}
