@@ -34,16 +34,36 @@ const ProjectsRowContent: React.FC<ProjectsRowContentProps> = ({
   const [showButtons, setShowButtons] = useState(false);
 
   useEffect(() => {
-    if (swiperInstance) {
-      if (
-        swiperInstance.slidesGrid.length > swiperInstance.slidesPerViewDynamic()
-      ) {
-        setShowButtons(true);
-      } else {
-        setShowButtons(false);
-      }
-    }
-  }, [swiperInstance]);
+    if (!swiperInstance) return;
+
+    const update = () => {
+      // Determine current slidesPerView considering breakpoints and dynamic widths
+      const pvParam = swiperInstance.params.slidesPerView;
+      const currentPerView =
+        typeof pvParam === 'number'
+          ? pvParam
+          : swiperInstance.slidesPerViewDynamic();
+      const shouldShow = projects.length > Math.max(1, Math.ceil(currentPerView));
+      setShowButtons(shouldShow);
+    };
+
+    // Initial compute
+    update();
+
+    // Subscribe to relevant Swiper events
+    swiperInstance.on('resize', update);
+    swiperInstance.on('breakpoint', update);
+    swiperInstance.on('slidesLengthChange', update);
+    swiperInstance.on('update', update);
+
+    // Cleanup
+    return () => {
+      swiperInstance.off('resize', update);
+      swiperInstance.off('breakpoint', update);
+      swiperInstance.off('slidesLengthChange', update);
+      swiperInstance.off('update', update);
+    };
+  }, [swiperInstance, projects.length]);
   return (
     <ProjectsRowContainerContent>
       <Typography
