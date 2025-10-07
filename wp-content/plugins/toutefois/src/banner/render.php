@@ -24,6 +24,7 @@ $height_unit = isset($attributes['heightUnit']) ? $attributes['heightUnit'] : 'p
 $background_mode = isset($attributes['backgroundMode']) ? $attributes['backgroundMode'] : 'image';
 $background_color = isset($attributes['backgroundColor']) ? $attributes['backgroundColor'] : '#f0f0f0';
 $background_svg = isset($attributes['backgroundSvg']) ? $attributes['backgroundSvg'] : '';
+$background_svg_color = isset($attributes['backgroundSvgColor']) ? $attributes['backgroundSvgColor'] : '#FFFFFF';
 
 // Build inline styles for the container
 $container_styles = [
@@ -108,7 +109,7 @@ $heading_style = [
 <div <?php echo $wrapper_attributes; ?>>
     <div class="toutefois-banner__bg" style="<?php echo implode('; ', $image_style); ?>">
         <?php if ($background_mode === 'svg' && !empty($background_svg)) : ?>
-            <div class="toutefois-banner__bg-svg" style="position:absolute; inset:0;  bottom: -20; right: -30;">
+            <div class="toutefois-banner__bg-svg" style="position:absolute; inset:0;  bottom: -20; right: -30; color: <?php echo esc_attr($background_svg_color); ?>;">
                 <?php
                 // Allow only safe SVG tags/attributes
                 $allowed_svg = [

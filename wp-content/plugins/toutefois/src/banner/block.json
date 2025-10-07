@@ -84,6 +84,10 @@
     "backgroundSvg": {
       "type": "string",
       "default": ""
+    },
+    "backgroundSvgColor": {
+      "type": "string",
+      "default": "#FFFFFF"
     }
   }
 }
