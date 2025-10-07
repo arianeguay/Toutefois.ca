@@ -170,14 +170,14 @@ export default function Edit({ attributes, setAttributes }) {
               label={__("SVG Preset", "toutefois")}
               value={backgroundSvg ? "custom" : "wave"}
               options={[
-                { label: __("Wave (placeholder)", "toutefois"), value: "wave" },
+                { label: __("Splash 1", "toutefois"), value: "splash1" },
                 {
-                  label: __("Diagonal (placeholder)", "toutefois"),
-                  value: "diagonal",
+                  label: __("Splash 2", "toutefois"),
+                  value: "splash2",
                 },
                 {
-                  label: __("Circle (placeholder)", "toutefois"),
-                  value: "circle",
+                  label: __("Splash 3", "toutefois"),
+                  value: "splash3",
                 },
               ]}
               onChange={(value) => {
