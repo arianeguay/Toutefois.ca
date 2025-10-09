@@ -10,7 +10,7 @@ export const ContainerContentStyling = css`
   width: 100%;
 
   @media (max-width: ${({ theme }) => theme.content.maxWidth}px) {
-    padding-inline: ${({ theme }) => theme.spacing.xl}px;
+    padding-inline: ${({ theme }) => theme.spacing.md}px;
   }
 `;
 
