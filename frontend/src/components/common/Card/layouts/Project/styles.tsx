@@ -38,6 +38,13 @@ export const ProjectContentCardContent = styled.article<{ type: ContentType }>`
 
   ${ContentBodyContent} {
     margin-block-start: -30px;
+
+    p {
+      &:not(:last-child) {
+        margin-block-start: 0;
+        margin-block-end: 0;
+      }
+    }
   }
 `;
 
