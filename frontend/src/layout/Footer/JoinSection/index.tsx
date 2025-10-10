@@ -1,7 +1,5 @@
-'use client';
 import Typography from '@/components/common/Typography';
 import { WordpressFooter } from '@/types';
-import { useTheme } from 'styled-components';
 import EmailIcon from '../../../icons/Email';
 import PhoneIcon from '../../../icons/Phone';
 import Socials from '../socials';
@@ -12,7 +10,6 @@ interface JoinSectionProps {
   footer: WordpressFooter | null;
 }
 const JoinSection: React.FC<JoinSectionProps> = ({ footer }) => {
-  const theme = useTheme();
   if (!footer) return <div />;
   return (
     <JoinSectionContainer>
@@ -20,9 +17,8 @@ const JoinSection: React.FC<JoinSectionProps> = ({ footer }) => {
         variant="body"
         element="p"
         style={{
-          fontWeight: 'bold',
+          fontWeight: 'semibold',
           marginBottom: 8,
-          fontFamily: theme.fonts.secondary,
         }}
       >
         Nous joindre

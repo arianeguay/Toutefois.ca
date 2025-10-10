@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /api/
+Disallow: /_next/
+Disallow: /not-found
+Disallow: /404
+
+Sitemap: https://toutefois.ca/sitemap.xml
