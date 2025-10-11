@@ -28,10 +28,10 @@ export const ContentListContainer = styled.div`
   ${ContainerContentStyling}
   overflow:hidden;
   padding-inline: 30px;
+  padding-block-end: ${({ theme }) => theme.spacing.lg}px;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding-inline: ${({ theme }) => theme.spacing.xxl}px;
   }
-  padding-block-end: ${({ theme }) => theme.spacing.xs}px;
   .swiper {
     width: 100%;
     --swiper-navigation-size: 36px;

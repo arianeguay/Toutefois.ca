@@ -40,6 +40,22 @@ export const WordpressStyling = css`
   .is-layout-constrained > * + * {
     margin-block-start: calc(var(--wp--style--block-gap) * 0.5);
   }
+
+  &,
+  .page-content {
+    & > .wp-block,
+    & > .wp-block-heading,
+    & > .wp-block-list,
+    & > h1,
+    & > h2,
+    & > h3,
+    & > h4,
+    & > h5,
+    & > h6 {
+      ${ContainerContentStyling}
+    }
+  }
+
   .is-layout-flex,
   .wp-block-buttons {
     gap: ${({ theme }) => theme.spacing.md}px;
@@ -141,9 +157,6 @@ export const WordpressStyling = css`
    * ---------------------------------------------- */
     a {
       color: ${({ theme }) => theme.prose.link};
-      text-decoration-thickness: 2px;
-      text-underline-offset: 3px;
-      text-decoration: underline;
     }
     a:hover {
       color: ${({ theme }) => theme.prose.linkHover};
@@ -451,11 +464,7 @@ export const WordpressStyling = css`
     }
 
     /* Spacer block with fluid height */
-    /* WP blockGap */
-    .wp-block-spacer {
-      inline-size: 100%;
-      block-size: clamp(8px, 3vw, 48px);
-    }
+
     .wp-block-separator.is-style-dots {
       background: none;
       text-align: center;
@@ -1313,9 +1322,6 @@ export const WordpressStyling = css`
   /* Typography & links */
   a {
     color: ${({ theme }) => theme.prose.link};
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
-    text-decoration: underline;
 
     &:hover {
       text-decoration: none;
@@ -1676,11 +1682,39 @@ export const WordpressStyling = css`
       opacity 150ms ease,
       background 150ms ease;
     box-shadow: ${({ theme }) => theme.boxShadow.xs};
+    a {
+      text-decoration: none;
+    }
   }
-  .wp-block-button.is-style-outline .wp-block-button__link {
+  .wp-block-button:not(.is-style-outline) {
+    background: ${({ theme }) => theme.colors.buttonPrimaryBackground};
+    color: ${({ theme }) => theme.colors.buttonPrimaryColor};
+    min-width: ${({ theme }) => theme.buttonSize.width_md};
+    min-height: ${({ theme }) => theme.buttonSize.height_md};
+
+    &:not(&:has(a)),
+    & > a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+
+      padding-inline: ${({ theme }) => theme.spacing.md}px;
+      padding-block: ${({ theme }) => theme.spacing.xs}px;
+    }
+    box-shadow: ${({ theme }) => theme.boxShadow.xs};
+
+    &:hover {
+      opacity: 0.92;
+      cursor: pointer;
+      transform: translateY(-1px);
+    }
+  }
+
+  .wp-block-button.is-style-outline {
     background: transparent;
-    color: ${({ theme }) => theme.colors.buttonTertiaryBackground};
-    border-color: ${({ theme }) => theme.colors.buttonTertiaryBackground};
+    color: ${({ theme }) => theme.colors.buttonPrimaryBackground};
+    border-color: ${({ theme }) => theme.colors.buttonPrimaryBackground};
   }
   .wp-block-button .wp-block-button__link:hover,
   .button:hover,
@@ -1749,7 +1783,11 @@ export const WordpressStyling = css`
     flex-wrap: nowrap;
     gap: ${({ theme }) => theme.spacing.xxl}px;
     align-items: stretch;
+    ${ContainerContentStyling}
 
+    .no-grow {
+      flex-grow: 0;
+    }
     /* Vertical alignment helpers from Gutenberg */
     &.are-vertically-aligned-top {
       align-items: flex-start;
