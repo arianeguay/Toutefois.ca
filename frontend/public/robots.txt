@@ -1,3 +1,4 @@
+# Règles pour tous les robots
 User-agent: *
 Allow: /
 Disallow: /checkout
@@ -5,5 +6,71 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /not-found
 Disallow: /404
+
+# Google
+User-agent: Googlebot
+Allow: /
+Disallow: /checkout
+Disallow: /api/
+Disallow: /_next/
+Disallow: /not-found
+Disallow: /404
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /checkout
+Disallow: /api/
+Disallow: /_next/
+Disallow: /not-found
+Disallow: /404
+
+# Yahoo
+User-agent: Slurp
+Allow: /
+Disallow: /checkout
+Disallow: /api/
+Disallow: /_next/
+Disallow: /not-found
+Disallow: /404
+
+# Yandex
+User-agent: Yandex
+Allow: /
+Disallow: /checkout
+Disallow: /api/
+Disallow: /_next/
+Disallow: /not-found
+Disallow: /404
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /checkout
+Disallow: /api/
+Disallow: /_next/
+Disallow: /not-found
+Disallow: /404
+
+# Baidu
+User-agent: Baiduspider
+Allow: /
+Disallow: /checkout
+Disallow: /api/
+Disallow: /_next/
+Disallow: /not-found
+Disallow: /404
+
+# Facebook
+User-agent: Facebookexternalhit
+Allow: /
+Disallow: /checkout
+Disallow: /api/
+
+# Twitter
+User-agent: Twitterbot
+Allow: /
+Disallow: /checkout
+Disallow: /api/
 
 Sitemap: https://toutefois.ca/sitemap.xml
