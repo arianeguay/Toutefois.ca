@@ -18,12 +18,12 @@ const PostCardBody: React.FC<CardBodyProps> = ({
     <PostContentCardContent type={type}>
       <ContentBodyContent>
         {date && (
-          <Typography variant="small" color="tertiaryText" element="p">
+          <Typography variant="small" color="tertiaryText" element="div">
             {formatDateFR(date)}
           </Typography>
         )}
         {description && (
-          <Typography variant="body" lineClamp={3}>
+          <Typography variant="body" lineClamp={3} element="div">
             {parse(description)}
           </Typography>
         )}

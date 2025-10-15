@@ -36,6 +36,14 @@ export const Heading6 = styled.h6<TypographyProps>`
   ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
 `;
 
+export const Span = styled.span<TypographyProps>`
+  ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
+`;
+
+export const Div = styled.div<TypographyProps>`
+  ${(props) => createFontStyleCSS(props.$variant, props.$lineClamp)}
+`;
+
 export const getElement = (element: TypographyElementType) => {
   switch (element) {
     case 'h1':
@@ -52,5 +60,9 @@ export const getElement = (element: TypographyElementType) => {
       return Heading6;
     case 'p':
       return Paragraph;
+    case 'span':
+      return Span;
+    case 'div':
+      return Div;
   }
 };

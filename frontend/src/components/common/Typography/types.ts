@@ -7,7 +7,9 @@ export type TypographyElementType =
   | 'h4'
   | 'h5'
   | 'h6'
-  | 'p';
+  | 'p'
+  | 'span'
+  | 'div';
 export type TypographyVariant =
   | 'h1'
   | 'h2'
