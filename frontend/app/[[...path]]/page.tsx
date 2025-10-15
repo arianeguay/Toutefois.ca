@@ -54,18 +54,7 @@ export async function generateMetadata({
 
   // Listing pages
   // Archives listing (/archives)
-  if (params.path.length === 1 && params.path[0] === 'archives') {
-    const url = `${baseUrl}/archives`;
-    const title = 'Toutefois - Archives';
-    const description = 'Nouvelles et articles de Toutefois';
-    return {
-      title,
-      description,
-      alternates: { canonical: url },
-      openGraph: { url, title, description, type: 'website' },
-      twitter: { card: 'summary_large_image', title, description },
-    };
-  }
+  // Handled in `app/archives/page.tsx`
 
   // Projects listing (/projets)
   if (params.path.length === 1 && params.path[0] === 'projets') {
@@ -325,10 +314,8 @@ export async function generateStaticParams() {
 
 export default async function Page({
   params,
-  searchParams,
 }: {
   params: { path?: string[] };
-  searchParams?: Record<string, string | string[] | undefined>;
 }) {
   // Handle root path (home)
   if (!params.path || params.path.length === 0) {
@@ -426,7 +413,6 @@ export default async function Page({
         const post = Array.isArray(postData) ? postData[0] : postData;
 
         if (post?.id) {
-          console.log(post);
           // Format the post data to match WordpressPage structure expected by PageLayout
           const formattedPostPage: WordpressPage = {
             id: post.id,
@@ -547,21 +533,7 @@ export default async function Page({
       notFound();
     }
 
-    // If this is the archives listing route (/archives), pass the page number for pagination
-    const isArchivesListing =
-      params.path.length === 1 && params.path[0] === 'archives';
-    let archivePageNumber: number | undefined = undefined;
-    if (isArchivesListing) {
-      const qPageRaw = searchParams?.page ?? searchParams?.p ?? '1';
-      const qPage = Array.isArray(qPageRaw) ? qPageRaw[0] : qPageRaw;
-      archivePageNumber = Math.max(1, parseInt(String(qPage || '1'), 10) || 1);
-    }
-    return (
-      <PageLayout
-        page={pageData}
-        archivePageNumber={isArchivesListing ? archivePageNumber : undefined}
-      />
-    );
+    return <PageLayout page={pageData} />;
   } catch (error) {
     console.error('Error fetching page:', error);
     notFound();

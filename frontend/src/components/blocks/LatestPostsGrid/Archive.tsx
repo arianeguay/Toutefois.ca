@@ -3,10 +3,26 @@ import Link from 'next/link';
 import ArticlesGrid from './Grid';
 
 async function fetchPostsPaged(page: number, perPage: number) {
-  const base = (
-    process.env.NEXT_PUBLIC_ADMIN_URL || 'https://admin.toutefois.ca'
-  ).replace(/\/$/, '');
-  const url = `${base}/wp-json/wp/v2/posts?page=${page}&per_page=${perPage}&_embed=1`;
+  // Normalize admin base to ensure exactly one '/wp-json'
+  const raw =
+    process.env.NEXT_PUBLIC_ADMIN_URL || 'https://admin.toutefois.ca/wp-json';
+  let normalized = raw.trim();
+  try {
+    const u = new URL(normalized);
+    if (!u.pathname.includes('/wp-json')) {
+      normalized = `${u.origin.replace(/\/$/, '')}/wp-json`;
+    } else {
+      normalized = `${u.origin}${u.pathname.replace(/\/$/, '')}`;
+    }
+  } catch {
+    if (!normalized.includes('/wp-json')) {
+      normalized = normalized.replace(/\/$/, '') + '/wp-json';
+    } else {
+      normalized = normalized.replace(/\/$/, '');
+    }
+  }
+
+  const url = `${normalized}/wp/v2/posts?page=${page}&per_page=${perPage}&_embed=1`;
 
   const response = await fetch(url, { next: { revalidate: 60 } });
   if (!response.ok) {
